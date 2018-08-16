@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "target": "es5",
+    "jsx": "preserve",
+    "sourceMap": false
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "timecomplete",
+  "version": "1.0.0",
+  "description": "Organizing Time for Life and Work",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michal-minich/TimeComplete.git"
+  },
+  "keywords": [
+    "todo",
+    "tasks"
+  ],
+  "author": "Michal Minich",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "s-array": "^0.4.10",
+    "s-js": "^0.4.9",
+    "surplus": "^0.5.3",
+    "surplus-mixin-data": "^0.5.0"
+  },
+  "devDependencies": {
+    "surplus-loader": "^0.5.0",
+    "ts-loader": "^2.3.7",
+    "typescript": "3.0.1",
+    "webpack": "^2.7.0",
+    "webpack-cli": "^3.1.0"
+  }
+}
