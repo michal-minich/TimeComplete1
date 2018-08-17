@@ -56,6 +56,7 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="index.html" />
+    <Content Include="scripts\main.js" />
     <Content Include="styles\main.css" />
     <Content Include="Web.config" />
     <Content Include="webpack.config.js" />
@@ -78,7 +79,6 @@
     <TypeScriptCompile Include="src\controllers.ts" />
     <TypeScriptCompile Include="src\index.ts" />
     <TypeScriptCompile Include="src\model.ts" />
-    <TypeScriptCompile Include="src\models.ts" />
     <TypeScriptCompile Include="src\views.tsx" />
   </ItemGroup>
   <ItemGroup>
