@@ -1,10 +1,10 @@
 import S from "s-js";
 
-import { TestController } from "./controllers";
+import { TaskController } from "./controllers";
 import { AppView } from "./views";
 
 
-var ctrl = new TestController();
+var ctrl = new TaskController();
 
 S.root(() => {
     var view = AppView(ctrl);

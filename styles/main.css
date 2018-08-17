@@ -2,4 +2,23 @@ body {
     background-color: white;
     color: black;
     cursor: default;
+    font-family: "Segoe UI", sans-serif;
+    font-size: 11pt;
 }
+
+.taskList {
+    border-collapse: collapse;
+    list-style: none;
+}
+
+.taskList tr:nth-child(even) {
+    background-color: white;
+}
+
+.taskList tr:nth-child(odd) {
+    background-color: rgb(218, 218, 218);
+}
+
+.taskList tr:hover {
+     background-color: rgb(129, 155, 205);
+ }

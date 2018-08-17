@@ -2,20 +2,32 @@
 import * as Surplus from "surplus"; Surplus;
 import data from "surplus-mixin-data";
 
-import { TestController } from "./controllers";
+import { TaskController } from "./controllers";
 
 
 // ReSharper disable once InconsistentNaming
-export const AppView = (ctrl: TestController) =>
+export const AppView = (c: TaskController) =>
     <div>
-        <input 
-            type="text" 
-            fn={data(ctrl.model.text)} 
-            onKeyDown={() => ctrl.updateText()}/>
-        <br />
-
-        <span>{ctrl.model.text() + " " + ctrl.model.counter()}</span>
+        <input type="text"
+               fn={data(c.model.taskName)}/>
+        <input
+            type="button"
+            onClick={() => c.addTask()}
+            value="Add"/>
+        <hr/>
+        <input
+            type="text"
+            fn={data(c.model.taskQuery)}
+            onKeyDown={() => c.findTask()}/>
         <br/>
-
-        <button onClick={() => ctrl.incrementCounter()}> + </button>
+        <table className="taskList">
+            <thead></thead>
+            <tbody>{
+                c.findTask().map(t =>
+                    <tr>
+                        <td>{t.id}</td>
+                        <td>{t.title()}</td>
+                    </tr>)}
+            </tbody>
+        </table>
     </div>;
