@@ -19,6 +19,7 @@ export interface ILabel extends IDomainObject {
     name: DataSignal<string>;
     color: DataSignal<IColor>;
     parent?: DataSignal<ILabel>;
+    cssColor(): {"background-color" : string };
 }
 
 export interface ITask extends IDomainObject {
@@ -37,17 +38,18 @@ export interface ITaskList {
 }
 
 export interface ILabelList {
-    tasks: SDataArray<ILabel>;
+    labels: SDataArray<ILabel>;
     addLabel(label: ILabel): void;
     removeLabel(label: ILabel): void;
 }
 
 export interface IAppState {
     readonly taskStore: ITaskList;
-    // readonly labelStore: ILabelList;
+    readonly labelStore: ILabelList;
     selectedTask?: ITask;
     taskQuery: DataSignal<string>;
-    taskName: DataSignal<string>;
+    newTaskName: DataSignal<string>;
+    newLabelName: DataSignal<string>;
 }
 
 // query language

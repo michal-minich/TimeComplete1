@@ -4,6 +4,19 @@ import SArray, { SArray as SArrayType, SDataArray } from "s-array";
 import * as M from "./model";
 
 
+class LabelList implements M.ILabelList {
+    addLabel(label: M.ILabel): void {
+        this.labels.unshift(label);
+    }
+
+    removeLabel(label: M.ILabel): void {
+        this.labels.remove(label);
+    }
+
+    labels: SDataArray<M.ILabel> = SArray([]);
+}
+
+
 class TaskList implements M.ITaskList {
 
     findTask(taskQuery: string) : SArrayType<M.ITask> {
@@ -57,6 +70,11 @@ class Label implements M.ILabel {
     color = S.data(new Color("gray"));
     id = ++Task.counter;
     createdOn = new DateTime("2018");
+
+
+    cssColor() {
+        return { "background-color": this.color().value };
+    }
 }
 
 
@@ -71,8 +89,10 @@ class DateTime implements M.IDateTime {
 
 class AppState implements M.IAppState {
     taskStore: M.ITaskList = new TaskList();
+    labelStore: M.ILabelList = new LabelList();
     taskQuery = S.data("");
-    taskName = S.data("");
+    newTaskName = S.data("");
+    newLabelName = S.data("");
 }
 
 
@@ -94,12 +114,25 @@ export class TaskController {
         this.model.taskStore.addTask(t3);
         const t4 = new Task(); t4.title("task 4 abcd");
         this.model.taskStore.addTask(t4);
+        
+        this.model.labelStore.addLabel(redL);
+        const l1 = new Label();
+        l1.name("blue");
+        l1.color(new Color("blue"));
+        const l2 = new Label();
+        l2.name("green");
+        l2.color(new Color("green"));
+        this.model.labelStore.addLabel(l2);
     }
 
-    addTask(): void {
-        const t: M.ITask = new Task();
-        t.title(this.model.taskName());
-        this.model.taskName("");
+    addTask(e : KeyboardEvent): void {
+        if (e.keyCode !== 13)
+            return;
+        if (this.model.newTaskName() === "")
+            return;
+        const t = new Task();
+        t.title(this.model.newTaskName());
+        this.model.newTaskName("");
         this.model.taskStore.addTask(t);
     }
 
@@ -114,5 +147,16 @@ export class TaskController {
         } else {
             task.completedOn(undefined);
         }
+    }
+
+    addLabel(e : KeyboardEvent): any {
+        if (e.keyCode !== 13)
+            return;
+        if (this.model.newLabelName() === "")
+            return;
+        const l = new Label();
+        l.name(this.model.newLabelName());
+        this.model.newLabelName("");
+        this.model.labelStore.addLabel(l);
     }
 }
