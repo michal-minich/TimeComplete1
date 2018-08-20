@@ -26,7 +26,7 @@ class TaskList implements M.ITaskList {
     }
 
     addTask(task: M.ITask): void {
-        this.tasks.push(task);
+        this.tasks.unshift(task);
     }
 
     tasks: SDataArray<M.ITask> = SArray([]);
@@ -70,11 +70,6 @@ class Label implements M.ILabel {
     color = S.data(new Color("gray"));
     id = ++Task.counter;
     createdOn = new DateTime("2018");
-
-
-    cssColor() {
-        return { "background-color": this.color().value };
-    }
 }
 
 
@@ -100,29 +95,46 @@ export class TaskController {
     model: M.IAppState = new AppState();
 
     constructor() {
+        const lRed = new Label();
+        lRed.name("red");
+        lRed.color(new Color("red"));
+        this.model.labelStore.addLabel(lRed);
+
+        const lGreen = new Label();
+        lGreen.name("green");
+        lGreen.color(new Color("green"));
+        this.model.labelStore.addLabel(lGreen);
         
+        const lBlue = new Label();
+        lBlue.name("blue");
+        lBlue.color(new Color("blue"));
+        this.model.labelStore.addLabel(lBlue);
+
+        for (let i = 0; i < 50; i++) {
+            const lbl = new Label();
+            lbl.name("label" + i);
+            lbl.color(new Color("gray"));
+            this.model.labelStore.addLabel(lbl);
+        }
+
         const t1 = new Task(); t1.title("task 1 a");
         this.model.taskStore.addTask(t1);
         const t2 = new Task(); t2.title("task 2 ab");
         this.model.taskStore.addTask(t2);
+        t2.assignLabel(lGreen);
         const t3 = new Task(); t3.title("task 3 abc");
         t3.completedOn(new DateTime("2018"));
-        const redL = new Label();
-        redL.name("red");
-        redL.color(new Color("red"));
-        t3.assignLabel(redL);
+        t3.assignLabel(lRed);
+        t3.assignLabel(lBlue);
         this.model.taskStore.addTask(t3);
         const t4 = new Task(); t4.title("task 4 abcd");
         this.model.taskStore.addTask(t4);
+        t4.assignLabel(lRed);
         
-        this.model.labelStore.addLabel(redL);
-        const l1 = new Label();
-        l1.name("blue");
-        l1.color(new Color("blue"));
-        const l2 = new Label();
-        l2.name("green");
-        l2.color(new Color("green"));
-        this.model.labelStore.addLabel(l2);
+        for (let i = 0; i < 20; i++) {
+            const t = new Task(); t.title("task " + i);
+            this.model.taskStore.addTask(t);
+        }
     }
 
     addTask(e : KeyboardEvent): void {

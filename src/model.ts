@@ -19,7 +19,6 @@ export interface ILabel extends IDomainObject {
     name: DataSignal<string>;
     color: DataSignal<IColor>;
     parent?: DataSignal<ILabel>;
-    cssColor(): {"background-color" : string };
 }
 
 export interface ITask extends IDomainObject {

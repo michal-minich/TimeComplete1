@@ -2,11 +2,37 @@ body {
     background-color: white;
     color: black;
     cursor: default;
+    margin: 0;
+    height: 100vh;
 }
 
-body, input {
+body, table, input {
     font-family: "Segoe UI", sans-serif;
     font-size: 11pt;
+}
+
+#bodyTable {
+    height: 100%;
+    border-collapse: collapse;
+    vertical-align: top;
+}
+
+#bodyTable tr {
+    vertical-align: top;
+}
+
+#bodyTable td {
+    overflow: scroll
+}
+
+.vertical-resizer {
+    width: 3px;
+    background-color: rgb(235, 235, 235);
+    cursor: e-resize;
+}
+
+.vertical-resizer:hover {
+    background-color: lightgray;
 }
 
 .task-list {
@@ -14,17 +40,33 @@ body, input {
     list-style: none;
 }
 
+.task-list tr {
+    border-top: 1px solid rgb(230, 230, 230);
+}
+
+.task-list tr:last-child {
+}
+
 .task-list tr:nth-child(even) {
-    background-color: white;
+    /*background-color: white;*/
 }
 
 .task-list tr:nth-child(odd) {
-    background-color: rgb(218, 218, 218);
+    /*background-color: rgb(218, 218, 218);*/
 }
 
 .task-list tr:hover {
-     background-color: rgb(129, 155, 205);
+    background-color: rgb(226, 226, 226);
  }
+
+.completed-task{
+    color: rgb(165, 165, 165);
+}
+
+.new-task-input {
+    padding-left: 25px;
+    border: none;
+}
 
 .label-list {
     width: 250px;
@@ -35,10 +77,14 @@ body, input {
 
 .label {
     color: white;
-    padding: 0 7px 3px 7px;
-    border-radius: 5px;
+    padding: 1px 7px 3px 7px;
+    border-radius: 7px;
     margin: 3px;
     float: left;
+}
+
+.label:hover {
+    border-top-left-radius: 0;
 }
 
 .new-label-input {
@@ -48,4 +94,22 @@ body, input {
     color: black;
     background-color: rgb(228, 228, 228);
     width: 80px;
+}
+
+.label-tag {
+    height: 1em;
+    padding: 0 3px 4px 4px;
+    border-radius: 5px;
+    margin: 2px;
+    float: left;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
