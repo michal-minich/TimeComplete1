@@ -2,6 +2,7 @@
 import SArray, { SArray as SArrayType, SDataArray } from "s-array";
 
 import * as M from "./model";
+import * as Q from "./query";
 
 
 class LabelList implements M.ILabelList {
@@ -19,10 +20,9 @@ class LabelList implements M.ILabelList {
 
 class TaskList implements M.ITaskList {
 
-    findTask(taskQuery: string) : SArrayType<M.ITask> {
-     
-       return this.tasks.filter(t => t.title().indexOf(taskQuery) !== -1);
-     
+    findTask(taskQuery: string): SArrayType<M.ITask> {
+        const q = new Q.TaskQueryParser().parse(taskQuery);
+        return this.tasks.filter(t => q.taskMatches(t));
     }
 
     addTask(task: M.ITask): void {

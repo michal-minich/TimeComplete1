@@ -7,7 +7,7 @@ import { TaskController } from "./controllers";
 let resizeStartLeft = -1;
 var labelList: HTMLDivElement;
 
-window.addEventListener('mousemove',
+window.addEventListener("mousemove",
     (e: MouseEvent) => {
         if (resizeStartLeft !== -1) {
             document.body.classList.add("noselect");
@@ -16,7 +16,7 @@ window.addEventListener('mousemove',
     },
     false);
 
-window.addEventListener('mouseup',
+window.addEventListener("mouseup",
     (e: MouseEvent) => {
         resizeStartLeft = -1;
         document.body.classList.remove("noselect");
