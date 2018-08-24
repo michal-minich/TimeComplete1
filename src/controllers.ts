@@ -3,6 +3,7 @@ import SArray, { SArray as SArrayType, SDataArray } from "s-array";
 
 import * as M from "./model";
 import * as Q from "./query";
+import * as V from "./views";
 
 
 class LabelList implements M.ILabelList {
@@ -20,7 +21,7 @@ class LabelList implements M.ILabelList {
 
 class TaskList implements M.ITaskList {
 
-    findTask(taskQuery: string): SArrayType<M.ITask> {
+    searchedTasks(taskQuery: string): SArrayType<M.ITask> {
         const q = new Q.TaskQueryParser().parse(taskQuery);
         return this.tasks.filter(t => q.taskMatches(t));
     }
@@ -88,6 +89,7 @@ class AppState implements M.IAppState {
     taskQuery = S.data("");
     newTaskName = S.data("");
     newLabelName = S.data("");
+    editTaskTitle = S.data("");
 }
 
 
@@ -104,7 +106,7 @@ export class TaskController {
         lGreen.name("green");
         lGreen.color(new Color("green"));
         this.model.labelStore.addLabel(lGreen);
-        
+
         const lBlue = new Label();
         lBlue.name("blue");
         lBlue.color(new Color("blue"));
@@ -117,27 +119,32 @@ export class TaskController {
             this.model.labelStore.addLabel(lbl);
         }
 
-        const t1 = new Task(); t1.title("task 1 a");
+        const t1 = new Task();
+        t1.title("task 1 a");
         this.model.taskStore.addTask(t1);
-        const t2 = new Task(); t2.title("task 2 ab");
+        const t2 = new Task();
+        t2.title("task 2 ab");
         this.model.taskStore.addTask(t2);
         t2.assignLabel(lGreen);
-        const t3 = new Task(); t3.title("task 3 abc");
+        const t3 = new Task();
+        t3.title("task 3 abc");
         t3.completedOn(new DateTime("2018"));
         t3.assignLabel(lRed);
         t3.assignLabel(lBlue);
         this.model.taskStore.addTask(t3);
-        const t4 = new Task(); t4.title("task 4 abcd");
+        const t4 = new Task();
+        t4.title("task 4 abcd");
         this.model.taskStore.addTask(t4);
         t4.assignLabel(lRed);
-        
+
         for (let i = 0; i < 20; i++) {
-            const t = new Task(); t.title("task " + i);
+            const t = new Task();
+            t.title("task " + i);
             this.model.taskStore.addTask(t);
         }
     }
 
-    addTask(e : KeyboardEvent): void {
+    addTask(e: KeyboardEvent): void {
         if (e.keyCode !== 13)
             return;
         if (this.model.newTaskName() === "")
@@ -148,8 +155,8 @@ export class TaskController {
         this.model.taskStore.addTask(t);
     }
 
-    findTask(): SArrayType<M.ITask> {
-        return this.model.taskStore.findTask(this.model.taskQuery());
+    searchedTasks(): SArrayType<M.ITask> {
+        return this.model.taskStore.searchedTasks(this.model.taskQuery());
     }
 
 
@@ -161,7 +168,7 @@ export class TaskController {
         }
     }
 
-    addLabel(e : KeyboardEvent): any {
+    addLabel(e: KeyboardEvent): any {
         if (e.keyCode !== 13)
             return;
         if (this.model.newLabelName() === "")
@@ -170,5 +177,52 @@ export class TaskController {
         l.name(this.model.newLabelName());
         this.model.newLabelName("");
         this.model.labelStore.addLabel(l);
+    }
+
+    addSearch(): void {
+    }
+
+    addOrRemoveLabelFromQuery(l: M.ILabel): void {
+        const ln = l.name();
+        const q = this.model.taskQuery().trim().replace("  ", " ");
+        if (q.indexOf(ln) === -1) {
+            this.model.taskQuery(q + " #" + ln);
+        } else {
+            this.model.taskQuery(q.replace("#" + ln, "").replace("  ", " "));
+        }
+    }
+
+
+    startEditTask(t: M.ITask, titleTd: HTMLTableDataCellElement): void {
+        this.finishEditingTask();
+        this.model.selectedTask = t;
+        this.model.editTaskTitle(t.title());
+        const r = titleTd.getBoundingClientRect();
+        const txtStyle = V.AppView.taskEditTextBox.style;
+        txtStyle.left = r.left + "px";
+        txtStyle.top = r.top + "px";
+        txtStyle.width = r.width + "px";
+        txtStyle.height = (r.height - 1) + "px";
+        txtStyle.display = "block";
+        V.AppView.taskEditTextBox.value = t.title();
+        setTimeout(() => V.AppView.taskEditTextBox.focus(), 0);
+    }
+
+    setTaskTitle(e: KeyboardEvent): void {
+        if (e.keyCode !== 13)
+            return;
+        this.finishEditingTask();
+    }
+
+    private finishEditingTaskCounter = 0;
+    finishEditingTask(): void {
+        ++this.finishEditingTaskCounter;
+        if (this.model.selectedTask === undefined || this.finishEditingTaskCounter === 1)
+            return;
+        this.finishEditingTaskCounter = 0;
+        this.model.selectedTask.title(this.model.editTaskTitle());
+        this.model.editTaskTitle("");
+        this.model.selectedTask = undefined;
+        V.AppView.taskEditTextBox.style.display = "none";
     }
 }

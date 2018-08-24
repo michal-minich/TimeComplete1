@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = {
-    entry: "./src/index.ts",
+    entry: "./src/app.ts",
     devtool: "inline-source-map",
     output: {
         filename: "./scripts/main.js"

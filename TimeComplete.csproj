@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="todo.md" />
     <Content Include=".gitignore" />
     <Content Include="index.html" />
     <Content Include="scripts\main.js" />
@@ -79,7 +80,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="src\query.ts" />
     <TypeScriptCompile Include="src\controllers.ts" />
-    <TypeScriptCompile Include="src\index.ts" />
+    <TypeScriptCompile Include="src\app.ts" />
     <TypeScriptCompile Include="src\model.ts" />
     <TypeScriptCompile Include="src\views.tsx" />
   </ItemGroup>

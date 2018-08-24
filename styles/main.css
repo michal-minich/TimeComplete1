@@ -68,6 +68,12 @@ body, table, input {
     border: none;
 }
 
+.task-text-edit-box {
+    display: none;
+    position: absolute;
+    border: none;
+}
+
 .label-list {
     width: 250px;
     padding: 5px;
@@ -102,6 +108,10 @@ body, table, input {
     border-radius: 5px;
     margin: 2px;
     float: left;
+}
+
+.searched-label {
+    text-decoration: underline;
 }
 
 .noselect {

@@ -2,7 +2,7 @@
 
 
 export class TaskQuery {
-    queryItems: QueryItem[] = [];
+    queryItems: IQueryItem[] = [];
 
     taskMatches(t: M.ITask): boolean {
         const title = t.title();
@@ -27,19 +27,18 @@ export class TaskQuery {
 }
 
 
-// ReSharper disable once InconsistentNaming
-export interface QueryItem {
+export interface IQueryItem {
 }
 
 
-export class QueryText implements QueryItem {
+export class QueryText implements IQueryItem {
     value: string;
 
     constructor(value: string) { this.value = value; }
 }
 
 
-export class QueryLabel implements QueryItem {
+export class QueryLabel implements IQueryItem {
     value: string;
 
     constructor(value: string) { this.value = value; }

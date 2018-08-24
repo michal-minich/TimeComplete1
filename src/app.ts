@@ -4,9 +4,13 @@ import { TaskController } from "./controllers";
 import { AppView } from "./views";
 
 
-var ctrl = new TaskController();
+export module App {
+    export let ctrl = new TaskController();
+}
+
 
 S.root(() => {
-    var view = AppView(ctrl);
+    var view = AppView.view(App.ctrl);
     document.body.appendChild(view);
+    setTimeout(()=> AppView.queryTextBox.focus(), 100);
 });

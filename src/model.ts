@@ -32,7 +32,7 @@ export interface ITask extends IDomainObject {
 
 export interface ITaskList {
     tasks: SDataArray<ITask>;
-    findTask(taskQuery: string): SArray<ITask>;
+    searchedTasks(taskQuery: string): SArray<ITask>;
     addTask(task: ITask): void;
 }
 
@@ -45,10 +45,11 @@ export interface ILabelList {
 export interface IAppState {
     readonly taskStore: ITaskList;
     readonly labelStore: ILabelList;
-    selectedTask?: ITask;
+    selectedTask?: ITask | undefined;
     taskQuery: DataSignal<string>;
     newTaskName: DataSignal<string>;
     newLabelName: DataSignal<string>;
+    editTaskTitle: DataSignal<string>;
 }
 
 // query language
