@@ -1,4 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=BD212344_002D0A2E_002D4C8A_002DB59C_002D729F7BA56ED1_002Fd_003Ascripts_002Ff_003Amain_002Ejs/@EntryIndexedValue">BD212344-0A2E-4C8A-B59C-729F7BA56ED1/d:scripts/f:main.js</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=DeclarationIsEmpty/@EntryIndexedValue">SUGGESTION</s:String>
-	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=UnusedLocalImport/@EntryIndexedValue">SUGGESTION</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=UnusedLocalImport/@EntryIndexedValue">SUGGESTION</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=langversion/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Michal/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Minich/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

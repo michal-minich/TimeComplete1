@@ -1,3 +1,6 @@
+- make possible to un/assing labels to tasks
+
+
 - make possible to rename label
 - make possible to delete label
 - make possible to change label color
@@ -8,7 +11,6 @@
 - make possible to change search color
 - inlude/exclude search reference in query when activated
 
-- make possible to un/assing labels to tasks
 - make possible to see task creation date time
 - make possible to see task's last completion date time
 

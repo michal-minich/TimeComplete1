@@ -3,6 +3,7 @@ import * as Surplus from "surplus"; Surplus;
 import data from "surplus-mixin-data";
 
 import { TaskController } from "./controllers";
+import * as M from "./model";
 
 
 export module AppView {
@@ -15,7 +16,7 @@ export module AppView {
     window.addEventListener("mousemove",
         (e: MouseEvent) => {
             if (resizeStartLeft !== -1) {
-                document.body.classList.add("noselect");
+                document.body.classList.add("user-select-none");
                 labelList.style.width = (e.clientX - labelList.offsetLeft - 10) + "px";
             }
         },
@@ -25,12 +26,37 @@ export module AppView {
     window.addEventListener("mouseup",
         (e: MouseEvent) => {
             resizeStartLeft = -1;
-            document.body.classList.remove("noselect");
+            document.body.classList.remove("user-select-none");
         },
         false);
 
+    
+    const taskListView = (c : TaskController) =>
+        c.searchedTasks().map(t => {
+            let doneChk: HTMLInputElement | undefined = undefined;
+            let titleTd: HTMLTableDataCellElement | undefined = undefined;
+            return <tr>
+                       <td>
+                           <input
+                               ref={doneChk}
+                               type="checkbox"
+                               checked={t.completedOn() !== undefined}
+                               onChange={() => c.changeTaskCompletion(t, doneChk!)}/>
+                       </td>
+                       <td ref={titleTd}
+                           onMouseDown={() => c.startEditTask(t, titleTd!)}
+                           className={t.completedOn() !== undefined
+                               ? "completed-task"
+                               : ""}>{t.title()}</td>
+                       <td>{t.assignedLabels.map(al =>
+                           <span
+                               className="label-tag"
+                               title={al.name()}
+                               style={{ backgroundColor: al.color().value }}></span>)}
+                       </td>
+                   </tr>;
+        });
 
-// ReSharper disable once InconsistentNaming
     export const view = (c: TaskController) =>
         <table id="bodyTable">
             <tbody>
@@ -77,31 +103,7 @@ export module AppView {
                            fn={data(c.model.newTaskName)}/>
                     <table className="task-list">
                         <thead></thead>
-                        <tbody>{
-                            c.searchedTasks().map(t => {
-                                let doneChk: HTMLInputElement | undefined = undefined;
-                                let titleTd: HTMLTableDataCellElement | undefined = undefined;
-                                return <tr>
-                                           <td>
-                                               <input
-                                                   ref={doneChk}
-                                                   type="checkbox"
-                                                   checked={t.completedOn() !== undefined}
-                                                   onChange={() => c.changeTaskCompletion(t, doneChk!)}/>
-                                           </td>
-                                           <td ref={titleTd}
-                                               onMouseDown={() => c.startEditTask(t, titleTd!)}
-                                               className={t.completedOn() !== undefined
-                                                   ? "completed-task"
-                                                   : ""}>{t.title()}</td>
-                                           <td>{t.assignedLabels.map(al =>
-                                               <span
-                                                   className="label-tag"
-                                                   title={al.name()}
-                                                   style={{ backgroundColor: al.color().value }}></span>)}
-                                           </td>
-                                       </tr>;
-                            })}
+                        <tbody>{taskListView(c)}
                         </tbody>
                     </table>
                         <input 

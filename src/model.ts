@@ -26,7 +26,7 @@ export interface ITask extends IDomainObject {
     completedOn: DataSignal<IDateTime | undefined>;
     readonly assignedLabels: SArray<ILabel>;
     assignLabel(label: ILabel): void;
-    unAssingLabel(label: ILabel): void;
+    unAssignLabel(label: ILabel): void;
     completedValue(): string;
 }
 

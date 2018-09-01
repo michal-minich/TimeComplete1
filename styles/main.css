@@ -44,17 +44,6 @@ body, table, input {
     border-top: 1px solid rgb(230, 230, 230);
 }
 
-.task-list tr:last-child {
-}
-
-.task-list tr:nth-child(even) {
-    /*background-color: white;*/
-}
-
-.task-list tr:nth-child(odd) {
-    /*background-color: rgb(218, 218, 218);*/
-}
-
 .task-list tr:hover {
     background-color: rgb(226, 226, 226);
  }
@@ -106,7 +95,8 @@ body, table, input {
     height: 1em;
     padding: 0 3px 4px 4px;
     border-radius: 5px;
-    margin: 2px;
+    margin: 1px;
+    margin-left: 3px;
     float: left;
 }
 
@@ -114,7 +104,7 @@ body, table, input {
     text-decoration: underline;
 }
 
-.noselect {
+.user-select-none {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */

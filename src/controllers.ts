@@ -42,7 +42,7 @@ class Task implements M.ITask {
         this.assignedLabels.push(label);
     }
 
-    unAssingLabel(label: M.ILabel): void {
+    unAssignLabel(label: M.ILabel): void {
         this.assignedLabels.remove(label);
     }
 
