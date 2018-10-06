@@ -86,6 +86,7 @@ class DateTime implements M.IDateTime {
 class AppState implements M.IAppState {
     taskStore: M.ITaskList = new TaskList();
     labelStore: M.ILabelList = new LabelList();
+    selectedTask = S.data(undefined);
     taskQuery = S.data("");
     newTaskName = S.data("");
     newLabelName = S.data("");
@@ -195,7 +196,7 @@ export class TaskController {
 
     startEditTask(t: M.ITask, titleTd: HTMLTableDataCellElement): void {
         this.finishEditingTask();
-        this.model.selectedTask = t;
+        this.model.selectedTask(t);
         this.model.editTaskTitle(t.title());
         const r = titleTd.getBoundingClientRect();
         const txtStyle = V.AppView.taskEditTextBox.style;
@@ -220,9 +221,9 @@ export class TaskController {
         if (this.model.selectedTask === undefined || this.finishEditingTaskCounter === 1)
             return;
         this.finishEditingTaskCounter = 0;
-        this.model.selectedTask.title(this.model.editTaskTitle());
+        this.model.selectedTask()!.title(this.model.editTaskTitle());
         this.model.editTaskTitle("");
-        this.model.selectedTask = undefined;
+        this.model.selectedTask(undefined);
         V.AppView.taskEditTextBox.style.display = "none";
     }
 }

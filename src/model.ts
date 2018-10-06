@@ -45,7 +45,7 @@ export interface ILabelList {
 export interface IAppState {
     readonly taskStore: ITaskList;
     readonly labelStore: ILabelList;
-    selectedTask?: ITask | undefined;
+    selectedTask: DataSignal<ITask | undefined>;
     taskQuery: DataSignal<string>;
     newTaskName: DataSignal<string>;
     newLabelName: DataSignal<string>;

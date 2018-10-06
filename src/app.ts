@@ -12,5 +12,8 @@ export module App {
 S.root(() => {
     var view = AppView.view(App.ctrl);
     document.body.appendChild(view);
+
+    var view2 = AppView.labelAssignView(App.ctrl);
+    document.body.appendChild(view2);
     setTimeout(()=> AppView.queryTextBox.focus(), 100);
 });

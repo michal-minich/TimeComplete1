@@ -70,11 +70,12 @@ export module AppView {
                                onKeyUp={(e: KeyboardEvent) => c.addLabel(e)}/>
                         {c.model.labelStore.labels.map(l =>
                             <span
-                                className={"label" + (c.model.taskQuery().indexOf(l.name()) === -1 ? "" : " searched-label")}
+                                className={"label" +
+                                    (c.model.taskQuery().indexOf(l.name()) === -1 ? "" : " searched-label")}
                                 onMouseDown={() => {
-                                c.addOrRemoveLabelFromQuery(l);
-                                setTimeout(()=> queryTextBox.focus());
-                            }}
+                                    c.addOrRemoveLabelFromQuery(l);
+                                    setTimeout(() => queryTextBox.focus());
+                                }}
                                 style={{ "backgroundColor": l.color().value }}>{l.name()}</span>)()}
                     </div>
                 </td>
@@ -106,15 +107,20 @@ export module AppView {
                         <tbody>{taskListView(c)}
                         </tbody>
                     </table>
-                        <input 
-                            type="text" 
-                            ref={taskEditTextBox} 
-                            fn={data(c.model.editTaskTitle)}
-                            onKeyUp={(e: KeyboardEvent) => c.setTaskTitle(e)}
-                            onBlur={() => c.finishEditingTask()}
-                            className="task-text-edit-box"/>
+                    <input
+                        type="text"
+                        ref={taskEditTextBox}
+                        fn={data(c.model.editTaskTitle)}
+                        onKeyUp={(e: KeyboardEvent) => c.setTaskTitle(e)}
+                        onBlur={() => c.finishEditingTask()}
+                        className="task-text-edit-box"/>
                 </td>
             </tr>
             </tbody>
         </table>;
+
+    export const labelAssignView = (c : TaskController) =>
+        <div>
+            <span>{c.model.selectedTask() ? c.model.selectedTask()!.title : ""}</span>
+        </div>;
 }
