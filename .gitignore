@@ -1,6 +1,6 @@
 .vs/
 node_modules/
-scripts/*.js*
+dist/*.js*
 bin/
 obj/
 *.user
