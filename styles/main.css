@@ -104,6 +104,10 @@ body, table, input {
     text-decoration: underline;
 }
 
+.hidden {
+    display: none;
+}
+
 .user-select-none {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -112,4 +116,8 @@ body, table, input {
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+.assign-labels-popup {
+    position: absolute;
 }

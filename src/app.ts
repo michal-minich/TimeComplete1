@@ -1,19 +1,20 @@
 import S from "s-js";
 
-import { TaskController } from "./controllers";
 import { AppView } from "./views";
-
-
-export module App {
-    export let ctrl = new TaskController();
-}
+import * as M from "./model";
+import * as C from "./controllers";
 
 
 S.root(() => {
-    var view = AppView.view(App.ctrl);
+    const app: M.IApp = new C.App();
+
+    C.initSampleData(app);
+
+    var view = AppView.view(app);
     document.body.appendChild(view);
 
-    var view2 = AppView.labelAssignView(App.ctrl);
+    var view2 = AppView.labelAssignView(app);
     document.body.appendChild(view2);
-    setTimeout(()=> AppView.queryTextBox.focus(), 100);
+
+    setTimeout(() => AppView.queryTextBox.focus(), 100);
 });

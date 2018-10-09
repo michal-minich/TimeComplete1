@@ -1,5 +1,5 @@
 import { DataSignal } from "s-js";
-import { SArray, SDataArray  } from "s-array";
+import { SArray, SDataArray } from "s-array";
 
 
 export interface IColor {
@@ -42,15 +42,67 @@ export interface ILabelList {
     removeLabel(label: ILabel): void;
 }
 
-export interface IAppState {
+export interface IApp {
     readonly taskStore: ITaskList;
     readonly labelStore: ILabelList;
-    selectedTask: DataSignal<ITask | undefined>;
-    taskQuery: DataSignal<string>;
-    newTaskName: DataSignal<string>;
-    newLabelName: DataSignal<string>;
-    editTaskTitle: DataSignal<string>;
+
+    readonly selectTaskActivity: ISelectTaskActivity;
+    readonly addTaskActivity: IAddTaskActivity;
+    readonly addLabelActivity: IAddLabelActivity;
+    readonly editTaskTitleActivity: IEditTaskTitleActivity;
+    readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
+    readonly assignLabelToTaskActivity: IAssignLabelToTaskActivity;
+    readonly searchTaskListActivity: ISearchTaskListActivity;
 }
+
+
+export interface IActivityController {
+    //perform, commit, rollback, reset
+}
+
+
+export interface ISelectTaskActivity extends IActivityController {
+    selectedTask: DataSignal<ITask | undefined>;
+}
+
+export interface IAddTaskActivity extends IActivityController {
+    newName: DataSignal<string>;
+    keyUp(e: KeyboardEvent): void;
+    commit(): void;
+    rollback(): void;
+}
+
+export interface IAddLabelActivity extends IActivityController {
+    newName: DataSignal<string>;
+    keyUp(e: KeyboardEvent): any;
+    commit(): void;
+    rollback(): void;
+}
+
+export interface IEditTaskTitleActivity extends IActivityController {
+    begin(t: ITask, titleTd: HTMLTableDataCellElement): void;
+    newTitle: DataSignal<string>;
+    keyUp(e: KeyboardEvent): void;
+    commit(): void;
+    rollback(): void;
+}
+
+export interface IChangeTaskCompletionActivity extends IActivityController {
+    perform(task: ITask, isDone: HTMLInputElement): any;
+}
+
+export interface IAssignLabelToTaskActivity extends IActivityController {
+    startAssigningLabels(task: ITask, titleTd: HTMLTableDataCellElement, assignLabelPopup: HTMLTableElement): void;
+}
+
+export interface ISearchTaskListActivity extends IActivityController {
+    addOrRemoveLabelFromQuery(l: ILabel): void;
+    resultTasks(): SArray<ITask>;
+    addSearch(): void;
+    taskQuery: DataSignal<string>;
+    resultTasks(): SArray<ITask>;
+}
+
 
 // query language
 // free text ... 'text' matches %text%

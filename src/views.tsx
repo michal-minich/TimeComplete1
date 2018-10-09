@@ -1,8 +1,8 @@
 // ReSharper disable once WrongExpressionStatement
-import * as Surplus from "surplus"; Surplus;
+import * as Surplus from "surplus";
+Surplus;
 import data from "surplus-mixin-data";
 
-import { TaskController } from "./controllers";
 import * as M from "./model";
 
 
@@ -12,6 +12,7 @@ export module AppView {
     export let queryTextBox: HTMLInputElement;
     export let taskEditTextBox: HTMLInputElement;
 
+    let assignLabelPopup: HTMLTableElement;
 
     window.addEventListener("mousemove",
         (e: MouseEvent) => {
@@ -30,9 +31,9 @@ export module AppView {
         },
         false);
 
-    
-    const taskListView = (c : TaskController) =>
-        c.searchedTasks().map(t => {
+
+    const taskListView = (a: M.IApp) =>
+        a.searchTaskListActivity.resultTasks().map(t => {
             let doneChk: HTMLInputElement | undefined = undefined;
             let titleTd: HTMLTableDataCellElement | undefined = undefined;
             return <tr>
@@ -41,23 +42,31 @@ export module AppView {
                                ref={doneChk}
                                type="checkbox"
                                checked={t.completedOn() !== undefined}
-                               onChange={() => c.changeTaskCompletion(t, doneChk!)}/>
+                               onChange={() => a.changeTaskCompletionActivity.perform(t, doneChk!)}/>
                        </td>
                        <td ref={titleTd}
-                           onMouseDown={() => c.startEditTask(t, titleTd!)}
+                           onMouseDown={() => a.editTaskTitleActivity.begin(t, titleTd!)}
                            className={t.completedOn() !== undefined
                                ? "completed-task"
-                               : ""}>{t.title()}</td>
-                       <td>{t.assignedLabels.map(al =>
-                           <span
-                               className="label-tag"
-                               title={al.name()}
-                               style={{ backgroundColor: al.color().value }}></span>)}
+                               : ""}>
+                           {t.title()}
+                       </td>
+                       <td onClick={() => a.assignLabelToTaskActivity.startAssigningLabels(t,
+                           titleTd!,
+                           assignLabelPopup)}>
+                           {
+                               t.assignedLabels.map(
+                                   al =>
+                                   <span
+                                       className="label-tag"
+                                       title={al.name()}
+                                       style={{ backgroundColor: al.color().value }}>
+                                   </span>)}
                        </td>
                    </tr>;
         });
 
-    export const view = (c: TaskController) =>
+    export const view = (a: M.IApp) =>
         <table id="bodyTable">
             <tbody>
             <tr>
@@ -66,33 +75,36 @@ export module AppView {
                         <input type="text"
                                placeholder="new label"
                                className="new-label-input label"
-                               fn={data(c.model.newLabelName)}
-                               onKeyUp={(e: KeyboardEvent) => c.addLabel(e)}/>
-                        {c.model.labelStore.labels.map(l =>
+                               fn={data(a.addLabelActivity.newName)}
+                               onKeyUp={(e: KeyboardEvent) => a.addLabelActivity.keyUp(e)}/>
+                        {a.labelStore.labels.map(l =>
                             <span
                                 className={"label" +
-                                    (c.model.taskQuery().indexOf(l.name()) === -1 ? "" : " searched-label")}
+                                    (a.searchTaskListActivity.taskQuery().indexOf(l.name()) === -1
+                                        ? ""
+                                        : " searched-label")}
                                 onMouseDown={() => {
-                                    c.addOrRemoveLabelFromQuery(l);
+                                    a.searchTaskListActivity.addOrRemoveLabelFromQuery(l);
                                     setTimeout(() => queryTextBox.focus());
                                 }}
                                 style={{ "backgroundColor": l.color().value }}>{l.name()}</span>)()}
                     </div>
                 </td>
                 <td className="vertical-resizer"
-                    onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}></td>
+                    onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
+                </td>
                 <td>
                     <input
                         type="text"
                         ref={queryTextBox}
-                        fn={data(c.model.taskQuery)}/>
+                        fn={data(a.searchTaskListActivity.taskQuery)}/>
                     <input
                         type="button"
-                        onMouseDown={() => c.model.taskQuery("")}
+                        onMouseDown={() => a.searchTaskListActivity.taskQuery("")}
                         value="Clear"/>
                     <input
                         type="button"
-                        onMouseDown={() => c.addSearch()}
+                        onMouseDown={() => a.searchTaskListActivity.addSearch()}
                         value="+"/>
 
                     <br/>
@@ -100,27 +112,37 @@ export module AppView {
                     <input type="text"
                            placeholder="new task"
                            className="new-task-input"
-                           onKeyUp={(e: KeyboardEvent) => c.addTask(e)}
-                           fn={data(c.model.newTaskName)}/>
+                           onKeyUp={(e: KeyboardEvent) => a.addTaskActivity.keyUp(e)}
+                           fn={data(a.addTaskActivity.newName)}/>
                     <table className="task-list">
                         <thead></thead>
-                        <tbody>{taskListView(c)}
+                        <tbody>
+                        {taskListView(a)}
                         </tbody>
                     </table>
                     <input
                         type="text"
                         ref={taskEditTextBox}
-                        fn={data(c.model.editTaskTitle)}
-                        onKeyUp={(e: KeyboardEvent) => c.setTaskTitle(e)}
-                        onBlur={() => c.finishEditingTask()}
+                        fn={data(a.editTaskTitleActivity.newTitle)}
+                        onKeyUp={(e: KeyboardEvent) => a.editTaskTitleActivity.keyUp(e)}
+                        onBlur={() => a.editTaskTitleActivity.commit()}
                         className="task-text-edit-box"/>
                 </td>
             </tr>
             </tbody>
         </table>;
 
-    export const labelAssignView = (c : TaskController) =>
-        <div>
-            <span>{c.model.selectedTask() ? c.model.selectedTask()!.title : ""}</span>
-        </div>;
+    export const labelAssignView = (a: M.IApp) =>
+        <table ref={assignLabelPopup}>
+            <tbody>
+            {
+                !a.selectTaskActivity.selectedTask()
+                    ? ""
+                    : a.selectTaskActivity.selectedTask()!.assignedLabels.map(al =>
+                        <tr>
+                            <td>{al.name()}</td>
+                        </tr>)
+            }
+            </tbody>
+        </table>;
 }

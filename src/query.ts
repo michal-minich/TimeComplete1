@@ -84,8 +84,8 @@ export class TaskQueryParser {
                 ordCh = this.currentCode();
                 if (ordCh === ord_space)
                     break;
-               ++this.pos;
-            } while (this.hasWork())
+                ++this.pos;
+            } while (this.hasWork());
 
             const len = this.pos - startPos;
             if (len > 0)
