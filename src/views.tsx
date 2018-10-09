@@ -45,7 +45,8 @@ export module AppView {
                                onChange={() => a.changeTaskCompletionActivity.perform(t, doneChk!)}/>
                        </td>
                        <td ref={titleTd}
-                           onMouseDown={() => a.editTaskTitleActivity.begin(t, titleTd!)}
+                           tabIndex={1}
+                           onFocus={() => a.editTaskTitleActivity.begin(t, titleTd!)}
                            className={t.completedOn() !== undefined
                                ? "completed-task"
                                : ""}>
@@ -97,10 +98,11 @@ export module AppView {
                     <input
                         type="text"
                         ref={queryTextBox}
+                        onKeyUp={(e: KeyboardEvent) => a.searchTaskListActivity.keyUp(e)}
                         fn={data(a.searchTaskListActivity.taskQuery)}/>
                     <input
                         type="button"
-                        onMouseDown={() => a.searchTaskListActivity.taskQuery("")}
+                        onMouseDown={() => a.searchTaskListActivity.rollback()}
                         value="Clear"/>
                     <input
                         type="button"

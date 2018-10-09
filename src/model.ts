@@ -97,10 +97,12 @@ export interface IAssignLabelToTaskActivity extends IActivityController {
 
 export interface ISearchTaskListActivity extends IActivityController {
     addOrRemoveLabelFromQuery(l: ILabel): void;
+    keyUp(e: KeyboardEvent): void;
     resultTasks(): SArray<ITask>;
     addSearch(): void;
     taskQuery: DataSignal<string>;
     resultTasks(): SArray<ITask>;
+    rollback(): void;
 }
 
 

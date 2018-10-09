@@ -124,6 +124,7 @@ class SelectTaskActivity implements M.ISelectTaskActivity {
 
     selectedTask = S.data(undefined as (M.ITask | undefined));
 
+
     perform(): void {
     }
 }
@@ -139,9 +140,7 @@ class AddTaskActivity implements M.IAddTaskActivity {
         this.app = app;
     }
 
-    begin(): void {
-    }
-
+    
     commit(): void {
         if (this.newName() === "")
             return;
@@ -151,14 +150,17 @@ class AddTaskActivity implements M.IAddTaskActivity {
         this.app.taskStore.addTask(t);
     }
 
+
     rollback(): void {
+        this.newName("");
     }
 
 
     keyUp(e: KeyboardEvent): void {
         if (e.keyCode === 13)
             this.commit();
-        // todo if esc rollback
+        else if (e.keyCode === 27)
+            this.rollback();
     }
 }
 
@@ -170,9 +172,7 @@ class AddLabelActivity implements M.IAddLabelActivity {
     constructor(app: M.IApp) {
         this.app = app;
     }
-
-    begin(): void {
-    }
+    
 
     commit(): void {
         if (this.newName() === "")
@@ -183,13 +183,17 @@ class AddLabelActivity implements M.IAddLabelActivity {
         this.app.labelStore.addLabel(l);
     }
 
+
     rollback(): void {
+        this.newName("");
     }
+
 
     keyUp(e: KeyboardEvent): any {
         if (e.keyCode === 13)
             this.commit();
-        // todo if esc rollback
+        else if (e.keyCode === 27)
+            this.rollback();
     }
 }
 
@@ -197,6 +201,7 @@ class AddLabelActivity implements M.IAddLabelActivity {
 class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
 
     newTitle = S.data("");
+    private originalTitle = "";
     private readonly app: M.IApp;
 
     constructor(app: M.IApp) {
@@ -205,7 +210,9 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
 
 
     begin(t: M.ITask, titleTd: HTMLTableDataCellElement): void {
-        this.commit();
+        console.log("begin " + t.title());
+        //this.commit();
+        this.originalTitle = t.title();
         this.app.selectTaskActivity.selectedTask(t);
         this.newTitle(t.title());
         const r = titleTd.getBoundingClientRect();
@@ -220,29 +227,34 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
     }
 
 
-    private finishEditingTaskCounter = 0;
-
     commit(): void {
-        ++this.finishEditingTaskCounter;
-        if (this.app.selectTaskActivity.selectedTask() === undefined || this.finishEditingTaskCounter === 1)
+        console.log("commit");
+        if (this.app.selectTaskActivity.selectedTask() === undefined)
             return;
-        this.finishEditingTaskCounter = 0;
         this.app.selectTaskActivity.selectedTask()!.title(this.newTitle());
-        this.newTitle("");
-        this.app.selectTaskActivity.selectedTask(undefined);
-        V.AppView.taskEditTextBox.style.display = "none";
+        this.cleanup();
     }
 
 
     rollback(): void {
+        console.log("rollback");
+        this.cleanup();
+    }
+
+    
+    cleanup(): void {
+        console.log("cleanup");
+        V.AppView.taskEditTextBox.style.display = "none";
+        this.newTitle("");
+        this.app.selectTaskActivity.selectedTask(undefined);
     }
 
 
     keyUp(e: KeyboardEvent): void {
-        if (e.keyCode === 13) {
+        if (e.keyCode === 13)
             this.commit();
-        }
-        // todo if esc rollback
+        else if (e.keyCode === 27)
+            this.rollback();
     }
 }
 
@@ -313,6 +325,16 @@ class SearchTaskListActivity implements M.ISearchTaskListActivity {
 
 
     addSearch(): void {
+    }
+    
+    rollback(): void {
+        this.taskQuery("");
+    }
+
+
+    keyUp(e: KeyboardEvent): void {
+        if (e.keyCode === 27)
+            this.rollback();
     }
 
 

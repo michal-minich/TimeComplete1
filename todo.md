@@ -1,8 +1,6 @@
 - make possible to un/assing labels to tasks
 
 
-- make possible to cancel editing task title by esc
-
 - make possible to rename label
 - make possible to delete label
 - make possible to change label color
