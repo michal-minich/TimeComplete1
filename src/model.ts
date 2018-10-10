@@ -45,16 +45,21 @@ export interface ILabelList {
 export interface IApp {
     readonly taskStore: ITaskList;
     readonly labelStore: ILabelList;
+    readonly taskListsActivities: SArray<ITaskListActivity>;
 
-    readonly selectTaskActivity: ISelectTaskActivity;
-    readonly addTaskActivity: IAddTaskActivity;
+    readonly selectedTaskListActivity: DataSignal<ITaskListActivity>;
     readonly addLabelActivity: IAddLabelActivity;
-    readonly editTaskTitleActivity: IEditTaskTitleActivity;
-    readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
     readonly assignLabelToTaskActivity: IAssignLabelToTaskActivity;
-    readonly searchTaskListActivity: ISearchTaskListActivity;
 }
 
+
+export interface ITaskListActivity {
+    readonly selectTaskActivity: ISelectTaskActivity;
+    readonly addTaskActivity: IAddTaskActivity;
+    readonly editTaskTitleActivity: IEditTaskTitleActivity;
+    readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
+    readonly searchTaskListActivity: ISearchTaskListActivity;
+}
 
 export interface IActivityController {
     //perform, commit, rollback, reset
@@ -101,7 +106,6 @@ export interface ISearchTaskListActivity extends IActivityController {
     resultTasks(): SArray<ITask>;
     addSearch(): void;
     taskQuery: DataSignal<string>;
-    resultTasks(): SArray<ITask>;
     rollback(): void;
 }
 

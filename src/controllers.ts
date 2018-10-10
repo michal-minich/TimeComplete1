@@ -1,4 +1,4 @@
-﻿import S from "s-js";
+﻿import S, { DataSignal as DataSignalType } from "s-js";
 import SArray, { SArray as SArrayType, SDataArray } from "s-array";
 
 import * as M from "./model";
@@ -94,23 +94,43 @@ class DateTime implements M.IDateTime {
 export class App implements M.IApp {
     readonly taskStore = new TaskList();
     readonly labelStore = new LabelList();
+    readonly taskListsActivities: SArrayType<M.ITaskListActivity>;
+
+    readonly selectedTaskListActivity: DataSignalType<M.ITaskListActivity>;
+    readonly addLabelActivity: M.IAddLabelActivity;
+    readonly assignLabelToTaskActivity: M.IAssignLabelToTaskActivity;
+
+
+    constructor() {
+        this.taskListsActivities = SArray<M.ITaskListActivity>([
+            new TaskListActivity(this),
+            new TaskListActivity(this),
+            new TaskListActivity(this)
+        ]);
+        this.selectedTaskListActivity = S.data(this.taskListsActivities()[0]);
+        this.addLabelActivity = new AddLabelActivity(this);
+        this.assignLabelToTaskActivity = new AssignLabelToTaskActivity(this);
+    }
+}
+
+
+class TaskListActivity implements M.ITaskListActivity {
+    private readonly app: M.IApp;
 
     readonly selectTaskActivity: M.ISelectTaskActivity;
     readonly addTaskActivity: M.IAddTaskActivity;
-    readonly addLabelActivity: M.IAddLabelActivity;
     readonly editTaskTitleActivity: M.IEditTaskTitleActivity;
     readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
-    readonly assignLabelToTaskActivity: M.IAssignLabelToTaskActivity;
     readonly searchTaskListActivity: M.ISearchTaskListActivity;
 
-    constructor() {
-        this.selectTaskActivity = new SelectTaskActivity(this);
-        this.addTaskActivity = new AddTaskActivity(this);
-        this.addLabelActivity = new AddLabelActivity(this);
-        this.editTaskTitleActivity = new EditTaskTitleActivity(this);
-        this.changeTaskCompletionActivity = new ChangeTaskCompletionActivity(this);
-        this.assignLabelToTaskActivity = new AssignLabelToTaskActivity(this);
-        this.searchTaskListActivity = new SearchTaskListActivity(this);
+    constructor(app: M.IApp) {
+        this.app = app;
+
+        this.selectTaskActivity = new SelectTaskActivity(app);
+        this.addTaskActivity = new AddTaskActivity(app);
+        this.editTaskTitleActivity = new EditTaskTitleActivity(app);
+        this.changeTaskCompletionActivity = new ChangeTaskCompletionActivity(app);
+        this.searchTaskListActivity = new SearchTaskListActivity(app);
     }
 }
 
@@ -140,7 +160,7 @@ class AddTaskActivity implements M.IAddTaskActivity {
         this.app = app;
     }
 
-    
+
     commit(): void {
         if (this.newName() === "")
             return;
@@ -172,7 +192,7 @@ class AddLabelActivity implements M.IAddLabelActivity {
     constructor(app: M.IApp) {
         this.app = app;
     }
-    
+
 
     commit(): void {
         if (this.newName() === "")
@@ -213,7 +233,7 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
         console.log("begin " + t.title());
         //this.commit();
         this.originalTitle = t.title();
-        this.app.selectTaskActivity.selectedTask(t);
+        this.app.selectedTaskListActivity().selectTaskActivity.selectedTask(t);
         this.newTitle(t.title());
         const r = titleTd.getBoundingClientRect();
         const txtStyle = V.AppView.taskEditTextBox.style;
@@ -229,9 +249,9 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
 
     commit(): void {
         console.log("commit");
-        if (this.app.selectTaskActivity.selectedTask() === undefined)
+        if (this.app.selectedTaskListActivity().selectTaskActivity.selectedTask() === undefined)
             return;
-        this.app.selectTaskActivity.selectedTask()!.title(this.newTitle());
+        this.app.selectedTaskListActivity().selectTaskActivity.selectedTask()!.title(this.newTitle());
         this.cleanup();
     }
 
@@ -241,12 +261,12 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
         this.cleanup();
     }
 
-    
+
     cleanup(): void {
         console.log("cleanup");
         V.AppView.taskEditTextBox.style.display = "none";
         this.newTitle("");
-        this.app.selectTaskActivity.selectedTask(undefined);
+        this.app.selectedTaskListActivity().selectTaskActivity.selectedTask(undefined);
     }
 
 
@@ -326,7 +346,7 @@ class SearchTaskListActivity implements M.ISearchTaskListActivity {
 
     addSearch(): void {
     }
-    
+
     rollback(): void {
         this.taskQuery("");
     }

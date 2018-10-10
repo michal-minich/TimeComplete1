@@ -10,10 +10,10 @@ S.root(() => {
 
     C.initSampleData(app);
 
-    var view = AppView.view(app);
+    const view = AppView.view(app);
     document.body.appendChild(view);
 
-    var view2 = AppView.labelAssignView(app);
+    const view2 = AppView.labelAssignView(app);
     document.body.appendChild(view2);
 
     setTimeout(() => AppView.queryTextBox.focus(), 100);

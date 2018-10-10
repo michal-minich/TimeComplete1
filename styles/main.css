@@ -2,18 +2,20 @@ body {
     background-color: white;
     color: black;
     cursor: default;
-    margin: 0;
     height: 100vh;
+    margin: 0;
 }
 
-body, table, input {
+body,
+table,
+input {
     font-family: "Segoe UI", sans-serif;
     font-size: 11pt;
 }
 
 #bodyTable {
-    height: 100%;
     border-collapse: collapse;
+    height: 100%;
     vertical-align: top;
 }
 
@@ -26,18 +28,64 @@ body, table, input {
 }
 
 .vertical-resizer {
-    width: 3px;
     background-color: rgb(235, 235, 235);
     cursor: e-resize;
+    width: 3px;
 }
 
 .vertical-resizer:hover {
     background-color: lightgray;
 }
 
+.task-list-activity {
+    float: left;
+    margin: 5px;
+    max-width: 300px;
+    min-width: 150px;
+}
+
+.task-list-activity .header {
+    background-color: rgb(101, 101, 101);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    color: white;
+    padding: 4px;
+}
+
+.task-list-activity .header input:first-child {
+    background-color: rgb(101, 101, 101);
+    border: none;
+    color: white;
+}
+
+.task-list-activity .header input[type=button] {
+    background-color: rgb(190, 190, 190);
+    border: none;
+    color: black;
+    margin-left: 3px;
+}
+
+.task-list-activity .header input:nth-child(3) {
+    border-top-right-radius: 6px;
+}
+
+.task-list-activity .body {
+    border: 1px solid rgb(204, 204, 204);
+    /*background-color: whitesmoke;*/
+}
+
+.task-list-activity .body input {
+    /*background-color: whitesmoke;*/
+}
+
 .task-list {
     border-collapse: collapse;
     list-style: none;
+    width: 100%;
+}
+
+.task-list tr td:first-child {
+    width: 20px;
 }
 
 .task-list tr {
@@ -46,36 +94,37 @@ body, table, input {
 
 .task-list tr:hover {
     background-color: rgb(226, 226, 226);
- }
+}
 
-.completed-task{
+.completed-task {
     color: rgb(165, 165, 165);
 }
 
 .new-task-input {
-    padding-left: 25px;
     border: none;
+    padding-left: 25px;
+    width: 100%;
 }
 
 .task-text-edit-box {
+    border: none;
     display: none;
     position: absolute;
-    border: none;
 }
 
 .label-list {
-    width: 250px;
+    float: left;
     padding: 5px;
     padding-left: 0;
-    float: left;
+    width: 250px;
 }
 
 .label {
-    color: white;
-    padding: 1px 7px 3px 7px;
     border-radius: 7px;
-    margin: 3px;
+    color: white;
     float: left;
+    margin: 3px;
+    padding: 1px 7px 3px 7px;
 }
 
 .label:hover {
@@ -83,21 +132,21 @@ body, table, input {
 }
 
 .new-label-input {
-    border-width: 0;
+    background-color: rgb(228, 228, 228);
     border-color: gray;
     border-style: solid;
+    border-width: 0;
     color: black;
-    background-color: rgb(228, 228, 228);
     width: 80px;
 }
 
 .label-tag {
-    height: 1em;
-    padding: 0 3px 4px 4px;
     border-radius: 5px;
+    float: left;
+    height: 1em;
     margin: 1px;
     margin-left: 3px;
-    float: left;
+    padding: 0 3px 4px 4px;
 }
 
 .searched-label {
@@ -109,11 +158,11 @@ body, table, input {
 }
 
 .user-select-none {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
