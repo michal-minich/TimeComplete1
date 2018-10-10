@@ -50,14 +50,14 @@ export interface IApp {
     readonly selectedTaskListActivity: DataSignal<ITaskListActivity>;
     readonly addLabelActivity: IAddLabelActivity;
     readonly assignLabelToTaskActivity: IAssignLabelToTaskActivity;
+    readonly selectTaskActivity: ISelectTaskActivity;
+    readonly editTaskTitleActivity: IEditTaskTitleActivity;
+    readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
 }
 
 
 export interface ITaskListActivity {
-    readonly selectTaskActivity: ISelectTaskActivity;
     readonly addTaskActivity: IAddTaskActivity;
-    readonly editTaskTitleActivity: IEditTaskTitleActivity;
-    readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
     readonly searchTaskListActivity: ISearchTaskListActivity;
 }
 
@@ -98,9 +98,14 @@ export interface IChangeTaskCompletionActivity extends IActivityController {
 
 export interface IAssignLabelToTaskActivity extends IActivityController {
     startAssigningLabels(task: ITask, titleTd: HTMLTableDataCellElement, assignLabelPopup: HTMLTableElement): void;
+    changeAssociation(label: ILabel): void;
+    begin(): void;
+    keyUp(e: KeyboardEvent): void;
+    labelQuery: DataSignal<string>;
 }
 
 export interface ISearchTaskListActivity extends IActivityController {
+    begin(): void;
     addOrRemoveLabelFromQuery(l: ILabel): void;
     keyUp(e: KeyboardEvent): void;
     resultTasks(): SArray<ITask>;

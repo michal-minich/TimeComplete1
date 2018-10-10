@@ -46,8 +46,8 @@ input {
 
 .task-list-activity .header {
     background-color: rgb(101, 101, 101);
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    /*border-top-left-radius: 7px;
+    border-top-right-radius: 7px;*/
     color: white;
     padding: 4px;
 }
@@ -66,11 +66,11 @@ input {
 }
 
 .task-list-activity .header input:nth-child(3) {
-    border-top-right-radius: 6px;
+    /*border-top-right-radius: 6px;*/
 }
 
 .task-list-activity .body {
-    border: 1px solid rgb(204, 204, 204);
+    border: 1px solid rgb(226, 226, 226);
     /*background-color: whitesmoke;*/
 }
 
@@ -79,20 +79,23 @@ input {
 }
 
 .task-list {
-    border-collapse: collapse;
-    list-style: none;
     width: 100%;
 }
 
-.task-list tr td:first-child {
+.lined-list {
+    border-collapse: collapse;
+    list-style: none;
+}
+
+.lined-list tr td:first-child {
     width: 20px;
 }
 
-.task-list tr {
+.lined-list tr {
     border-top: 1px solid rgb(230, 230, 230);
 }
 
-.task-list tr:hover {
+.lined-list tr:hover {
     background-color: rgb(226, 226, 226);
 }
 
@@ -117,6 +120,7 @@ input {
     padding: 5px;
     padding-left: 0;
     width: 250px;
+    min-width: 80px;
 }
 
 .label {
@@ -125,6 +129,9 @@ input {
     float: left;
     margin: 3px;
     padding: 1px 7px 3px 7px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .label:hover {
@@ -167,6 +174,14 @@ input {
                                   supported by Chrome and Opera */
 }
 
-.assign-labels-popup {
+#assign-label-activity {
     position: absolute;
+    border: 1px solid rgb(108, 108, 108);
+    background-color: white;
+    color: black;
+
+}
+
+#assign-label-activity tr:first-child {
+    border-top: 1px solid rgb(108, 108, 108);
 }

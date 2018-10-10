@@ -99,6 +99,9 @@ export class App implements M.IApp {
     readonly selectedTaskListActivity: DataSignalType<M.ITaskListActivity>;
     readonly addLabelActivity: M.IAddLabelActivity;
     readonly assignLabelToTaskActivity: M.IAssignLabelToTaskActivity;
+    readonly selectTaskActivity: M.ISelectTaskActivity;
+    readonly editTaskTitleActivity: M.IEditTaskTitleActivity;
+    readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
 
 
     constructor() {
@@ -110,6 +113,9 @@ export class App implements M.IApp {
         this.selectedTaskListActivity = S.data(this.taskListsActivities()[0]);
         this.addLabelActivity = new AddLabelActivity(this);
         this.assignLabelToTaskActivity = new AssignLabelToTaskActivity(this);
+        this.selectTaskActivity = new SelectTaskActivity(this);
+        this.editTaskTitleActivity = new EditTaskTitleActivity(this);
+        this.changeTaskCompletionActivity = new ChangeTaskCompletionActivity(this);
     }
 }
 
@@ -117,19 +123,13 @@ export class App implements M.IApp {
 class TaskListActivity implements M.ITaskListActivity {
     private readonly app: M.IApp;
 
-    readonly selectTaskActivity: M.ISelectTaskActivity;
     readonly addTaskActivity: M.IAddTaskActivity;
-    readonly editTaskTitleActivity: M.IEditTaskTitleActivity;
-    readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
     readonly searchTaskListActivity: M.ISearchTaskListActivity;
 
     constructor(app: M.IApp) {
         this.app = app;
 
-        this.selectTaskActivity = new SelectTaskActivity(app);
         this.addTaskActivity = new AddTaskActivity(app);
-        this.editTaskTitleActivity = new EditTaskTitleActivity(app);
-        this.changeTaskCompletionActivity = new ChangeTaskCompletionActivity(app);
         this.searchTaskListActivity = new SearchTaskListActivity(app);
     }
 }
@@ -230,10 +230,8 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
 
 
     begin(t: M.ITask, titleTd: HTMLTableDataCellElement): void {
-        console.log("begin " + t.title());
-        //this.commit();
         this.originalTitle = t.title();
-        this.app.selectedTaskListActivity().selectTaskActivity.selectedTask(t);
+        this.app.selectTaskActivity.selectedTask(t);
         this.newTitle(t.title());
         const r = titleTd.getBoundingClientRect();
         const txtStyle = V.AppView.taskEditTextBox.style;
@@ -248,25 +246,24 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
 
 
     commit(): void {
-        console.log("commit");
-        if (this.app.selectedTaskListActivity().selectTaskActivity.selectedTask() === undefined)
-            return;
-        this.app.selectedTaskListActivity().selectTaskActivity.selectedTask()!.title(this.newTitle());
-        this.cleanup();
+        if (this.newTitle().trim() === "") {
+            this.rollback();
+        } else {
+            this.app.selectTaskActivity.selectedTask()!.title(this.newTitle());
+            this.cleanup();
+        }
     }
 
 
     rollback(): void {
-        console.log("rollback");
         this.cleanup();
     }
 
 
     cleanup(): void {
-        console.log("cleanup");
         V.AppView.taskEditTextBox.style.display = "none";
         this.newTitle("");
-        this.app.selectedTaskListActivity().selectTaskActivity.selectedTask(undefined);
+        //this.app.selectTaskActivity.selectedTask(undefined);
     }
 
 
@@ -299,20 +296,25 @@ class ChangeTaskCompletionActivity implements IChangeTaskCompletionActivity {
 
 class AssignLabelToTaskActivity implements M.IAssignLabelToTaskActivity {
     private readonly app: M.IApp;
+    labelQuery: DataSignalType<string>;
+    
 
     constructor(app: M.IApp) {
         this.app = app;
+        this.labelQuery = S.data("");
     }
+
 
     begin(): void {
     }
 
+
     commit(): void {
     }
 
+
     rollback(): void {
     }
-
 
     startAssigningLabels(task: M.ITask, titleTd: HTMLTableDataCellElement, assignLabelPopup: HTMLTableElement): void {
         console.log(task);
@@ -321,16 +323,21 @@ class AssignLabelToTaskActivity implements M.IAssignLabelToTaskActivity {
         const r = titleTd.getBoundingClientRect();
         const txtStyle = assignLabelPopup.style;
         txtStyle.left = (r.left + r.width) + "px";
-        txtStyle.top = r.top + "px";
-        //txtStyle.width = r.width + "px";
-        //txtStyle.height = (r.height - 1) + "px";
-        //txtStyle.display = "block";
+        txtStyle.top = (r.top + 5) + "px";
+    }
+
+    changeAssociation(label: M.ILabel): void {
+    }  
+
+
+    keyUp(e: KeyboardEvent): void {
     }
 }
 
 
 class SearchTaskListActivity implements M.ISearchTaskListActivity {
     taskQuery = S.data("");
+    private originalTitle = "";
 
     private readonly app: M.IApp;
 
@@ -344,11 +351,24 @@ class SearchTaskListActivity implements M.ISearchTaskListActivity {
     }
 
 
+    begin(): void {
+        this.originalTitle = this.taskQuery();
+    }
+
+
     addSearch(): void {
     }
 
+
     rollback(): void {
-        this.taskQuery("");
+        if (this.originalTitle === "__NEXT_EMPTY__") {
+            this.originalTitle = this.taskQuery();
+            this.taskQuery("");
+
+        } else {
+            this.taskQuery(this.originalTitle);
+            this.originalTitle = "__NEXT_EMPTY__";
+        }
     }
 
 
@@ -364,7 +384,7 @@ class SearchTaskListActivity implements M.ISearchTaskListActivity {
         if (q.indexOf(ln) === -1) {
             this.taskQuery(q + " #" + ln);
         } else {
-            this.taskQuery(q.replace("#" + ln, "").replace("  ", " "));
+            this.taskQuery(q.replace(`#${ln}`, "").replace("  ", " "));
         }
     }
 }
@@ -389,7 +409,7 @@ export function initSampleData(app: M.IApp) {
 
     for (let i = 0; i < 50; i++) {
         const lbl = new Label();
-        lbl.name("label" + i);
+        lbl.name(`label${i}`);
         lbl.color(new Color("gray"));
         app.labelStore.addLabel(lbl);
     }
@@ -414,7 +434,7 @@ export function initSampleData(app: M.IApp) {
 
     for (let i = 0; i < 20; i++) {
         const t = new Task();
-        t.title("task " + i);
+        t.title(`task ${i}`);
         app.taskStore.addTask(t);
     }
 }

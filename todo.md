@@ -1,4 +1,3 @@
-- when esc on query, revert to original text when focused, not empty
 - make possible to un/assing labels to tasks
 
 

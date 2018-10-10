@@ -41,11 +41,11 @@ export module AppView {
                                ref={doneChk}
                                type="checkbox"
                                checked={t.completedOn() !== undefined}
-                               onChange={() => tla.changeTaskCompletionActivity.perform(t, doneChk!)}/>
+                               onChange={() => a.changeTaskCompletionActivity.perform(t, doneChk!)}/>
                        </td>
                        <td ref={titleTd}
                            tabIndex={1}
-                           onFocus={() => tla.editTaskTitleActivity.begin(t, titleTd!)}
+                           onFocus={() => a.editTaskTitleActivity.begin(t, titleTd!)}
                            className={t.completedOn() !== undefined
                                ? "completed-task"
                                : ""}>
@@ -72,6 +72,7 @@ export module AppView {
                 <input
                     type="text"
                     ref={queryTextBox}
+                    onFocus={() => tla.searchTaskListActivity.begin()}
                     onKeyUp={(e: KeyboardEvent) => tla.searchTaskListActivity.keyUp(e)}
                     fn={data(tla.searchTaskListActivity.taskQuery)}/>
                 <input
@@ -89,19 +90,12 @@ export module AppView {
                        className="new-task-input"
                        onKeyUp={(e: KeyboardEvent) => tla.addTaskActivity.keyUp(e)}
                        fn={data(tla.addTaskActivity.newName)}/>
-                <table className="task-list">
+                <table className="task-list lined-list">
                     <thead></thead>
                     <tbody>
                     {taskListView(a, tla)}
                     </tbody>
                 </table>
-                <input
-                    type="text"
-                    ref={taskEditTextBox}
-                    fn={data(tla.editTaskTitleActivity.newTitle)}
-                    onKeyUp={(e: KeyboardEvent) => tla.editTaskTitleActivity.keyUp(e)}
-                    onBlur={() => tla.editTaskTitleActivity.commit()}
-                    className="task-text-edit-box"/>
             </div>
         </div>;
 
@@ -119,7 +113,9 @@ export module AppView {
                         {a.labelStore.labels.map(l =>
                             <span
                                 className={"label" +
-                                    (a.selectedTaskListActivity().searchTaskListActivity.taskQuery().indexOf(l.name()) === -1
+                                    (a.selectedTaskListActivity().searchTaskListActivity.taskQuery()
+                                        .indexOf(l.name()) ===
+                                        -1
                                         ? ""
                                         : " searched-label")}
                                 onMouseDown={() => {
@@ -133,20 +129,43 @@ export module AppView {
                     onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
                 </td>
                 <td>
-                    {a.taskListsActivities.map(tla2 => taskListActivityView(a, tla2))}
+                    <div>{a.taskListsActivities.map(tla2 => taskListActivityView(a, tla2))}</div>
+                    <input
+                        type="text"
+                        ref={taskEditTextBox}
+                        fn={data(a.editTaskTitleActivity.newTitle)}
+                        onKeyUp={(e: KeyboardEvent) => a.editTaskTitleActivity.keyUp(e)}
+                        onBlur={() => a.editTaskTitleActivity.commit()}
+                        className="task-text-edit-box"/>
                 </td>
             </tr>
             </tbody>
         </table>;
 
     export const labelAssignView = (a: M.IApp) =>
-        <table ref={assignLabelPopup}>
+        <table id="assign-label-activity" className="lined-list" ref={assignLabelPopup}>
+            <tbody>
+            <tr>
+                <td>
+                    <input
+                        type="text"
+                        onFocus={() => a.assignLabelToTaskActivity.begin()}
+                        onKeyUp={(e: KeyboardEvent) => a.assignLabelToTaskActivity.keyUp(e)}
+                        fn={data(a.assignLabelToTaskActivity.labelQuery)}/>
+                </td></tr>
+            </tbody>
             <tbody>
             {
-                !a.selectedTaskListActivity().selectTaskActivity.selectedTask()
+                !a.selectTaskActivity.selectedTask()
                     ? ""
-                    : a.selectedTaskListActivity().selectTaskActivity.selectedTask()!.assignedLabels.map(al =>
+                    : a.selectTaskActivity.selectedTask()!.assignedLabels.map(al =>
                         <tr>
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    checked={true}
+                                    onChange={() => a.assignLabelToTaskActivity.changeAssociation(al)}/>
+                            </td>
                             <td>{al.name()}</td>
                         </tr>)
             }
