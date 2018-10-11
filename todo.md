@@ -18,7 +18,6 @@
 task list activity view:
 - make possible to add or remove view
 - make possible to reorder view
-- make possible activate last used view - to allow query editing by clicking on label
 - use color of first label in query text box as color of view title
 - make possible to change title color of view to custom
 - align label tags to right

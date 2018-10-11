@@ -11,7 +11,7 @@ export module AppView {
     export let queryTextBox: HTMLInputElement;
     export let taskEditTextBox: HTMLInputElement;
 
-    let assignLabelPopup: HTMLTableElement;
+    let assignLabelPopup: HTMLDivElement;
 
     window.addEventListener("mousemove",
         (e: MouseEvent) => {
@@ -35,7 +35,8 @@ export module AppView {
         tla.searchTaskListActivity.resultTasks().map(t => {
             let doneChk: HTMLInputElement | undefined = undefined;
             let titleTd: HTMLTableDataCellElement | undefined = undefined;
-            return <tr>
+            return <tr onMouseDown={() => a.selectTaskActivity.select(t)}
+                       className={a.selectTaskActivity.selectedTask() === t ? "selected-task" : ""}>
                        <td>
                            <input
                                ref={doneChk}
@@ -45,15 +46,13 @@ export module AppView {
                        </td>
                        <td ref={titleTd}
                            tabIndex={1}
-                           onFocus={() => a.editTaskTitleActivity.begin(t, titleTd!)}
+                           onFocus={() => a.editTaskTitleActivity.begin(t, titleTd!, tla)}
                            className={t.completedOn() !== undefined
                                ? "completed-task"
                                : ""}>
                            {t.title()}
                        </td>
-                       <td onClick={() => a.assignLabelToTaskActivity.startAssigningLabels(t,
-                           titleTd!,
-                           assignLabelPopup)}>
+                       <td onMouseDown={() => a.associateLabelWithTaskActivity.begin(t, titleTd!, assignLabelPopup)}>
                            {
                                t.assignedLabels.map(
                                    al =>
@@ -67,9 +66,11 @@ export module AppView {
         });
 
     export const taskListActivityView = (a: M.IApp, tla: M.ITaskListActivity) =>
-        <div className="task-list-activity">
+        <div onMouseDown={() => a.selectedTaskListActivity(tla)}
+            className={"task-list-activity " +  (a.selectedTaskListActivity() === tla ? "selected-task-list-activity" : "")}>
             <div className="header">
-                <input
+                <input 
+                    spellCheck={false}
                     type="text"
                     ref={queryTextBox}
                     onFocus={() => tla.searchTaskListActivity.begin()}
@@ -77,7 +78,7 @@ export module AppView {
                     fn={data(tla.searchTaskListActivity.taskQuery)}/>
                 <input
                     type="button"
-                    onMouseDown={() => tla.searchTaskListActivity.rollback()}
+                    onMouseDown={() => tla.searchTaskListActivity.clear()}
                     value="Clear"/>
                 <input
                     type="button"
@@ -98,6 +99,12 @@ export module AppView {
                 </table>
             </div>
         </div>;
+
+
+    function labelInlineStyle(l: M.ILabel) {
+        return { "backgroundColor": l.color().value }
+    };
+
 
     export const view = (a: M.IApp) =>
         <table id="bodyTable">
@@ -122,7 +129,7 @@ export module AppView {
                                     a.selectedTaskListActivity().searchTaskListActivity.addOrRemoveLabelFromQuery(l);
                                     setTimeout(() => queryTextBox.focus());
                                 }}
-                                style={{ "backgroundColor": l.color().value }}>{l.name()}</span>)()}
+                                style={labelInlineStyle(l)}>{l.name()}</span>)()}
                     </div>
                 </td>
                 <td className="vertical-resizer"
@@ -136,39 +143,40 @@ export module AppView {
                         fn={data(a.editTaskTitleActivity.newTitle)}
                         onKeyUp={(e: KeyboardEvent) => a.editTaskTitleActivity.keyUp(e)}
                         onBlur={() => a.editTaskTitleActivity.commit()}
-                        className="task-text-edit-box"/>
+                        className="task-text-edit-box selected-task"/>
                 </td>
             </tr>
             </tbody>
         </table>;
 
     export const labelAssignView = (a: M.IApp) =>
-        <table id="assign-label-activity" className="lined-list" ref={assignLabelPopup}>
-            <tbody>
-            <tr>
-                <td>
-                    <input
-                        type="text"
-                        onFocus={() => a.assignLabelToTaskActivity.begin()}
-                        onKeyUp={(e: KeyboardEvent) => a.assignLabelToTaskActivity.keyUp(e)}
-                        fn={data(a.assignLabelToTaskActivity.labelQuery)}/>
-                </td></tr>
-            </tbody>
-            <tbody>
-            {
-                !a.selectTaskActivity.selectedTask()
+        <div id="assign-label-activity" ref={assignLabelPopup} className="hidden">
+            <input
+                type="text"
+                onFocus={() => a.associateLabelWithTaskActivity.beginFilter()}
+                onKeyUp={(e: KeyboardEvent) => a.associateLabelWithTaskActivity.keyUp(e)}
+                fn={data(a.associateLabelWithTaskActivity.labelQuery)}/>
+            <br/>
+            <div className="smaller-font">Associated</div>
+            <div id="associated-labels">
+                {!a.selectTaskActivity.selectedTask()
                     ? ""
                     : a.selectTaskActivity.selectedTask()!.assignedLabels.map(al =>
-                        <tr>
-                            <td>
-                                <input
-                                    type="checkbox"
-                                    checked={true}
-                                    onChange={() => a.assignLabelToTaskActivity.changeAssociation(al)}/>
-                            </td>
-                            <td>{al.name()}</td>
-                        </tr>)
-            }
-            </tbody>
-        </table>;
+                        <span className="label" style={labelInlineStyle(al)}>
+                            {al.name()}
+                        </span>
+                    )
+                }
+            </div>
+            <div className="smaller-font">Available</div>
+            <div id="available-labels">
+                {!a.selectTaskActivity.selectedTask()
+                    ? ""
+                    : a.labelStore.labels
+                    .filter(l => !a.selectTaskActivity.selectedTask()!.assignedLabels().some(al => al.name() === l.name()))
+                    .map(l =>
+                        <span className="label" style={labelInlineStyle(l)}>{l.name()}</span>)
+                }
+            </div>
+        </div>;
 }

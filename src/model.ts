@@ -1,6 +1,9 @@
 import { DataSignal } from "s-js";
 import { SArray, SDataArray } from "s-array";
 
+export interface IReadonlyDataSignal<T> {
+    (): T;
+}
 
 export interface IColor {
     value: string;
@@ -49,7 +52,7 @@ export interface IApp {
 
     readonly selectedTaskListActivity: DataSignal<ITaskListActivity>;
     readonly addLabelActivity: IAddLabelActivity;
-    readonly assignLabelToTaskActivity: IAssignLabelToTaskActivity;
+    readonly associateLabelWithTaskActivity: IAssociateLabelWithTaskActivity;
     readonly selectTaskActivity: ISelectTaskActivity;
     readonly editTaskTitleActivity: IEditTaskTitleActivity;
     readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
@@ -67,7 +70,9 @@ export interface IActivityController {
 
 
 export interface ISelectTaskActivity extends IActivityController {
-    selectedTask: DataSignal<ITask | undefined>;
+    selectedTask: IReadonlyDataSignal<ITask | undefined>;
+    select(t: ITask): void;
+    unselect(): void;
 }
 
 export interface IAddTaskActivity extends IActivityController {
@@ -85,7 +90,7 @@ export interface IAddLabelActivity extends IActivityController {
 }
 
 export interface IEditTaskTitleActivity extends IActivityController {
-    begin(t: ITask, titleTd: HTMLTableDataCellElement): void;
+    begin(t: ITask, titleTd: HTMLTableDataCellElement, tla: ITaskListActivity): void;
     newTitle: DataSignal<string>;
     keyUp(e: KeyboardEvent): void;
     commit(): void;
@@ -96,10 +101,10 @@ export interface IChangeTaskCompletionActivity extends IActivityController {
     perform(task: ITask, isDone: HTMLInputElement): any;
 }
 
-export interface IAssignLabelToTaskActivity extends IActivityController {
-    startAssigningLabels(task: ITask, titleTd: HTMLTableDataCellElement, assignLabelPopup: HTMLTableElement): void;
+export interface IAssociateLabelWithTaskActivity extends IActivityController {
+    begin(task: ITask, titleTd: HTMLTableDataCellElement, popup: HTMLDivElement): void;
     changeAssociation(label: ILabel): void;
-    begin(): void;
+    beginFilter(): void;
     keyUp(e: KeyboardEvent): void;
     labelQuery: DataSignal<string>;
 }
@@ -112,8 +117,8 @@ export interface ISearchTaskListActivity extends IActivityController {
     addSearch(): void;
     taskQuery: DataSignal<string>;
     rollback(): void;
+    clear(): void;
 }
-
 
 // query language
 // free text ... 'text' matches %text%

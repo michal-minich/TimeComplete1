@@ -5,6 +5,7 @@ import * as M from "./model";
 import * as Q from "./query";
 import * as V from "./views";
 import IChangeTaskCompletionActivity = M.IChangeTaskCompletionActivity;
+import IAssociateLabelWithTaskActivity = M.IAssociateLabelWithTaskActivity;
 
 
 class LabelList implements M.ILabelList {
@@ -98,7 +99,7 @@ export class App implements M.IApp {
 
     readonly selectedTaskListActivity: DataSignalType<M.ITaskListActivity>;
     readonly addLabelActivity: M.IAddLabelActivity;
-    readonly assignLabelToTaskActivity: M.IAssignLabelToTaskActivity;
+    readonly associateLabelWithTaskActivity: IAssociateLabelWithTaskActivity;
     readonly selectTaskActivity: M.ISelectTaskActivity;
     readonly editTaskTitleActivity: M.IEditTaskTitleActivity;
     readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
@@ -112,7 +113,7 @@ export class App implements M.IApp {
         ]);
         this.selectedTaskListActivity = S.data(this.taskListsActivities()[0]);
         this.addLabelActivity = new AddLabelActivity(this);
-        this.assignLabelToTaskActivity = new AssignLabelToTaskActivity(this);
+        this.associateLabelWithTaskActivity = new AssociateLabelWithActivity(this);
         this.selectTaskActivity = new SelectTaskActivity(this);
         this.editTaskTitleActivity = new EditTaskTitleActivity(this);
         this.changeTaskCompletionActivity = new ChangeTaskCompletionActivity(this);
@@ -145,8 +146,14 @@ class SelectTaskActivity implements M.ISelectTaskActivity {
     selectedTask = S.data(undefined as (M.ITask | undefined));
 
 
-    perform(): void {
+    select(t : M.ITask): void {
+        this.selectedTask(t);
     }
+
+    unselect(): void {
+        this.selectedTask(undefined);
+    }
+
 }
 
 
@@ -229,10 +236,11 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
     }
 
 
-    begin(t: M.ITask, titleTd: HTMLTableDataCellElement): void {
+    begin(t: M.ITask, titleTd: HTMLTableDataCellElement, tla: M.ITaskListActivity): void {
         this.originalTitle = t.title();
-        this.app.selectTaskActivity.selectedTask(t);
+        this.app.selectTaskActivity.select(t);
         this.newTitle(t.title());
+        V.AppView.taskEditTextBox.value = t.title();
         const r = titleTd.getBoundingClientRect();
         const txtStyle = V.AppView.taskEditTextBox.style;
         txtStyle.left = r.left + "px";
@@ -240,7 +248,6 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
         txtStyle.width = r.width + "px";
         txtStyle.height = (r.height - 1) + "px";
         txtStyle.display = "block";
-        V.AppView.taskEditTextBox.value = t.title();
         setTimeout(() => V.AppView.taskEditTextBox.focus(), 0);
     }
 
@@ -263,7 +270,6 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
     cleanup(): void {
         V.AppView.taskEditTextBox.style.display = "none";
         this.newTitle("");
-        //this.app.selectTaskActivity.selectedTask(undefined);
     }
 
 
@@ -294,9 +300,10 @@ class ChangeTaskCompletionActivity implements IChangeTaskCompletionActivity {
 }
 
 
-class AssignLabelToTaskActivity implements M.IAssignLabelToTaskActivity {
+class AssociateLabelWithActivity implements IAssociateLabelWithTaskActivity {
     private readonly app: M.IApp;
     labelQuery: DataSignalType<string>;
+    popup!: HTMLDivElement;
     
 
     constructor(app: M.IApp) {
@@ -305,25 +312,37 @@ class AssignLabelToTaskActivity implements M.IAssignLabelToTaskActivity {
     }
 
 
-    begin(): void {
+    beginFilter(): void {
+    }
+
+
+    close = () => {
+        this.cleanup();
     }
 
 
     commit(): void {
+        this.cleanup();
     }
 
 
     rollback(): void {
+        this.cleanup();
     }
 
-    startAssigningLabels(task: M.ITask, titleTd: HTMLTableDataCellElement, assignLabelPopup: HTMLTableElement): void {
-        console.log(task);
-        console.log(assignLabelPopup);
+    cleanup(): void {
+        document.body.removeEventListener("mousedown", this.close);
+        this.popup.classList.add("hidden");
+    }
 
+    begin(task: M.ITask, titleTd: HTMLTableDataCellElement, popup: HTMLDivElement): void {
+        this.popup = popup;
+        document.body.addEventListener("mousedown", this.close);
         const r = titleTd.getBoundingClientRect();
-        const txtStyle = assignLabelPopup.style;
+        const txtStyle = popup.style;
         txtStyle.left = (r.left + r.width) + "px";
         txtStyle.top = (r.top + 5) + "px";
+        popup.classList.remove("hidden");
     }
 
     changeAssociation(label: M.ILabel): void {
@@ -353,6 +372,7 @@ class SearchTaskListActivity implements M.ISearchTaskListActivity {
 
     begin(): void {
         this.originalTitle = this.taskQuery();
+        this.app.selectTaskActivity.unselect();
     }
 
 
@@ -363,14 +383,17 @@ class SearchTaskListActivity implements M.ISearchTaskListActivity {
     rollback(): void {
         if (this.originalTitle === "__NEXT_EMPTY__") {
             this.originalTitle = this.taskQuery();
-            this.taskQuery("");
+            this.clear();
 
         } else {
             this.taskQuery(this.originalTitle);
             this.originalTitle = "__NEXT_EMPTY__";
         }
     }
-
+    
+    clear(): void {
+        this.taskQuery("");
+    }
 
     keyUp(e: KeyboardEvent): void {
         if (e.keyCode === 27)
