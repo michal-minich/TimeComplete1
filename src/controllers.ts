@@ -44,12 +44,12 @@ class Task implements M.ITask {
 
     static counter = 0;
 
-    assignLabel(label: M.ILabel): void {
+    addLabelAssociation(label: M.ILabel): void {
         this.assignedLabels.push(label);
     }
 
 
-    unAssignLabel(label: M.ILabel): void {
+    removeLabelAssociation(label: M.ILabel): void {
         this.assignedLabels.remove(label);
     }
 
@@ -146,7 +146,7 @@ class SelectTaskActivity implements M.ISelectTaskActivity {
     selectedTask = S.data(undefined as (M.ITask | undefined));
 
 
-    select(t : M.ITask): void {
+    select(t: M.ITask): void {
         this.selectedTask(t);
     }
 
@@ -208,6 +208,10 @@ class AddLabelActivity implements M.IAddLabelActivity {
         l.name(this.newName());
         this.newName("");
         this.app.labelStore.addLabel(l);
+        const t = this.app.selectTaskActivity.selectedTask();
+        if (t) {
+            t.addLabelAssociation(l);
+        }
     }
 
 
@@ -302,54 +306,18 @@ class ChangeTaskCompletionActivity implements IChangeTaskCompletionActivity {
 
 class AssociateLabelWithActivity implements IAssociateLabelWithTaskActivity {
     private readonly app: M.IApp;
-    labelQuery: DataSignalType<string>;
-    popup!: HTMLDivElement;
-    
 
     constructor(app: M.IApp) {
         this.app = app;
-        this.labelQuery = S.data("");
     }
-
-
-    beginFilter(): void {
-    }
-
-
-    close = () => {
-        this.cleanup();
-    }
-
-
-    commit(): void {
-        this.cleanup();
-    }
-
-
-    rollback(): void {
-        this.cleanup();
-    }
-
-    cleanup(): void {
-        document.body.removeEventListener("mousedown", this.close);
-        this.popup.classList.add("hidden");
-    }
-
-    begin(task: M.ITask, titleTd: HTMLTableDataCellElement, popup: HTMLDivElement): void {
-        this.popup = popup;
-        document.body.addEventListener("mousedown", this.close);
-        const r = titleTd.getBoundingClientRect();
-        const txtStyle = popup.style;
-        txtStyle.left = (r.left + r.width) + "px";
-        txtStyle.top = (r.top + 5) + "px";
-        popup.classList.remove("hidden");
-    }
-
+    
     changeAssociation(label: M.ILabel): void {
-    }  
-
-
-    keyUp(e: KeyboardEvent): void {
+        const t = this.app.selectTaskActivity.selectedTask()!;
+        if (t.assignedLabels().some(al => al.name() === label.name())) {
+            t.removeLabelAssociation(label);
+        } else {
+            t.addLabelAssociation(label);
+        }
     }
 }
 
@@ -390,7 +358,7 @@ class SearchTaskListActivity implements M.ISearchTaskListActivity {
             this.originalTitle = "__NEXT_EMPTY__";
         }
     }
-    
+
     clear(): void {
         this.taskQuery("");
     }
@@ -443,17 +411,17 @@ export function initSampleData(app: M.IApp) {
     const t2 = new Task();
     t2.title("task 2 ab");
     app.taskStore.addTask(t2);
-    t2.assignLabel(lGreen);
+    t2.addLabelAssociation(lGreen);
     const t3 = new Task();
     t3.title("task 3 abc");
     t3.completedOn(new DateTime("2018"));
-    t3.assignLabel(lRed);
-    t3.assignLabel(lBlue);
+    t3.addLabelAssociation(lRed);
+    t3.addLabelAssociation(lBlue);
     app.taskStore.addTask(t3);
     const t4 = new Task();
     t4.title("task 4 abcd");
     app.taskStore.addTask(t4);
-    t4.assignLabel(lRed);
+    t4.addLabelAssociation(lRed);
 
     for (let i = 0; i < 20; i++) {
         const t = new Task();

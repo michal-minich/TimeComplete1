@@ -180,22 +180,15 @@ input {
 }
 
 #assign-label-activity {
-    position: absolute;
-    border: 1px solid rgb(108, 108, 108);
-    background-color: white;
-    color: black;
-    height: auto;
+    
 }
 
 #assign-label-activity tr:first-child {
-    border-top: 1px solid rgb(108, 108, 108);
 }
 
 #associated-labels,
 #available-labels {
-    overflow-y: auto;
-    max-width: 250px;
-    max-height: 250px;
+
 }
 
 .smaller-font {
@@ -204,4 +197,13 @@ input {
 
 .selected-task {
     background-color: rgb(214, 214, 214);
+}
+
+.selected-task .lined-list td:hover {
+    border-top: 1px solid rgb(187, 43, 43);
+}
+
+#assign-label-activity .smaller-font {
+    clear: both;
+    color: gray;
 }

@@ -13,8 +13,5 @@ S.root(() => {
     const view = AppView.view(app);
     document.body.appendChild(view);
 
-    const view2 = AppView.labelAssignView(app);
-    document.body.appendChild(view2);
-
     setTimeout(() => AppView.queryTextBox.focus(), 100);
 });

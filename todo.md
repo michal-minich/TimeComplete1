@@ -1,5 +1,3 @@
-- make possible to un/assing labels to tasks
-
 
 - make possible to rename label
 - make possible to delete label

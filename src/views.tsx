@@ -1,6 +1,8 @@
+import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
-import * as Surplus from "surplus"; Surplus;
+Surplus;
 import data from "surplus-mixin-data";
+import { SArray as SArrayType } from "s-array";
 
 import * as M from "./model";
 
@@ -52,24 +54,22 @@ export module AppView {
                                : ""}>
                            {t.title()}
                        </td>
-                       <td onMouseDown={() => a.associateLabelWithTaskActivity.begin(t, titleTd!, assignLabelPopup)}>
-                           {
-                               t.assignedLabels.map(
-                                   al =>
-                                   <span
-                                       className="label-tag"
-                                       title={al.name()}
-                                       style={{ backgroundColor: al.color().value }}>
-                                   </span>)}
+                       <td>{t.assignedLabels.map(al =>
+                           <span
+                               className="label-tag"
+                               title={al.name()}
+                               style={{ backgroundColor: al.color().value }}>
+                           </span>)}
                        </td>
                    </tr>;
         });
 
     export const taskListActivityView = (a: M.IApp, tla: M.ITaskListActivity) =>
         <div onMouseDown={() => a.selectedTaskListActivity(tla)}
-            className={"task-list-activity " +  (a.selectedTaskListActivity() === tla ? "selected-task-list-activity" : "")}>
+             className={"task-list-activity " +
+                 (a.selectedTaskListActivity() === tla ? "selected-task-list-activity" : "")}>
             <div className="header">
-                <input 
+                <input
                     spellCheck={false}
                     type="text"
                     ref={queryTextBox}
@@ -102,7 +102,7 @@ export module AppView {
 
 
     function labelInlineStyle(l: M.ILabel) {
-        return { "backgroundColor": l.color().value }
+        return { "backgroundColor": l.color().value };
     };
 
 
@@ -111,26 +111,10 @@ export module AppView {
             <tbody>
             <tr>
                 <td>
-                    <div ref={labelList} className="label-list">
-                        <input type="text"
-                               placeholder="new label"
-                               className="new-label-input label"
-                               fn={data(a.addLabelActivity.newName)}
-                               onKeyUp={(e: KeyboardEvent) => a.addLabelActivity.keyUp(e)}/>
-                        {a.labelStore.labels.map(l =>
-                            <span
-                                className={"label" +
-                                    (a.selectedTaskListActivity().searchTaskListActivity.taskQuery()
-                                        .indexOf(l.name()) ===
-                                        -1
-                                        ? ""
-                                        : " searched-label")}
-                                onMouseDown={() => {
-                                    a.selectedTaskListActivity().searchTaskListActivity.addOrRemoveLabelFromQuery(l);
-                                    setTimeout(() => queryTextBox.focus());
-                                }}
-                                style={labelInlineStyle(l)}>{l.name()}</span>)()}
-                    </div>
+                    {a.selectTaskActivity.selectedTask() === undefined
+                        ? labelListView(a)
+                        : labelAssociateView(a)
+                    }
                 </td>
                 <td className="vertical-resizer"
                     onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
@@ -149,34 +133,60 @@ export module AppView {
             </tbody>
         </table>;
 
-    export const labelAssignView = (a: M.IApp) =>
-        <div id="assign-label-activity" ref={assignLabelPopup} className="hidden">
-            <input
-                type="text"
-                onFocus={() => a.associateLabelWithTaskActivity.beginFilter()}
-                onKeyUp={(e: KeyboardEvent) => a.associateLabelWithTaskActivity.keyUp(e)}
-                fn={data(a.associateLabelWithTaskActivity.labelQuery)}/>
-            <br/>
-            <div className="smaller-font">Associated</div>
-            <div id="associated-labels">
-                {!a.selectTaskActivity.selectedTask()
+
+    export const newLabelView = (a: M.IApp) =>
+        <input type="text"
+               placeholder="new label"
+               className="new-label-input label"
+               fn={data(a.addLabelActivity.newName)}
+               onKeyUp={(e: KeyboardEvent) => a.addLabelActivity.keyUp(e)}/>;
+
+
+    export const labelListView = (a: M.IApp) =>
+        <div ref={labelList} className="label-list">
+            {newLabelView(a)}
+            {a.labelStore.labels.map(l =>
+                <span className={"label" +
+                (a.selectedTaskListActivity().searchTaskListActivity.taskQuery()
+                    .indexOf(l.name()) ===
+                    -1
                     ? ""
-                    : a.selectTaskActivity.selectedTask()!.assignedLabels.map(al =>
-                        <span className="label" style={labelInlineStyle(al)}>
-                            {al.name()}
-                        </span>
-                    )
-                }
-            </div>
-            <div className="smaller-font">Available</div>
-            <div id="available-labels">
-                {!a.selectTaskActivity.selectedTask()
-                    ? ""
-                    : a.labelStore.labels
-                    .filter(l => !a.selectTaskActivity.selectedTask()!.assignedLabels().some(al => al.name() === l.name()))
-                    .map(l =>
-                        <span className="label" style={labelInlineStyle(l)}>{l.name()}</span>)
-                }
-            </div>
+                    : " searched-label")}
+                      onMouseDown={() => {
+                          a.selectedTaskListActivity().searchTaskListActivity.addOrRemoveLabelFromQuery(l);
+                          setTimeout(() => queryTextBox.focus());
+                      }}
+                      style={labelInlineStyle(l)}>
+                    {l.name()}
+                </span>)()}
         </div>;
+
+
+    export const labelAssociateView = (a: M.IApp) =>
+        !a.selectTaskActivity.selectedTask()
+        ? ""
+        : <div id="assign-label-activity" className="label-list" ref={assignLabelPopup}>
+              <div className="smaller-font">Associated</div>
+              <div id="associated-labels">
+                  {newLabelView(a)}
+                  {associateLabelList(a, a.selectTaskActivity.selectedTask()!.assignedLabels)()}
+              </div>
+              <div className="smaller-font">Available</div>
+              <div id="available-labels">
+                  {associateLabelList(a,
+                      a.labelStore.labels
+                      .filter(l => !a.selectTaskActivity.selectedTask()!.assignedLabels()
+                          .some(al => al.name() === l.name())))
+                  }
+              </div>
+          </div>;
+
+
+    export const associateLabelList = (a: M.IApp, labels: SArrayType<M.ILabel>) =>
+        labels.map(l =>
+            <span className="label"
+                  style={labelInlineStyle(l)}
+                  onMouseDown={() => a.associateLabelWithTaskActivity.changeAssociation(l)}>
+                {l.name()}
+            </span>);
 }

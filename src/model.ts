@@ -28,8 +28,8 @@ export interface ITask extends IDomainObject {
     title: DataSignal<string>;
     completedOn: DataSignal<IDateTime | undefined>;
     readonly assignedLabels: SArray<ILabel>;
-    assignLabel(label: ILabel): void;
-    unAssignLabel(label: ILabel): void;
+    addLabelAssociation(label: ILabel): void;
+    removeLabelAssociation(label: ILabel): void;
     completedValue(): string;
 }
 
@@ -102,11 +102,7 @@ export interface IChangeTaskCompletionActivity extends IActivityController {
 }
 
 export interface IAssociateLabelWithTaskActivity extends IActivityController {
-    begin(task: ITask, titleTd: HTMLTableDataCellElement, popup: HTMLDivElement): void;
     changeAssociation(label: ILabel): void;
-    beginFilter(): void;
-    keyUp(e: KeyboardEvent): void;
-    labelQuery: DataSignal<string>;
 }
 
 export interface ISearchTaskListActivity extends IActivityController {
