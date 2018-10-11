@@ -120,7 +120,9 @@ export module AppView {
                     onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
                 </td>
                 <td>
-                    <div>{a.taskListsActivities.map(tla2 => taskListActivityView(a, tla2))}</div>
+                    <div id="task-list-activities">
+                        {a.taskListsActivities.map(tla2 => taskListActivityView(a, tla2))}
+                    </div>
                     <input
                         type="text"
                         ref={taskEditTextBox}
@@ -143,7 +145,7 @@ export module AppView {
 
 
     export const labelListView = (a: M.IApp) =>
-        <div ref={labelList} className="label-list">
+        <div ref={labelList} className="label-list"><div id="label-list-inner">
             {newLabelView(a)}
             {a.labelStore.labels.map(l =>
                 <span className={"label" +
@@ -159,7 +161,7 @@ export module AppView {
                       style={labelInlineStyle(l)}>
                     {l.name()}
                 </span>)()}
-        </div>;
+        </div></div>;
 
 
     export const labelAssociateView = (a: M.IApp) =>

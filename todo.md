@@ -7,6 +7,8 @@
 - when adding new task, and the title contains label reference that does not exists, create the label, and assing it to the task
 - when adding new task, assing it all existing labels wich are used in related query text box
 
+- fix focus on last (not selected) task list activity textbox when clicked on label to query it
+
 - make possible to create search from query
 - make possible to rename search
 - make possible to delete search
