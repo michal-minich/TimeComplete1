@@ -158,7 +158,8 @@ export module AppView {
                     ? ""
                     : " searched-label")}
                           onMouseDown={() => {
-                              a.selectedTaskListActivity().searchTaskListActivity.addOrRemoveLabelFromQuery(l);
+                              a.selectedTaskListActivity().searchTaskListActivity
+                                  .addOrRemoveLabelFromQuery(l);
                               setTimeout(() => queryTextBox.focus());
                           }}
                           style={labelInlineStyle(l)}>

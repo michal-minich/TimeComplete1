@@ -1,11 +1,20 @@
-﻿import S from "s-js";
-import { ILabel } from "../interfaces";
-import { Task, Color, DateTime } from "./all";
+﻿import S, { DataSignal } from "s-js";
+import { clock, idCounter } from "../common";
+import { ILabel, IColor } from "../interfaces";
 
 
 export class Label implements ILabel {
-    name = S.data("");
-    color = S.data(new Color("gray"));
-    id = ++Task.counter;
-    createdOn = new DateTime("2018");
+
+    id = idCounter.getNext();
+    createdOn = clock.now();
+
+    name: DataSignal<string>;
+    color: DataSignal<IColor>;
+    parent?: DataSignal<ILabel>;
+
+
+    constructor(name: string, color: IColor) {
+        this.name = S.data(name);
+        this.color = S.data(color);
+    }
 }

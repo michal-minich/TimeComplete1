@@ -1,6 +1,6 @@
 ﻿import S from "s-js";
 import { IApp, ITask, ITaskListActivity, IEditTaskTitleActivity } from "../interfaces";
-import * as V from "../views";
+import { AppView } from "../views";
 
 
 export class EditTaskTitleActivity implements IEditTaskTitleActivity {
@@ -8,6 +8,7 @@ export class EditTaskTitleActivity implements IEditTaskTitleActivity {
     newTitle = S.data("");
     private originalTitle = "";
     private readonly app: IApp;
+
 
     constructor(app: IApp) {
         this.app = app;
@@ -18,15 +19,15 @@ export class EditTaskTitleActivity implements IEditTaskTitleActivity {
         this.originalTitle = t.title();
         this.app.selectTaskActivity.select(t);
         this.newTitle(t.title());
-        V.AppView.taskEditTextBox.value = t.title();
+        AppView.taskEditTextBox.value = t.title();
         const r = titleTd.getBoundingClientRect();
-        const txtStyle = V.AppView.taskEditTextBox.style;
+        const txtStyle = AppView.taskEditTextBox.style;
         txtStyle.left = r.left + "px";
         txtStyle.top = r.top + "px";
         txtStyle.width = r.width + "px";
         txtStyle.height = (r.height - 1) + "px";
         txtStyle.display = "block";
-        setTimeout(() => V.AppView.taskEditTextBox.focus(), 0);
+        setTimeout(() => AppView.taskEditTextBox.focus(), 0);
     }
 
 
@@ -46,7 +47,7 @@ export class EditTaskTitleActivity implements IEditTaskTitleActivity {
 
 
     cleanup(): void {
-        V.AppView.taskEditTextBox.style.display = "none";
+        AppView.taskEditTextBox.style.display = "none";
         this.newTitle("");
     }
 

@@ -1,23 +1,24 @@
 ﻿import S from "s-js";
-import * as I from "../interfaces";
+import { IApp, ISelectTaskActivity, ITask } from "../interfaces";
 
 
-export class SelectTaskActivity implements I.ISelectTaskActivity {
-    private readonly app: I.IApp;
+export class SelectTaskActivity implements ISelectTaskActivity {
 
-    constructor(app: I.IApp) {
+    private readonly app: IApp;
+    selectedTask = S.data(undefined as (ITask | undefined));
+
+
+    constructor(app: IApp) {
         this.app = app;
     }
 
-    selectedTask = S.data(undefined as (I.ITask | undefined));
 
-
-    select(t: I.ITask): void {
+    select(t: ITask): void {
         this.selectedTask(t);
     }
+
 
     unselect(): void {
         this.selectedTask(undefined);
     }
-
 }

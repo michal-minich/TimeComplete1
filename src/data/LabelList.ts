@@ -3,6 +3,10 @@ import { ILabelList, ILabel } from "../interfaces";
 
 
 export class LabelList implements ILabelList {
+
+    readonly labels: SDataArray<ILabel> = SArray([]);
+
+
     addLabel(label: ILabel): void {
         this.labels.unshift(label);
     }
@@ -11,7 +15,4 @@ export class LabelList implements ILabelList {
     removeLabel(label: ILabel): void {
         this.labels.remove(label);
     }
-
-
-    labels: SDataArray<ILabel> = SArray([]);
 }

@@ -2,9 +2,10 @@
 
 
 export class DateTime implements IDateTime {
+
+    value: string;
+
     constructor(value: string) {
         this.value = value;
     }
-
-    value = "";
 }

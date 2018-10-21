@@ -1,5 +1,6 @@
 import { DataSignal } from "s-js";
-import { SArray, SDataArray } from "s-array";
+import { SArray } from "s-array";
+
 
 export interface IReadonlyDataSignal<T> {
     (): T;
@@ -7,6 +8,11 @@ export interface IReadonlyDataSignal<T> {
 
 export interface ICanDeserialize {
 
+}
+
+export interface IIdProvider<T> {
+    getNext(): T;
+    readonly current: T;
 }
 
 export interface IDataStore {
@@ -20,6 +26,10 @@ export interface IColor {
 
 export interface IDateTime {
     value: string;
+}
+
+export interface IClock {
+    now(): IDateTime;
 }
 
 export interface IDomainObject {
@@ -39,17 +49,15 @@ export interface ITask extends IDomainObject {
     readonly assignedLabels: SArray<ILabel>;
     addLabelAssociation(label: ILabel): void;
     removeLabelAssociation(label: ILabel): void;
-    completedValue(): string;
 }
 
 export interface ITaskList {
-    tasks: SDataArray<ITask>;
-    searchedTasks(taskQuery: string): SArray<ITask>;
+    readonly tasks: SArray<ITask>;
     addTask(task: ITask): void;
 }
 
 export interface ILabelList {
-    labels: SDataArray<ILabel>;
+    readonly labels: SArray<ILabel>;
     addLabel(label: ILabel): void;
     removeLabel(label: ILabel): void;
 }
@@ -123,4 +131,5 @@ export interface ISearchTaskListActivity extends IActivityController {
     taskQuery: DataSignal<string>;
     rollback(): void;
     clear(): void;
+    searchedTasks(taskQuery: string): SArray<ITask>;
 }

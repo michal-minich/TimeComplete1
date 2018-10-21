@@ -6,8 +6,8 @@ import { IApp, IAddTaskActivity } from "../interfaces";
 export class AddTaskActivity implements IAddTaskActivity {
 
     newName = S.data("");
-
     private readonly app: IApp;
+
 
     constructor(app: IApp) {
         this.app = app;
@@ -17,8 +17,7 @@ export class AddTaskActivity implements IAddTaskActivity {
     commit(): void {
         if (this.newName() === "")
             return;
-        const t = new Task();
-        t.title(this.newName());
+        const t = new Task(this.newName());
         this.newName("");
         this.app.taskStore.addTask(t);
     }

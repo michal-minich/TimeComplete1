@@ -3,11 +3,14 @@ import { IApp, IChangeTaskCompletionActivity, ITask } from "../interfaces";
 
 
 export class ChangeTaskCompletionActivity implements IChangeTaskCompletionActivity {
+
     private readonly app: IApp;
+
 
     constructor(app: IApp) {
         this.app = app;
     }
+
 
     perform(task: ITask, isDone: HTMLInputElement): any {
         //this.app.selectTaskActivity.selectedTask(task);

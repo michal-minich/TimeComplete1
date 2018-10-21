@@ -1,12 +1,23 @@
-﻿import S from "s-js";
+﻿import S, { DataSignal } from "s-js";
 import SArray from "s-array";
+import { clock, idCounter } from "../common";
 import { ITask, ILabel, IDateTime } from "../interfaces";
-import { DateTime } from "./DateTime";
 
 
 export class Task implements ITask {
 
-    static counter = 0;
+    id = idCounter.getNext();
+    createdOn = clock.now();
+
+    title: DataSignal<string>;
+    assignedLabels = SArray<ILabel>([]);
+    completedOn = S.data<IDateTime | undefined>(undefined);
+
+
+    constructor(title: string) {
+        this.title = S.data(title);
+    }
+
 
     addLabelAssociation(label: ILabel): void {
         this.assignedLabels.push(label);
@@ -15,18 +26,5 @@ export class Task implements ITask {
 
     removeLabelAssociation(label: ILabel): void {
         this.assignedLabels.remove(label);
-    }
-
-
-    title = S.data("");
-    assignedLabels = SArray<ILabel>([]);
-    id = ++Task.counter;
-    createdOn = new DateTime("2018");
-    completedOn = S.data<IDateTime | undefined>(undefined);
-
-
-    completedValue(): string {
-        const con = this.completedOn();
-        return con ? con.value : "";
     }
 }

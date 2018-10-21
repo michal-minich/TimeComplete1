@@ -1,14 +1,16 @@
-﻿import { AddTaskActivity, SearchTaskListActivity } from "./all";
-import * as I from "../interfaces";
+﻿import { AddTaskActivity, } from "./AddTaskActivity";
+import { SearchTaskListActivity } from "./SearchTaskListActivity";
+import { IApp, ITaskListActivity, IAddTaskActivity, ISearchTaskListActivity } from "../interfaces";
 
 
-export class TaskListActivity implements I.ITaskListActivity {
-    private readonly app: I.IApp;
+export class TaskListActivity implements ITaskListActivity {
 
-    readonly addTaskActivity: I.IAddTaskActivity;
-    readonly searchTaskListActivity: I.ISearchTaskListActivity;
+    private readonly app: IApp;
+    readonly addTaskActivity: IAddTaskActivity;
+    readonly searchTaskListActivity: ISearchTaskListActivity;
 
-    constructor(app: I.IApp) {
+
+    constructor(app: IApp) {
         this.app = app;
 
         this.addTaskActivity = new AddTaskActivity(app);

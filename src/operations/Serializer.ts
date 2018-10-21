@@ -40,8 +40,10 @@ export class SSerializer implements ISerializer {
         return o;
     }
 
+
     toPlainSimple<T>(value: Simple) {
     }
+
 
     deserialize<T>(value: string): T {
         throw new Error("Not implemented");

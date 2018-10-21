@@ -2,7 +2,10 @@
 
 
 export class Color implements IColor {
+
     value: string;
 
-    constructor(value: string) { this.value = value; }
+    constructor(value: string) {
+        this.value = value;
+    }
 }

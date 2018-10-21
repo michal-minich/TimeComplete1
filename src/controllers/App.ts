@@ -1,8 +1,18 @@
 ﻿import S, { DataSignal as DataSignalType } from "s-js";
 import SArray, { SArray as SArrayType } from "s-array";
-import * as C from "../controllers/all";
-import { DateTime, Color, TaskList, LabelList, Label, Task } from "../data/all";
+import { TaskListActivity } from "./TaskListActivity";
+import { AddLabelActivity } from "./AddLabelActivity";
+import { AssociateLabelWithTaskActivity } from "./AssociateLabelWithTaskActivity";
+import { SelectTaskActivity } from "./SelectTaskActivity";
+import { EditTaskTitleActivity } from "./EditTaskTitleActivity";
+import { ChangeTaskCompletionActivity } from "./ChangeTaskCompletionActivity";
+import { Color } from "../data/Color";
+import { TaskList } from "../data/TaskList";
+import { LabelList } from "../data/LabelList";
+import { Label } from "../data/Label";
+import { Task } from "../data/Task";
 import { SessionStore } from "../io/SessionStore";
+import { clock } from "../common";
 import {
     IApp,
     IDataStore,
@@ -33,16 +43,16 @@ export class App implements IApp {
     constructor() {
         App.instance = this;
         this.taskListsActivities = SArray<ITaskListActivity>([
-            new C.TaskListActivity(this),
-            new C.TaskListActivity(this),
-            new C.TaskListActivity(this)
+            new TaskListActivity(this),
+            new TaskListActivity(this),
+            new TaskListActivity(this)
         ]);
         this.selectedTaskListActivity = S.data(this.taskListsActivities()[0]);
-        this.addLabelActivity = new C.AddLabelActivity(this);
-        this.associateLabelWithTaskActivity = new C.AssociateLabelWithActivity(this);
-        this.selectTaskActivity = new C.SelectTaskActivity(this);
-        this.editTaskTitleActivity = new C.EditTaskTitleActivity(this);
-        this.changeTaskCompletionActivity = new C.ChangeTaskCompletionActivity(this);
+        this.addLabelActivity = new AddLabelActivity(this);
+        this.associateLabelWithTaskActivity = new AssociateLabelWithTaskActivity(this);
+        this.selectTaskActivity = new SelectTaskActivity(this);
+        this.editTaskTitleActivity = new EditTaskTitleActivity(this);
+        this.changeTaskCompletionActivity = new ChangeTaskCompletionActivity(this);
 
         initSampleData(this);
     }
@@ -51,49 +61,36 @@ export class App implements IApp {
 
 export function initSampleData(app: IApp) {
 
-    const lRed = new Label();
-    lRed.name("red");
-    lRed.color(new Color("red"));
+    const lRed = new Label("red", new Color("red"));
     app.labelStore.addLabel(lRed);
 
-    const lGreen = new Label();
-    lGreen.name("green");
-    lGreen.color(new Color("green"));
+    const lGreen = new Label("green", new Color("green"));
     app.labelStore.addLabel(lGreen);
 
-    const lBlue = new Label();
-    lBlue.name("blue");
-    lBlue.color(new Color("blue"));
+    const lBlue = new Label("blue", new Color("blue"));
     app.labelStore.addLabel(lBlue);
 
     for (let i = 0; i < 50; i++) {
-        const lbl = new Label();
-        lbl.name(`label${i}`);
-        lbl.color(new Color("gray"));
+        const lbl = new Label("label " + i, new Color("gray"));
         app.labelStore.addLabel(lbl);
     }
 
-    const t1 = new Task();
-    t1.title("task 1 a");
+    const t1 = new Task("task 1 a");
     app.taskStore.addTask(t1);
-    const t2 = new Task();
-    t2.title("task 2 ab");
+    const t2 = new Task("task 2 ab");
     app.taskStore.addTask(t2);
     t2.addLabelAssociation(lGreen);
-    const t3 = new Task();
-    t3.title("task 3 abc");
-    t3.completedOn(new DateTime("2018"));
+    const t3 = new Task("task 3 abc");
+    t3.completedOn(clock.now());
     t3.addLabelAssociation(lRed);
     t3.addLabelAssociation(lBlue);
     app.taskStore.addTask(t3);
-    const t4 = new Task();
-    t4.title("task 4 abcd");
+    const t4 = new Task("task 4 abcd");
     app.taskStore.addTask(t4);
     t4.addLabelAssociation(lRed);
 
     for (let i = 0; i < 20; i++) {
-        const t = new Task();
-        t.title(`task ${i}`);
+        const t = new Task("task " + i);
         app.taskStore.addTask(t);
     }
 }
