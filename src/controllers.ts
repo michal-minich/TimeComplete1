@@ -8,6 +8,21 @@ import IChangeTaskCompletionActivity = M.IChangeTaskCompletionActivity;
 import IAssociateLabelWithTaskActivity = M.IAssociateLabelWithTaskActivity;
 
 
+
+
+class SessionStore implements M.IDataStore {
+    save(key: string, value: any): void {
+        const v = JSON.stringify(value);
+        window.localStorage.setItem(key, v);
+    }
+
+    load<T>(key: string): T | undefined {
+        const value = window.localStorage.getItem(key);
+        return value ? JSON.parse(value!) as T : undefined;
+    }
+}
+
+
 class LabelList implements M.ILabelList {
     addLabel(label: M.ILabel): void {
         this.labels.unshift(label);
@@ -93,6 +108,8 @@ class DateTime implements M.IDateTime {
 
 
 export class App implements M.IApp {
+    static instance: App;
+    readonly sessionStore: M.IDataStore = new SessionStore();
     readonly taskStore = new TaskList();
     readonly labelStore = new LabelList();
     readonly taskListsActivities: SArrayType<M.ITaskListActivity>;
@@ -106,6 +123,7 @@ export class App implements M.IApp {
 
 
     constructor() {
+        App.instance = this;
         this.taskListsActivities = SArray<M.ITaskListActivity>([
             new TaskListActivity(this),
             new TaskListActivity(this),
