@@ -84,6 +84,7 @@
     <TypeScriptCompile Include="src\controllers\all.ts" />
     <TypeScriptCompile Include="src\app.ts" />
     <TypeScriptCompile Include="src\models\all.ts" />
+    <TypeScriptCompile Include="src\Serializer.ts" />
     <TypeScriptCompile Include="src\views.tsx" />
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,7 @@ export module AppView {
     export let queryTextBox: HTMLInputElement;
     export let taskEditTextBox: HTMLInputElement;
 
+    let leftTd: HTMLTableCellElement;
     let assignLabelPopup: HTMLDivElement;
 
     window.addEventListener("mousemove",
@@ -20,6 +21,7 @@ export module AppView {
             if (resizeStartLeft !== -1) {
                 document.body.classList.add("user-select-none");
                 labelList.style.width = (e.clientX - labelList.offsetLeft - 10) + "px";
+                leftTd.style.width = (e.clientX - leftTd.offsetLeft - 10) + "px";
             }
         },
         false);
@@ -28,7 +30,7 @@ export module AppView {
     window.addEventListener("mouseup",
         (e: MouseEvent) => {
             resizeStartLeft = -1;
-            document.body.classList.remove("user-select-none");
+            window.setTimeout(() => document.body.classList.remove("user-select-none"), 0);
         },
         false);
 
@@ -110,7 +112,7 @@ export module AppView {
         <table id="bodyTable">
             <tbody>
             <tr>
-                <td>
+                <td ref={leftTd}>
                     {a.selectTaskActivity.selectedTask() === undefined
                         ? labelListView(a)
                         : labelAssociateView(a)

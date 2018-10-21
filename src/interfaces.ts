@@ -5,6 +5,15 @@ export interface IReadonlyDataSignal<T> {
     (): T;
 }
 
+export interface ICanDeserialize {
+
+}
+
+export interface IDataStore {
+    save<T>(key: string, value: T): void;
+    load<T>(key: string): T | undefined;
+}
+
 export interface IColor {
     value: string;
 }

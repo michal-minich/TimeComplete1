@@ -8,7 +8,19 @@ import * as I from "../interfaces";
 import * as Q from "../query";
 import * as V from "../views";
 
-import "./model";
+
+
+class SessionStore implements I.IDataStore {
+    save(key: string, value: any): void {
+        const v = JSON.stringify(value);
+        window.localStorage.setItem(key, v);
+    }
+
+    load<T>(key: string): T | undefined {
+        const value = window.localStorage.getItem(key);
+        return value ? JSON.parse(value!) as T : undefined;
+    }
+}
 
 
 class TaskList implements I.ITaskList {
@@ -83,6 +95,8 @@ class DateTime implements I.IDateTime {
 
 
 export class App implements I.IApp {
+    static instance: App;
+    readonly sessionStore: I.IDataStore = new SessionStore();
     readonly taskStore = new TaskList();
     readonly labelStore = new M.LabelList();
     readonly taskListsActivities: SArrayType<I.ITaskListActivity>;
