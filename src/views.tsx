@@ -1,9 +1,8 @@
 import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 Surplus;
-import data from "surplus-mixin-data";
 import { SArray as SArrayType } from "s-array";
-
+import data from "surplus-mixin-data";
 import * as I from "./interfaces";
 
 
@@ -56,12 +55,13 @@ export module AppView {
                                : ""}>
                            {t.title()}
                        </td>
-                       <td>{t.assignedLabels.map(al =>
-                           <span
-                               className="label-tag"
-                               title={al.name()}
-                               style={{ backgroundColor: al.color().value }}>
-                           </span>)}
+                       <td>
+                           {t.assignedLabels.map(al =>
+                               <span
+                                   className="label-tag"
+                                   title={al.name()}
+                                   style={{ backgroundColor: al.color().value }}>
+                               </span>)}
                        </td>
                    </tr>;
         });
@@ -147,23 +147,25 @@ export module AppView {
 
 
     export const labelListView = (a: I.IApp) =>
-        <div ref={labelList} className="label-list"><div id="label-list-inner">
-            {newLabelView(a)}
-            {a.labelStore.labels.map(l =>
-                <span className={"label" +
+        <div ref={labelList} className="label-list">
+            <div id="label-list-inner">
+                {newLabelView(a)}
+                {a.labelStore.labels.map(l =>
+                    <span className={"label" +
                 (a.selectedTaskListActivity().searchTaskListActivity.taskQuery()
                     .indexOf(l.name()) ===
                     -1
                     ? ""
                     : " searched-label")}
-                      onMouseDown={() => {
-                          a.selectedTaskListActivity().searchTaskListActivity.addOrRemoveLabelFromQuery(l);
-                          setTimeout(() => queryTextBox.focus());
-                      }}
-                      style={labelInlineStyle(l)}>
-                    {l.name()}
-                </span>)()}
-        </div></div>;
+                          onMouseDown={() => {
+                              a.selectedTaskListActivity().searchTaskListActivity.addOrRemoveLabelFromQuery(l);
+                              setTimeout(() => queryTextBox.focus());
+                          }}
+                          style={labelInlineStyle(l)}>
+                        {l.name()}
+                    </span>)()}
+            </div>
+        </div>;
 
 
     export const labelAssociateView = (a: I.IApp) =>

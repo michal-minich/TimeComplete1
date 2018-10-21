@@ -124,11 +124,3 @@ export interface ISearchTaskListActivity extends IActivityController {
     rollback(): void;
     clear(): void;
 }
-
-// query language
-// free text ... 'text' matches %text%
-// #label ... '#xx' matches #%xx%
-// #label.. matches the label + all children
-// #label..
-// bool ops: ! and or < >= <= = (auto correct from ==) != (auto correct from <>)
-// saved 'named' search will virtually assign 'named' as a label to matching tasks (and can be used as #named in other queries)

@@ -78,13 +78,29 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="src\models\LabelList.ts" />
+    <TypeScriptCompile Include="src\controllers\AddLabelActivity.ts" />
+    <TypeScriptCompile Include="src\controllers\AddTaskActivity.ts" />
+    <TypeScriptCompile Include="src\controllers\AssociateLabelWithActivity.ts" />
+    <TypeScriptCompile Include="src\controllers\ChangeTaskCompletionActivity.ts" />
+    <TypeScriptCompile Include="src\controllers\EditTaskTitleActivity.ts" />
+    <TypeScriptCompile Include="src\controllers\SearchTaskListActivity.ts" />
+    <TypeScriptCompile Include="src\controllers\SelectTaskActivity.ts" />
+    <TypeScriptCompile Include="src\controllers\TaskListActivity.ts" />
+    <TypeScriptCompile Include="src\controllers\App.ts" />
+    <TypeScriptCompile Include="src\data\all.ts" />
+    <TypeScriptCompile Include="src\data\Color.ts" />
+    <TypeScriptCompile Include="src\data\DateTime.ts" />
+    <TypeScriptCompile Include="src\data\Label.ts" />
+    <TypeScriptCompile Include="src\io\all.ts" />
+    <TypeScriptCompile Include="src\io\SessionStore.ts" />
+    <TypeScriptCompile Include="src\data\Task.ts" />
+    <TypeScriptCompile Include="src\data\TaskList.ts" />
+    <TypeScriptCompile Include="src\data\LabelList.ts" />
     <TypeScriptCompile Include="src\interfaces.ts" />
-    <TypeScriptCompile Include="src\query.ts" />
+    <TypeScriptCompile Include="src\operations\query.ts" />
     <TypeScriptCompile Include="src\controllers\all.ts" />
-    <TypeScriptCompile Include="src\app.ts" />
-    <TypeScriptCompile Include="src\models\all.ts" />
-    <TypeScriptCompile Include="src\Serializer.ts" />
+    <TypeScriptCompile Include="src\start.ts" />
+    <TypeScriptCompile Include="src\operations\Serializer.ts" />
     <TypeScriptCompile Include="src\views.tsx" />
   </ItemGroup>
   <ItemGroup>

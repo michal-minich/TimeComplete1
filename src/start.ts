@@ -1,14 +1,14 @@
 import S from "s-js";
 
+import { App } from "./controllers/App";
+import { IApp } from "./interfaces";
+import { SSerializer } from "./operations/Serializer";
 import { AppView } from "./views";
-import * as I from "./interfaces";
-import * as C from "./controllers/all";
-import { SSerializer } from "./Serializer";
 
 
 S.root(() => {
-    const app: I.IApp = new C.App();
-    
+    const app: IApp = new App();
+
     const view = AppView.view(app);
     document.body.appendChild(view);
 

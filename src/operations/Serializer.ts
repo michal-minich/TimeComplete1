@@ -1,7 +1,4 @@
-﻿import * as Q from "./query";
-import * as V from "./views";
-
-interface ISerializer {
+﻿interface ISerializer {
     serialize<T>(value: T): string;
     deserialize<T>(value: string): T;
 }
