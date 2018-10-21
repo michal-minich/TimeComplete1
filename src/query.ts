@@ -1,10 +1,10 @@
-﻿import * as M from "./model";
+﻿import * as I from "./interfaces";
 
 
 export class TaskQuery {
     queryItems: IQueryItem[] = [];
 
-    taskMatches(t: M.ITask): boolean {
+    taskMatches(t: I.ITask): boolean {
         const title = t.title();
         for (let qi of this.queryItems) {
             if (qi instanceof QueryText) {

@@ -78,15 +78,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\models\LabelList.ts" />
+    <TypeScriptCompile Include="src\interfaces.ts" />
     <TypeScriptCompile Include="src\query.ts" />
-    <TypeScriptCompile Include="src\controllers.ts" />
+    <TypeScriptCompile Include="src\controllers\all.ts" />
     <TypeScriptCompile Include="src\app.ts" />
-    <TypeScriptCompile Include="src\model.ts" />
+    <TypeScriptCompile Include="src\models\all.ts" />
     <TypeScriptCompile Include="src\views.tsx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -1,64 +1,54 @@
-﻿import S, { DataSignal as DataSignalType } from "s-js";
+﻿
+import S, { DataSignal as DataSignalType } from "s-js";
 import SArray, { SArray as SArrayType, SDataArray } from "s-array";
 
-import * as M from "./model";
-import * as Q from "./query";
-import * as V from "./views";
-import IChangeTaskCompletionActivity = M.IChangeTaskCompletionActivity;
-import IAssociateLabelWithTaskActivity = M.IAssociateLabelWithTaskActivity;
+
+import * as M from "../models/all";
+import * as I from "../interfaces";
+import * as Q from "../query";
+import * as V from "../views";
+
+import "./model";
 
 
-class LabelList implements M.ILabelList {
-    addLabel(label: M.ILabel): void {
-        this.labels.unshift(label);
-    }
+class TaskList implements I.ITaskList {
 
-
-    removeLabel(label: M.ILabel): void {
-        this.labels.remove(label);
-    }
-
-
-    labels: SDataArray<M.ILabel> = SArray([]);
-}
-
-
-class TaskList implements M.ITaskList {
-
-    searchedTasks(taskQuery: string): SArrayType<M.ITask> {
+    searchedTasks(taskQuery: string): SArrayType<I.ITask> {
+        
+        new String("").padStart(1, "");
         const q = new Q.TaskQueryParser().parse(taskQuery);
         return this.tasks.filter(t => q.taskMatches(t));
     }
 
 
-    addTask(task: M.ITask): void {
+    addTask(task: I.ITask): void {
         this.tasks.unshift(task);
     }
 
 
-    tasks: SDataArray<M.ITask> = SArray([]);
+    tasks: SDataArray<I.ITask> = SArray([]);
 }
 
 
-class Task implements M.ITask {
+class Task implements I.ITask {
 
     static counter = 0;
 
-    addLabelAssociation(label: M.ILabel): void {
+    addLabelAssociation(label: I.ILabel): void {
         this.assignedLabels.push(label);
     }
 
 
-    removeLabelAssociation(label: M.ILabel): void {
+    removeLabelAssociation(label: I.ILabel): void {
         this.assignedLabels.remove(label);
     }
 
 
     title = S.data("");
-    assignedLabels = SArray<M.ILabel>([]);
+    assignedLabels = SArray<I.ILabel>([]);
     id = ++Task.counter;
     createdOn = new DateTime("2018");
-    completedOn = S.data<M.IDateTime | undefined>(undefined);
+    completedOn = S.data<I.IDateTime | undefined>(undefined);
 
 
     completedValue(): string {
@@ -68,14 +58,14 @@ class Task implements M.ITask {
 }
 
 
-class Color implements M.IColor {
+class Color implements I.IColor {
     value: string;
 
     constructor(value: string) { this.value = value; }
 }
 
 
-class Label implements M.ILabel {
+class Label implements I.ILabel {
     name = S.data("");
     color = S.data(new Color("gray"));
     id = ++Task.counter;
@@ -83,7 +73,7 @@ class Label implements M.ILabel {
 }
 
 
-class DateTime implements M.IDateTime {
+class DateTime implements I.IDateTime {
     constructor(value: string) {
         this.value = value;
     }
@@ -92,21 +82,21 @@ class DateTime implements M.IDateTime {
 }
 
 
-export class App implements M.IApp {
+export class App implements I.IApp {
     readonly taskStore = new TaskList();
-    readonly labelStore = new LabelList();
-    readonly taskListsActivities: SArrayType<M.ITaskListActivity>;
+    readonly labelStore = new M.LabelList();
+    readonly taskListsActivities: SArrayType<I.ITaskListActivity>;
 
-    readonly selectedTaskListActivity: DataSignalType<M.ITaskListActivity>;
-    readonly addLabelActivity: M.IAddLabelActivity;
-    readonly associateLabelWithTaskActivity: IAssociateLabelWithTaskActivity;
-    readonly selectTaskActivity: M.ISelectTaskActivity;
-    readonly editTaskTitleActivity: M.IEditTaskTitleActivity;
-    readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
+    readonly selectedTaskListActivity: DataSignalType<I.ITaskListActivity>;
+    readonly addLabelActivity: I.IAddLabelActivity;
+    readonly associateLabelWithTaskActivity: I.IAssociateLabelWithTaskActivity;
+    readonly selectTaskActivity: I.ISelectTaskActivity;
+    readonly editTaskTitleActivity: I.IEditTaskTitleActivity;
+    readonly changeTaskCompletionActivity: I.IChangeTaskCompletionActivity;
 
 
     constructor() {
-        this.taskListsActivities = SArray<M.ITaskListActivity>([
+        this.taskListsActivities = SArray<I.ITaskListActivity>([
             new TaskListActivity(this),
             new TaskListActivity(this),
             new TaskListActivity(this)
@@ -117,17 +107,19 @@ export class App implements M.IApp {
         this.selectTaskActivity = new SelectTaskActivity(this);
         this.editTaskTitleActivity = new EditTaskTitleActivity(this);
         this.changeTaskCompletionActivity = new ChangeTaskCompletionActivity(this);
+
+        initSampleData(this);
     }
 }
 
 
-class TaskListActivity implements M.ITaskListActivity {
-    private readonly app: M.IApp;
+class TaskListActivity implements I.ITaskListActivity {
+    private readonly app: I.IApp;
 
-    readonly addTaskActivity: M.IAddTaskActivity;
-    readonly searchTaskListActivity: M.ISearchTaskListActivity;
+    readonly addTaskActivity: I.IAddTaskActivity;
+    readonly searchTaskListActivity: I.ISearchTaskListActivity;
 
-    constructor(app: M.IApp) {
+    constructor(app: I.IApp) {
         this.app = app;
 
         this.addTaskActivity = new AddTaskActivity(app);
@@ -136,17 +128,17 @@ class TaskListActivity implements M.ITaskListActivity {
 }
 
 
-class SelectTaskActivity implements M.ISelectTaskActivity {
-    private readonly app: M.IApp;
+class SelectTaskActivity implements I.ISelectTaskActivity {
+    private readonly app: I.IApp;
 
-    constructor(app: M.IApp) {
+    constructor(app: I.IApp) {
         this.app = app;
     }
 
-    selectedTask = S.data(undefined as (M.ITask | undefined));
+    selectedTask = S.data(undefined as (I.ITask | undefined));
 
 
-    select(t: M.ITask): void {
+    select(t: I.ITask): void {
         this.selectedTask(t);
     }
 
@@ -157,13 +149,13 @@ class SelectTaskActivity implements M.ISelectTaskActivity {
 }
 
 
-class AddTaskActivity implements M.IAddTaskActivity {
+class AddTaskActivity implements I.IAddTaskActivity {
 
     newName = S.data("");
 
-    private readonly app: M.IApp;
+    private readonly app: I.IApp;
 
-    constructor(app: M.IApp) {
+    constructor(app: I.IApp) {
         this.app = app;
     }
 
@@ -192,11 +184,11 @@ class AddTaskActivity implements M.IAddTaskActivity {
 }
 
 
-class AddLabelActivity implements M.IAddLabelActivity {
+class AddLabelActivity implements I.IAddLabelActivity {
     newName = S.data("");
-    private readonly app: M.IApp;
+    private readonly app: I.IApp;
 
-    constructor(app: M.IApp) {
+    constructor(app: I.IApp) {
         this.app = app;
     }
 
@@ -229,18 +221,18 @@ class AddLabelActivity implements M.IAddLabelActivity {
 }
 
 
-class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
+class EditTaskTitleActivity implements I.IEditTaskTitleActivity {
 
     newTitle = S.data("");
     private originalTitle = "";
-    private readonly app: M.IApp;
+    private readonly app: I.IApp;
 
-    constructor(app: M.IApp) {
+    constructor(app: I.IApp) {
         this.app = app;
     }
 
 
-    begin(t: M.ITask, titleTd: HTMLTableDataCellElement, tla: M.ITaskListActivity): void {
+    begin(t: I.ITask, titleTd: HTMLTableDataCellElement, tla: I.ITaskListActivity): void {
         this.originalTitle = t.title();
         this.app.selectTaskActivity.select(t);
         this.newTitle(t.title());
@@ -286,14 +278,14 @@ class EditTaskTitleActivity implements M.IEditTaskTitleActivity {
 }
 
 
-class ChangeTaskCompletionActivity implements IChangeTaskCompletionActivity {
-    private readonly app: M.IApp;
+class ChangeTaskCompletionActivity implements I.IChangeTaskCompletionActivity {
+    private readonly app: I.IApp;
 
-    constructor(app: M.IApp) {
+    constructor(app: I.IApp) {
         this.app = app;
     }
 
-    perform(task: M.ITask, isDone: HTMLInputElement): any {
+    perform(task: I.ITask, isDone: HTMLInputElement): any {
         //this.app.selectTaskActivity.selectedTask(task);
         if (isDone.checked) {
             task.completedOn(new DateTime("2019"));
@@ -304,14 +296,14 @@ class ChangeTaskCompletionActivity implements IChangeTaskCompletionActivity {
 }
 
 
-class AssociateLabelWithActivity implements IAssociateLabelWithTaskActivity {
-    private readonly app: M.IApp;
+class AssociateLabelWithActivity implements I.IAssociateLabelWithTaskActivity {
+    private readonly app: I.IApp;
 
-    constructor(app: M.IApp) {
+    constructor(app: I.IApp) {
         this.app = app;
     }
     
-    changeAssociation(label: M.ILabel): void {
+    changeAssociation(label: I.ILabel): void {
         const t = this.app.selectTaskActivity.selectedTask()!;
         if (t.assignedLabels().some(al => al.name() === label.name())) {
             t.removeLabelAssociation(label);
@@ -322,18 +314,18 @@ class AssociateLabelWithActivity implements IAssociateLabelWithTaskActivity {
 }
 
 
-class SearchTaskListActivity implements M.ISearchTaskListActivity {
+class SearchTaskListActivity implements I.ISearchTaskListActivity {
     taskQuery = S.data("");
     private originalTitle = "";
 
-    private readonly app: M.IApp;
+    private readonly app: I.IApp;
 
-    constructor(app: M.IApp) {
+    constructor(app: I.IApp) {
         this.app = app;
     }
 
 
-    resultTasks(): SArrayType<M.ITask> {
+    resultTasks(): SArrayType<I.ITask> {
         return this.app.taskStore.searchedTasks(this.taskQuery());
     }
 
@@ -369,7 +361,7 @@ class SearchTaskListActivity implements M.ISearchTaskListActivity {
     }
 
 
-    addOrRemoveLabelFromQuery(l: M.ILabel): void {
+    addOrRemoveLabelFromQuery(l: I.ILabel): void {
         const ln = l.name();
         const q = this.taskQuery().trim().replace("  ", " ");
         if (q.indexOf(ln) === -1) {
@@ -381,7 +373,7 @@ class SearchTaskListActivity implements M.ISearchTaskListActivity {
 }
 
 
-export function initSampleData(app: M.IApp) {
+export function initSampleData(app: I.IApp) {
 
     const lRed = new Label();
     lRed.name("red");

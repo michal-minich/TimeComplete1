@@ -1,15 +1,13 @@
 import S from "s-js";
 
 import { AppView } from "./views";
-import * as M from "./model";
-import * as C from "./controllers";
+import * as I from "./interfaces";
+import * as C from "./controllers/all";
 
 
 S.root(() => {
-    const app: M.IApp = new C.App();
-
-    C.initSampleData(app);
-
+    const app: I.IApp = new C.App();
+    
     const view = AppView.view(app);
     document.body.appendChild(view);
 

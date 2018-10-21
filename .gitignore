@@ -5,5 +5,4 @@ bin/
 obj/
 *.user
 packages/
-src/*.js
-src/*.jsx
+src/**/*.js*

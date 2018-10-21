@@ -1,3 +1,4 @@
+- local storage
 
 - make possible to rename label
 - make possible to delete label
@@ -27,7 +28,6 @@ task list activity view:
 - make possible to see task creation date time
 - make possible to see task's last completion date time
 
-- local storage
 - server storage
 - sync resolving 
 

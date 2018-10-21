@@ -4,7 +4,7 @@ Surplus;
 import data from "surplus-mixin-data";
 import { SArray as SArrayType } from "s-array";
 
-import * as M from "./model";
+import * as I from "./interfaces";
 
 
 export module AppView {
@@ -33,7 +33,7 @@ export module AppView {
         false);
 
 
-    const taskListView = (a: M.IApp, tla: M.ITaskListActivity) =>
+    const taskListView = (a: I.IApp, tla: I.ITaskListActivity) =>
         tla.searchTaskListActivity.resultTasks().map(t => {
             let doneChk: HTMLInputElement | undefined = undefined;
             let titleTd: HTMLTableDataCellElement | undefined = undefined;
@@ -64,7 +64,7 @@ export module AppView {
                    </tr>;
         });
 
-    export const taskListActivityView = (a: M.IApp, tla: M.ITaskListActivity) =>
+    export const taskListActivityView = (a: I.IApp, tla: I.ITaskListActivity) =>
         <div onMouseDown={() => a.selectedTaskListActivity(tla)}
              className={"task-list-activity " +
                  (a.selectedTaskListActivity() === tla ? "selected-task-list-activity" : "")}>
@@ -101,12 +101,12 @@ export module AppView {
         </div>;
 
 
-    function labelInlineStyle(l: M.ILabel) {
+    function labelInlineStyle(l: I.ILabel) {
         return { "backgroundColor": l.color().value };
     };
 
 
-    export const view = (a: M.IApp) =>
+    export const view = (a: I.IApp) =>
         <table id="bodyTable">
             <tbody>
             <tr>
@@ -136,7 +136,7 @@ export module AppView {
         </table>;
 
 
-    export const newLabelView = (a: M.IApp) =>
+    export const newLabelView = (a: I.IApp) =>
         <input type="text"
                placeholder="new label"
                className="new-label-input label"
@@ -144,7 +144,7 @@ export module AppView {
                onKeyUp={(e: KeyboardEvent) => a.addLabelActivity.keyUp(e)}/>;
 
 
-    export const labelListView = (a: M.IApp) =>
+    export const labelListView = (a: I.IApp) =>
         <div ref={labelList} className="label-list"><div id="label-list-inner">
             {newLabelView(a)}
             {a.labelStore.labels.map(l =>
@@ -164,7 +164,7 @@ export module AppView {
         </div></div>;
 
 
-    export const labelAssociateView = (a: M.IApp) =>
+    export const labelAssociateView = (a: I.IApp) =>
         !a.selectTaskActivity.selectedTask()
         ? ""
         : <div id="assign-label-activity" className="label-list" ref={assignLabelPopup}>
@@ -184,7 +184,7 @@ export module AppView {
           </div>;
 
 
-    export const associateLabelList = (a: M.IApp, labels: SArrayType<M.ILabel>) =>
+    export const associateLabelList = (a: I.IApp, labels: SArrayType<I.ILabel>) =>
         labels.map(l =>
             <span className="label"
                   style={labelInlineStyle(l)}

@@ -3,8 +3,12 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "target": "es5",
+    //"noUnusedLocals": true,
+    //"noUnusedParameters": true,
+    "target": "es2018",
     "jsx": "preserve",
-    "sourceMap": false
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "lib": ["dom", "dom.iterable", "es6", "es2018"]
   }
 }
