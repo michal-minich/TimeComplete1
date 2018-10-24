@@ -63,16 +63,30 @@ export interface ILabelList {
 }
 
 export interface IApp {
-    readonly taskStore: ITaskList;
-    readonly labelStore: ILabelList;
-    readonly taskListsActivities: SArray<ITaskListActivity>;
+    readonly data: IAppData;
+    readonly activity: IAppActivities;
 
-    readonly selectedTaskListActivity: DataSignal<ITaskListActivity>;
-    readonly addLabelActivity: IAddLabelActivity;
-    readonly associateLabelWithTaskActivity: IAssociateLabelWithTaskActivity;
-    readonly selectTaskActivity: ISelectTaskActivity;
-    readonly editTaskTitleActivity: IEditTaskTitleActivity;
-    readonly changeTaskCompletionActivity: IChangeTaskCompletionActivity;
+    readonly sessionStore: IDataStore;
+    readonly clock: IClock;
+    readonly idCounter: IIdProvider<number>;
+}
+
+
+export interface IAppData {
+    readonly tasks: ITaskList;
+    readonly labels: ILabelList;
+}
+
+
+export interface IAppActivities {
+    readonly taskLists: SArray<ITaskListActivity>;
+
+    readonly selectedTaskList: DataSignal<ITaskListActivity>;
+    readonly addLabel: IAddLabelActivity;
+    readonly associateLabelWithTask: IAssociateLabelWithTaskActivity;
+    readonly selectTask: ISelectTaskActivity;
+    readonly editTaskTitle: IEditTaskTitleActivity;
+    readonly changeTaskCompletion: IChangeTaskCompletionActivity;
 }
 
 
@@ -107,7 +121,7 @@ export interface IAddLabelActivity extends IActivityController {
 }
 
 export interface IEditTaskTitleActivity extends IActivityController {
-    begin(t: ITask, titleTd: HTMLTableDataCellElement, tla: ITaskListActivity): void;
+    begin(t: ITask, titleTd: HTMLTableDataCellElement): void;
     newTitle: DataSignal<string>;
     keyUp(e: KeyboardEvent): void;
     commit(): void;

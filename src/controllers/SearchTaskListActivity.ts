@@ -19,7 +19,7 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
     searchedTasks(taskQuery: string): SArray<ITask> {
         new String("").padStart(1, "");
         const q = new TaskQueryParser().parse(taskQuery);
-        return this.app.taskStore.tasks.filter(t => q.taskMatches(t));
+        return this.app.data.tasks.tasks.filter(t => q.taskMatches(t));
     }
 
 
@@ -30,7 +30,7 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
 
     begin(): void {
         this.originalTitle = this.taskQuery();
-        this.app.selectTaskActivity.unselect();
+        this.app.activity.selectTask.unselect();
     }
 
 

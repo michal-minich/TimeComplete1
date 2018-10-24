@@ -19,7 +19,7 @@ export class AddTaskActivity implements IAddTaskActivity {
             return;
         const t = new Task(this.newName());
         this.newName("");
-        this.app.taskStore.addTask(t);
+        this.app.data.tasks.addTask(t);
     }
 
 

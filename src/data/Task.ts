@@ -1,13 +1,13 @@
 ﻿import S, { DataSignal } from "s-js";
 import SArray from "s-array";
-import { clock, idCounter } from "../common";
+import { App } from "../controllers/App";
 import { ITask, ILabel, IDateTime } from "../interfaces";
 
 
 export class Task implements ITask {
 
-    id = idCounter.getNext();
-    createdOn = clock.now();
+    id = App.instance.idCounter.getNext();
+    createdOn = App.instance.clock.now();
 
     title: DataSignal<string>;
     assignedLabels = SArray<ILabel>([]);

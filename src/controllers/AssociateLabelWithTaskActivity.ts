@@ -11,7 +11,7 @@ export class AssociateLabelWithTaskActivity implements IAssociateLabelWithTaskAc
     }
 
     changeAssociation(label: ILabel): void {
-        const t = this.app.selectTaskActivity.selectedTask()!;
+        const t = this.app.activity.selectTask.selectedTask()!;
         if (t.assignedLabels().some(al => al.name() === label.name())) {
             t.removeLabelAssociation(label);
         } else {

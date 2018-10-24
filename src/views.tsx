@@ -34,22 +34,22 @@ export module AppView {
         false);
 
 
-    const taskListView = (a: I.IApp, tla: I.ITaskListActivity) =>
-        tla.searchTaskListActivity.resultTasks().map(t => {
+    const taskListViewBody = (a: I.IApp, stla: I.ISearchTaskListActivity) =>
+        stla.resultTasks().map(t => {
             let doneChk: HTMLInputElement | undefined = undefined;
             let titleTd: HTMLTableDataCellElement | undefined = undefined;
-            return <tr onMouseDown={() => a.selectTaskActivity.select(t)}
-                       className={a.selectTaskActivity.selectedTask() === t ? "selected-task" : ""}>
+            return <tr onMouseDown={() => a.activity.selectTask.select(t)}
+                       className={a.activity.selectTask.selectedTask() === t ? "selected-task" : ""}>
                        <td>
                            <input
                                ref={doneChk}
                                type="checkbox"
                                checked={t.completedOn() !== undefined}
-                               onChange={() => a.changeTaskCompletionActivity.perform(t, doneChk!)}/>
+                               onChange={() => a.activity.changeTaskCompletion.perform(t, doneChk!)}/>
                        </td>
                        <td ref={titleTd}
                            tabIndex={1}
-                           onFocus={() => a.editTaskTitleActivity.begin(t, titleTd!, tla)}
+                           onFocus={() => a.activity.editTaskTitle.begin(t, titleTd!)}
                            className={t.completedOn() !== undefined
                                ? "completed-task"
                                : ""}>
@@ -66,10 +66,20 @@ export module AppView {
                    </tr>;
         });
 
+
+    export const taskListView = (a: I.IApp, stla: I.ISearchTaskListActivity) =>
+        <table className="task-list lined-list">
+            <thead></thead>
+            <tbody>
+            {taskListViewBody(a, stla)}
+            </tbody>
+        </table>;
+
+
     export const taskListActivityView = (a: I.IApp, tla: I.ITaskListActivity) =>
-        <div onMouseDown={() => a.selectedTaskListActivity(tla)}
+        <div onMouseDown={() => a.activity.selectedTaskList(tla)}
              className={"task-list-activity " +
-                 (a.selectedTaskListActivity() === tla ? "selected-task-list-activity" : "")}>
+                 (a.activity.selectedTaskList() === tla ? "selected-task-list-activity" : "")}>
             <div className="header">
                 <input
                     spellCheck={false}
@@ -93,12 +103,7 @@ export module AppView {
                        className="new-task-input"
                        onKeyUp={(e: KeyboardEvent) => tla.addTaskActivity.keyUp(e)}
                        fn={data(tla.addTaskActivity.newName)}/>
-                <table className="task-list lined-list">
-                    <thead></thead>
-                    <tbody>
-                    {taskListView(a, tla)}
-                    </tbody>
-                </table>
+                {taskListView(a, tla.searchTaskListActivity)}
             </div>
         </div>;
 
@@ -113,7 +118,7 @@ export module AppView {
             <tbody>
             <tr>
                 <td ref={leftTd}>
-                    {a.selectTaskActivity.selectedTask() === undefined
+                    {a.activity.selectTask.selectedTask() === undefined
                         ? labelListView(a)
                         : labelAssociateView(a)
                     }
@@ -123,14 +128,14 @@ export module AppView {
                 </td>
                 <td>
                     <div id="task-list-activities">
-                        {a.taskListsActivities.map(tla2 => taskListActivityView(a, tla2))}
+                        {a.activity.taskLists.map(tla2 => taskListActivityView(a, tla2))}
                     </div>
                     <input
                         type="text"
                         ref={taskEditTextBox}
-                        fn={data(a.editTaskTitleActivity.newTitle)}
-                        onKeyUp={(e: KeyboardEvent) => a.editTaskTitleActivity.keyUp(e)}
-                        onBlur={() => a.editTaskTitleActivity.commit()}
+                        fn={data(a.activity.editTaskTitle.newTitle)}
+                        onKeyUp={(e: KeyboardEvent) => a.activity.editTaskTitle.keyUp(e)}
+                        onBlur={() => a.activity.editTaskTitle.commit()}
                         className="task-text-edit-box selected-task"/>
                 </td>
             </tr>
@@ -142,23 +147,23 @@ export module AppView {
         <input type="text"
                placeholder="new label"
                className="new-label-input label"
-               fn={data(a.addLabelActivity.newName)}
-               onKeyUp={(e: KeyboardEvent) => a.addLabelActivity.keyUp(e)}/>;
+               fn={data(a.activity.addLabel.newName)}
+               onKeyUp={(e: KeyboardEvent) => a.activity.addLabel.keyUp(e)}/>;
 
 
     export const labelListView = (a: I.IApp) =>
         <div ref={labelList} className="label-list">
             <div id="label-list-inner">
                 {newLabelView(a)}
-                {a.labelStore.labels.map(l =>
+                {a.data.labels.labels.map(l =>
                     <span className={"label" +
-                (a.selectedTaskListActivity().searchTaskListActivity.taskQuery()
+                (a.activity.selectedTaskList().searchTaskListActivity.taskQuery()
                     .indexOf(l.name()) ===
                     -1
                     ? ""
                     : " searched-label")}
                           onMouseDown={() => {
-                              a.selectedTaskListActivity().searchTaskListActivity
+                              a.activity.selectedTaskList().searchTaskListActivity
                                   .addOrRemoveLabelFromQuery(l);
                               setTimeout(() => queryTextBox.focus());
                           }}
@@ -170,19 +175,19 @@ export module AppView {
 
 
     export const labelAssociateView = (a: I.IApp) =>
-        !a.selectTaskActivity.selectedTask()
+        !a.activity.selectTask.selectedTask()
         ? ""
         : <div id="assign-label-activity" className="label-list" ref={assignLabelPopup}>
               <div className="smaller-font">Associated</div>
               <div id="associated-labels">
                   {newLabelView(a)}
-                  {associateLabelList(a, a.selectTaskActivity.selectedTask()!.assignedLabels)()}
+                  {associateLabelList(a, a.activity.selectTask.selectedTask()!.assignedLabels)()}
               </div>
               <div className="smaller-font">Available</div>
               <div id="available-labels">
                   {associateLabelList(a,
-                      a.labelStore.labels
-                      .filter(l => !a.selectTaskActivity.selectedTask()!.assignedLabels()
+                      a.data.labels.labels
+                      .filter(l => !a.activity.selectTask.selectedTask()!.assignedLabels()
                           .some(al => al.name() === l.name())))
                   }
               </div>
@@ -193,7 +198,7 @@ export module AppView {
         labels.map(l =>
             <span className="label"
                   style={labelInlineStyle(l)}
-                  onMouseDown={() => a.associateLabelWithTaskActivity.changeAssociation(l)}>
+                  onMouseDown={() => a.activity.associateLabelWithTask.changeAssociation(l)}>
                 {l.name()}
             </span>);
 }

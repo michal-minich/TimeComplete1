@@ -15,9 +15,9 @@ export class EditTaskTitleActivity implements IEditTaskTitleActivity {
     }
 
 
-    begin(t: ITask, titleTd: HTMLTableDataCellElement, tla: ITaskListActivity): void {
+    begin(t: ITask, titleTd: HTMLTableDataCellElement): void {
         this.originalTitle = t.title();
-        this.app.selectTaskActivity.select(t);
+        this.app.activity.selectTask.select(t);
         this.newTitle(t.title());
         AppView.taskEditTextBox.value = t.title();
         const r = titleTd.getBoundingClientRect();
@@ -35,7 +35,7 @@ export class EditTaskTitleActivity implements IEditTaskTitleActivity {
         if (this.newTitle().trim() === "") {
             this.rollback();
         } else {
-            this.app.selectTaskActivity.selectedTask()!.title(this.newTitle());
+            this.app.activity.selectTask.selectedTask()!.title(this.newTitle());
             this.cleanup();
         }
     }

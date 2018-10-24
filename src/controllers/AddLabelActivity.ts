@@ -18,9 +18,9 @@ export class AddLabelActivity implements IAddLabelActivity {
         if (this.newName() === "")
             return;
         const l = new Label(this.newName(), new Color("gray"));
-        this.app.labelStore.addLabel(l);
+        this.app.data.labels.addLabel(l);
         this.newName("");
-        const t = this.app.selectTaskActivity.selectedTask();
+        const t = this.app.activity.selectTask.selectedTask();
         if (t) {
             t.addLabelAssociation(l);
         }

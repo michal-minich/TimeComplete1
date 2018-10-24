@@ -13,8 +13,8 @@ S.root(() => {
     document.body.appendChild(view);
 
     var s = new SSerializer();
-    //console.log(s.toPlain(app.labelStore.labels()));
-    //console.log(s.toPlain(app.taskStore.tasks()));
+    //console.log(s.toPlain(app.data.labels.labels()));
+    //console.log(s.toPlain(app.data.tasks.tasks()));
 
     setTimeout(() => AppView.queryTextBox.focus(), 100);
 });

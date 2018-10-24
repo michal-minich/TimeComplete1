@@ -1,12 +1,12 @@
 ﻿import S, { DataSignal } from "s-js";
-import { clock, idCounter } from "../common";
+import { App } from "../controllers/App";
 import { ILabel, IColor } from "../interfaces";
 
 
 export class Label implements ILabel {
 
-    id = idCounter.getNext();
-    createdOn = clock.now();
+    id = App.instance.idCounter.getNext();
+    createdOn = App.instance.clock.now();
 
     name: DataSignal<string>;
     color: DataSignal<IColor>;
