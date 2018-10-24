@@ -128,15 +128,15 @@ export module AppView {
                 </td>
                 <td>
                     <div id="task-list-activities">
-                        {a.activity.taskLists.map(tla2 => taskListActivityView(a, tla2))}
+                        <input
+                            type="text"
+                            ref={taskEditTextBox}
+                            fn={data(a.activity.editTaskTitle.newTitle)}
+                            onKeyUp={(e: KeyboardEvent) => a.activity.editTaskTitle.keyUp(e)}
+                            onBlur={() => a.activity.editTaskTitle.commit()}
+                            className="task-text-edit-box selected-task"/>
+                        {a.activity.taskLists.map(tla2 => taskListActivityView(a, tla2))()}
                     </div>
-                    <input
-                        type="text"
-                        ref={taskEditTextBox}
-                        fn={data(a.activity.editTaskTitle.newTitle)}
-                        onKeyUp={(e: KeyboardEvent) => a.activity.editTaskTitle.keyUp(e)}
-                        onBlur={() => a.activity.editTaskTitle.commit()}
-                        className="task-text-edit-box selected-task"/>
                 </td>
             </tr>
             </tbody>
