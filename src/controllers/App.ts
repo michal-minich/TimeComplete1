@@ -32,7 +32,7 @@ import {
 
 export class App implements IApp {
     static instance: IApp;
-    
+
     readonly data: IAppData;
     readonly activity: IAppActivities;
 

@@ -155,7 +155,7 @@ export module AppView {
         <div ref={labelList} className="label-list">
             <div id="label-list-inner">
                 {newLabelView(a)}
-                {a.data.labels.labels.map(l =>
+                {a.data.labels.items.map(l =>
                     <span className={"label" +
                 (a.activity.selectedTaskList().searchTaskListActivity.taskQuery()
                     .indexOf(l.name()) ===
@@ -186,7 +186,7 @@ export module AppView {
               <div className="smaller-font">Available</div>
               <div id="available-labels">
                   {associateLabelList(a,
-                      a.data.labels.labels
+                      a.data.labels.items
                       .filter(l => !a.activity.selectTask.selectedTask()!.assignedLabels()
                           .some(al => al.name() === l.name())))
                   }

@@ -2,23 +2,18 @@ import { DataSignal } from "s-js";
 import { SArray } from "s-array";
 
 
-export interface IReadonlyDataSignal<T> {
-    (): T;
-}
+// General ==================================================================
 
-export interface ICanDeserialize {
 
-}
+export type Indexer<T> = { [key: string]: T };
 
-export interface IIdProvider<T> {
-    getNext(): T;
-    readonly current: T;
-}
 
-export interface IDataStore {
-    save<T>(key: string, value: T): void;
-    load<T>(key: string): T | undefined;
-}
+export type JsonValueType = string | number | boolean | object | string[] | number[] | boolean[] | object[];
+
+
+
+// Data =====================================================================
+
 
 export interface IColor {
     value: string;
@@ -28,13 +23,17 @@ export interface IDateTime {
     value: string;
 }
 
-export interface IClock {
-    now(): IDateTime;
-}
-
 export interface IDomainObject {
     readonly id: number;
     readonly createdOn: IDateTime;
+}
+
+export interface IList<T> {
+    readonly items: SArray<T>;
+}
+
+export interface IDomainObjectList<T extends IDomainObject> extends IList<T> {
+    byId(id: number): T;
 }
 
 export interface ILabel extends IDomainObject {
@@ -51,16 +50,20 @@ export interface ITask extends IDomainObject {
     removeLabelAssociation(label: ILabel): void;
 }
 
-export interface ITaskList {
-    readonly tasks: SArray<ITask>;
+export interface ITaskList extends IDomainObjectList<ITask> {
+    readonly items: SArray<ITask>;
     addTask(task: ITask): void;
 }
 
-export interface ILabelList {
-    readonly labels: SArray<ILabel>;
+export interface ILabelList extends IDomainObjectList<ILabel>  {
+    readonly items: SArray<ILabel>;
     addLabel(label: ILabel): void;
     removeLabel(label: ILabel): void;
 }
+
+
+// Controllers ==============================================================
+
 
 export interface IApp {
     readonly data: IAppData;
@@ -146,4 +149,44 @@ export interface ISearchTaskListActivity extends IActivityController {
     rollback(): void;
     clear(): void;
     searchedTasks(taskQuery: string): SArray<ITask>;
+}
+
+
+// IO =======================================================================
+
+
+export interface IClock {
+    now(): IDateTime;
+}
+
+export interface IDataStore {
+    save<T>(key: string, value: T): void;
+    load<T>(key: string): T | undefined;
+}
+
+
+// Operations ===============================================================
+
+
+export interface IReadonlyDataSignal<T> {
+    (): T;
+}
+
+export interface ICanDeserialize {
+
+}
+
+export interface ICanSerialize {
+
+}
+
+export interface IIdProvider<T> {
+    getNext(): T;
+    readonly current: T;
+}
+
+
+export interface ISerializer {
+    serialize<T extends object>(value: T): string;
+    deserialize<T extends object>(value: string): T;
 }

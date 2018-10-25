@@ -1,5 +1,5 @@
 ﻿import S from "s-js";
-import { IApp, ITask, ITaskListActivity, IEditTaskTitleActivity } from "../interfaces";
+import { IApp, ITask, IEditTaskTitleActivity } from "../interfaces";
 import { AppView } from "../views";
 
 
@@ -7,7 +7,7 @@ export class EditTaskTitleActivity implements IEditTaskTitleActivity {
 
     newTitle = S.data("");
     private readonly app: IApp;
-    private task! : ITask;
+    private task!: ITask;
 
 
     constructor(app: IApp) {

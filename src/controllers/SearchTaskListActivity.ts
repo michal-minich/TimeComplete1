@@ -19,7 +19,7 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
     searchedTasks(taskQuery: string): SArray<ITask> {
         new String("").padStart(1, "");
         const q = new TaskQueryParser().parse(taskQuery);
-        return this.app.data.tasks.tasks.filter(t => q.taskMatches(t));
+        return this.app.data.tasks.items.filter(t => q.taskMatches(t));
     }
 
 

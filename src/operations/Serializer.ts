@@ -1,47 +1,52 @@
-﻿interface ISerializer {
-    serialize<T>(value: T): string;
-    deserialize<T>(value: string): T;
-}
+﻿import S, { DataSignal as DataSignalType } from "s-js";
+import SArray, { SArray as SArrayType } from "s-array";
+import { Indexer, JsonValueType, ISerializer } from "../interfaces";
 
-
-type Indexer<T> = { [key: string]: T };
-
-type Simple = string | number | boolean;
 
 export class SSerializer implements ISerializer {
 
-    serialize<T>(value: T): string {
-        const o = this.toPlain(value);
+    serialize<T extends object>(value: T): string {
+        const o = this.toPlainObject(value);
         return JSON.stringify(o);
     }
 
 
-    toPlain<T extends Indexer<any>>(value: T): any {
-        const o: Indexer<Simple | Simple[]> = {};
-
-        for (let k of Object.keys(value)) {
-            let v = value[k];
-            if (typeof v === "function" && v.name && v.name === "data") {
-                v = (v as () => any)();
-            }
-            switch (typeof v) {
-            case "string":
-            case "number":
-            case "boolean":
-                o[k] = v;
-                break;
-            case "object":
-                o[k] = this.toPlain(v);
-                break;
-            default:
-                throw undefined;
-            }
-        }
-        return o;
+    toPlainObject(value: object): object {
+        const v = this.toPlainSimple(value);
+        if (v == undefined)
+            throw undefined;
+        return v as object;
     }
 
 
-    toPlainSimple<T>(value: Simple) {
+    toPlainSimple(v: any): JsonValueType | undefined {
+        switch (typeof v) {
+        case "string":
+        case "number":
+        case "boolean":
+            return v;
+        case "function":
+            if (v.name) {
+                if (v.name === "data" /* S data signal */) {
+                    return this.toPlainSimple((v as DataSignalType<any>)());
+                } else if (v.name === "array" /* S array */) {
+                    return this.toPlainSimple((v as SArrayType<any>)());
+                }
+            }
+            return undefined;
+        case "undefined":
+            return undefined;
+        case "object":
+            const o: Indexer<JsonValueType> = {};
+            for (let k of Object.keys(v)) {
+                const f = this.toPlainSimple(v[k]);
+                if (f !== undefined)
+                    o[k] = f;
+            }
+            return o;
+        default:
+            throw undefined;
+        }
     }
 
 
