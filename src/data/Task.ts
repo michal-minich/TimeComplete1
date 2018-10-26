@@ -1,7 +1,8 @@
 ﻿import S, { DataSignal } from "s-js";
 import SArray from "s-array";
 import { App } from "../controllers/App";
-import { ITask, ILabel, IDateTime } from "../interfaces";
+import { ITask, ILabel, IDateTime, IAssociatedLabels } from "../interfaces";
+import { Common } from "../common";
 
 
 export class Task implements ITask {
@@ -10,21 +11,29 @@ export class Task implements ITask {
     createdOn = App.instance.clock.now();
 
     title: DataSignal<string>;
-    assignedLabels = SArray<ILabel>([]);
+    associatedLabels = new AssociatedLabels();
     completedOn = S.data<IDateTime | undefined>(undefined);
 
 
     constructor(title: string) {
         this.title = S.data(title);
     }
+}
 
 
-    addLabelAssociation(label: ILabel): void {
-        this.assignedLabels.push(label);
+class AssociatedLabels implements IAssociatedLabels {
+
+    items = SArray<ILabel>([]);
+
+    add(label: ILabel): void {
+        this.items.push(label);
     }
 
+    remove(label: ILabel): void {
+        this.items.remove(label);
+    }
 
-    removeLabelAssociation(label: ILabel): void {
-        this.assignedLabels.remove(label);
+    byId(id: number): ILabel {
+        return Common.findById(this.items, id);
     }
 }

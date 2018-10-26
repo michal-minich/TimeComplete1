@@ -45,9 +45,12 @@ export interface ILabel extends IDomainObject {
 export interface ITask extends IDomainObject {
     title: DataSignal<string>;
     completedOn: DataSignal<IDateTime | undefined>;
-    readonly assignedLabels: SArray<ILabel>;
-    addLabelAssociation(label: ILabel): void;
-    removeLabelAssociation(label: ILabel): void;
+    readonly associatedLabels: IAssociatedLabels;
+}
+
+export interface IAssociatedLabels extends IDomainObjectList<ILabel> {
+    add(label: ILabel): void;
+    remove(label: ILabel): void;
 }
 
 export interface ITaskList extends IDomainObjectList<ITask> {

@@ -22,7 +22,7 @@ export class AddLabelActivity implements IAddLabelActivity {
         this.newName("");
         const t = this.app.activity.selectTask.selectedTask();
         if (t) {
-            t.addLabelAssociation(l);
+            t.associatedLabels.add(l);
         }
     }
 

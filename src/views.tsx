@@ -56,7 +56,7 @@ export module AppView {
                            {t.title()}
                        </td>
                        <td>
-                           {t.assignedLabels.map(al =>
+                           {t.associatedLabels.items.map(al =>
                                <span
                                    className="label-tag"
                                    title={al.name()}
@@ -181,13 +181,13 @@ export module AppView {
               <div className="smaller-font">Associated</div>
               <div id="associated-labels">
                   {newLabelView(a)}
-                  {associateLabelList(a, a.activity.selectTask.selectedTask()!.assignedLabels)()}
+                  {associateLabelList(a, a.activity.selectTask.selectedTask()!.associatedLabels.items)()}
               </div>
               <div className="smaller-font">Available</div>
               <div id="available-labels">
                   {associateLabelList(a,
                       a.data.labels.items
-                      .filter(l => !a.activity.selectTask.selectedTask()!.assignedLabels()
+                      .filter(l => !a.activity.selectTask.selectedTask()!.associatedLabels.items()
                           .some(al => al.name() === l.name())))
                   }
               </div>

@@ -105,15 +105,15 @@ export function initSampleData(app: IApp) {
     app.data.tasks.addTask(t1);
     const t2 = new Task("task 2 ab");
     app.data.tasks.addTask(t2);
-    t2.addLabelAssociation(lGreen);
+    t2.associatedLabels.add(lGreen);
     const t3 = new Task("task 3 abc");
     t3.completedOn(app.clock.now());
-    t3.addLabelAssociation(lRed);
-    t3.addLabelAssociation(lBlue);
+    t3.associatedLabels.add(lRed);
+    t3.associatedLabels.add(lBlue);
     app.data.tasks.addTask(t3);
     const t4 = new Task("task 4 abcd");
     app.data.tasks.addTask(t4);
-    t4.addLabelAssociation(lRed);
+    t4.associatedLabels.add(lRed);
 
     for (let i = 0; i < 20; i++) {
         const t = new Task("task " + i);

@@ -12,7 +12,7 @@ export class TaskQuery {
                     return false;
             } else if (qi instanceof QueryLabel) {
                 let found = false;
-                for (const al of t.assignedLabels()) {
+                for (const al of t.associatedLabels.items()) {
                     if (al.name().indexOf(qi.value) !== -1) {
                         found = true;
                         break;
