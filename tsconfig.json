@@ -7,7 +7,7 @@
     //"noUnusedParameters": true,
     "target": "es2018",
     "jsx": "preserve",
-    "sourceMap": true,
+    "sourceMap": false,
     "moduleResolution": "node",
     "lib": ["dom", "dom.iterable", "es6", "es2018"]
   }

@@ -21,7 +21,7 @@ export class TaskList implements ITaskList {
     }
 
 
-    private saveWithSerialize<T extends object>(key: string, value: T): void {
+    private saveWithSerialize<T extends object>(key: string, value: ArrayLike<T>): void {
         const sv = new SSerializer().toPlainObject(value);
         App.instance.sessionStore.save(key, sv);
     }

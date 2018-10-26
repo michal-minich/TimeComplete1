@@ -28,6 +28,10 @@ export interface IDomainObject {
     readonly createdOn: IDateTime;
 }
 
+export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
+    return typeof (v as any).id === "number" && typeof (v as any).createdOn.value === "string";
+}
+
 export interface IList<T> {
     readonly items: SArray<T>;
 }

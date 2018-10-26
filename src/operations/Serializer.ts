@@ -1,6 +1,6 @@
 ﻿import S, { DataSignal as DataSignalType } from "s-js";
 import SArray, { SArray as SArrayType } from "s-array";
-import { Indexer, JsonValueType, ISerializer } from "../interfaces";
+import { isDomainObject, Indexer, JsonValueType, ISerializer } from "../interfaces";
 
 
 export class SSerializer implements ISerializer {
@@ -12,14 +12,14 @@ export class SSerializer implements ISerializer {
 
 
     toPlainObject(value: object): object {
-        const v = this.toPlainSimple(value);
+        const v = this.toPlain(value);
         if (v == undefined)
             throw undefined;
         return v as object;
     }
 
 
-    toPlainSimple(v: any): JsonValueType | undefined {
+    toPlain(v: any): JsonValueType | undefined {
         switch (typeof v) {
         case "string":
         case "number":
@@ -27,23 +27,42 @@ export class SSerializer implements ISerializer {
             return v;
         case "function":
             if (v.name) {
-                if (v.name === "data" /* S data signal */) {
-                    return this.toPlainSimple((v as DataSignalType<any>)());
-                } else if (v.name === "array" /* S array */) {
-                    return this.toPlainSimple((v as SArrayType<any>)());
+                if (v.name === "data") {
+                    return this.toPlain((v as DataSignalType<any>)());
+                } else if (v.name === "array") {
+                    return this.toPlain((v as SArrayType<any>)());
                 }
             }
             return undefined;
         case "undefined":
             return undefined;
         case "object":
-            const o: Indexer<JsonValueType> = {};
-            for (let k of Object.keys(v)) {
-                const f = this.toPlainSimple(v[k]);
-                if (f !== undefined)
-                    o[k] = f;
+            if (v === null)
+                throw undefined;
+            if (Array.isArray(v)) {
+                //return v.map((i: any) => this.toPlain(i));
+                const a: JsonValueType[] = [];
+                for (let item of v) {
+                    const plainItem = this.toPlain(item);
+                    if (plainItem === undefined)
+                        throw undefined;
+                    a.push(plainItem);
+                }
+                return a;
+            } else {
+                const o: Indexer<JsonValueType> = {};
+                for (let k of Object.keys(v)) {
+                    const f = v[k];
+                    const f2 = this.toPlain(f);
+                    if (typeof f2 == "object" && isDomainObject(f2)) {
+                        o[k] = f2.id;
+                    } else if (f2 !== undefined) {
+                        o[k] = f2;
+                    }
+                }
+                return o;
             }
-            return o;
+        case "symbol":
         default:
             throw undefined;
         }
@@ -51,6 +70,7 @@ export class SSerializer implements ISerializer {
 
 
     deserialize<T>(value: string): T {
+        const o = JSON.parse(value);
         throw new Error("Not implemented");
     }
 }
