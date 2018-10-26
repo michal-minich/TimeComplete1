@@ -7,9 +7,15 @@ import { SArray } from "s-array";
 
 export type Indexer<T> = { [key: string]: T };
 
-
 export type JsonValueType = string | number | boolean | object | string[] | number[] | boolean[] | object[];
 
+export function isDataSignal(v: any): v is DataSignal<any> {
+    return typeof v === "function" && (v as any).name === "data";
+}
+
+export function isSArray(v: any): v is SArray<any> {
+    return typeof v === "function" && (v as any).name === "array";
+}
 
 
 // Data =====================================================================
@@ -38,6 +44,10 @@ export interface IList<T> {
 
 export interface IDomainObjectList<T extends IDomainObject> extends IList<T> {
     byId(id: number): T;
+}
+
+export function isDomainObjectList(v: NonNullable<object>): v is IDomainObjectList<any> {
+    return typeof (v as any).items === "function" && typeof (v as any).byId === "function";
 }
 
 export interface ILabel extends IDomainObject {
