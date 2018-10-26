@@ -24,8 +24,8 @@ export class EditTaskTitleActivity implements IEditTaskTitleActivity {
             .parentElement!.parentElement!.parentElement!;
         const pr = p.getBoundingClientRect();
         const txtStyle = AppView.taskEditTextBox.style;
-        txtStyle.left = (p.offsetLeft + r.left - pr.left) + "px";
-        txtStyle.top = (p.offsetTop + r.top - pr.top + 30) + "px";
+        txtStyle.left = (p.offsetLeft + r.left - pr.left - 1) + "px";
+        txtStyle.top = (p.offsetTop + r.top - pr.top + 29) + "px";
         txtStyle.width = (titleTd.offsetWidth) + "px";
         txtStyle.height = (titleTd.offsetHeight - 2) + "px";
         txtStyle.display = "block";
