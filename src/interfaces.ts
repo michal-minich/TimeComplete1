@@ -52,13 +52,13 @@ export function isDomainObjectList(v: NonNullable<object>): v is IDomainObjectLi
 }
 
 export interface ILabel extends IDomainObject {
-    name: DataSignal<string>;
-    color: DataSignal<IColor>;
-    parent?: DataSignal<ILabel>;
+    name: string;
+    color: IColor;
+    parent: ILabel | undefined;
 }
 
 export interface ITask extends IDomainObject {
-    title: DataSignal<string>;
+    title: string;
     completedOn: IDateTime | undefined;
     readonly associatedLabels: IAssociatedLabels;
 }
@@ -129,7 +129,7 @@ export interface ISelectTaskActivity extends IActivityController {
 }
 
 export interface IAddTaskActivity extends IActivityController {
-    newName: DataSignal<string>;
+    newTitle: DataSignal<string>;
     keyUp(e: KeyboardEvent): void;
     commit(): void;
     rollback(): void;
@@ -144,7 +144,7 @@ export interface IAddLabelActivity extends IActivityController {
 
 export interface IEditTaskTitleActivity extends IActivityController {
     begin(t: ITask, titleTd: HTMLTableDataCellElement): void;
-    newTitle: DataSignal<string>;
+    newName: DataSignal<string>;
     keyUp(e: KeyboardEvent): void;
     commit(): void;
     rollback(): void;

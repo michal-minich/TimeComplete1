@@ -5,7 +5,7 @@ import { IApp, IAddTaskActivity } from "../interfaces";
 
 export class AddTaskActivity implements IAddTaskActivity {
 
-    newName = S.data("");
+    readonly newTitle = S.data("");
     private readonly app: IApp;
 
 
@@ -13,18 +13,30 @@ export class AddTaskActivity implements IAddTaskActivity {
         this.app = app;
     }
 
+    /*
+    get newTitle(): string {
+        return this.newTitleSignal();
+    }
+
+
+
+    set newTitle(value: string) {
+        this.newTitleSignal(value);
+        // todo save
+    }
+    */
 
     commit(): void {
-        if (this.newName() === "")
+        if (this.newTitle() === "")
             return;
-        const t = new Task(this.newName());
-        this.newName("");
+        const t = new Task(this.newTitle());
+        this.newTitle("");
         this.app.data.tasks.addTask(t);
     }
 
 
     rollback(): void {
-        this.newName("");
+        this.newTitle("");
     }
 
 

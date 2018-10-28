@@ -1,4 +1,11 @@
-- local storage
+- refactor out S from interface - use property functions
+- store activities state 
+  - filters in task list views
+  - texts in create boxes for task and label
+  - selected task list
+  - selected task
+  - edit task title?
+
 
 task list activity view:
 - make possible to add or remove view
@@ -23,14 +30,20 @@ search references:
 - make possible to change search color
 - include/exclude search reference in query when activated
 
+polish - storage:
+- optimize local storage to store by element-id as key
+
 polish - task lists:
 - fix focus on last (not selected) task list activity text-box when clicked on label to query it
 - make possible to change title color of view to custom
 - align label tags to right
 - resize query text box to view width
 - make views in same column equal width
-- set minimal width, check with resizing tab panel to big size
 - 'clear' button design
+
+polish:
+- resizing panels - set minimal width, check with resizing to big size
+- resizing panels - resize also content elements - check for multiple resizes
 
 future:
 - make possible to see task creation date time

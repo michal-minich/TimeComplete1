@@ -62,7 +62,7 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
 
 
     addOrRemoveLabelFromQuery(l: ILabel): void {
-        const ln = l.name();
+        const ln = l.name;
         const q = this.taskQuery().trim().replace("  ", " ");
         if (q.indexOf(ln) === -1) {
             this.taskQuery(q + " #" + ln);

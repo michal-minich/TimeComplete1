@@ -5,7 +5,7 @@ export class TaskQuery {
     queryItems: IQueryItem[] = [];
 
     taskMatches(t: I.ITask): boolean {
-        const title = t.title();
+        const title = t.title;
         for (let qi of this.queryItems) {
             if (qi instanceof QueryText) {
                 if (title.indexOf(qi.value) === -1)
@@ -13,7 +13,7 @@ export class TaskQuery {
             } else if (qi instanceof QueryLabel) {
                 let found = false;
                 for (const al of t.associatedLabels.items()) {
-                    if (al.name().indexOf(qi.value) !== -1) {
+                    if (al.name.indexOf(qi.value) !== -1) {
                         found = true;
                         break;
                     }

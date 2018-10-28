@@ -53,14 +53,14 @@ export module AppView {
                            className={t.completedOn !== undefined
                                ? "completed-task"
                                : ""}>
-                           {t.title()}
+                           {t.title}
                        </td>
                        <td>
                            {t.associatedLabels.items.map(al =>
                                <span
                                    className="label-tag"
-                                   title={al.name()}
-                                   style={{ backgroundColor: al.color().value }}>
+                                   title={al.name}
+                                   style={{ backgroundColor: al.color.value }}>
                                </span>)}
                        </td>
                    </tr>;
@@ -102,14 +102,14 @@ export module AppView {
                        placeholder="new task"
                        className="new-task-input"
                        onKeyUp={(e: KeyboardEvent) => tla.addTaskActivity.keyUp(e)}
-                       fn={data(tla.addTaskActivity.newName)}/>
+                       fn={data(tla.addTaskActivity.newTitle)}/>
                 {taskListView(a, tla.searchTaskListActivity)}
             </div>
         </div>;
 
 
     function labelInlineStyle(l: I.ILabel) {
-        return { "backgroundColor": l.color().value };
+        return { "backgroundColor": l.color.value };
     };
 
 
@@ -131,7 +131,7 @@ export module AppView {
                         <input
                             type="text"
                             ref={taskEditTextBox}
-                            fn={data(a.activity.editTaskTitle.newTitle)}
+                            fn={data(a.activity.editTaskTitle.newName)}
                             onKeyUp={(e: KeyboardEvent) => a.activity.editTaskTitle.keyUp(e)}
                             onBlur={() => a.activity.editTaskTitle.commit()}
                             className="task-text-edit-box selected-task"/>
@@ -158,7 +158,7 @@ export module AppView {
                 {a.data.labels.items.map(l =>
                     <span className={"label" +
                 (a.activity.selectedTaskList().searchTaskListActivity.taskQuery()
-                    .indexOf(l.name()) ===
+                    .indexOf(l.name) ===
                     -1
                     ? ""
                     : " searched-label")}
@@ -168,7 +168,7 @@ export module AppView {
                               setTimeout(() => queryTextBox.focus());
                           }}
                           style={labelInlineStyle(l)}>
-                        {l.name()}
+                        {l.name}
                     </span>)()}
             </div>
         </div>;
@@ -189,7 +189,7 @@ export module AppView {
                   {associateLabelList(a,
                       a.data.labels.items
                       .filter(l => !a.activity.selectTask.selectedTask()!.associatedLabels.items()
-                          .some(al => al.name() === l.name())))
+                          .some(al => al.name === l.name)))
                   }
               </div>
           </div>;
@@ -200,6 +200,6 @@ export module AppView {
             <span className="label"
                   style={labelInlineStyle(l)}
                   onMouseDown={() => a.activity.associateLabelWithTask.changeAssociation(l)}>
-                {l.name()}
+                {l.name}
             </span>);
 }

@@ -87,8 +87,8 @@ export default class Serializer implements ISerializer {
                 for (let k of Object.keys(v)) {
                     const f2 = this.toPlain(v[k], ++objLevel);
                     if (f2 !== undefined) {
-                        if (k.endsWith("Value"))
-                            k = k.substring(0, k.length - 5);
+                        if (k.endsWith("Signal"))
+                            k = k.substring(0, k.length - 6);
                         o[k] = f2;
                     }
                 }

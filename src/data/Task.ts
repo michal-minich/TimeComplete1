@@ -11,21 +11,35 @@ export default class Task implements ITask {
     id = App.instance.idCounter.getNext();
     createdOn = App.instance.clock.now();
 
-    title: DataSignal<string>;
-    associatedLabels: AssociatedLabels;
-    private completedOnValue = S.data<IDateTime | undefined>(undefined);
+    private readonly titleSignal: DataSignal<string>;
+    readonly associatedLabels: AssociatedLabels;
+    private readonly completedOnSignal = S.data<IDateTime | undefined>(undefined);
+   
 
-    get completedOn(): IDateTime | undefined {
-        return this.completedOnValue();
+    get title(): string {
+        return this.titleSignal();
     }
 
-    set completedOn(value: IDateTime | undefined) {
-        this.completedOnValue(value);
+
+    set title(value: string) {
+        this.titleSignal(value);
         this.save();
     }
 
+
+    get completedOn(): IDateTime | undefined {
+        return this.completedOnSignal();
+    }
+
+
+    set completedOn(value: IDateTime | undefined) {
+        this.completedOnSignal(value);
+        this.save();
+    }
+
+
     constructor(title: string, associatedLabels?: AssociatedLabels) {
-        this.title = S.data(title);
+        this.titleSignal = S.data(title);
         this.associatedLabels = associatedLabels
             ? associatedLabels
             : new AssociatedLabels([]);
