@@ -1,13 +1,18 @@
 ﻿import SArray, { SDataArray } from "s-array";
-import { App } from "../controllers/App";
+import App from "../controllers/App";
 import { ITaskList, ITask } from "../interfaces";
-import { SSerializer } from "../operations/Serializer";
+import Serializer from "../operations/Serializer";
 import { Common } from "../common";
 
 
-export class TaskList implements ITaskList {
+export default class TaskList implements ITaskList {
 
     readonly items: SDataArray<ITask> = SArray([]);
+
+
+    constructor(tasks: ITask[]) {
+        this.items = SArray(tasks);
+    }
 
 
     addTask(task: ITask): void {
@@ -22,7 +27,7 @@ export class TaskList implements ITaskList {
 
 
     private saveWithSerialize<T extends object>(key: string, value: ArrayLike<T>): void {
-        const sv = new SSerializer().toPlainObject(value);
+        const sv = new Serializer().toPlainObject(value);
         App.instance.sessionStore.save(key, sv);
     }
 

@@ -1,7 +1,7 @@
 ﻿import { IDateTime } from "../interfaces";
 
 
-export class DateTime implements IDateTime {
+export default class DateTime implements IDateTime {
 
     value: string;
 

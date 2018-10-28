@@ -1,6 +1,5 @@
-﻿import S, { DataSignal as DataSignalType } from "s-js";
-import SArray, { SArray as SArrayType } from "s-array";
-import { ITask, IDomainObject } from "./interfaces";
+﻿import { SArray as SArrayType } from "s-array";
+import { IDomainObject } from "./interfaces";
 
 export module Common {
 

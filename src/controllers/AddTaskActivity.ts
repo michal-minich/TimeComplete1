@@ -1,5 +1,5 @@
 ﻿import S from "s-js";
-import { Task } from "../data/Task";
+import Task from "../data/Task";
 import { IApp, IAddTaskActivity } from "../interfaces";
 
 

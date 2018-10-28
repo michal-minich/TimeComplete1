@@ -1,7 +1,7 @@
 ﻿import { IColor } from "../interfaces";
 
 
-export class Color implements IColor {
+export default class Color implements IColor {
 
     value: string;
 

@@ -1,7 +1,7 @@
 import { IIdProvider } from "../interfaces";
 
 
-export class IncrementCounter implements IIdProvider<number> {
+export default class IncrementCounter implements IIdProvider<number> {
 
     private value = 0;
 

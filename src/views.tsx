@@ -44,13 +44,13 @@ export module AppView {
                            <input
                                ref={doneChk}
                                type="checkbox"
-                               checked={t.completedOn() !== undefined}
+                               checked={t.completedOn !== undefined}
                                onChange={() => a.activity.changeTaskCompletion.perform(t, doneChk!)}/>
                        </td>
                        <td ref={titleTd}
                            tabIndex={1}
                            onFocus={() => a.activity.editTaskTitle.begin(t, titleTd!)}
-                           className={t.completedOn() !== undefined
+                           className={t.completedOn !== undefined
                                ? "completed-task"
                                : ""}>
                            {t.title()}
@@ -181,7 +181,8 @@ export module AppView {
               <div className="smaller-font">Associated</div>
               <div id="associated-labels">
                   {newLabelView(a)}
-                  {associateLabelList(a, a.activity.selectTask.selectedTask()!.associatedLabels.items)()}
+                  {associateLabelList(a,
+                      a.activity.selectTask.selectedTask()!.associatedLabels.items)()}
               </div>
               <div className="smaller-font">Available</div>
               <div id="available-labels">

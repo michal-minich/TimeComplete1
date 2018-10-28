@@ -1,13 +1,18 @@
 ﻿import SArray, { SDataArray } from "s-array";
-import { App } from "../controllers/App";
-import { ILabelList, ILabel, ITask } from "../interfaces";
-import { SSerializer } from "../operations/Serializer";
+import App from "../controllers/App";
+import { ILabelList, ILabel } from "../interfaces";
+import Serializer from "../operations/Serializer";
 import { Common } from "../common";
 
 
-export class LabelList implements ILabelList {
+export default class LabelList implements ILabelList {
 
-    readonly items: SDataArray<ILabel> = SArray([]);
+    readonly items: SDataArray<ILabel>;
+
+
+    constructor(labels: ILabel[]) {
+        this.items = SArray(labels);
+    }
 
 
     addLabel(label: ILabel): void {
@@ -28,7 +33,7 @@ export class LabelList implements ILabelList {
 
 
     private saveWithSerialize<T extends object>(key: string, value: T): void {
-        const sv = new SSerializer().toPlainObject(value);
+        const sv = new Serializer().toPlainObject(value);
         App.instance.sessionStore.save(key, sv);
     }
 

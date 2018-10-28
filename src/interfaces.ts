@@ -7,7 +7,8 @@ import { SArray } from "s-array";
 
 export type Indexer<T> = { [key: string]: T };
 
-export type JsonValueType = string | number | boolean | object | string[] | number[] | boolean[] | object[];
+export type JsonValueType =
+    string | number | boolean | object | string[] | number[] | boolean[] | object[];
 
 export function isDataSignal(v: any): v is DataSignal<any> {
     return typeof v === "function" && (v as any).name === "data";
@@ -58,7 +59,7 @@ export interface ILabel extends IDomainObject {
 
 export interface ITask extends IDomainObject {
     title: DataSignal<string>;
-    completedOn: DataSignal<IDateTime | undefined>;
+    completedOn: IDateTime | undefined;
     readonly associatedLabels: IAssociatedLabels;
 }
 
@@ -72,7 +73,7 @@ export interface ITaskList extends IDomainObjectList<ITask> {
     addTask(task: ITask): void;
 }
 
-export interface ILabelList extends IDomainObjectList<ILabel>  {
+export interface ILabelList extends IDomainObjectList<ILabel> {
     readonly items: SArray<ILabel>;
     addLabel(label: ILabel): void;
     removeLabel(label: ILabel): void;
@@ -95,6 +96,7 @@ export interface IApp {
 export interface IAppData {
     readonly tasks: ITaskList;
     readonly labels: ILabelList;
+    load(): void;
 }
 
 
@@ -177,8 +179,9 @@ export interface IClock {
 }
 
 export interface IDataStore {
-    save<T>(key: string, value: T): void;
-    load<T>(key: string): T | undefined;
+    save<T extends object>(key: string, value: T): void;
+    load<T extends object>(key: string): T;
+    loadOrUndefined<T extends object>(key: string): T | undefined;
 }
 
 
@@ -189,13 +192,6 @@ export interface IReadonlyDataSignal<T> {
     (): T;
 }
 
-export interface ICanDeserialize {
-
-}
-
-export interface ICanSerialize {
-
-}
 
 export interface IIdProvider<T> {
     getNext(): T;
@@ -205,5 +201,5 @@ export interface IIdProvider<T> {
 
 export interface ISerializer {
     serialize<T extends object>(value: T): string;
-    deserialize<T extends object>(value: string): T;
+    deserialize<T extends object>(value: string, type: string): T;
 }

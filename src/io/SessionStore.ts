@@ -3,14 +3,24 @@
 
 export class SessionStore implements IDataStore {
 
-    save(key: string, value: any): void {
+    save<T extends object>(key: string, value: T): void {
         const v = JSON.stringify(value);
         window.localStorage.setItem(key, v);
     }
 
 
-    load<T>(key: string): T | undefined {
+    load<T extends object>(key: string): T {
+        const value = this.loadOrUndefined<T>(key);
+        if (value === undefined)
+            throw new Error();
+        return value;
+    }
+
+
+    loadOrUndefined<T extends object>(key: string): T | undefined {
         const value = window.localStorage.getItem(key);
-        return value ? JSON.parse(value!) as T : undefined;
+        if (value)
+            return JSON.parse(value) as T;
+        return undefined;
     }
 }

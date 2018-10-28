@@ -1,6 +1,6 @@
 ﻿import S from "s-js";
-import { Label } from "../data/Label";
-import { Color } from "../data/Color";
+import Label from "../data/Label";
+import Color from "../data/Color";
 import { IApp, IAddLabelActivity } from "../interfaces";
 
 export class AddLabelActivity implements IAddLabelActivity {

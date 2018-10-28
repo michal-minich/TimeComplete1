@@ -6,14 +6,15 @@ import { AssociateLabelWithTaskActivity } from "./AssociateLabelWithTaskActivity
 import { SelectTaskActivity } from "./SelectTaskActivity";
 import { EditTaskTitleActivity } from "./EditTaskTitleActivity";
 import { ChangeTaskCompletionActivity } from "./ChangeTaskCompletionActivity";
-import { Color } from "../data/Color";
-import { TaskList } from "../data/TaskList";
-import { LabelList } from "../data/LabelList";
-import { Label } from "../data/Label";
-import { Task } from "../data/Task";
+import Color from "../data/Color";
+import TaskList from "../data/TaskList";
+import LabelList from "../data/LabelList";
+import Label from "../data/Label";
+import Task from "../data/Task";
 import { SessionStore } from "../io/SessionStore";
-import { Clock } from "../io/Clock";
-import { IncrementCounter } from "../operations/IncrementCounter";
+import Clock from "../io/Clock";
+import Serializer from "../operations/Serializer";
+import IncrementCounter from "../operations/IncrementCounter";
 import {
     IApp,
     IAppData,
@@ -26,11 +27,13 @@ import {
     IEditTaskTitleActivity,
     IChangeTaskCompletionActivity,
     IClock,
-    IIdProvider
+    IIdProvider,
+    ILabelList,
+    ITaskList
 } from "../interfaces";
 
 
-export class App implements IApp {
+export default class App implements IApp {
     static instance: IApp;
 
     readonly data: IAppData;
@@ -44,16 +47,29 @@ export class App implements IApp {
         App.instance = this;
 
         this.data = new AppData();
+        this.data.load();
         this.activity = new AppActivities(this);
 
-        initSampleData(this);
+        //initSampleData(this);
     }
 }
 
 
 export class AppData implements IAppData {
-    readonly tasks = new TaskList();
-    readonly labels = new LabelList();
+    tasks!: ITaskList;
+    labels!: ILabelList;
+
+    load(): void {
+        const savedLabels = new SessionStore().loadOrUndefined("labels");
+        this.labels = savedLabels === undefined
+            ? new LabelList([])
+            : new Serializer().fromPlainObject<LabelList>(savedLabels, "LabelList");
+
+        const savedTasks = new SessionStore().loadOrUndefined("tasks");
+        this.tasks = savedTasks === undefined
+            ? new TaskList([])
+            : new Serializer().fromPlainObject<TaskList>(savedTasks, "TaskList");
+    }
 }
 
 
@@ -107,7 +123,7 @@ export function initSampleData(app: IApp) {
     app.data.tasks.addTask(t2);
     t2.associatedLabels.add(lGreen);
     const t3 = new Task("task 3 abc");
-    t3.completedOn(app.clock.now());
+    t3.completedOn = app.clock.now();
     t3.associatedLabels.add(lRed);
     t3.associatedLabels.add(lBlue);
     app.data.tasks.addTask(t3);
