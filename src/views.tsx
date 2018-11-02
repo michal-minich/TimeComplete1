@@ -33,7 +33,6 @@ export module AppView {
         },
         false);
 
-    
 
     function labelInlineStyle(l: I.ILabel) {
         return { "backgroundColor": l.color.value };
@@ -131,7 +130,7 @@ export module AppView {
             </div>
         </div>;
 
-    
+
     export const view = (a: I.IApp) =>
         <table id="bodyTable">
             <tbody>

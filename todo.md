@@ -1,11 +1,9 @@
 - refactor out S from interface - use property functions
 - store activities state 
-  - filters in task list views
-  - texts in create boxes for task and label
   - selected task list
-  - selected task
   - edit task title?
-
+- make possible to download local data as json file
+- add lodash
 
 task list activity view:
 - make possible to add or remove view
@@ -39,6 +37,7 @@ polish - task lists:
 - resize query text box to view width
 - make views in same column equal width
 - 'clear' button design
+- add label text color
 
 polish:
 - resizing panels - set minimal width, check with resizing to big size

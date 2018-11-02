@@ -6,6 +6,7 @@ import { AppView } from "./views";
 
 
 S.root(() => {
+
     const app: IApp = new App();
 
     const view = AppView.view(app);

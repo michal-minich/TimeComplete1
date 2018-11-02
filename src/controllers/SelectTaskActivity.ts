@@ -15,10 +15,12 @@ export class SelectTaskActivity implements ISelectTaskActivity {
 
     select(t: ITask): void {
         this.selectedTask(t);
+        this.app.activity.save();
     }
 
 
     unselect(): void {
         this.selectedTask(undefined);
+        this.app.activity.save();
     }
 }

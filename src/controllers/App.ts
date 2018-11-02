@@ -1,5 +1,5 @@
 ﻿import S, { DataSignal as DataSignalType } from "s-js";
-import SArray, { SArray as SArrayType } from "s-array";
+import SArray, { SDataArray } from "s-array";
 import { TaskListActivity } from "./TaskListActivity";
 import { AddLabelActivity } from "./AddLabelActivity";
 import { AssociateLabelWithTaskActivity } from "./AssociateLabelWithTaskActivity";
@@ -29,7 +29,8 @@ import {
     IClock,
     IIdProvider,
     ILabelList,
-    ITaskList
+    ITaskList,
+    IAppActivitiesSettings
 } from "../interfaces";
 
 
@@ -47,8 +48,10 @@ export default class App implements IApp {
         App.instance = this;
 
         this.data = new AppData();
-        this.data.load();
         this.activity = new AppActivities(this);
+
+        this.data.load();
+        this.activity.load();
 
         //initSampleData(this);
     }
@@ -72,12 +75,12 @@ export class AppData implements IAppData {
     }
 }
 
-
 export class AppActivities implements IAppActivities {
 
-    readonly taskLists: SArrayType<ITaskListActivity>;
+    private readonly app: IApp;
+    readonly taskLists: SDataArray<ITaskListActivity>;
 
-    readonly selectedTaskList: DataSignalType<ITaskListActivity>;
+    selectedTaskList!: DataSignalType<ITaskListActivity>;
     readonly addLabel: IAddLabelActivity;
     readonly associateLabelWithTask: IAssociateLabelWithTaskActivity;
     readonly selectTask: ISelectTaskActivity;
@@ -85,18 +88,46 @@ export class AppActivities implements IAppActivities {
     readonly changeTaskCompletion: IChangeTaskCompletionActivity;
 
     constructor(app: IApp) {
-
-        this.taskLists = SArray<ITaskListActivity>([
-            new TaskListActivity(app),
-            new TaskListActivity(app),
-            new TaskListActivity(app)
-        ]);
-        this.selectedTaskList = S.data(this.taskLists()[0]);
+        this.app = app;
+        this.taskLists = SArray<ITaskListActivity>([]);
         this.addLabel = new AddLabelActivity(app);
         this.associateLabelWithTask = new AssociateLabelWithTaskActivity(app);
         this.selectTask = new SelectTaskActivity(app);
         this.editTaskTitle = new EditTaskTitleActivity(app);
         this.changeTaskCompletion = new ChangeTaskCompletionActivity(app);
+    }
+
+
+    load(): void {
+        const s = this.app.sessionStore.loadOrUndefined<IAppActivitiesSettings>("activities");
+        if (s) {
+            for (let tl of s.taskLists) {
+                const tla = new TaskListActivity(this.app);
+                tla.searchTaskListActivity.taskQueryText(tl.taskQueryText);
+                tla.addTaskActivity.newTitle(tl.newTaskTitle);
+                this.taskLists.push(tla);
+            }
+            if (s.selectedTask) {
+                const t = this.app.data.tasks.byId(s.selectedTask);
+                this.selectTask.select(t);
+            }
+        }
+        if (this.taskLists().length === 0)
+            this.taskLists.push(new TaskListActivity(this.app));
+        this.selectedTaskList = S.data(this.taskLists()[0]);
+    }
+
+
+    save(): void {
+        const st = this.selectTask.selectedTask();
+        const s: IAppActivitiesSettings = {
+            taskLists: this.taskLists().map(tl => ({
+                taskQueryText: tl.searchTaskListActivity.taskQueryText(),
+                newTaskTitle: tl.addTaskActivity.newTitle()
+            })),
+            selectedTask: st ? st.id : undefined
+        };
+        this.app.sessionStore.save("activities", s);
     }
 }
 

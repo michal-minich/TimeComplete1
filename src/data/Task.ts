@@ -14,7 +14,7 @@ export default class Task implements ITask {
     private readonly titleSignal: DataSignal<string>;
     readonly associatedLabels: AssociatedLabels;
     private readonly completedOnSignal = S.data<IDateTime | undefined>(undefined);
-   
+
 
     get title(): string {
         return this.titleSignal();

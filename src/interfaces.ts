@@ -110,6 +110,18 @@ export interface IAppActivities {
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
     readonly changeTaskCompletion: IChangeTaskCompletionActivity;
+
+    load(): void;
+    save(): void;
+}
+
+
+export interface IAppActivitiesSettings {
+    taskLists: Array<{
+        taskQueryText: string;
+        newTaskTitle: string;
+    }>;
+    selectedTask?: number;
 }
 
 

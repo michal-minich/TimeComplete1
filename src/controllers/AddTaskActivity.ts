@@ -45,5 +45,6 @@ export class AddTaskActivity implements IAddTaskActivity {
             this.commit();
         else if (e.keyCode === 27)
             this.rollback();
+        this.app.activity.save();
     }
 }
