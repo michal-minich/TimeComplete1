@@ -1,8 +1,20 @@
 ﻿import * as I from "../interfaces";
+import App from "../controllers/App";
 
 
 export class TaskQuery {
     queryItems: IQueryItem[] = [];
+    firstLabelColor: string | undefined;
+
+    constructor(queryItems: IQueryItem[]) {
+        this.queryItems = queryItems;
+        const label = this.firstLabel();
+        if (label) {
+            const l = App.instance.data.labels.items().find(l => l.name === label.value);
+            if (l)
+                this.firstLabelColor = l.color.value;
+        }
+    }
 
     taskMatches(t: I.ITask): boolean {
         const title = t.title;
@@ -23,6 +35,14 @@ export class TaskQuery {
             }
         }
         return true;
+    }
+
+
+    private firstLabel(): QueryLabel | undefined {
+        for (let qi of this.queryItems)
+            if (qi instanceof QueryLabel)
+                return qi;
+        return undefined;
     }
 }
 
@@ -49,19 +69,19 @@ export class TaskQueryParser {
     private pos: number = 0;
     private qt: string = "";
 
-    parse(queryText: string): TaskQuery {
-        this.qt = queryText;
+    parse(queryTextText: string): TaskQuery {
+        this.qt = queryTextText;
         this.pos = 0;
         let tok: string | undefined;
-        const q = new TaskQuery();
+        const queryItems: IQueryItem[] = [];
         while ((tok = this.nextToken()) !== undefined) {
             if (tok[0] === "#") {
-                q.queryItems.push(new QueryLabel(tok.substring(1)));
+                queryItems.push(new QueryLabel(tok.substring(1)));
             } else {
-                q.queryItems.push(new QueryText(tok));
+                queryItems.push(new QueryText(tok));
             }
         }
-        //console.log(q.queryItems);
+        const q = new TaskQuery(queryItems);
         return q;
     }
 

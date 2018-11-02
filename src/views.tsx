@@ -33,6 +33,28 @@ export module AppView {
         },
         false);
 
+    
+
+    function labelInlineStyle(l: I.ILabel) {
+        return { "backgroundColor": l.color.value };
+    }
+
+
+    function queryColor(tla: I.ITaskListActivity): string {
+        const c = tla.searchTaskListActivity.taskQuery().firstLabelColor;
+        return c ? c : "rgb(101, 101, 101)";
+    }
+
+
+    function queryBackground(tla: I.ITaskListActivity) {
+        return { backgroundColor: queryColor(tla) };
+    }
+
+
+    function queryBorder(tla: I.ITaskListActivity) {
+        return { borderColor: queryColor(tla) };
+    }
+
 
     const taskListViewBody = (a: I.IApp, stla: I.ISearchTaskListActivity) =>
         stla.resultTasks().map(t => {
@@ -78,16 +100,18 @@ export module AppView {
 
     export const taskListActivityView = (a: I.IApp, tla: I.ITaskListActivity) =>
         <div onMouseDown={() => a.activity.selectedTaskList(tla)}
+             style={queryBorder(tla)}
              className={"task-list-activity " +
                  (a.activity.selectedTaskList() === tla ? "selected-task-list-activity" : "")}>
-            <div className="header">
+            <div className="header" style={queryBackground(tla)}>
                 <input
                     spellCheck={false}
                     type="text"
                     ref={queryTextBox}
                     onFocus={() => tla.searchTaskListActivity.begin()}
                     onKeyUp={(e: KeyboardEvent) => tla.searchTaskListActivity.keyUp(e)}
-                    fn={data(tla.searchTaskListActivity.taskQuery)}/>
+                    fn={data(tla.searchTaskListActivity.taskQueryText)}
+                    style={queryBackground(tla)}/>
                 <input
                     type="button"
                     onMouseDown={() => tla.searchTaskListActivity.clear()}
@@ -107,12 +131,7 @@ export module AppView {
             </div>
         </div>;
 
-
-    function labelInlineStyle(l: I.ILabel) {
-        return { "backgroundColor": l.color.value };
-    };
-
-
+    
     export const view = (a: I.IApp) =>
         <table id="bodyTable">
             <tbody>
@@ -157,7 +176,7 @@ export module AppView {
                 {newLabelView(a)}
                 {a.data.labels.items.map(l =>
                     <span className={"label" +
-                (a.activity.selectedTaskList().searchTaskListActivity.taskQuery()
+                (a.activity.selectedTaskList().searchTaskListActivity.taskQueryText()
                     .indexOf(l.name) ===
                     -1
                     ? ""

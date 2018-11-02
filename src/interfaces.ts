@@ -1,5 +1,6 @@
 import { DataSignal } from "s-js";
 import { SArray } from "s-array";
+import { TaskQuery } from "./operations/query";
 
 
 // General ==================================================================
@@ -164,7 +165,8 @@ export interface ISearchTaskListActivity extends IActivityController {
     keyUp(e: KeyboardEvent): void;
     resultTasks(): SArray<ITask>;
     addSearch(): void;
-    taskQuery: DataSignal<string>;
+    taskQueryText: DataSignal<string>;
+    taskQuery: DataSignal<TaskQuery>;
     rollback(): void;
     clear(): void;
     searchedTasks(taskQuery: string): SArray<ITask>;

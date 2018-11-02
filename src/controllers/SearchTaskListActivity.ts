@@ -1,12 +1,13 @@
 ﻿import S from "s-js";
 import { SArray as SArrayType, SArray } from "s-array";
-import { TaskQueryParser } from "../operations/query";
+import { TaskQueryParser, TaskQuery } from "../operations/query";
 import { IApp, ISearchTaskListActivity, ITask, ILabel } from "../interfaces";
 
 
 export class SearchTaskListActivity implements ISearchTaskListActivity {
 
-    taskQuery = S.data("");
+    taskQueryText = S.data("");
+    taskQuery = S.data(new TaskQuery([]));
     private originalTitle = "";
     private readonly app: IApp;
 
@@ -17,19 +18,19 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
 
 
     searchedTasks(taskQuery: string): SArray<ITask> {
-        new String("").padStart(1, "");
         const q = new TaskQueryParser().parse(taskQuery);
+        this.taskQuery(q);
         return this.app.data.tasks.items.filter(t => q.taskMatches(t));
     }
 
 
     resultTasks(): SArrayType<ITask> {
-        return this.searchedTasks(this.taskQuery());
+        return this.searchedTasks(this.taskQueryText());
     }
 
 
     begin(): void {
-        this.originalTitle = this.taskQuery();
+        this.originalTitle = this.taskQueryText();
         this.app.activity.selectTask.unselect();
     }
 
@@ -40,18 +41,18 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
 
     rollback(): void {
         if (this.originalTitle === "__NEXT_EMPTY__") {
-            this.originalTitle = this.taskQuery();
+            this.originalTitle = this.taskQueryText();
             this.clear();
 
         } else {
-            this.taskQuery(this.originalTitle);
+            this.taskQueryText(this.originalTitle);
             this.originalTitle = "__NEXT_EMPTY__";
         }
     }
 
 
     clear(): void {
-        this.taskQuery("");
+        this.taskQueryText("");
     }
 
 
@@ -63,11 +64,11 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
 
     addOrRemoveLabelFromQuery(l: ILabel): void {
         const ln = l.name;
-        const q = this.taskQuery().trim().replace("  ", " ");
+        const q = this.taskQueryText().trim().replace("  ", " ");
         if (q.indexOf(ln) === -1) {
-            this.taskQuery(q + " #" + ln);
+            this.taskQueryText(q + " #" + ln);
         } else {
-            this.taskQuery(q.replace("#" + ln, "").replace("  ", " "));
+            this.taskQueryText(q.replace("#" + ln, "").replace("  ", " "));
         }
     }
 }
