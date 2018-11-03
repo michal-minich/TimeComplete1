@@ -1,7 +1,7 @@
 ﻿import { IApp, ILabel, IAssociateLabelWithTaskActivity } from "../interfaces";
 
 
-export class AssociateLabelWithTaskActivity implements IAssociateLabelWithTaskActivity {
+export default class AssociateLabelWithTaskActivity implements IAssociateLabelWithTaskActivity {
 
     private readonly app: IApp;
 

@@ -13,18 +13,6 @@ export class AddTaskActivity implements IAddTaskActivity {
         this.app = app;
     }
 
-    /*
-    get newTitle(): string {
-        return this.newTitleSignal();
-    }
-
-
-
-    set newTitle(value: string) {
-        this.newTitleSignal(value);
-        // todo save
-    }
-    */
 
     commit(): void {
         if (this.newTitle() === "")

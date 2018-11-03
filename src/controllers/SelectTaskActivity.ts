@@ -2,7 +2,7 @@
 import { IApp, ISelectTaskActivity, ITask } from "../interfaces";
 
 
-export class SelectTaskActivity implements ISelectTaskActivity {
+export default class SelectTaskActivity implements ISelectTaskActivity {
 
     private readonly app: IApp;
     selectedTask = S.data(undefined as (ITask | undefined));

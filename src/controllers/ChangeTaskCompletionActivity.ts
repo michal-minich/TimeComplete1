@@ -2,7 +2,7 @@
 import { IApp, IChangeTaskCompletionActivity, ITask } from "../interfaces";
 
 
-export class ChangeTaskCompletionActivity implements IChangeTaskCompletionActivity {
+export default class ChangeTaskCompletionActivity implements IChangeTaskCompletionActivity {
 
     private readonly app: IApp;
 

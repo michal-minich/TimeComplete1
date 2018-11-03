@@ -3,7 +3,7 @@ import { SearchTaskListActivity } from "./SearchTaskListActivity";
 import { IApp, ITaskListActivity, IAddTaskActivity, ISearchTaskListActivity } from "../interfaces";
 
 
-export class TaskListActivity implements ITaskListActivity {
+export default class TaskListActivity implements ITaskListActivity {
 
     private readonly app: IApp;
     readonly addTaskActivity: IAddTaskActivity;

@@ -100,9 +100,8 @@ export interface IAppData {
     load(): void;
 }
 
-
 export interface IAppActivities {
-    readonly taskLists: SArray<ITaskListActivity>;
+    readonly taskLists: ITaskListGroup;
 
     readonly selectedTaskList: DataSignal<ITaskListActivity>;
     readonly addLabel: IAddLabelActivity;
@@ -122,6 +121,14 @@ export interface IAppActivitiesSettings {
         newTaskTitle: string;
     }>;
     selectedTask?: number;
+}
+
+
+export interface ITaskListGroup {
+    readonly items: SArray<ITaskListActivity>;
+    add(tla: ITaskListActivity): void;
+    addNew(): void;
+    remove(tla: ITaskListActivity): void;
 }
 
 
@@ -175,13 +182,13 @@ export interface ISearchTaskListActivity extends IActivityController {
     begin(): void;
     addOrRemoveLabelFromQuery(l: ILabel): void;
     keyUp(e: KeyboardEvent): void;
-    resultTasks(): SArray<ITask>;
+    resultTasks(): ITask[];
     addSearch(): void;
     taskQueryText: DataSignal<string>;
     taskQuery: DataSignal<TaskQuery>;
     rollback(): void;
     clear(): void;
-    searchedTasks(taskQuery: string): SArray<ITask>;
+    //searchedTasks(taskQuery: string): SArray<ITask>;
 }
 
 

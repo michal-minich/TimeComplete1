@@ -1,11 +1,11 @@
 ﻿import S, { DataSignal as DataSignalType } from "s-js";
-import SArray, { SDataArray } from "s-array";
-import { TaskListActivity } from "./TaskListActivity";
-import { AddLabelActivity } from "./AddLabelActivity";
-import { AssociateLabelWithTaskActivity } from "./AssociateLabelWithTaskActivity";
-import { SelectTaskActivity } from "./SelectTaskActivity";
-import { EditTaskTitleActivity } from "./EditTaskTitleActivity";
-import { ChangeTaskCompletionActivity } from "./ChangeTaskCompletionActivity";
+import TaskListActivity from "./TaskListActivity";
+import AddLabelActivity from "./AddLabelActivity";
+import AssociateLabelWithTaskActivity from "./AssociateLabelWithTaskActivity";
+import SelectTaskActivity from "./SelectTaskActivity";
+import EditTaskTitleActivity from "./EditTaskTitleActivity";
+import ChangeTaskCompletionActivity from "./ChangeTaskCompletionActivity";
+import TaskListGroup from "./TaskListGroup";
 import Color from "../data/Color";
 import TaskList from "../data/TaskList";
 import LabelList from "../data/LabelList";
@@ -30,7 +30,8 @@ import {
     IIdProvider,
     ILabelList,
     ITaskList,
-    IAppActivitiesSettings
+    IAppActivitiesSettings,
+    ITaskListGroup
 } from "../interfaces";
 
 
@@ -78,7 +79,7 @@ export class AppData implements IAppData {
 export class AppActivities implements IAppActivities {
 
     private readonly app: IApp;
-    readonly taskLists: SDataArray<ITaskListActivity>;
+    readonly taskLists: ITaskListGroup;
 
     selectedTaskList!: DataSignalType<ITaskListActivity>;
     readonly addLabel: IAddLabelActivity;
@@ -89,7 +90,7 @@ export class AppActivities implements IAppActivities {
 
     constructor(app: IApp) {
         this.app = app;
-        this.taskLists = SArray<ITaskListActivity>([]);
+        this.taskLists = new TaskListGroup(app, []);
         this.addLabel = new AddLabelActivity(app);
         this.associateLabelWithTask = new AssociateLabelWithTaskActivity(app);
         this.selectTask = new SelectTaskActivity(app);
@@ -105,23 +106,23 @@ export class AppActivities implements IAppActivities {
                 const tla = new TaskListActivity(this.app);
                 tla.searchTaskListActivity.taskQueryText(tl.taskQueryText);
                 tla.addTaskActivity.newTitle(tl.newTaskTitle);
-                this.taskLists.push(tla);
+                this.taskLists.add(tla);
             }
             if (s.selectedTask) {
                 const t = this.app.data.tasks.byId(s.selectedTask);
                 this.selectTask.select(t);
             }
         }
-        if (this.taskLists().length === 0)
-            this.taskLists.push(new TaskListActivity(this.app));
-        this.selectedTaskList = S.data(this.taskLists()[0]);
+        if (this.taskLists.items().length === 0)
+            this.taskLists.add(new TaskListActivity(this.app));
+        this.selectedTaskList = S.data(this.taskLists.items()[0]);
     }
 
 
     save(): void {
         const st = this.selectTask.selectedTask();
         const s: IAppActivitiesSettings = {
-            taskLists: this.taskLists().map(tl => ({
+            taskLists: this.taskLists.items().map(tl => ({
                 taskQueryText: tl.searchTaskListActivity.taskQueryText(),
                 newTaskTitle: tl.addTaskActivity.newTitle()
             })),

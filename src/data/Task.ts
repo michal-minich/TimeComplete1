@@ -48,13 +48,7 @@ export default class Task implements ITask {
 
     private save(): void {
         if (App.instance.data.tasks)
-            this.saveWithSerialize("tasks", App.instance.data.tasks.items());
-    }
-
-
-    private saveWithSerialize<T extends object>(key: string, value: T): void {
-        const sv = new Serializer().toPlainObject(value);
-        App.instance.sessionStore.save(key, sv);
+            Common.saveWithSerialize("tasks", App.instance.data.tasks.items());
     }
 }
 

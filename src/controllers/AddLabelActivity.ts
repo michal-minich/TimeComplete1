@@ -3,7 +3,7 @@ import Label from "../data/Label";
 import Color from "../data/Color";
 import { IApp, IAddLabelActivity } from "../interfaces";
 
-export class AddLabelActivity implements IAddLabelActivity {
+export default class AddLabelActivity implements IAddLabelActivity {
 
     newName = S.data("");
     private readonly app: IApp;

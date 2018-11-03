@@ -1,9 +1,9 @@
 ﻿import S from "s-js";
 import { IApp, ITask, IEditTaskTitleActivity } from "../interfaces";
-import { AppView } from "../views";
+import { taskEditTextBox } from "../views";
 
 
-export class EditTaskTitleActivity implements IEditTaskTitleActivity {
+export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
 
     newName = S.data("");
     private readonly app: IApp;
@@ -23,14 +23,14 @@ export class EditTaskTitleActivity implements IEditTaskTitleActivity {
         const p = titleTd.parentElement!.parentElement!
             .parentElement!.parentElement!.parentElement!;
         const pr = p.getBoundingClientRect();
-        const txtStyle = AppView.taskEditTextBox.style;
+        const txtStyle = taskEditTextBox.style;
         txtStyle.left = (p.offsetLeft + r.left - pr.left - 1) + "px";
         txtStyle.top = (p.offsetTop + r.top - pr.top + 299) + "px";
         txtStyle.width = (titleTd.offsetWidth) + "px";
         txtStyle.height = (titleTd.offsetHeight - 2) + "px";
         txtStyle.display = "block";
-        AppView.taskEditTextBox.value = t.title;
-        setTimeout(() => AppView.taskEditTextBox.focus(), 0);
+        taskEditTextBox.value = t.title;
+        setTimeout(() => taskEditTextBox.focus(), 0);
     }
 
 
@@ -50,7 +50,7 @@ export class EditTaskTitleActivity implements IEditTaskTitleActivity {
 
 
     cleanup(): void {
-        AppView.taskEditTextBox.style.display = "none";
+        taskEditTextBox.style.display = "none";
         this.newName("");
     }
 

@@ -67,9 +67,10 @@ input {
     background-color: rgb(101, 101, 101);
     border: none;
     color: white;
+    width: 170px;
 }
 
-.task-list-activity .header input[type=button] {
+.task-list-activity .header button {
     background-color: rgb(190, 190, 190);
     border: none;
     color: black;

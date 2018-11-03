@@ -1,7 +1,5 @@
 ﻿import SArray, { SDataArray } from "s-array";
-import App from "../controllers/App";
 import { ILabelList, ILabel } from "../interfaces";
-import Serializer from "../operations/Serializer";
 import { Common } from "../common";
 
 
@@ -17,24 +15,13 @@ export default class LabelList implements ILabelList {
 
     addLabel(label: ILabel): void {
         this.items.unshift(label);
-        this.save();
+        Common.saveWithSerialize("labels", this.items());
     }
 
 
     removeLabel(label: ILabel): void {
         this.items.remove(label);
-        this.save();
-    }
-
-
-    private save(): void {
-        this.saveWithSerialize("labels", this.items());
-    }
-
-
-    private saveWithSerialize<T extends object>(key: string, value: T): void {
-        const sv = new Serializer().toPlainObject(value);
-        App.instance.sessionStore.save(key, sv);
+        Common.saveWithSerialize("labels", this.items());
     }
 
 

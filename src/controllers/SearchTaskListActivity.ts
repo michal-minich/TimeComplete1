@@ -1,5 +1,4 @@
 ﻿import S from "s-js";
-import { SArray as SArrayType, SArray } from "s-array";
 import { TaskQueryParser, TaskQuery } from "../operations/query";
 import { IApp, ISearchTaskListActivity, ITask, ILabel } from "../interfaces";
 
@@ -10,6 +9,7 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
     taskQuery = S.data(new TaskQuery([]));
     private originalTitle = "";
     private readonly app: IApp;
+    private text: string = "";
 
 
     constructor(app: IApp) {
@@ -17,15 +17,18 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
     }
 
 
-    searchedTasks(taskQuery: string): SArray<ITask> {
-        const q = new TaskQueryParser().parse(taskQuery);
-        this.taskQuery(q);
-        this.app.activity.save();
-        return this.app.data.tasks.items.filter(t => q.taskMatches(t));
+    private searchedTasks(taskQuery: string): ITask[] {
+        if (taskQuery !== this.text) {
+            this.text = taskQuery;
+            const q = new TaskQueryParser().parse(taskQuery);
+            this.taskQuery(q);
+            this.app.activity.save();
+        }
+        return this.app.data.tasks.items().filter(t => this.taskQuery().taskMatches(t));
     }
 
 
-    resultTasks(): SArrayType<ITask> {
+    resultTasks(): ITask[] {
         return this.searchedTasks(this.taskQueryText());
     }
 
