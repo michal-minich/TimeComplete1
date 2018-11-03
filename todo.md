@@ -1,4 +1,3 @@
-- refactor out S from interface - use property functions
 - store activities state 
   - selected task list
   - edit task title?
@@ -6,7 +5,6 @@
 - add lodash
 
 task list activity view:
-- make possible to add or remove view
 - make possible to reorder view
 
 label edit:

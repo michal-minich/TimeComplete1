@@ -17,7 +17,7 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
 
     begin(t: ITask, titleTd: HTMLTableDataCellElement): void {
         this.task = t;
-        this.app.activity.selectTask.select(t);
+        this.app.activity.selectTask.selectedTask = t;
         this.newName(t.title);
         const r = titleTd.getBoundingClientRect();
         const p = titleTd.parentElement!.parentElement!

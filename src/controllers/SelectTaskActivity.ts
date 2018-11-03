@@ -5,7 +5,7 @@ import { IApp, ISelectTaskActivity, ITask } from "../interfaces";
 export default class SelectTaskActivity implements ISelectTaskActivity {
 
     private readonly app: IApp;
-    selectedTask = S.data(undefined as (ITask | undefined));
+    private selectedTaskSignal = S.data(undefined as (ITask | undefined));
 
 
     constructor(app: IApp) {
@@ -13,14 +13,13 @@ export default class SelectTaskActivity implements ISelectTaskActivity {
     }
 
 
-    select(t: ITask): void {
-        this.selectedTask(t);
-        this.app.activity.save();
+    get selectedTask(): ITask | undefined {
+        return this.selectedTaskSignal();
     }
 
 
-    unselect(): void {
-        this.selectedTask(undefined);
+    set selectedTask(value: ITask | undefined) {
+        this.selectedTaskSignal(value);
         this.app.activity.save();
     }
 }

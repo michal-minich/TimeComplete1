@@ -88,7 +88,7 @@ export interface IApp {
     readonly data: IAppData;
     readonly activity: IAppActivities;
 
-    readonly sessionStore: IDataStore;
+    readonly localStore: IDataStore;
     readonly clock: IClock;
     readonly idCounter: IIdProvider<number>;
 }
@@ -143,9 +143,7 @@ export interface IActivityController {
 
 
 export interface ISelectTaskActivity extends IActivityController {
-    selectedTask: IReadonlyDataSignal<ITask | undefined>;
-    select(t: ITask): void;
-    unselect(): void;
+    selectedTask: ITask | undefined;
 }
 
 export interface IAddTaskActivity extends IActivityController {

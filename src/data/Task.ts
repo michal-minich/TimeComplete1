@@ -88,6 +88,6 @@ export class AssociatedLabels implements IAssociatedLabels {
 
     private saveWithSerialize<T extends object>(key: string, value: T): void {
         const sv = new Serializer().toPlainObject(value);
-        App.instance.sessionStore.save(key, sv);
+        App.instance.localStore.save(key, sv);
     }
 }

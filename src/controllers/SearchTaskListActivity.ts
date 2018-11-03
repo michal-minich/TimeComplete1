@@ -35,7 +35,7 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
 
     begin(): void {
         this.originalTitle = this.taskQueryText();
-        this.app.activity.selectTask.unselect();
+        this.app.activity.selectTask.selectedTask = undefined;
     }
 
 

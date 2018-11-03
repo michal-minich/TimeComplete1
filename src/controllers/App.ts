@@ -41,7 +41,7 @@ export default class App implements IApp {
     readonly data: IAppData;
     readonly activity: IAppActivities;
 
-    readonly sessionStore: IDataStore = new SessionStore();
+    readonly localStore: IDataStore = new SessionStore();
     readonly clock: IClock = new Clock();
     readonly idCounter: IIdProvider<number> = new IncrementCounter();
 
@@ -100,7 +100,7 @@ export class AppActivities implements IAppActivities {
 
 
     load(): void {
-        const s = this.app.sessionStore.loadOrUndefined<IAppActivitiesSettings>("activities");
+        const s = this.app.localStore.loadOrUndefined<IAppActivitiesSettings>("activities");
         if (s) {
             for (let tl of s.taskLists) {
                 const tla = new TaskListActivity(this.app);
@@ -110,7 +110,7 @@ export class AppActivities implements IAppActivities {
             }
             if (s.selectedTask) {
                 const t = this.app.data.tasks.byId(s.selectedTask);
-                this.selectTask.select(t);
+                this.selectTask.selectedTask = t;
             }
         }
         if (this.taskLists.items().length === 0)
@@ -120,7 +120,7 @@ export class AppActivities implements IAppActivities {
 
 
     save(): void {
-        const st = this.selectTask.selectedTask();
+        const st = this.selectTask.selectedTask;
         const s: IAppActivitiesSettings = {
             taskLists: this.taskLists.items().map(tl => ({
                 taskQueryText: tl.searchTaskListActivity.taskQueryText(),
@@ -128,7 +128,7 @@ export class AppActivities implements IAppActivities {
             })),
             selectedTask: st ? st.id : undefined
         };
-        this.app.sessionStore.save("activities", s);
+        this.app.localStore.save("activities", s);
     }
 }
 

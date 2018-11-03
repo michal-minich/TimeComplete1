@@ -4,6 +4,7 @@ Surplus;
 import { SArray as SArrayType } from "s-array";
 import data from "surplus-mixin-data";
 import * as I from "./interfaces";
+import { Common } from "./common";
 
 
 let resizeStartLeft = -1;
@@ -58,8 +59,8 @@ const taskListViewBody = (a: I.IApp, stla: I.ISearchTaskListActivity) =>
     stla.resultTasks().map(t => {
         let doneChk: HTMLInputElement | undefined = undefined;
         let titleTd: HTMLTableDataCellElement | undefined = undefined;
-        return <tr onMouseDown={() => a.activity.selectTask.select(t)}
-                   className={a.activity.selectTask.selectedTask() === t ? "selected-task" : ""}>
+        return <tr onMouseDown={() => a.activity.selectTask.selectedTask = t}
+                   className={a.activity.selectTask.selectedTask === t ? "selected-task" : ""}>
                    <td>
                        <input
                            ref={doneChk}
@@ -139,7 +140,7 @@ export const view = (a: I.IApp) =>
         <tbody>
         <tr>
             <td ref={leftTd}>
-                {a.activity.selectTask.selectedTask() === undefined
+                {a.activity.selectTask.selectedTask === undefined
                     ? labelListView(a)
                     : labelAssociateView(a)
                 }
@@ -158,6 +159,7 @@ export const view = (a: I.IApp) =>
                         className="task-text-edit-box selected-task"/>
                     {a.activity.taskLists.items.map(tla2 => taskListActivityView(a, tla2))()}
                     <button onClick={() => a.activity.taskLists.addNew()}>+</button>
+                    <button onClick={() => Common.generateLocalStorageDownload()}>Download</button>
                 </div>
             </td>
         </tr>
@@ -197,20 +199,20 @@ const labelListView = (a: I.IApp) =>
 
 
 const labelAssociateView = (a: I.IApp) =>
-    !a.activity.selectTask.selectedTask()
+    !a.activity.selectTask.selectedTask
     ? ""
     : <div id="assign-label-activity" className="label-list" ref={assignLabelPopup}>
           <div className="smaller-font">Associated</div>
           <div id="associated-labels">
               {newLabelView(a)}
               {associateLabelList(a,
-                  a.activity.selectTask.selectedTask()!.associatedLabels.items)()}
+                  a.activity.selectTask.selectedTask!.associatedLabels.items)()}
           </div>
           <div className="smaller-font">Available</div>
           <div id="available-labels">
               {associateLabelList(a,
                   a.data.labels.items
-                  .filter(l => !a.activity.selectTask.selectedTask()!.associatedLabels.items()
+                  .filter(l => !a.activity.selectTask.selectedTask!.associatedLabels.items()
                       .some(al => al.name === l.name)))
               }
           </div>
