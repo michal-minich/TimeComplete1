@@ -10,7 +10,7 @@ export default class LabelList implements ILabelList {
     }
 
 
-    readonly items: SDataArray<ILabel>;
+    readonly items: SDataArray<ILabel>; // todo make SArray only for public
 
 
     addLabel(label: ILabel): void {

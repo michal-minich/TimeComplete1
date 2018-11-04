@@ -7,29 +7,27 @@ export default class Label implements ILabel {
 
     constructor(name: string, style: ILabelStyle) {
         this.nameSignal = S.data(name);
-        this.styleSignal = S.data(style);
+        this.style = style;
         this.parentSignal = S.data(undefined);
     }
+    
+    
+    private readonly nameSignal: DataSignal<string>;
+    private readonly parentSignal: DataSignal<ILabel | undefined>;
 
 
     id = App.instance.idCounter.getNext();
     createdOn = App.instance.clock.now();
 
-    private readonly nameSignal: DataSignal<string>;
-    private readonly styleSignal: DataSignal<ILabelStyle>;
-    private readonly parentSignal: DataSignal<ILabel | undefined>;
+    
+    readonly style: ILabelStyle;
 
 
     get name(): string { return this.nameSignal(); }
 
     set name(value: string) { this.nameSignal(value); }
 
-
-    get style(): ILabelStyle { return this.styleSignal(); }
-
-    set style(value: ILabelStyle) { this.styleSignal(value); }
-
-
+    
     get parent(): ILabel | undefined { return this.parentSignal(); }
 
     set parent(value: ILabel | undefined) { this.parentSignal(value); }

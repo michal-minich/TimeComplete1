@@ -10,7 +10,7 @@ export default class TaskList implements ITaskList {
     }
 
 
-    readonly items: SDataArray<ITask>;
+    readonly items: SDataArray<ITask>; // todo make SArray only for public
 
 
     addTask(task: ITask): void {

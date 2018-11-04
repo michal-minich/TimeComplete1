@@ -54,7 +54,7 @@ export function isDomainObjectList(v: NonNullable<object>): v is IDomainObjectLi
 
 export interface ILabel extends IDomainObject {
     name: string;
-    style: ILabelStyle;
+    readonly style: ILabelStyle;
     parent: ILabel | undefined;
 }
 
