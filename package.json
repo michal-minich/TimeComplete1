@@ -19,12 +19,14 @@
   "author": "Michal Minich",
   "license": "UNLICENSED",
   "dependencies": {
+    "lodash": "latest",
     "s-array": "latest",
     "s-js": "latest",
     "surplus": "latest",
     "surplus-mixin-data": "latest"
   },
   "devDependencies": {
+    "@types/lodash": "latest",
     "surplus-loader": "latest",
     "ts-loader": "latest",
     "typescript": "latest",

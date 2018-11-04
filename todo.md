@@ -1,17 +1,10 @@
-- store activities state 
-  - selected task list
-  - edit task title?
-- make possible to download local data as json file
-- add lodash
-
-task list activity view:
-- make possible to reorder view
 
 label edit:
 - make possible to rename label
 - make possible to delete label
 - make possible to change label color
 - when renaming and removing label, update all queries
+- add label text color
 
 adding new task:
 - if the text-box contains label reference that does not exists, create the label
@@ -28,6 +21,10 @@ search references:
 polish - storage:
 - optimize local storage to store by element-id as key
 
+polish - store activities state 
+  - selected task list
+  - edit task title?
+
 polish - task lists:
 - fix focus on last (not selected) task list activity text-box when clicked on label to query it
 - make possible to change title color of view to custom
@@ -35,7 +32,7 @@ polish - task lists:
 - resize query text box to view width
 - make views in same column equal width
 - 'clear' button design
-- add label text color
+- make possible to reorder view
 
 polish:
 - resizing panels - set minimal width, check with resizing to big size
