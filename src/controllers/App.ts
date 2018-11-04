@@ -15,6 +15,7 @@ import { SessionStore } from "../io/SessionStore";
 import Clock from "../io/Clock";
 import Serializer from "../operations/Serializer";
 import IncrementCounter from "../operations/IncrementCounter";
+import { Common } from "../common";
 import {
     IApp,
     IAppData,
@@ -73,6 +74,14 @@ export class AppData implements IAppData {
         this.tasks = savedTasks === undefined
             ? new TaskList([])
             : new Serializer().fromPlainObject<TaskList>(savedTasks, "TaskList");
+
+        S(() => {
+            Common.saveWithSerialize("labels", this.labels.items());
+        });
+
+        S(() => {
+            Common.saveWithSerialize("tasks", this.tasks.items());
+        });
     }
 }
 
@@ -116,10 +125,12 @@ export class AppActivities implements IAppActivities {
         if (this.taskLists.items().length === 0)
             this.taskLists.add(new TaskListActivity(this.app));
         this.selectedTaskList = S.data(this.taskLists.items()[0]);
+
+        S(() => this.save());
     }
 
 
-    save(): void {
+    private save(): void {
         const st = this.selectTask.selectedTask;
         const s: IAppActivitiesSettings = {
             taskLists: this.taskLists.items().map(tl => ({

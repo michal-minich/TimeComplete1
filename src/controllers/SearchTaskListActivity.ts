@@ -22,7 +22,6 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
             this.text = taskQuery;
             const q = new TaskQueryParser().parse(taskQuery);
             this.taskQuery(q);
-            this.app.activity.save();
         }
         return this.app.data.tasks.items().filter(t => this.taskQuery().taskMatches(t));
     }

@@ -22,12 +22,10 @@ export default class TaskListGroup implements ITaskListGroup {
 
     addNew(): void {
         this.items.push(new TaskListActivity(this.app));
-        this.app.activity.save();
     }
 
 
     remove(tla: ITaskListActivity): void {
         this.items.remove(tla);
-        this.app.activity.save();
     }
 }

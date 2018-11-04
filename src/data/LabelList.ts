@@ -15,13 +15,11 @@ export default class LabelList implements ILabelList {
 
     addLabel(label: ILabel): void {
         this.items.unshift(label);
-        Common.saveWithSerialize("labels", this.items());
     }
 
 
     removeLabel(label: ILabel): void {
         this.items.remove(label);
-        Common.saveWithSerialize("labels", this.items());
     }
 
 

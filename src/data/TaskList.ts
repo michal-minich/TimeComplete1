@@ -15,7 +15,6 @@ export default class TaskList implements ITaskList {
 
     addTask(task: ITask): void {
         this.items.unshift(task);
-        Common.saveWithSerialize("tasks", this.items());
     }
 
 

@@ -112,7 +112,6 @@ export interface IAppActivities {
     readonly changeTaskCompletion: IChangeTaskCompletionActivity;
 
     load(): void;
-    save(): void;
 }
 
 

@@ -1,7 +1,6 @@
 ﻿import S, { DataSignal } from "s-js";
 import App from "../controllers/App";
 import { ILabel, IColor } from "../interfaces";
-import { Common } from "../common";
 
 
 export default class Label implements ILabel {
@@ -22,7 +21,6 @@ export default class Label implements ILabel {
 
     set name(value: string) {
         this.nameSignal(value);
-        Common.saveWithSerialize("labels", App.instance.data.labels.items());
     }
 
 
@@ -33,7 +31,6 @@ export default class Label implements ILabel {
 
     set backColor(value: IColor) {
         this.backColorSignal(value);
-        Common.saveWithSerialize("labels", App.instance.data.labels.items());
     }
 
 
@@ -44,7 +41,6 @@ export default class Label implements ILabel {
 
     set textColor(value: IColor) {
         this.textColorSignal(value);
-        Common.saveWithSerialize("labels", App.instance.data.labels.items());
     }
 
 
@@ -55,7 +51,6 @@ export default class Label implements ILabel {
 
     set parent(value: ILabel | undefined) {
         this.parentSignal(value);
-        Common.saveWithSerialize("labels", App.instance.data.labels.items());
     }
 
 

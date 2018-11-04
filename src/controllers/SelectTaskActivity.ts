@@ -20,6 +20,5 @@ export default class SelectTaskActivity implements ISelectTaskActivity {
 
     set selectedTask(value: ITask | undefined) {
         this.selectedTaskSignal(value);
-        this.app.activity.save();
     }
 }

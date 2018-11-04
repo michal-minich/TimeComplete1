@@ -23,7 +23,6 @@ export default class Task implements ITask {
 
     set title(value: string) {
         this.titleSignal(value);
-        this.save();
     }
 
 
@@ -34,7 +33,6 @@ export default class Task implements ITask {
 
     set completedOn(value: IDateTime | undefined) {
         this.completedOnSignal(value);
-        this.save();
     }
 
 
@@ -43,12 +41,6 @@ export default class Task implements ITask {
         this.associatedLabels = associatedLabels
             ? associatedLabels
             : new AssociatedLabels([]);
-    }
-
-
-    private save(): void {
-        if (App.instance.data.tasks)
-            Common.saveWithSerialize("tasks", App.instance.data.tasks.items());
     }
 }
 
