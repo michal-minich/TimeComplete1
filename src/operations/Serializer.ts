@@ -111,7 +111,8 @@ export default class Serializer implements ISerializer {
         case "Label":
             const l = new Label(
                 o.name,
-                this.fromPlainObject<IColor>(o.color, "Color"));
+                this.fromPlainObject<IColor>(o.backColor, "Color"),
+                this.fromPlainObject<IColor>(o.textColor, "Color"));
             l.id = o.id;
             l.createdOn = this.fromPlainObject<IDateTime>(
                 o.createdOn,

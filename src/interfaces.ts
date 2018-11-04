@@ -54,7 +54,8 @@ export function isDomainObjectList(v: NonNullable<object>): v is IDomainObjectLi
 
 export interface ILabel extends IDomainObject {
     name: string;
-    color: IColor;
+    backColor: IColor;
+    textColor: IColor;
     parent: ILabel | undefined;
 }
 

@@ -4,7 +4,6 @@ label edit:
 - make possible to delete label
 - make possible to change label color
 - when renaming and removing label, update all queries
-- add label text color
 
 adding new task:
 - if the text-box contains label reference that does not exists, create the label

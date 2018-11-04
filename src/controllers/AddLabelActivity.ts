@@ -17,7 +17,7 @@ export default class AddLabelActivity implements IAddLabelActivity {
     commit(): void {
         if (this.newName() === "")
             return;
-        const l = new Label(this.newName(), new Color("gray"));
+        const l = new Label(this.newName(), new Color("gray"), new Color("white"));
         this.app.data.labels.addLabel(l);
         this.newName("");
         const t = this.app.activity.selectTask.selectedTask;

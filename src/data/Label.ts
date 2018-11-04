@@ -1,6 +1,7 @@
 ﻿import S, { DataSignal } from "s-js";
 import App from "../controllers/App";
 import { ILabel, IColor } from "../interfaces";
+import { Common } from "../common";
 
 
 export default class Label implements ILabel {
@@ -9,7 +10,8 @@ export default class Label implements ILabel {
     createdOn = App.instance.clock.now();
 
     private readonly nameSignal: DataSignal<string>;
-    private readonly colorSignal: DataSignal<IColor>;
+    private readonly backColorSignal: DataSignal<IColor>;
+    private readonly textColorSignal: DataSignal<IColor>;
     private readonly parentSignal: DataSignal<ILabel | undefined> = S.data(undefined);
 
 
@@ -20,18 +22,29 @@ export default class Label implements ILabel {
 
     set name(value: string) {
         this.nameSignal(value);
-        // todo save
+        Common.saveWithSerialize("labels", App.instance.data.labels.items());
     }
 
 
-    get color(): IColor {
-        return this.colorSignal();
+    get backColor(): IColor {
+        return this.backColorSignal();
     }
 
 
-    set color(value: IColor) {
-        this.colorSignal(value);
-        // todo save
+    set backColor(value: IColor) {
+        this.backColorSignal(value);
+        Common.saveWithSerialize("labels", App.instance.data.labels.items());
+    }
+
+
+    get textColor(): IColor {
+        return this.textColorSignal();
+    }
+
+
+    set textColor(value: IColor) {
+        this.textColorSignal(value);
+        Common.saveWithSerialize("labels", App.instance.data.labels.items());
     }
 
 
@@ -42,12 +55,13 @@ export default class Label implements ILabel {
 
     set parent(value: ILabel | undefined) {
         this.parentSignal(value);
-        // todo save
+        Common.saveWithSerialize("labels", App.instance.data.labels.items());
     }
 
 
-    constructor(name: string, color: IColor) {
+    constructor(name: string, backColor: IColor, textColor: IColor) {
         this.nameSignal = S.data(name);
-        this.colorSignal = S.data(color);
+        this.backColorSignal = S.data(backColor);
+        this.textColorSignal = S.data(textColor);
     }
 }
