@@ -19,17 +19,17 @@ export function isSArray(v: any): v is SArray<any> {
     return typeof v === "function" && (v as any).name === "array";
 }
 
-
-// Data =====================================================================
-
-
 export interface IColor {
-    value: string;
+    readonly value: string;
 }
 
 export interface IDateTime {
-    value: string;
+    readonly value: string;
 }
+
+
+// Data =====================================================================
+
 
 export interface IDomainObject {
     readonly id: number;
@@ -54,9 +54,20 @@ export function isDomainObjectList(v: NonNullable<object>): v is IDomainObjectLi
 
 export interface ILabel extends IDomainObject {
     name: string;
+    style: ILabelStyle;
+    parent: ILabel | undefined;
+}
+
+export interface ILabelStyle {
     backColor: IColor;
     textColor: IColor;
-    parent: ILabel | undefined;
+    textColorInUse: LabelTextColor;
+}
+
+export enum LabelTextColor {
+    BlackOrWhite,
+    Inverted,
+    Custom
 }
 
 export interface ITask extends IDomainObject {

@@ -10,7 +10,8 @@ import {
     ILabel,
     IColor,
     ITask,
-    IDateTime
+    IDateTime,
+    LabelTextColor
 } from "../interfaces";
 import Label from "../data/Label";
 import Color from "../data/Color";
@@ -20,6 +21,7 @@ import Task from "../data/Task";
 import TaskList from "../data/TaskList";
 import { AssociatedLabels } from "../data/Task";
 import App from "../controllers/App";
+import LabelStyle from "../data/LabelStyle";
 
 
 export default class Serializer implements ISerializer {
@@ -111,8 +113,11 @@ export default class Serializer implements ISerializer {
         case "Label":
             const l = new Label(
                 o.name,
-                this.fromPlainObject<IColor>(o.backColor, "Color"),
-                this.fromPlainObject<IColor>(o.textColor, "Color"));
+                new
+                LabelStyle(
+                    this.fromPlainObject<IColor>(o.style.backColor, "Color"),
+                    this.fromPlainObject<IColor>(o.style.textColor, "Color"),
+                    o.style.textColorInUse as LabelTextColor));
             l.id = o.id;
             l.createdOn = this.fromPlainObject<IDateTime>(
                 o.createdOn,

@@ -9,6 +9,7 @@ import TaskListGroup from "./TaskListGroup";
 import Color from "../data/Color";
 import TaskList from "../data/TaskList";
 import LabelList from "../data/LabelList";
+import LabelStyle from "../data/LabelStyle";
 import Label from "../data/Label";
 import Task from "../data/Task";
 import { SessionStore } from "../io/SessionStore";
@@ -146,17 +147,17 @@ export class AppActivities implements IAppActivities {
 
 export function initSampleData(app: IApp) {
 
-    const lRed = new Label("red", new Color("red"), new Color("white"));
+    const lRed = new Label("red", new LabelStyle(new Color("red"), new Color("white")));
     app.data.labels.addLabel(lRed);
 
-    const lGreen = new Label("green", new Color("green"), new Color("white"));
+    const lGreen = new Label("green", new LabelStyle(new Color("green"), new Color("white")));
     app.data.labels.addLabel(lGreen);
 
-    const lBlue = new Label("blue", new Color("blue"), new Color("white"));
+    const lBlue = new Label("blue", new LabelStyle(new Color("blue"), new Color("white")));
     app.data.labels.addLabel(lBlue);
 
     for (let i = 0; i < 50; i++) {
-        const lbl = new Label("label " + i, new Color("gray"), new Color("white"));
+        const lbl = new Label("label " + i, new LabelStyle(new Color("gray"), new Color("white")));
         app.data.labels.addLabel(lbl);
     }
 

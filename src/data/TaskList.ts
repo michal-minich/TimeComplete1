@@ -4,13 +4,13 @@ import { Common } from "../common";
 
 
 export default class TaskList implements ITaskList {
-
-    readonly items: SDataArray<ITask>;
-
-
+    
     constructor(tasks: ITask[]) {
         this.items = SArray(tasks);
     }
+
+
+    readonly items: SDataArray<ITask>;
 
 
     addTask(task: ITask): void {

@@ -4,13 +4,13 @@ import { Common } from "../common";
 
 
 export default class LabelList implements ILabelList {
-
-    readonly items: SDataArray<ILabel>;
-
-
+    
     constructor(labels: ILabel[]) {
         this.items = SArray(labels);
     }
+
+
+    readonly items: SDataArray<ILabel>;
 
 
     addLabel(label: ILabel): void {

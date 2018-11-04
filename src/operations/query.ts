@@ -12,7 +12,7 @@ export class TaskQuery {
         if (label) {
             const l = App.instance.data.labels.items().find(l => l.name === label.value);
             if (l)
-                this.firstLabelColor = l.backColor.value;
+                this.firstLabelColor = l.style.backColor.value;
         }
     }
 

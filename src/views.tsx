@@ -35,7 +35,7 @@ window.addEventListener("mouseup",
 
 
 function labelInlineStyle(l: I.ILabel) {
-    return { backgroundColor: l.backColor.value, color: l.textColor.value };
+    return { backgroundColor: l.style.backColor.value, color: l.style.textColor.value };
 }
 
 
@@ -81,7 +81,7 @@ const taskListViewBody = (a: I.IApp, stla: I.ISearchTaskListActivity) =>
                            <span
                                className="label-tag"
                                title={al.name}
-                               style={{ backgroundColor: al.backColor.value }}>
+                               style={{ backgroundColor: al.style.backColor.value }}>
                            </span>)}
                    </td>
                </tr>;

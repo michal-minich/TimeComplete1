@@ -7,6 +7,14 @@ import Serializer from "../operations/Serializer";
 
 
 export default class Task implements ITask {
+    
+    constructor(title: string, associatedLabels?: AssociatedLabels) {
+        this.titleSignal = S.data(title);
+        this.associatedLabels = associatedLabels
+            ? associatedLabels
+            : new AssociatedLabels([]);
+    }
+
 
     id = App.instance.idCounter.getNext();
     createdOn = App.instance.clock.now();
@@ -34,25 +42,17 @@ export default class Task implements ITask {
     set completedOn(value: IDateTime | undefined) {
         this.completedOnSignal(value);
     }
-
-
-    constructor(title: string, associatedLabels?: AssociatedLabels) {
-        this.titleSignal = S.data(title);
-        this.associatedLabels = associatedLabels
-            ? associatedLabels
-            : new AssociatedLabels([]);
-    }
 }
 
 
 export class AssociatedLabels implements IAssociatedLabels {
-
-    readonly items: SDataArray<ILabel>;
-
-
+    
     constructor(labels: ILabel[]) {
         this.items = SArray(labels);
     }
+
+
+    readonly items: SDataArray<ILabel>;
 
 
     add(label: ILabel): void {

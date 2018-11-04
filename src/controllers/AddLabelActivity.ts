@@ -1,7 +1,9 @@
 ﻿import S from "s-js";
 import Label from "../data/Label";
+import LabelStyle from "../data/LabelStyle";
 import Color from "../data/Color";
 import { IApp, IAddLabelActivity } from "../interfaces";
+
 
 export default class AddLabelActivity implements IAddLabelActivity {
 
@@ -17,7 +19,7 @@ export default class AddLabelActivity implements IAddLabelActivity {
     commit(): void {
         if (this.newName() === "")
             return;
-        const l = new Label(this.newName(), new Color("gray"), new Color("white"));
+        const l = new Label(this.newName(), new LabelStyle(new Color("gray"), new Color("white")));
         this.app.data.labels.addLabel(l);
         this.newName("");
         const t = this.app.activity.selectTask.selectedTask;
