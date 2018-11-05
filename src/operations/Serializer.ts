@@ -1,5 +1,4 @@
-﻿import { SArray as SArrayType } from "s-array";
-import {
+﻿import {
     isDataSignal,
     isSArray,
     isDomainObjectList,
@@ -11,7 +10,8 @@ import {
     IColor,
     ITask,
     IDateTime,
-    LabelTextColor
+    LabelTextColor,
+    RArray
 } from "../interfaces";
 import Label from "../data/Label";
 import Color from "../data/Color";
@@ -57,7 +57,7 @@ export default class Serializer implements ISerializer {
             if (isDataSignal(v)) {
                 return this.toPlain(v(), objLevel);
             } else if (isSArray(v)) {
-                return this.toPlain((v as SArrayType<any>)(), objLevel);
+                return this.toPlain((v as RArray<any>)(), objLevel);
             }
             return undefined;
         case "undefined":

@@ -1,6 +1,6 @@
 ﻿import S from "s-js";
 import { IApp, ITask, IEditTaskTitleActivity } from "../interfaces";
-import { taskEditTextBox } from "../views";
+import { taskEditTextBox } from "../views/views";
 
 
 export default class EditTaskTitleActivity implements IEditTaskTitleActivity {

@@ -58,6 +58,16 @@ export default class App implements IApp {
 
         //initSampleData(this);
     }
+
+
+    generateLocalStorageDownload(): void {
+        const data = {
+            labels: App.instance.localStore.load("labels"),
+            tasks: App.instance.localStore.load("tasks"),
+            activities: App.instance.localStore.load("activities")
+        };
+        Common.download("export.json", JSON.stringify(data));
+    }
 }
 
 

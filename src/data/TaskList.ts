@@ -1,24 +1,29 @@
-﻿import SArray, { SDataArray } from "s-array";
-import { ITaskList, ITask } from "../interfaces";
+﻿import SArray from "s-array";
+import { ITaskList, ITask, WArray, RArray } from "../interfaces";
 import { Common } from "../common";
 
 
 export default class TaskList implements ITaskList {
-    
+
     constructor(tasks: ITask[]) {
-        this.items = SArray(tasks);
+        this.itemsSignal = SArray(tasks);
     }
 
 
-    readonly items: SDataArray<ITask>; // todo make SArray only for public
+    private readonly itemsSignal: WArray<ITask>;
+
+
+    get items(): RArray<ITask> {
+        return this.itemsSignal;
+    }
 
 
     addTask(task: ITask): void {
-        this.items.unshift(task);
+        this.itemsSignal.unshift(task);
     }
 
 
     byId(id: number): ITask {
-        return Common.findById(this.items, id);
+        return Common.findById(this.itemsSignal, id);
     }
 }

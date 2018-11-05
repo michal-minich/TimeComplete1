@@ -103,7 +103,11 @@
     <TypeScriptCompile Include="src\operations\query.ts" />
     <TypeScriptCompile Include="src\start.ts" />
     <TypeScriptCompile Include="src\operations\Serializer.ts" />
-    <TypeScriptCompile Include="src\views.tsx" />
+    <TypeScriptCompile Include="src\views\TaskListActivityView.tsx" />
+    <TypeScriptCompile Include="src\views\NewLabelView.tsx" />
+    <TypeScriptCompile Include="src\views\LabelListView.tsx" />
+    <TypeScriptCompile Include="src\views\LabelAssociateView.tsx" />
+    <TypeScriptCompile Include="src\views\Views.tsx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

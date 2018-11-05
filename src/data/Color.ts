@@ -2,7 +2,7 @@
 
 
 export default class Color implements IColor {
-    
+
     constructor(readonly value: string) {
     }
 }

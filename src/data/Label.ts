@@ -10,8 +10,8 @@ export default class Label implements ILabel {
         this.style = style;
         this.parentSignal = S.data(undefined);
     }
-    
-    
+
+
     private readonly nameSignal: DataSignal<string>;
     private readonly parentSignal: DataSignal<ILabel | undefined>;
 
@@ -19,7 +19,7 @@ export default class Label implements ILabel {
     id = App.instance.idCounter.getNext();
     createdOn = App.instance.clock.now();
 
-    
+
     readonly style: ILabelStyle;
 
 
@@ -27,7 +27,7 @@ export default class Label implements ILabel {
 
     set name(value: string) { this.nameSignal(value); }
 
-    
+
     get parent(): ILabel | undefined { return this.parentSignal(); }
 
     set parent(value: ILabel | undefined) { this.parentSignal(value); }

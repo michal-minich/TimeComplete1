@@ -14,7 +14,7 @@ export default class Task implements ITask {
             : new AssociatedLabels([]);
     }
 
-    
+
     private readonly titleSignal: DataSignal<string>;
     private readonly completedOnSignal = S.data<IDateTime | undefined>(undefined);
 
@@ -22,7 +22,7 @@ export default class Task implements ITask {
     id = App.instance.idCounter.getNext();
     createdOn = App.instance.clock.now();
 
-    
+
     readonly associatedLabels: AssociatedLabels;
 
 

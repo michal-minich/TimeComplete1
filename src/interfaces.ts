@@ -1,5 +1,5 @@
 import { DataSignal } from "s-js";
-import { SArray } from "s-array";
+import { SArray, SDataArray } from "s-array";
 import { TaskQuery } from "./operations/query";
 
 
@@ -15,7 +15,7 @@ export function isDataSignal(v: any): v is DataSignal<any> {
     return typeof v === "function" && (v as any).name === "data";
 }
 
-export function isSArray(v: any): v is SArray<any> {
+export function isSArray(v: any): v is RArray<any> {
     return typeof v === "function" && (v as any).name === "array";
 }
 
@@ -26,6 +26,10 @@ export interface IColor {
 export interface IDateTime {
     readonly value: string;
 }
+
+export type RArray<T> = SArray<T>;
+
+export type WArray<T> = SDataArray<T>;
 
 
 // Data =====================================================================
@@ -41,7 +45,7 @@ export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
 }
 
 export interface IList<T> {
-    readonly items: SArray<T>;
+    readonly items: RArray<T>;
 }
 
 export interface IDomainObjectList<T extends IDomainObject> extends IList<T> {
@@ -82,12 +86,12 @@ export interface IAssociatedLabels extends IDomainObjectList<ILabel> {
 }
 
 export interface ITaskList extends IDomainObjectList<ITask> {
-    readonly items: SArray<ITask>;
+    readonly items: RArray<ITask>;
     addTask(task: ITask): void;
 }
 
 export interface ILabelList extends IDomainObjectList<ILabel> {
-    readonly items: SArray<ILabel>;
+    readonly items: RArray<ILabel>;
     addLabel(label: ILabel): void;
     removeLabel(label: ILabel): void;
 }
@@ -103,6 +107,8 @@ export interface IApp {
     readonly localStore: IDataStore;
     readonly clock: IClock;
     readonly idCounter: IIdProvider<number>;
+
+    generateLocalStorageDownload(): void;
 }
 
 
@@ -136,7 +142,7 @@ export interface IAppActivitiesSettings {
 
 
 export interface ITaskListGroup {
-    readonly items: SArray<ITaskListActivity>;
+    readonly items: RArray<ITaskListActivity>;
     add(tla: ITaskListActivity): void;
     addNew(): void;
     remove(tla: ITaskListActivity): void;
