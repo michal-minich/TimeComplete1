@@ -151,12 +151,14 @@ export interface ITaskListGroup {
 
 
 export interface IEditLabelActivity {
+    begin(label: ILabel): void;
     save(): void;
     cancel(): void;
     readonly editLabelName: DataSignal<string>;
     keyUp(e: KeyboardEvent): void;
     switchMode(): void;
-    nextModeName(): string;
+    readonly nextModeName: string;
+    label: ILabel | undefined;
 }
 
 

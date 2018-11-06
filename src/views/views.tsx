@@ -6,6 +6,7 @@ import { IApp } from "../interfaces";
 import { taskListActivityView } from "./TaskListActivityView";
 import { labelListView } from "./LabelListView";
 import { labelAssociateView } from "./LabelAssociateView";
+import { editLabelView } from "./EditLabelView";
 
 
 let resizeStartLeft = -1;
@@ -37,19 +38,24 @@ export const view = (a: IApp) =>
     <table id="bodyTable">
         <tbody>
         <tr>
-            <button onClick={() => a.activity.editLabel.switchMode()}>
-                {() => a.activity.editLabel.nextModeName()}
-            </button>
-            <br/>
             <td ref={leftTd}>
+                <div className="toolbar">
+                    <button onClick={() => a.activity.editLabel.switchMode()}>
+                        {() => a.activity.editLabel.nextModeName}
+                    </button>
+                </div>
                 {a.activity.selectTask.selectedTask === undefined
                     ? labelListView(a)
                     : labelAssociateView(a) }
+                {editLabelView(a)}
             </td>
             <td className="vertical-resizer"
                 onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
             </td>
             <td>
+                <div className="toolbar">
+                    <input type="text"></input>
+                </div>
                 <div id="task-list-activities">
                     <input
                         type="text"
@@ -59,9 +65,9 @@ export const view = (a: IApp) =>
                         onBlur={() => a.activity.editTaskTitle.commit()}
                         className="task-text-edit-box selected-task"/>
                     {a.activity.taskLists.items.map(tla2 => taskListActivityView(a, tla2))()}
-                    <button onClick={() => a.activity.taskLists.addNew()}>+</button>
-                    <button onClick={() => a.generateLocalStorageDownload()}>Download</button>
                 </div>
+                <button onClick={() => a.activity.taskLists.addNew()}>+</button>
+                <button onClick={() => a.generateLocalStorageDownload()}>Download</button>
             </td>
         </tr>
         </tbody>

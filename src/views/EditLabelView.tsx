@@ -6,7 +6,7 @@ import { IApp } from "../interfaces";
 
 
 export const editLabelView = (a: IApp) =>
-    <div>
+    <div className={"edit-label " + (a.activity.editLabel.label === undefined ? "hidden" : "")}>
         <input type="text"
                className="label"
                fn={data(a.activity.editLabel.editLabelName)}

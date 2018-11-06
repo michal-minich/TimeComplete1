@@ -216,3 +216,16 @@ input {
     clear: both;
     color: gray;
 }
+
+.toolbar {
+    align-items: center;
+    background-color: rgb(233, 233, 233);
+    display: flex;
+    margin: 7px;
+    padding: 7px;
+}
+
+.edit-label {
+    border: 1px solid black;
+    background-color: white;
+}

@@ -14,6 +14,16 @@ function labelInlineStyle(l: ILabel) {
 }
 
 
+function labelActivate(a: IApp, l: ILabel) {
+    if (a.activity.editLabel.label === undefined) {
+        a.activity.editLabel.begin(l);
+    } else {
+        a.activity.selectedTaskList().searchTaskListActivity.addOrRemoveLabelFromQuery(l);
+        setTimeout(() => queryTextBox.focus());
+    }
+}
+
+
 export const labelListView = (a: IApp) =>
     <div ref={labelList} className="label-list">
         <div id="label-list-inner">
@@ -25,11 +35,7 @@ export const labelListView = (a: IApp) =>
                 -1
                 ? ""
                 : " searched-label")}
-                      onMouseDown={() => {
-                          a.activity.selectedTaskList().searchTaskListActivity
-                              .addOrRemoveLabelFromQuery(l);
-                          setTimeout(() => queryTextBox.focus());
-                      }}
+                      onMouseDown={() => labelActivate(a, l)}
                       style={labelInlineStyle(l)}>
                     {l.name}
                 </span>)()}

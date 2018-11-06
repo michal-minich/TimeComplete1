@@ -6,21 +6,30 @@ export default class EditLabelActivity implements IEditLabelActivity {
 
     constructor(app: any) {
         this.editLabelName = S.data("");
+        this.nextModeNameSignal = S.data("Edit");
+        this.labelSignal = S.data(undefined);
     }
 
 
     readonly editLabelName: DataSignal<string>;
+    private readonly nextModeNameSignal :DataSignal<string>;
+    private readonly labelSignal: DataSignal<ILabel | undefined>;
 
 
-    begin(l: ILabel): void {
+    begin(label: ILabel): void {
+        this.labelSignal(label);
     }
 
 
     save(): void {
+        this.labelSignal(undefined);
+        this.switchMode();
     }
 
 
     cancel(): void {
+        this.labelSignal(undefined);
+        this.switchMode();
     }
 
 
@@ -29,10 +38,16 @@ export default class EditLabelActivity implements IEditLabelActivity {
 
 
     switchMode(): void {
+        this.nextModeNameSignal(this.nextModeNameSignal() === "Edit" ? "Cancel" : "Edit");
     }
 
 
-    nextModeName(): string {
-        return "Edit";
+    get nextModeName(): string {
+        return this.nextModeNameSignal();
+    }
+
+
+    get label(): ILabel | undefined {
+        return this.labelSignal();
     }
 }
