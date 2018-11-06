@@ -1,8 +1,9 @@
-﻿import S, { DataSignal as DataSignalType } from "s-js";
+﻿import S, { DataSignal } from "s-js";
 import TaskListActivity from "./TaskListActivity";
 import AddLabelActivity from "./AddLabelActivity";
 import AssociateLabelWithTaskActivity from "./AssociateLabelWithTaskActivity";
 import SelectTaskActivity from "./SelectTaskActivity";
+import EditLabelActivity from "./EditLabelActivity";
 import EditTaskTitleActivity from "./EditTaskTitleActivity";
 import ChangeTaskCompletionActivity from "./ChangeTaskCompletionActivity";
 import TaskListGroup from "./TaskListGroup";
@@ -33,7 +34,8 @@ import {
     ILabelList,
     ITaskList,
     IAppActivitiesSettings,
-    ITaskListGroup
+    ITaskListGroup,
+    IEditLabelActivity
 } from "../interfaces";
 
 
@@ -96,17 +98,19 @@ export class AppData implements IAppData {
     }
 }
 
+
 export class AppActivities implements IAppActivities {
 
     private readonly app: IApp;
     readonly taskLists: ITaskListGroup;
 
-    selectedTaskList!: DataSignalType<ITaskListActivity>;
+    selectedTaskList!: DataSignal<ITaskListActivity>;
     readonly addLabel: IAddLabelActivity;
     readonly associateLabelWithTask: IAssociateLabelWithTaskActivity;
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
     readonly changeTaskCompletion: IChangeTaskCompletionActivity;
+    readonly editLabel: IEditLabelActivity;
 
     constructor(app: IApp) {
         this.app = app;
@@ -116,6 +120,7 @@ export class AppActivities implements IAppActivities {
         this.selectTask = new SelectTaskActivity(app);
         this.editTaskTitle = new EditTaskTitleActivity(app);
         this.changeTaskCompletion = new ChangeTaskCompletionActivity(app);
+        this.editLabel = new EditLabelActivity(app);
     }
 
 

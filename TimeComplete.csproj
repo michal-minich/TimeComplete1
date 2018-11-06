@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\common.ts" />
+    <TypeScriptCompile Include="src\controllers\EditLabelActivity.ts" />
     <TypeScriptCompile Include="src\controllers\TaskListGroup.ts" />
     <TypeScriptCompile Include="src\controllers\AddLabelActivity.ts" />
     <TypeScriptCompile Include="src\controllers\AddTaskActivity.ts" />
@@ -103,6 +104,7 @@
     <TypeScriptCompile Include="src\operations\query.ts" />
     <TypeScriptCompile Include="src\start.ts" />
     <TypeScriptCompile Include="src\operations\Serializer.ts" />
+    <TypeScriptCompile Include="src\views\EditLabelView.tsx" />
     <TypeScriptCompile Include="src\views\TaskListActivityView.tsx" />
     <TypeScriptCompile Include="src\views\NewLabelView.tsx" />
     <TypeScriptCompile Include="src\views\LabelListView.tsx" />

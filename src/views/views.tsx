@@ -37,11 +37,14 @@ export const view = (a: IApp) =>
     <table id="bodyTable">
         <tbody>
         <tr>
+            <button onClick={() => a.activity.editLabel.switchMode()}>
+                {() => a.activity.editLabel.nextModeName()}
+            </button>
+            <br/>
             <td ref={leftTd}>
                 {a.activity.selectTask.selectedTask === undefined
                     ? labelListView(a)
-                    : labelAssociateView(a)
-                }
+                    : labelAssociateView(a) }
             </td>
             <td className="vertical-resizer"
                 onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
@@ -62,4 +65,4 @@ export const view = (a: IApp) =>
             </td>
         </tr>
         </tbody>
-    </table>
+    </table>;

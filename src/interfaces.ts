@@ -127,6 +127,7 @@ export interface IAppActivities {
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
     readonly changeTaskCompletion: IChangeTaskCompletionActivity;
+    readonly editLabel: IEditLabelActivity;
 
     load(): void;
 }
@@ -146,6 +147,16 @@ export interface ITaskListGroup {
     add(tla: ITaskListActivity): void;
     addNew(): void;
     remove(tla: ITaskListActivity): void;
+}
+
+
+export interface IEditLabelActivity {
+    save(): void;
+    cancel(): void;
+    readonly editLabelName: DataSignal<string>;
+    keyUp(e: KeyboardEvent): void;
+    switchMode(): void;
+    nextModeName(): string;
 }
 
 
