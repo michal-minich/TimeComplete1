@@ -44,10 +44,10 @@ export const view = (a: IApp) =>
                         {() => a.activity.editLabel.nextModeName}
                     </button>
                 </div>
+                {editLabelView(a)}
                 {a.activity.selectTask.selectedTask === undefined
                     ? labelListView(a)
                     : labelAssociateView(a) }
-                {editLabelView(a)}
             </td>
             <td className="vertical-resizer"
                 onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
@@ -55,6 +55,8 @@ export const view = (a: IApp) =>
             <td>
                 <div className="toolbar">
                     <input type="text"></input>
+                    <button onClick={() => a.activity.taskLists.addNew()}>+</button>
+                    <button onClick={() => a.generateLocalStorageDownload()}>Download</button>
                 </div>
                 <div id="task-list-activities">
                     <input
@@ -66,8 +68,6 @@ export const view = (a: IApp) =>
                         className="task-text-edit-box selected-task"/>
                     {a.activity.taskLists.items.map(tla2 => taskListActivityView(a, tla2))()}
                 </div>
-                <button onClick={() => a.activity.taskLists.addNew()}>+</button>
-                <button onClick={() => a.generateLocalStorageDownload()}>Download</button>
             </td>
         </tr>
         </tbody>

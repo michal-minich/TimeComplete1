@@ -17,17 +17,20 @@ export default class EditLabelActivity implements IEditLabelActivity {
 
 
     begin(label: ILabel): void {
+        this.editLabelName(label.name);
         this.labelSignal(label);
     }
 
 
     save(): void {
+        this.labelSignal()!.name = this.editLabelName();
         this.labelSignal(undefined);
         this.switchMode();
     }
 
 
     cancel(): void {
+        this.editLabelName("");
         this.labelSignal(undefined);
         this.switchMode();
     }
