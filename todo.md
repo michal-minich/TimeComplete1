@@ -2,11 +2,12 @@
 
 searches:
 - rest task and label summary footer
-- automaticaly list all task list view as searches in left panel
 - allow them to be named, then the name will be in the header of the view, on click ti will be exapnded to full search
 - when name of search is used in the search view itsefl, new unamed serarch will be created on save, original will remaing unchanged
 
 - refactor task queries tobe reactive (use parsed references which are reactive(?))
+- when hovering above label in left panel, highlight tasks which have it associated
+- when hovering above search in left pane, highlight task list to wich it belongs
 
 adding new task:
 - if the text-box contains label reference that does not exists, create the label

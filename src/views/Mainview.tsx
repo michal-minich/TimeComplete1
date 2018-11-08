@@ -7,6 +7,7 @@ import { taskListActivityView } from "./TaskListActivityView";
 import { labelListView } from "./LabelListView";
 import { labelAssociateView } from "./LabelAssociateView";
 import { editLabelView } from "./EditLabelView";
+import { taskListsSearchesView } from "./TaskListsSearchesView";
 import { Common } from "../common";
 
 
@@ -36,9 +37,10 @@ window.addEventListener("mouseup",
     (e: MouseEvent) => {
         resizeStartLeft = -1;
         window.setTimeout(() => {
-            document.body.classList.remove("user-select-none");
-            Common.removeTextSelections();
-        }, 0);
+                document.body.classList.remove("user-select-none");
+                Common.removeTextSelections();
+            },
+            0);
     },
     false);
 
@@ -58,6 +60,7 @@ export const mainView = (a: IApp) =>
                 {a.activity.selectTask.selectedTask === undefined
                     ? labelListView(a)
                     : labelAssociateView(a) }
+                {taskListsSearchesView(a)}
             </td>
             <td className="vertical-resizer"
                 onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
@@ -78,6 +81,9 @@ export const mainView = (a: IApp) =>
                         onBlur={() => a.activity.editTaskTitle.commit()}
                         className="task-text-edit-box selected-task"/>
                     {a.activity.taskLists.items.map(tla2 => taskListActivityView(a, tla2))()}
+                    <div className="task-list-activities-footer">
+                        123 task and labels 12 are not listed
+                    </div>
                 </div>
             </td>
         </tr>

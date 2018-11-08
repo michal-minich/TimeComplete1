@@ -14,7 +14,7 @@ function queryColor(tla: ITaskListActivity): string {
 }
 
 
-function queryBackground(tla: ITaskListActivity) {
+export function queryBackground(tla: ITaskListActivity) {
     return { backgroundColor: queryColor(tla) };
 }
 
