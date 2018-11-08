@@ -27,4 +27,15 @@ export module Common {
         el.click();
         document.body.removeChild(el);
     }
+
+
+    export function removeTextSelections() {
+        if (window.getSelection) {
+            if (window.getSelection().empty) { // Chrome
+                window.getSelection().empty();
+            } else if (window.getSelection().removeAllRanges) { // Firefox
+                window.getSelection().removeAllRanges();
+            }
+        }
+    }
 }

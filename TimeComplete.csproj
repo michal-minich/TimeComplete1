@@ -109,7 +109,7 @@
     <TypeScriptCompile Include="src\views\NewLabelView.tsx" />
     <TypeScriptCompile Include="src\views\LabelListView.tsx" />
     <TypeScriptCompile Include="src\views\LabelAssociateView.tsx" />
-    <TypeScriptCompile Include="src\views\Views.tsx" />
+    <TypeScriptCompile Include="src\views\Mainview.tsx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

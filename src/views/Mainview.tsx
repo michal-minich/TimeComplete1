@@ -2,17 +2,23 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp } from "../interfaces";
+import { IApp, ILabelStyle } from "../interfaces";
 import { taskListActivityView } from "./TaskListActivityView";
 import { labelListView } from "./LabelListView";
 import { labelAssociateView } from "./LabelAssociateView";
 import { editLabelView } from "./EditLabelView";
+import { Common } from "../common";
 
 
 let resizeStartLeft = -1;
 let labelList: HTMLDivElement;
 export let taskEditTextBox: HTMLInputElement;
 let leftTd: HTMLTableCellElement;
+
+
+export function labelInlineStyle(ls: ILabelStyle) {
+    return { backgroundColor: ls.backColor.value, color: ls.textColor.value };
+}
 
 
 window.addEventListener("mousemove",
@@ -29,18 +35,22 @@ window.addEventListener("mousemove",
 window.addEventListener("mouseup",
     (e: MouseEvent) => {
         resizeStartLeft = -1;
-        window.setTimeout(() => document.body.classList.remove("user-select-none"), 0);
+        window.setTimeout(() => {
+            document.body.classList.remove("user-select-none");
+            Common.removeTextSelections();
+        }, 0);
     },
     false);
 
 
-export const view = (a: IApp) =>
+export const mainView = (a: IApp) =>
     <table id="bodyTable">
         <tbody>
         <tr>
             <td ref={leftTd}>
                 <div className="toolbar">
-                    <button onClick={() => a.activity.editLabel.switchMode()}>
+                    <button onClick={() => a.activity.editLabel.switchMode()}
+                            disabled={a.activity.editLabel.label !== undefined}>
                         {() => a.activity.editLabel.nextModeName}
                     </button>
                 </div>
@@ -54,9 +64,10 @@ export const view = (a: IApp) =>
             </td>
             <td>
                 <div className="toolbar">
-                    <input type="text"></input>
+                    <input type="text" disabled={true}></input>
                     <button onClick={() => a.activity.taskLists.addNew()}>+</button>
-                    <button onClick={() => a.generateLocalStorageDownload()}>Download</button>
+                    <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
+                    <button onClick={() => a.importLocalStorageDownload()}>Import</button>
                 </div>
                 <div id="task-list-activities">
                     <input

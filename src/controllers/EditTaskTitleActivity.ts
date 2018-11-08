@@ -1,6 +1,6 @@
 ﻿import S from "s-js";
 import { IApp, ITask, IEditTaskTitleActivity } from "../interfaces";
-import { taskEditTextBox } from "../views/views";
+import { taskEditTextBox } from "../views/MainView";
 
 
 export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
@@ -25,7 +25,7 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
         const pr = p.getBoundingClientRect();
         const txtStyle = taskEditTextBox.style;
         txtStyle.left = (p.offsetLeft + r.left - pr.left - 1) + "px";
-        txtStyle.top = (p.offsetTop + r.top - pr.top + 299) + "px";
+        txtStyle.top = (p.offsetTop + r.top - pr.top + 299 - 52) + "px";
         txtStyle.width = (titleTd.offsetWidth) + "px";
         txtStyle.height = (titleTd.offsetHeight - 2) + "px";
         txtStyle.display = "block";

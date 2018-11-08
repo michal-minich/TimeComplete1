@@ -2,11 +2,11 @@ import S from "s-js";
 
 import App from "./controllers/App";
 import { IApp } from "./interfaces";
-import { view } from "./views/views";
+import { mainView } from "./views/MainView";
 
 
 S.root(() => {
     const app: IApp = new App();
-    document.body.appendChild(view(app));
+    document.body.appendChild(mainView(app));
     //setTimeout(() => queryTextBox.focus(), 100);
 });

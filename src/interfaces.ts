@@ -109,6 +109,7 @@ export interface IApp {
     readonly idCounter: IIdProvider<number>;
 
     generateLocalStorageDownload(): void;
+    importLocalStorageDownload(): void;
 }
 
 
@@ -151,10 +152,12 @@ export interface ITaskListGroup {
 
 
 export interface IEditLabelActivity {
-    begin(label: ILabel): void;
-    save(): void;
-    cancel(): void;
+    begin(label: ILabel, el: HTMLSpanElement): void;
+    commit(): void;
+    rollback(): void;
+    delete(): void;
     readonly editLabelName: DataSignal<string>;
+    readonly editColor: DataSignal<string>;
     keyUp(e: KeyboardEvent): void;
     switchMode(): void;
     readonly nextModeName: string;

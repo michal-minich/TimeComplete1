@@ -19,14 +19,18 @@ function queryBackground(tla: ITaskListActivity) {
 }
 
 
-function queryBorder(tla: ITaskListActivity) {
-    return { borderColor: queryColor(tla) };
+function queryBorder(a: IApp, tla: ITaskListActivity) {
+    if (a.activity.selectedTaskList() === tla) {
+        return { borderColor: queryColor(tla) };
+    } else {
+        return { borderColor: "rgb(223, 223, 223)" };
+    }
 }
 
 
 export const taskListActivityView = (a: IApp, tla: ITaskListActivity) =>
     <div onMouseDown={() => a.activity.selectedTaskList(tla)}
-         style={queryBorder(tla)}
+         style={queryBorder(a, tla)}
          className={"task-list-activity " +
              (a.activity.selectedTaskList() === tla ? "selected-task-list-activity" : "")}>
         <div className="header" style={queryBackground(tla)}>

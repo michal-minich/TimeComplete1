@@ -70,6 +70,10 @@ export default class App implements IApp {
         };
         Common.download("export.json", JSON.stringify(data));
     }
+
+
+    importLocalStorageDownload(): void {
+    }
 }
 
 

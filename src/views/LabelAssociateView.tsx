@@ -3,13 +3,18 @@ import * as Surplus from "surplus";
 Surplus;
 import { IApp, ILabel, RArray } from "../interfaces";
 import { newLabelView } from "./NewLabelView";
+import { labelInlineStyle } from "./MainView";
 
 
 let assignLabelPopup: HTMLDivElement;
 
 
-function labelInlineStyle(l: ILabel) {
-    return { backgroundColor: l.style.backColor.value, color: l.style.textColor.value };
+function labelActivate(a: IApp, l: ILabel, el: HTMLSpanElement) {
+    if (a.activity.editLabel.nextModeName === "Cancel") {
+        a.activity.editLabel.begin(l, el);
+    } else {
+        a.activity.associateLabelWithTask.changeAssociation(l);
+    }
 }
 
 
@@ -35,9 +40,13 @@ export const labelAssociateView = (a: IApp) =>
 
 
 const associateLabelList = (a: IApp, labels: RArray<ILabel>) =>
-    labels.map(l =>
-        <span className="label"
-              style={labelInlineStyle(l)}
-              onMouseDown={() => a.activity.associateLabelWithTask.changeAssociation(l)}>
-            {l.name}
-        </span>);
+    labels.map(l => {
+        let el: HTMLSpanElement | undefined;
+        return <span
+                   ref={el}
+                   className="label"
+                   style={labelInlineStyle(l.style)}
+                   onMouseDown={() => labelActivate(a, l, el!)}>
+                   {l.name}
+               </span>;
+    });
