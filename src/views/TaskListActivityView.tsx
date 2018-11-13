@@ -92,8 +92,10 @@ const taskListViewBody = (a: IApp, stla: ISearchTaskListActivity) =>
                            : ""}>
                        {t.title}
                    </td>
-                   <td>
-                       {t.associatedLabels.items.map(al =>
+                   <td className="label-tag-container">
+                       {t.associatedLabels.items
+                           .orderBy(al => al.id)
+                           .map(al =>
                            <span
                                className="label-tag"
                                title={al.name}

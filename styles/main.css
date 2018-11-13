@@ -47,7 +47,7 @@ input {
     border: 2px solid rgb(223, 223, 223);
     float: left;
     margin: 5px;
-    max-width: 300px;
+    max-width: 450px;
     min-width: 150px;
 }
 
@@ -164,6 +164,11 @@ input {
     width: 80px;
 }
 
+.label-tag-container /*.task-list td:nth-child(3) */ {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
 .label-tag {
     border-radius: 5px;
     float: left;
@@ -171,6 +176,8 @@ input {
     margin: 1px;
     margin-left: 3px;
     padding: 0 3px 4px 4px;
+    width: 1px;
+    display: table-cell;
 }
 
 .searched-label {

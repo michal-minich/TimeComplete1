@@ -7,7 +7,7 @@ import { newLabelView } from "./NewLabelView";
 import { labelInlineStyle } from "./MainView";
 
 
-let labelList: HTMLDivElement;
+export var labelList: HTMLDivElement;
 
 
 function labelActivate(a: IApp, l: ILabel, el: HTMLSpanElement) {

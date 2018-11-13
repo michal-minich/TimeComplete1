@@ -6,7 +6,7 @@ import { queryBackground } from "./TaskListActivityView";
 
 
 export const taskListsSearchesView = (a: IApp) =>
-    <div className="task-list-searches">
+    <div className="task-list-searches label-list">
         <div className="smaller-font">Task Lists</div>
         <div>{
             a.activity.taskLists.items.map(tla =>

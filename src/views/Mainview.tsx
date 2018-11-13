@@ -4,7 +4,7 @@ Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ILabelStyle } from "../interfaces";
 import { taskListActivityView } from "./TaskListActivityView";
-import { labelListView } from "./LabelListView";
+import { labelListView, labelList } from "./LabelListView";
 import { labelAssociateView } from "./LabelAssociateView";
 import { editLabelView } from "./EditLabelView";
 import { taskListsSearchesView } from "./TaskListsSearchesView";
@@ -12,7 +12,6 @@ import { Common } from "../common";
 
 
 let resizeStartLeft = -1;
-let labelList: HTMLDivElement;
 export let taskEditTextBox: HTMLInputElement;
 let leftTd: HTMLTableCellElement;
 
