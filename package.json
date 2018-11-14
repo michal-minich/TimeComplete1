@@ -29,7 +29,7 @@
     "@types/lodash": "latest",
     "surplus-loader": "latest",
     "ts-loader": "latest",
-    "typescript": "latest",
+    "typescript": "^3.2.0-dev.20181114",
     "webpack": "latest",
     "webpack-cli": "latest"
   }
