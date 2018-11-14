@@ -17,7 +17,7 @@ import { SessionStore } from "../io/SessionStore";
 import Clock from "../io/Clock";
 import Serializer from "../operations/Serializer";
 import IncrementCounter from "../operations/IncrementCounter";
-import { Common } from "../common";
+import { download, saveWithSerialize } from "../common";
 import {
     IApp,
     IAppData,
@@ -68,7 +68,7 @@ export default class App implements IApp {
             tasks: App.instance.localStore.load("tasks"),
             activities: App.instance.localStore.load("activities")
         };
-        Common.download("export.json", JSON.stringify(data));
+        download("export.json", JSON.stringify(data));
     }
 
 
@@ -93,11 +93,11 @@ export class AppData implements IAppData {
             : new Serializer().fromPlainObject<TaskList>(savedTasks, "TaskList");
 
         S(() => {
-            Common.saveWithSerialize("labels", this.labels.items());
+            saveWithSerialize("labels", this.labels.items());
         });
 
         S(() => {
-            Common.saveWithSerialize("tasks", this.tasks.items());
+            saveWithSerialize("tasks", this.tasks.items());
         });
     }
 }

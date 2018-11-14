@@ -8,7 +8,7 @@ import { labelListView, labelList } from "./LabelListView";
 import { labelAssociateView } from "./LabelAssociateView";
 import { editLabelView } from "./EditLabelView";
 import { taskListsSearchesView } from "./TaskListsSearchesView";
-import { Common } from "../common";
+import { onClick, removeTextSelections, onMouseDown } from "../common";
 
 
 let resizeStartLeft = -1;
@@ -37,7 +37,7 @@ window.addEventListener("mouseup",
         resizeStartLeft = -1;
         window.setTimeout(() => {
                 document.body.classList.remove("user-select-none");
-                Common.removeTextSelections();
+                removeTextSelections();
             },
             0);
     },
@@ -66,10 +66,9 @@ export const mainView = (a: IApp) =>
             </td>
             <td>
                 <div className="toolbar">
-                    <input type="text" disabled={true}></input>
-                    <button onClick={() => a.activity.taskLists.addNew()}>+</button>
+                    <button fn={onMouseDown((e) => console.log(e))}>Labels</button>
+                    <button onClick={() => a.activity.taskLists.addNew()}>Add</button>
                     <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
-                    <button onClick={() => a.importLocalStorageDownload()}>Import</button>
                 </div>
                 <div id="task-list-activities">
                     <input

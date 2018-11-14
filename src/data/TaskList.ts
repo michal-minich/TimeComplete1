@@ -1,6 +1,6 @@
 ﻿import SArray from "s-array";
 import { ITaskList, ITask, WArray, RArray } from "../interfaces";
-import { Common } from "../common";
+import { findById } from "../common";
 
 
 export default class TaskList implements ITaskList {
@@ -24,6 +24,6 @@ export default class TaskList implements ITaskList {
 
 
     byId(id: number): ITask {
-        return Common.findById(this.itemsSignal, id);
+        return findById(this.itemsSignal, id);
     }
 }

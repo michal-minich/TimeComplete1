@@ -2,7 +2,7 @@
 import SArray, { SDataArray } from "s-array";
 import App from "../controllers/App";
 import { ITask, ILabel, IDateTime, IAssociatedLabels } from "../interfaces";
-import { Common } from "../common";
+import { findById } from "../common";
 
 
 export default class Task implements ITask {
@@ -53,6 +53,6 @@ export class AssociatedLabels implements IAssociatedLabels {
 
 
     byId(id: number): ILabel {
-        return Common.findById(this.items, id);
+        return findById(this.items, id);
     }
 }

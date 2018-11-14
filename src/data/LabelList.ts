@@ -1,6 +1,6 @@
 ﻿import SArray from "s-array";
 import { ILabelList, ILabel, WArray, RArray } from "../interfaces";
-import { Common } from "../common";
+import { findById } from "../common";
 
 
 export default class LabelList implements ILabelList {
@@ -29,6 +29,6 @@ export default class LabelList implements ILabelList {
 
 
     byId(id: number): ILabel {
-        return Common.findById(this.itemsSignal, id);
+        return findById(this.itemsSignal, id);
     }
 }
