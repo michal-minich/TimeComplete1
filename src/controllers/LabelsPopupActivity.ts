@@ -3,7 +3,8 @@ import { ILabelsPopupActivity, ILabel, IApp } from "../interfaces";
 
 
 export default class LabelsPopupActivity implements ILabelsPopupActivity {
-    
+
+    private labelsPopupDiv!: HTMLDivElement;
     private readonly app: IApp;
 
     keyUp(e: KeyboardEvent): void {
@@ -13,13 +14,14 @@ export default class LabelsPopupActivity implements ILabelsPopupActivity {
     queryText: DataSignal<string>;
 
 
-    constructor(app : IApp) {
+    constructor(app: IApp) {
         this.app = app;
         this.queryText = S.data("");
     }
 
 
     init(labelsPopupDiv: HTMLDivElement): void {
+        this.labelsPopupDiv = labelsPopupDiv;
     }
 
 
@@ -28,6 +30,7 @@ export default class LabelsPopupActivity implements ILabelsPopupActivity {
 
 
     show(target: HTMLButtonElement): void {
+        this.labelsPopupDiv.classList.remove("hidden");
     }
 
 

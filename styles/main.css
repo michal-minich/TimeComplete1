@@ -39,8 +39,11 @@ input {
 }
 
 .task-list-activities {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     max-height: 100vh;
-    overflow-y: auto;
+    overflow-y: auto;   
 }
 
 .task-list-activity {
@@ -49,6 +52,7 @@ input {
     margin: 5px;
     max-width: 450px;
     min-width: 150px;
+    background-color: white;
 }
 
 .selected-task-list-activity {
@@ -213,14 +217,6 @@ input {
     color: gray;
 }
 
-.toolbar {
-    align-items: center;
-    background-color: rgb(233, 233, 233);
-    display: flex;
-    margin: 7px;
-    padding: 7px;
-}
-
 .edit-label {
     background-color: rgb(230, 230, 230);
     border: 1px solid rgb(139, 139, 139);
@@ -253,4 +249,89 @@ input {
 
 
 .labels-popup-view {
+    border: 1px solid black;
+    background-color: white;
+}
+
+.tab-bar {
+    height: 25px;
+    margin-top: 10px;
+    border-bottom-color: gray;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    padding-left: 20px;
+}
+
+.tab {
+    background-color: rgb(230, 230, 230);
+    padding: 3px 9px;
+    padding-bottom: 5px;
+    margin-right: 10px;
+}
+
+.active-tab {
+    background-color: gray;
+    color: white;
+}
+
+.logo {
+    width: 24px;
+    height: 24px;
+    float: left;
+    margin-left: 6px;
+    margin-right: 20px;
+    margin-top: 6px;
+}
+
+.tab-plus {
+    border-radius: 10px;
+    padding: 0 5px;
+    font-weight: bold;
+    color: gray;
+    background-color: rgb(230, 230, 230);
+}
+
+.tab-plus span {
+     position: relative;
+     top: -1px;
+ }
+
+.view-area {
+    background-color: rgb(230, 230, 230);
+}
+
+
+.toolbar {
+    align-items: center;
+    background-color: rgb(230, 230, 230);
+    padding: 3px;
+    padding-top: 4px;
+    border-bottom: 1px solid rgb(183, 183, 183);
+}
+
+.toolbar button ,
+.toolbar input {
+    padding: 5px 8px;
+    margin: 3px 5px;
+    padding-bottom: 6px;
+}
+
+.toolbar button {
+    border: none;
+    background-color: rgb(200, 200, 200);
+    color: #454545;
+}
+
+.toolbar .main-search-input {
+    border: none;
+    padding: 2px 5px;
+    padding-bottom: 4px;
+}
+
+.toolbar .view-filter {
+    border: none;
+    padding: 2px 5px;
+    padding-bottom: 4px;
+    background-color: rgb(200, 200, 200);
+    color: #454545;
 }

@@ -4,17 +4,11 @@ Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ILabelStyle } from "../interfaces";
 import { taskListActivityView } from "./TaskListActivityView";
-import { labelListView, labelList } from "./LabelListView";
-import { labelAssociateView } from "./LabelAssociateView";
-import { editLabelView } from "./EditLabelView";
-import { taskListsSearchesView } from "./TaskListsSearchesView";
 import { labelsPopupView } from "./LabelsPopupView";
-import { removeTextSelections, onMouseDown } from "../common";
+import { onMouseDown } from "../common";
 
 
-let resizeStartLeft = -1;
 export let taskEditTextBox: HTMLInputElement;
-let leftTd: HTMLTableCellElement;
 
 
 export function labelInlineStyle(ls: ILabelStyle) {
@@ -22,59 +16,32 @@ export function labelInlineStyle(ls: ILabelStyle) {
 }
 
 
-window.addEventListener("mousemove",
-    (e: MouseEvent) => {
-        if (resizeStartLeft !== -1) {
-            document.body.classList.add("user-select-none");
-            labelList.style.width = (e.clientX - labelList.offsetLeft - 10) + "px";
-            leftTd.style.width = (e.clientX - leftTd.offsetLeft - 10) + "px";
-        }
-    },
-    false);
-
-
-window.addEventListener("mouseup",
-    (e: MouseEvent) => {
-        resizeStartLeft = -1;
-        window.setTimeout(() => {
-                document.body.classList.remove("user-select-none");
-                removeTextSelections();
-            },
-            0);
-    },
-    false);
-
-
 export const mainView = (a: IApp) =>
     <table id="bodyTable">
         <tbody>
         <tr>
-            <td ref={leftTd}>
-                <div className="toolbar">
-                    <button onClick={() => a.activity.editLabel.switchMode()}
-                            disabled={a.activity.editLabel.label !== undefined}>
-                        {() => a.activity.editLabel.nextModeName}
-                    </button>
-                </div>
-                {editLabelView(a)}
-                {a.activity.selectTask.selectedTask === undefined
-                    ? labelListView(a)
-                    : labelAssociateView(a) }
-                {taskListsSearchesView(a)}
-                {labelsPopupView(a, a.activity.labelsPopup, a.data.labels.items)}
-            </td>
-            <td className="vertical-resizer"
-                onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
-            </td>
-            <td>
-                <div className="toolbar">
-                    <button fn={onMouseDown((e) =>
-                        a.activity.labelsPopup.show(e.target as HTMLButtonElement))}>
-                        Labels
-                    </button>
-                    <button onClick={() => a.activity.taskLists.addNew()}>Add</button>
-                    <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
-                </div>
+            <img className="logo" src="favicon.png" alt="Time Complete" />
+            <div className="tab-bar">
+                <span className="tab active-tab">Tasks 1</span>
+                <span className="tab">Tasks 2</span>
+                <span className="tab">Tasks 3</span>
+                <span className="tab-plus"><span>+</span></span>
+            </div>
+            <div className="toolbar">
+                <button fn={onMouseDown((e) =>
+                    a.activity.labelsPopup.show(e.target as HTMLButtonElement))}>
+                    Labels
+                </button>
+                <button>Tasks</button>
+                <button onClick={() => a.activity.taskLists.addNew()}>Add</button>
+                <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
+                <input className="main-search-input" type="search" placeholder="Search" />
+                <input className="view-filter" type="search" placeholder="View Filter" />
+            </div>
+            {labelsPopupView(a, a.activity.labelsPopup, a.data.labels.items)}
+        </tr>
+        <tr>
+            <td className="view-area">
                 <div className="task-list-activities">
                     <input
                         type="text"
