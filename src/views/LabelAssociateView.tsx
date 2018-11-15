@@ -21,10 +21,10 @@ function labelActivate(a: IApp, l: ILabel, el: HTMLSpanElement) {
 export const labelAssociateView = (a: IApp) =>
     !a.activity.selectTask.selectedTask
     ? ""
-    : <div id="assign-label-activity" className="label-list" ref={assignLabelPopup}>
+    : <div className="assign-label-activity" className="label-list" ref={assignLabelPopup}>
           <div className="smaller-font">Associated</div>
           <div id="associated-labels">
-              {newLabelView(a)}
+              {newLabelView(a.activity.addLabel)}
               {associateLabelList(a,
                   a.activity.selectTask.selectedTask!.associatedLabels.items)()}
           </div>

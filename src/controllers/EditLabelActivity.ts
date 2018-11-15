@@ -15,7 +15,7 @@ export default class EditLabelActivity implements IEditLabelActivity {
     }
 
 
-    readonly app: IApp;
+    private readonly app: IApp;
     readonly editLabelName: DataSignal<string>;
     readonly editColor: DataSignal<string>;
     private readonly nextModeNameSignal :DataSignal<string>;

@@ -38,7 +38,7 @@ input {
     background-color: lightgray;
 }
 
-#task-list-activities {
+.task-list-activities {
     max-height: 100vh;
     overflow-y: auto;
 }
@@ -136,7 +136,7 @@ input {
     width: 200px;
 }
 
-#label-list-inner {
+.label-list-inner {
     padding: 5px;
 }
 
@@ -196,16 +196,6 @@ input {
     user-select: none;
 }
 
-#assign-label-activity {
-}
-
-#assign-label-activity tr:first-child {
-}
-
-#associated-labels,
-#available-labels {
-}
-
 .smaller-font {
     font-size: smaller;
 }
@@ -218,7 +208,7 @@ input {
     border-top: 1px solid rgb(187, 43, 43);
 }
 
-#assign-label-activity .smaller-font {
+.assign-label-activity .smaller-font {
     clear: both;
     color: gray;
 }
@@ -259,4 +249,8 @@ input {
 }
 
 .task-list-searches {
+}
+
+
+.labels-popup-view {
 }

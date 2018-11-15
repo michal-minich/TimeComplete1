@@ -94,6 +94,7 @@
     <TypeScriptCompile Include="src\data\DateTime.ts" />
     <TypeScriptCompile Include="src\data\Label.ts" />
     <TypeScriptCompile Include="src\data\LabelStyle.ts" />
+    <TypeScriptCompile Include="src\controllers\LabelsPopupActivity.ts" />
     <TypeScriptCompile Include="src\operations\IncrementCounter.ts" />
     <TypeScriptCompile Include="src\io\SessionStore.ts" />
     <TypeScriptCompile Include="src\data\Task.ts" />
@@ -105,6 +106,7 @@
     <TypeScriptCompile Include="src\start.ts" />
     <TypeScriptCompile Include="src\operations\Serializer.ts" />
     <TypeScriptCompile Include="src\views\EditLabelView.tsx" />
+    <TypeScriptCompile Include="src\views\LabelsPopupView.tsx" />
     <TypeScriptCompile Include="src\views\TaskListActivityView.tsx" />
     <TypeScriptCompile Include="src\views\NewLabelView.tsx" />
     <TypeScriptCompile Include="src\views\LabelListView.tsx" />

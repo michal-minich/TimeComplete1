@@ -112,7 +112,6 @@ export interface IApp {
     importLocalStorageDownload(): void;
 }
 
-
 export interface IAppData {
     readonly tasks: ITaskList;
     readonly labels: ILabelList;
@@ -129,10 +128,10 @@ export interface IAppActivities {
     readonly editTaskTitle: IEditTaskTitleActivity;
     readonly changeTaskCompletion: IChangeTaskCompletionActivity;
     readonly editLabel: IEditLabelActivity;
+    readonly labelsPopup: ILabelsPopupActivity;
 
     load(): void;
 }
-
 
 export interface IAppActivitiesSettings {
     taskLists: Array<{
@@ -142,14 +141,12 @@ export interface IAppActivitiesSettings {
     selectedTask?: number;
 }
 
-
 export interface ITaskListGroup {
     readonly items: RArray<ITaskListActivity>;
     add(tla: ITaskListActivity): void;
     addNew(): void;
     remove(tla: ITaskListActivity): void;
 }
-
 
 export interface IEditLabelActivity {
     begin(label: ILabel, el: HTMLSpanElement): void;
@@ -164,6 +161,14 @@ export interface IEditLabelActivity {
     label: ILabel | undefined;
 }
 
+export interface ILabelsPopupActivity {
+    show(target: HTMLButtonElement): void;
+    hide(): void;
+    activate(label: ILabel): any;
+    init(labelsPopupDiv: HTMLDivElement): void;
+    queryText: DataSignal<string>;
+    keyUp(e: KeyboardEvent): void;
+}
 
 export interface ITaskListActivity {
     readonly addTaskActivity: IAddTaskActivity;

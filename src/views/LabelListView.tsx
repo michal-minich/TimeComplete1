@@ -22,8 +22,8 @@ function labelActivate(a: IApp, l: ILabel, el: HTMLSpanElement) {
 
 export const labelListView = (a: IApp) =>
     <div ref={labelList} className="label-list">
-        <div id="label-list-inner">
-            {newLabelView(a)}
+        <div className="label-list-inner">
+            {newLabelView(a.activity.addLabel)}
             {a.data.labels.items.map(l => {
                 let el: HTMLSpanElement | undefined;
                 return <span

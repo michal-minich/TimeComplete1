@@ -8,7 +8,8 @@ import { labelListView, labelList } from "./LabelListView";
 import { labelAssociateView } from "./LabelAssociateView";
 import { editLabelView } from "./EditLabelView";
 import { taskListsSearchesView } from "./TaskListsSearchesView";
-import { onClick, removeTextSelections, onMouseDown } from "../common";
+import { labelsPopupView } from "./LabelsPopupView";
+import { removeTextSelections, onMouseDown } from "../common";
 
 
 let resizeStartLeft = -1;
@@ -60,17 +61,21 @@ export const mainView = (a: IApp) =>
                     ? labelListView(a)
                     : labelAssociateView(a) }
                 {taskListsSearchesView(a)}
+                {labelsPopupView(a, a.activity.labelsPopup, a.data.labels.items)}
             </td>
             <td className="vertical-resizer"
                 onMouseDown={(e: MouseEvent) => resizeStartLeft = e.clientX}>
             </td>
             <td>
                 <div className="toolbar">
-                    <button fn={onMouseDown((e) => console.log(e))}>Labels</button>
+                    <button fn={onMouseDown((e) =>
+                        a.activity.labelsPopup.show(e.target as HTMLButtonElement))}>
+                        Labels
+                    </button>
                     <button onClick={() => a.activity.taskLists.addNew()}>Add</button>
                     <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
                 </div>
-                <div id="task-list-activities">
+                <div className="task-list-activities">
                     <input
                         type="text"
                         ref={taskEditTextBox}
