@@ -24,11 +24,11 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
             .parentElement!.parentElement!.parentElement!;
         const pr = p.getBoundingClientRect();
         const txtStyle = taskEditTextBox.style;
-        txtStyle.left = (p.offsetLeft + r.left - pr.left - 1) + "px";
-        txtStyle.top = (p.offsetTop + r.top - pr.top + 299 - 52) + "px";
+        txtStyle.left = (p.offsetLeft + r.left - pr.left + 1) + "px";
+        txtStyle.top = (p.offsetTop + r.top - pr.top + titleTd.offsetHeight - 20) + "px";
         txtStyle.width = (titleTd.offsetWidth) + "px";
         txtStyle.height = (titleTd.offsetHeight - 2) + "px";
-        txtStyle.display = "block";
+        txtStyle.visibility = "visible";
         taskEditTextBox.value = t.title;
         setTimeout(() => taskEditTextBox.focus(), 0);
     }
@@ -50,15 +50,17 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
 
 
     cleanup(): void {
-        taskEditTextBox.style.display = "none";
-        this.newName("");
+        //taskEditTextBox.style.display = "none";
+        //this.newName("");
     }
 
 
     keyUp(e: KeyboardEvent): void {
-        if (e.keyCode === 13)
+        if (e.keyCode === 13) {
             this.commit();
-        else if (e.keyCode === 27)
+            e.preventDefault();
+        } else if (e.keyCode === 27) {
             this.rollback();
+        }
     }
 }

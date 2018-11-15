@@ -8,51 +8,50 @@ body {
 
 body,
 table,
-input {
+input,
+textarea {
     font-family: "Segoe UI", sans-serif;
     font-size: 11pt;
 }
 
-#bodyTable {
-    border-collapse: collapse;
-    height: 100%;
-    vertical-align: top;
-    width: 100%;
-}
-
-#bodyTable tr {
-    vertical-align: top;
-}
-
-#bodyTable td {
-    padding: 0;
-}
-
-.vertical-resizer {
-    background-color: rgb(235, 235, 235);
-    cursor: e-resize;
-    width: 5px;
-}
-
-.vertical-resizer:hover {
-    background-color: lightgray;
-}
-
 .task-list-activities {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
     max-height: 100vh;
-    overflow-y: auto;   
+    margin-top: -20px;
+}
+
+@media screen and (max-width: 2400px) {
+    .task-list-activities {
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@media screen and (max-width: 1800px) {
+    .task-list-activities {
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .task-list-activities {
+        grid-template-columns: auto auto;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .task-list-activities {
+        grid-template-columns: auto;
+    }
 }
 
 .task-list-activity {
+    background-color: white;
     border: 2px solid rgb(223, 223, 223);
-    float: left;
     margin: 5px;
     max-width: 450px;
-    min-width: 150px;
-    background-color: white;
+    min-width: 200px;
+    align-self: start;
 }
 
 .selected-task-list-activity {
@@ -127,9 +126,10 @@ input {
 
 .task-text-edit-box {
     border: none;
-    display: none;
-    margin-top: -300px;
+    visibility: hidden;
+    margin-top: -50px;
     position: relative;
+    resize: none;
 }
 
 .label-list {
@@ -175,13 +175,13 @@ input {
 
 .label-tag {
     border-radius: 5px;
+    display: table-cell;
     float: left;
     height: 1em;
     margin: 1px;
     margin-left: 3px;
     padding: 0 3px 4px 4px;
     width: 1px;
-    display: table-cell;
 }
 
 .searched-label {
@@ -237,11 +237,11 @@ input {
 
 .task-list-activities-footer {
     background-color: rgb(240, 240, 240);
-    color: rgb(188, 188, 188);    
+    color: rgb(188, 188, 188);
     float: left;
     margin: 5px;
-    width: 240px;
     padding: 10px 20px;
+    width: 240px;
 }
 
 .task-list-searches {
@@ -249,24 +249,25 @@ input {
 
 
 .labels-popup-view {
-    border: 1px solid black;
     background-color: white;
+    border: 1px solid black;
 }
 
 .tab-bar {
+    border-bottom-color: gray;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
     height: 25px;
     margin-top: 10px;
-    border-bottom-color: gray;
-    border-bottom-width: 3px;
-    border-bottom-style: solid;
-    padding-left: 20px;
+    position: absolute;
+    width: 100vw;
 }
 
 .tab {
     background-color: rgb(230, 230, 230);
+    margin-right: 10px;
     padding: 3px 9px;
     padding-bottom: 5px;
-    margin-right: 10px;
 }
 
 .active-tab {
@@ -275,50 +276,68 @@ input {
 }
 
 .logo {
-    width: 24px;
-    height: 24px;
     float: left;
-    margin-left: 6px;
-    margin-right: 20px;
-    margin-top: 6px;
+    height: 24px;
+    margin-right: 12px;
+    margin-top: -4px;
+    width: 24px;
 }
 
 .tab-plus {
-    border-radius: 10px;
-    padding: 0 5px;
-    font-weight: bold;
-    color: gray;
     background-color: rgb(230, 230, 230);
+    border-radius: 10px;
+    color: gray;
+    font-weight: bold;
+    padding: 0 5px;
 }
 
 .tab-plus span {
-     position: relative;
-     top: -1px;
- }
+    position: relative;
+    top: -1px;
+}
+
+#bodyTable tr {
+    vertical-align: top;
+}
+
+#bodyTable td {
+    padding: 0;
+}
+
+.main-view {
+}
 
 .view-area {
     background-color: rgb(230, 230, 230);
+    position: absolute;
+    top: 75px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: scroll;  
 }
-
 
 .toolbar {
     align-items: center;
     background-color: rgb(230, 230, 230);
-    padding: 3px;
-    padding-top: 4px;
     border-bottom: 1px solid rgb(183, 183, 183);
+    padding-top: 4px;
+    position: absolute;
+    top: 37px;
+    width: 100vw;
+    overflow-x: hidden; 
 }
 
-.toolbar button ,
+.toolbar button,
 .toolbar input {
-    padding: 5px 8px;
     margin: 3px 5px;
+    padding: 5px 8px;
     padding-bottom: 6px;
 }
 
 .toolbar button {
-    border: none;
     background-color: rgb(200, 200, 200);
+    border: none;
     color: #454545;
 }
 
@@ -329,9 +348,9 @@ input {
 }
 
 .toolbar .view-filter {
+    background-color: rgb(200, 200, 200);
     border: none;
+    color: #454545;
     padding: 2px 5px;
     padding-bottom: 4px;
-    background-color: rgb(200, 200, 200);
-    color: #454545;
 }
