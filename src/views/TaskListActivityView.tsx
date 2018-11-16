@@ -3,6 +3,7 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ITaskListActivity, ISearchTaskListActivity } from "../interfaces";
+import { onMouseDown } from "../common";
 
 
 export let queryTextBox: HTMLInputElement;
@@ -42,14 +43,6 @@ export const taskListActivityView = (a: IApp, tla: ITaskListActivity) =>
                 onKeyUp={(e: KeyboardEvent) => tla.searchTaskListActivity.keyUp(e)}
                 fn={data(tla.searchTaskListActivity.taskQueryText)}
                 style={queryBackground(tla)}/>
-            <button
-                onMouseDown={() => tla.searchTaskListActivity.clear()}>
-                Clear
-            </button>
-            <button
-                onMouseDown={() => tla.searchTaskListActivity.addSearch()}>
-                +
-            </button>
             <button
                 onClick={() => a.activity.taskLists.remove(tla)}>
                 X
@@ -92,7 +85,10 @@ const taskListViewBody = (a: IApp, stla: ISearchTaskListActivity) =>
                            : ""}>
                        {t.title}
                    </td>
-                   <td className="label-tag-container">
+                   <td className="label-tag-container"
+                       fn={(onMouseDown((e) => a.activity.labelsPopup.show(e.target as HTMLElement,
+                           (l, el) => a.activity.associateLabelWithTask.changeAssociation(l)
+                       )))}>
                        {t.associatedLabels.items
                            .orderBy(al => al.id)
                            .map(al =>

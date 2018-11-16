@@ -11,8 +11,6 @@ searches:
 
 adding new task:
 - if the text-box contains label reference that does not exists, create the label
-- assign all existing labels which are used in the text-box for the new task
-- remove the label reference from value of text-box before using it as task title
 
 search references:
 - make possible to create search from query

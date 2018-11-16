@@ -109,8 +109,6 @@
     <TypeScriptCompile Include="src\views\LabelsPopupView.tsx" />
     <TypeScriptCompile Include="src\views\TaskListActivityView.tsx" />
     <TypeScriptCompile Include="src\views\NewLabelView.tsx" />
-    <TypeScriptCompile Include="src\views\LabelListView.tsx" />
-    <TypeScriptCompile Include="src\views\LabelAssociateView.tsx" />
     <TypeScriptCompile Include="src\views\Mainview.tsx" />
     <TypeScriptCompile Include="src\views\TaskListsSearchesView.tsx" />
   </ItemGroup>

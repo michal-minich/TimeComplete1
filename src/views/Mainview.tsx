@@ -6,7 +6,8 @@ import data from "surplus-mixin-data";
 import { IApp, ILabelStyle } from "../interfaces";
 import { taskListActivityView } from "./TaskListActivityView";
 import { labelsPopupView } from "./LabelsPopupView";
-import { onMouseDown, indexOfMin } from "../common";
+import { onMouseDown, indexOfMin, removeTextSelections } from "../common";
+import { editLabelView } from "./EditLabelView";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
@@ -16,6 +17,15 @@ export function labelInlineStyle(ls: ILabelStyle) {
     return { backgroundColor: ls.backColor.value, color: ls.textColor.value };
 }
 
+window.addEventListener("mouseup",
+    () => {
+        window.setTimeout(() => {
+                document.body.classList.remove("users-elect-none");
+                removeTextSelections();
+            },
+            0);
+    },
+    false);
 
 export const mainView = (a: IApp) =>
     <div>
@@ -29,8 +39,8 @@ export const mainView = (a: IApp) =>
             </span>
         </div>
         <div className="toolbar">
-            <button fn={onMouseDown((e) =>
-                a.activity.labelsPopup.show(e.target as HTMLButtonElement))}>
+            <button fn={onMouseDown((e) => a.activity.labelsPopup.show(e.target as HTMLElement,
+                (l, el) => a.activity.editLabel.begin(l, el)))}>
                 Labels
             </button>
             <button>Tasks</button>
@@ -41,7 +51,7 @@ export const mainView = (a: IApp) =>
             <input className="view-filter" type="number" fn={data(numColumnsSignal)}/>
         </div>
         {labelsPopupView(a, a.activity.labelsPopup, a.data.labels.items)}
-
+        {editLabelView(a)}
         <div className="view-area">
             <textarea
                 ref={taskEditTextBox}
@@ -65,8 +75,6 @@ export const mainView = (a: IApp) =>
                             const v = taskListActivityView(a, tla2);
                             tds[col].appendChild(v);
                             tdsHeight[col] += tla2.estimatedHeight;
-                            console.log(tla2.estimatedHeight);
-                            console.log(tdsHeight);
                         }
                         return tds;
                     }}

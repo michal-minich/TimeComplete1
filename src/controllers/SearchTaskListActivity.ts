@@ -38,24 +38,15 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
     }
 
 
-    addSearch(): void {
-    }
-
-
     rollback(): void {
         if (this.originalTitle === "__NEXT_EMPTY__") {
             this.originalTitle = this.taskQueryText();
-            this.clear();
+            this.taskQueryText("");
 
         } else {
             this.taskQueryText(this.originalTitle);
             this.originalTitle = "__NEXT_EMPTY__";
         }
-    }
-
-
-    clear(): void {
-        this.taskQueryText("");
     }
 
 

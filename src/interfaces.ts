@@ -162,9 +162,9 @@ export interface IEditLabelActivity {
 }
 
 export interface ILabelsPopupActivity {
-    show(target: HTMLButtonElement): void;
+    show(over: HTMLElement, action: (label: ILabel, el: HTMLElement) => void): void;
     hide(): void;
-    activate(label: ILabel): any;
+    activate(label: ILabel, el: HTMLSpanElement): any;
     init(labelsPopupDiv: HTMLDivElement): void;
     queryText: DataSignal<string>;
     keyUp(e: KeyboardEvent): void;
@@ -220,11 +220,9 @@ export interface ISearchTaskListActivity extends IActivityController {
     addOrRemoveLabelFromQuery(l: ILabel): void;
     keyUp(e: KeyboardEvent): void;
     resultTasks(): ITask[];
-    addSearch(): void;
     taskQueryText: DataSignal<string>;
     taskQuery: DataSignal<TaskQuery>;
     rollback(): void;
-    clear(): void;
     //searchedTasks(taskQuery: string): SArray<ITask>;
 }
 

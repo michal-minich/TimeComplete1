@@ -48,14 +48,15 @@ textarea {
     background-color: rgb(101, 101, 101);
     border: none;
     color: white;
-    width: 170px;
+    width: calc(100% - 40px);
 }
 
 .task-list-activity .header button {
     background-color: rgb(190, 190, 190);
     border: none;
     color: black;
-    margin-left: 3px;
+    float: right;
+    margin-right: 3px;
 }
 
 .task-list-activity .header input:nth-child(3) {
@@ -198,6 +199,7 @@ textarea {
     border: 1px solid rgb(139, 139, 139);
     padding: 5px;
     position: absolute;
+    z-index: 20;
 }
 
 .edit-label input {
@@ -227,6 +229,17 @@ textarea {
 .labels-popup-view {
     background-color: white;
     border: 1px solid black;
+    left: 15px;
+    max-width: 300px;
+    min-width: 200px;
+    padding: 5px;
+    position: absolute;
+    top: 90px;
+    z-index: 10;
+}
+
+.labels-popup-view input[type=search] {
+    width: 100%;
 }
 
 .tab-bar {
