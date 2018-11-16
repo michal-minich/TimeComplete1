@@ -1,13 +1,14 @@
 ﻿import * as I from "../interfaces";
 import App from "../controllers/App";
 import ILabel = I.ILabel;
+import IQueryElement = I.IQueryElement;
 
 
 export class TaskQuery {
-    queryItems: IQueryItem[] = [];
+    queryItems: IQueryElement[] = [];
     firstLabelColor: string | undefined;
 
-    constructor(queryItems: IQueryItem[]) {
+    constructor(queryItems: IQueryElement[]) {
         this.queryItems = queryItems;
         const label = this.firstLabel();
         if (label) {
@@ -60,18 +61,14 @@ export class TaskQuery {
 }
 
 
-export interface IQueryItem {
-}
-
-
-export class QueryText implements IQueryItem {
+export class QueryText implements IQueryElement {
     value: string;
 
     constructor(value: string) { this.value = value; }
 }
 
 
-export class QueryLabel implements IQueryItem {
+export class QueryLabel implements IQueryElement {
     value: string;
 
     constructor(value: string) { this.value = value; }
@@ -86,7 +83,7 @@ export class TaskQueryParser {
         this.qt = queryTextText;
         this.pos = 0;
         let tok: string | undefined;
-        const queryItems: IQueryItem[] = [];
+        const queryItems: IQueryElement[] = [];
         while ((tok = this.nextToken()) !== undefined) {
             if (tok[0] === "#") {
                 queryItems.push(new QueryLabel(tok.substring(1)));

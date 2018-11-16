@@ -48,6 +48,12 @@ export interface IList<T> {
     readonly items: RArray<T>;
 }
 
+export interface IWritableList<T> {
+    readonly items: RArray<T>;
+    add(label: T): void;
+    remove(label: T): void;
+}
+
 export interface IDomainObjectList<T extends IDomainObject> extends IList<T> {
     byId(id: number): T;
 }
@@ -226,6 +232,33 @@ export interface ISearchTaskListActivity extends IActivityController {
     //searchedTasks(taskQuery: string): SArray<ITask>;
 }
 
+export interface ITabBarActivity extends IWritableList<ITabPage> {
+}
+
+export interface IQueryElement {
+}
+
+export interface IQuery {
+    text: string;
+    matches(o: IDomainObject): boolean;
+    labels: RArray<ILabel>;
+    includeLabel(l: ILabel): void;
+    excludeLabel(l: ILabel): void;
+}
+
+export interface ITabPage {
+    title: string;
+    readonly filter: IQuery;
+    close(): void;
+}
+
+export interface IToolbarActivity {
+    showLabelsPopup(): void;
+    showTasksPopup(): void;
+    showSearchPopup(): void;
+    addTaskListView(): void;
+    displayColumnsCount: number;
+}
 
 // IO =======================================================================
 
