@@ -1,5 +1,6 @@
 ﻿import * as I from "../interfaces";
 import App from "../controllers/App";
+import ILabel = I.ILabel;
 
 
 export class TaskQuery {
@@ -43,6 +44,18 @@ export class TaskQuery {
             if (qi instanceof QueryLabel)
                 return qi;
         return undefined;
+    }
+
+
+    get existingLabels(): ILabel[] {
+        const ls: ILabel[] = [];
+        for (let qi of this.queryItems)
+            if (qi instanceof QueryLabel) {
+                const l = App.instance.data.labels.items().find(l2 => l2.name === (qi as QueryLabel).value);
+                if (l)
+                    ls.push(l);
+            };
+        return ls;
     }
 }
 

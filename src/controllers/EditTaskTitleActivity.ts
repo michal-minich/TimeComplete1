@@ -21,7 +21,7 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
         this.newName(t.title);
         const r = titleTd.getBoundingClientRect();
         const p = titleTd.parentElement!.parentElement!
-            .parentElement!.parentElement!.parentElement!;
+            .parentElement!.parentElement!.parentElement!.parentElement!;
         const pr = p.getBoundingClientRect();
         const txtStyle = taskEditTextBox.style;
         txtStyle.left = (p.offsetLeft + r.left - pr.left + 1) + "px";
@@ -50,8 +50,8 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
 
 
     cleanup(): void {
-        //taskEditTextBox.style.display = "none";
-        //this.newName("");
+        taskEditTextBox.style.visibility = "hidden";
+        this.newName("");
     }
 
 

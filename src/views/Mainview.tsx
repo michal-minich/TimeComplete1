@@ -6,7 +6,7 @@ import data from "surplus-mixin-data";
 import { IApp, ILabelStyle } from "../interfaces";
 import { taskListActivityView } from "./TaskListActivityView";
 import { labelsPopupView } from "./LabelsPopupView";
-import { onMouseDown } from "../common";
+import { onMouseDown, indexOfMin } from "../common";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
@@ -53,17 +53,20 @@ export const mainView = (a: IApp) =>
                 <tr>
                     {() => {
                         const tds: HTMLTableCellElement[] = [];
+                        const tdsHeight: number[] = [];
                         const numColumns = numColumnsSignal();
                         for (let i = 0; i < numColumns; i++) {
                             tds.push(document.createElement("td"));
+                            tdsHeight.push(0);
                         }
-                        let col = 0;
                         const items = a.activity.taskLists.items();
                         for (let tla2 of items) {
-                            if (col >= numColumns)
-                                col = 0;
-                            tds[col].appendChild(taskListActivityView(a, tla2));
-                            ++col;
+                            const col = indexOfMin(tdsHeight);
+                            const v = taskListActivityView(a, tla2);
+                            tds[col].appendChild(v);
+                            tdsHeight[col] += tla2.estimatedHeight;
+                            console.log(tla2.estimatedHeight);
+                            console.log(tdsHeight);
                         }
                         return tds;
                     }}

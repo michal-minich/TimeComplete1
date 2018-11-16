@@ -173,6 +173,7 @@ export interface ILabelsPopupActivity {
 export interface ITaskListActivity {
     readonly addTaskActivity: IAddTaskActivity;
     readonly searchTaskListActivity: ISearchTaskListActivity;
+    readonly estimatedHeight: number;
 }
 
 export interface IActivityController {

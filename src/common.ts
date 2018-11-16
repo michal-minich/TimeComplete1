@@ -51,3 +51,17 @@ export function onMouseDown(fn: (e: MouseEvent) => void) {
         el.addEventListener("mousedown", fn);
     };
 }
+
+export function indexOfMin(array: ArrayLike<any>): number {
+    if (array.length === 0)
+        return -1;
+    let min = array[0];
+    let ix = 0;
+    for (let i = 1; i < array.length; i++) {
+        if (array[i] < min) {
+            ix = i;
+            min = array[i];
+        }
+    }
+    return ix;
+}

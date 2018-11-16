@@ -153,12 +153,10 @@ textarea {
 
 .label-tag {
     border-radius: 5px;
-    display: table-cell;
-    float: left;
     height: 1em;
     margin: 1px;
-    margin-left: 3px;
-    padding: 0 3px 4px 4px;
+    margin-left: 2px;
+    padding: 0 4px 0 4px;
     width: 1px;
 }
 

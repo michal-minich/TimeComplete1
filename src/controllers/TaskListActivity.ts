@@ -13,7 +13,11 @@ export default class TaskListActivity implements ITaskListActivity {
     constructor(app: IApp) {
         this.app = app;
 
-        this.addTaskActivity = new AddTaskActivity(app);
         this.searchTaskListActivity = new SearchTaskListActivity(app);
+        this.addTaskActivity = new AddTaskActivity(app, this.searchTaskListActivity);
+    }
+
+    get estimatedHeight(): number {
+        return this.searchTaskListActivity.resultTasks().length * 15 + 30;
     }
 }
