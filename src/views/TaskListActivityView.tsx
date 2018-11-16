@@ -96,11 +96,11 @@ const taskListViewBody = (a: IApp, stla: ISearchTaskListActivity) =>
                        {t.associatedLabels.items
                            .orderBy(al => al.id)
                            .map(al =>
-                           <span
-                               className="label-tag"
-                               title={al.name}
-                               style={{ backgroundColor: al.style.backColor.value }}>
-                           </span>)}
+                               <span
+                                   className="label-tag"
+                                   title={al.name}
+                                   style={{ backgroundColor: al.style.backColor.value }}>
+                               </span>)}
                    </td>
                </tr>;
     });

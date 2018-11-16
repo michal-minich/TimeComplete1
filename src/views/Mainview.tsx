@@ -1,3 +1,4 @@
+import S from "s-js";
 import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 Surplus;
@@ -9,7 +10,7 @@ import { onMouseDown } from "../common";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
-
+let numColumnsSignal = S.data(3);
 
 export function labelInlineStyle(ls: ILabelStyle) {
     return { backgroundColor: ls.backColor.value, color: ls.textColor.value };
@@ -17,7 +18,7 @@ export function labelInlineStyle(ls: ILabelStyle) {
 
 
 export const mainView = (a: IApp) =>
-    <div className="main-view">
+    <div>
         <div className="tab-bar">
             <img className="logo" src="favicon.png" alt="Time Complete"/>
             <span className="tab active-tab">Tasks 1</span>
@@ -37,6 +38,7 @@ export const mainView = (a: IApp) =>
             <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
             <input className="main-search-input" type="search" placeholder="Search"/>
             <input className="view-filter" type="search" placeholder="View Filter"/>
+            <input className="view-filter" type="number" fn={data(numColumnsSignal)}/>
         </div>
         {labelsPopupView(a, a.activity.labelsPopup, a.data.labels.items)}
 
@@ -47,11 +49,25 @@ export const mainView = (a: IApp) =>
                 onKeyUp={(e: KeyboardEvent) => a.activity.editTaskTitle.keyUp(e)}
                 onBlur={() => a.activity.editTaskTitle.commit()}
                 className="task-text-edit-box selected-task"></textarea>
-            <div className="task-list-activities">
-                {a.activity.taskLists.items.map(tla2 => taskListActivityView(a, tla2))()}
-                <div className="task-list-activities-footer">
-                    123 task and labels 12 are not listed
-                </div>
-            </div>
+            <table className="task-list-activities">
+                <tr>
+                    {() => {
+                        const tds: HTMLTableCellElement[] = [];
+                        const numColumns = numColumnsSignal();
+                        for (let i = 0; i < numColumns; i++) {
+                            tds.push(document.createElement("td"));
+                        }
+                        let col = 0;
+                        const items = a.activity.taskLists.items();
+                        for (let tla2 of items) {
+                            if (col >= numColumns)
+                                col = 0;
+                            tds[col].appendChild(taskListActivityView(a, tla2));
+                            ++col;
+                        }
+                        return tds;
+                    }}
+                </tr>
+            </table>
         </div>
     </div>;

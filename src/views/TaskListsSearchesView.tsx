@@ -11,8 +11,8 @@ export const taskListsSearchesView = (a: IApp) =>
         <div>{
             a.activity.taskLists.items.map(tla =>
                 <span className="label" style={queryBackground(tla)}>{() => {
-                        const qt = tla.searchTaskListActivity.taskQueryText();
-                        return qt === "" ? "(empty)" : qt;
-                    }}</span>)
+                    const qt = tla.searchTaskListActivity.taskQueryText();
+                    return qt === "" ? "(empty)" : qt;
+                }}</span>)
         }</div>
     </div>;

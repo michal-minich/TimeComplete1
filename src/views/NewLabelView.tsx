@@ -10,4 +10,4 @@ export const newLabelView = (ada: IAddLabelActivity) =>
            placeholder="new label"
            className="new-label-input label"
            fn={data(ada.newName)}
-           onKeyUp={(e: KeyboardEvent) => ada.keyUp(e)}/>
+           onKeyUp={(e: KeyboardEvent) => ada.keyUp(e)}/>;

@@ -15,34 +15,13 @@ textarea {
 }
 
 .task-list-activities {
-    display: grid;
     grid-template-columns: auto auto auto auto auto;
-    max-height: 100vh;
     margin-top: -20px;
+    max-height: 100vh;
 }
 
-@media screen and (max-width: 2400px) {
-    .task-list-activities {
-        grid-template-columns: auto auto auto;
-    }
-}
-
-@media screen and (max-width: 1800px) {
-    .task-list-activities {
-        grid-template-columns: auto auto auto;
-    }
-}
-
-@media screen and (max-width: 1200px) {
-    .task-list-activities {
-        grid-template-columns: auto auto;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .task-list-activities {
-        grid-template-columns: auto;
-    }
+.task-list-activities td {
+    vertical-align: top;
 }
 
 .task-list-activity {
@@ -51,7 +30,6 @@ textarea {
     margin: 5px;
     max-width: 450px;
     min-width: 200px;
-    align-self: start;
 }
 
 .selected-task-list-activity {
@@ -126,10 +104,10 @@ textarea {
 
 .task-text-edit-box {
     border: none;
-    visibility: hidden;
     margin-top: -50px;
     position: relative;
     resize: none;
+    visibility: hidden;
 }
 
 .label-list {
@@ -304,28 +282,25 @@ textarea {
     padding: 0;
 }
 
-.main-view {
-}
-
 .view-area {
     background-color: rgb(230, 230, 230);
-    position: absolute;
-    top: 75px;
-    left: 0;
-    right: 0;
     bottom: 0;
-    overflow-y: scroll;  
+    left: 0;
+    overflow-y: scroll;
+    position: absolute;
+    right: 0;
+    top: 75px;
 }
 
 .toolbar {
     align-items: center;
     background-color: rgb(230, 230, 230);
     border-bottom: 1px solid rgb(183, 183, 183);
+    overflow-x: hidden;
     padding-top: 4px;
     position: absolute;
     top: 37px;
     width: 100vw;
-    overflow-x: hidden; 
 }
 
 .toolbar button,

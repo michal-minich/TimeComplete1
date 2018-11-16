@@ -18,7 +18,7 @@ export default class EditLabelActivity implements IEditLabelActivity {
     private readonly app: IApp;
     readonly editLabelName: DataSignal<string>;
     readonly editColor: DataSignal<string>;
-    private readonly nextModeNameSignal :DataSignal<string>;
+    private readonly nextModeNameSignal: DataSignal<string>;
     private readonly labelSignal: DataSignal<ILabel | undefined>;
 
 
@@ -36,14 +36,15 @@ export default class EditLabelActivity implements IEditLabelActivity {
 
 
     commit(): void {
-        const l = this.labelSignal()!;    
+        const l = this.labelSignal()!;
 
         for (let tla of this.app.activity.taskLists.items()) {
             const qt = S.sample(tla.searchTaskListActivity.taskQueryText);
-            tla.searchTaskListActivity.taskQueryText(qt.replace("#" + l.name, "#" + this.editLabelName()));
+            tla.searchTaskListActivity.taskQueryText(qt.replace("#" + l.name,
+                "#" + this.editLabelName()));
         }
 
-        l.name = this.editLabelName();    
+        l.name = this.editLabelName();
         l.style.backColor = new Color(this.editColor());
         this.cleanup();
     }

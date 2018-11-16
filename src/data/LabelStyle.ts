@@ -7,7 +7,11 @@ export default class LabelStyle implements ILabelStyle {
     private readonly textColorSignal: DataSignal<IColor>;
     private readonly textColorInUseSignal: DataSignal<LabelTextColor>;
 
-    constructor(backColor: IColor, textColor: IColor, textColorInUse: LabelTextColor = LabelTextColor.Custom) {
+    constructor(
+        backColor: IColor,
+        textColor: IColor,
+        textColorInUse: LabelTextColor = LabelTextColor.Custom) {
+
         this.backColorSignal = S.data(backColor);
         this.textColorSignal = S.data(textColor);
         this.textColorInUseSignal = S.data(textColorInUse);

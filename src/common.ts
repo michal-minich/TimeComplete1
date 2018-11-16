@@ -39,15 +39,15 @@ export function removeTextSelections() {
 }
 
 
-export function onClick(fn : (e: MouseEvent) => void) {
+export function onClick(fn: (e: MouseEvent) => void) {
     return (el: HTMLElement) => {
         el.addEventListener("click", fn);
-    }
+    };
 }
 
 
-export function onMouseDown(fn : (e: MouseEvent) => void) {
+export function onMouseDown(fn: (e: MouseEvent) => void) {
     return (el: HTMLElement) => {
         el.addEventListener("mousedown", fn);
-    }
+    };
 }
