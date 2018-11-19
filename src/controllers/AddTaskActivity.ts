@@ -1,7 +1,7 @@
 ﻿import S from "s-js";
 import Task from "../data/Task";
 import { IApp, IAddTaskActivity, ISearchTaskListActivity, ILabel } from "../interfaces";
-import { TaskQueryParser } from "../operations/query";
+import { QueryMatcher } from "./QueryMatcher";
 
 
 export class AddTaskActivity implements IAddTaskActivity {
@@ -22,8 +22,10 @@ export class AddTaskActivity implements IAddTaskActivity {
             return;
         let title = this.newTitle();
         this.newTitle("");
-        const sq = new TaskQueryParser().parse(this.searchTaskListActivity.taskQueryText());
-        const tq = new TaskQueryParser().parse(title);
+        const sq = new QueryMatcher();
+        sq.text = this.searchTaskListActivity.query.text;
+        const tq = new QueryMatcher();
+        tq.text = title;
         for (const l of tq.existingLabels) {
             title = title.replace("#" + l.name, "");
         }

@@ -13,7 +13,6 @@ export default class ChangeTaskCompletionActivity implements IChangeTaskCompleti
 
 
     perform(task: ITask, isDone: HTMLInputElement): any {
-        //this.app.selectTaskActivity.selectedTask(task);
         if (isDone.checked) {
             task.completedOn = new DateTime("2019");
         } else {

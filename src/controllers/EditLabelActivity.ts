@@ -39,9 +39,9 @@ export default class EditLabelActivity implements IEditLabelActivity {
         const l = this.labelSignal()!;
 
         for (let tla of this.app.activity.taskLists.items()) {
-            const qt = S.sample(tla.searchTaskListActivity.taskQueryText);
-            tla.searchTaskListActivity.taskQueryText(qt.replace("#" + l.name,
-                "#" + this.editLabelName()));
+            const qt = tla.searchTaskListActivity.query.textSample;
+            tla.searchTaskListActivity.query.text = qt.replace("#" + l.name,
+                "#" + this.editLabelName());
         }
 
         l.name = this.editLabelName();
@@ -70,8 +70,8 @@ export default class EditLabelActivity implements IEditLabelActivity {
                 t.associatedLabels.remove(l);
             }
             for (let tla of this.app.activity.taskLists.items()) {
-                const qt = S.sample(tla.searchTaskListActivity.taskQueryText);
-                tla.searchTaskListActivity.taskQueryText(qt.replace("#" + l.name, ""));
+                const qt = tla.searchTaskListActivity.query.textSample;
+                tla.searchTaskListActivity.query.text = qt.replace("#" + l.name, "");
             }
             this.app.data.labels.removeLabel(l);
             this.cleanup();

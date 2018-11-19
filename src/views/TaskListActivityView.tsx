@@ -10,7 +10,7 @@ export let queryTextBox: HTMLInputElement;
 
 
 function queryColor(tla: ITaskListActivity): string {
-    const c = tla.searchTaskListActivity.taskQuery().firstLabelColor;
+    const c = tla.searchTaskListActivity.query.firstLabelColor;
     return c ? c : "rgb(101, 101, 101)";
 }
 
@@ -41,7 +41,7 @@ export const taskListActivityView = (a: IApp, tla: ITaskListActivity) =>
                 ref={queryTextBox}
                 onFocus={() => tla.searchTaskListActivity.begin()}
                 onKeyUp={(e: KeyboardEvent) => tla.searchTaskListActivity.keyUp(e)}
-                fn={data(tla.searchTaskListActivity.taskQueryText)}
+                fn={data(tla.searchTaskListActivity.query.textSignal)}
                 style={queryBackground(tla)}/>
             <button
                 onClick={() => a.activity.taskLists.remove(tla)}>

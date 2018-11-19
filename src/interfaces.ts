@@ -1,6 +1,5 @@
 import { DataSignal } from "s-js";
 import { SArray, SDataArray } from "s-array";
-import { TaskQuery } from "./operations/query";
 
 
 // General ==================================================================
@@ -109,6 +108,7 @@ export interface ILabelList extends IDomainObjectList<ILabel> {
 export interface IApp {
     readonly data: IAppData;
     readonly activity: IAppActivities;
+    readonly settings: IAppRuntimeSettings;
 
     readonly localStore: IDataStore;
     readonly clock: IClock;
@@ -137,6 +137,10 @@ export interface IAppActivities {
     readonly labelsPopup: ILabelsPopupActivity;
 
     load(): void;
+}
+
+export interface IAppRuntimeSettings {
+    readonly labelPrefix: string;
 }
 
 export interface IAppActivitiesSettings {
@@ -226,8 +230,7 @@ export interface ISearchTaskListActivity extends IActivityController {
     addOrRemoveLabelFromQuery(l: ILabel): void;
     keyUp(e: KeyboardEvent): void;
     resultTasks(): ITask[];
-    taskQueryText: DataSignal<string>;
-    taskQuery: DataSignal<TaskQuery>;
+    query: IQueryMatcher;
     rollback(): void;
     //searchedTasks(taskQuery: string): SArray<ITask>;
 }
@@ -236,19 +239,28 @@ export interface ITabBarActivity extends IWritableList<ITabPage> {
 }
 
 export interface IQueryElement {
+    makeString(): string;
 }
 
-export interface IQuery {
+export interface IQueryMatcher {
     text: string;
-    matches(o: IDomainObject): boolean;
-    labels: RArray<ILabel>;
-    includeLabel(l: ILabel): void;
-    excludeLabel(l: ILabel): void;
+    readonly textSignal: DataSignal<string>;
+    readonly textSample: string;
+    generalSearchMatches(queryText: string): boolean;
+    matches(obj: IDomainObject): boolean;
+    taskMatches(task: ITask): boolean;
+    labelMatches(label: ILabel): boolean;
+    readonly labels: RArray<ILabel>;
+    includeLabel(label: ILabel): void;
+    excludeLabel(label: ILabel): void;
+    readonly firstLabelColor: string | undefined;
 }
 
 export interface ITabPage {
     title: string;
-    readonly filter: IQuery;
+    readonly search: IQueryMatcher;
+    readonly filter: IQueryMatcher;
+    displayColumnsCount: number;
     close(): void;
 }
 
@@ -257,8 +269,8 @@ export interface IToolbarActivity {
     showTasksPopup(): void;
     showSearchPopup(): void;
     addTaskListView(): void;
-    displayColumnsCount: number;
 }
+
 
 // IO =======================================================================
 

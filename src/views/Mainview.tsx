@@ -43,7 +43,6 @@ export const mainView = (a: IApp) =>
                 (l, el) => a.activity.editLabel.begin(l, el)))}>
                 Labels
             </button>
-            <button>Tasks</button>
             <button onClick={() => a.activity.taskLists.addNew()}>Add</button>
             <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
             <input className="main-search-input" type="search" placeholder="Search"/>
