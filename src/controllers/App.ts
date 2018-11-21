@@ -1,9 +1,6 @@
 ﻿import TaskListActivity from "./TaskListActivity";
-import AssociateLabelWithTaskActivity from "./AssociateLabelWithTaskActivity";
 import SelectTaskActivity from "./SelectTaskActivity";
 import EditTaskTitleActivity from "./EditTaskTitleActivity";
-import LabelsPopupActivity from "./LabelsPopupActivity";
-import ChangeTaskCompletionActivity from "./ChangeTaskCompletionActivity";
 import TaskListGroup from "./TaskListGroup";
 import SessionStore from "../io/SessionStore";
 import Clock from "../io/Clock";
@@ -16,17 +13,14 @@ import {
     IAppActivities,
     IDataStore,
     ITaskListActivity,
-    IAssociateLabelWithTaskActivity,
     ISelectTaskActivity,
     IEditTaskTitleActivity,
-    IChangeTaskCompletionActivity,
     IClock,
     IIdProvider,
     ILabelList,
     ITaskList,
     IAppActivitiesSettings,
     ITaskListGroup,
-    ILabelsPopupActivity,
     IAppRuntimeSettings,
     ValueSignal,
     INotesList
@@ -113,20 +107,14 @@ export class AppActivities implements IAppActivities {
     readonly taskLists: ITaskListGroup;
 
     selectedTaskList!: ValueSignal<ITaskListActivity>;
-    readonly associateLabelWithTask: IAssociateLabelWithTaskActivity;
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
-    readonly changeTaskCompletion: IChangeTaskCompletionActivity;
-    readonly labelsPopup: ILabelsPopupActivity;
 
     constructor(app: IApp) {
         this.app = app;
         this.taskLists = new TaskListGroup(app, []);
-        this.associateLabelWithTask = new AssociateLabelWithTaskActivity(app);
         this.selectTask = new SelectTaskActivity(app);
         this.editTaskTitle = new EditTaskTitleActivity(app);
-        this.changeTaskCompletion = new ChangeTaskCompletionActivity(app);
-        this.labelsPopup = new LabelsPopupActivity(app);
     }
 
     init(): void {

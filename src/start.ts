@@ -1,6 +1,6 @@
 import App from "./controllers/App";
 import { IApp } from "./interfaces";
-import { mainView } from "./views/MainView";
+import mainView from "./views/MainView";
 import { R } from "./common";
 
 

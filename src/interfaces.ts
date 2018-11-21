@@ -127,11 +127,8 @@ export interface IAppActivities {
     readonly taskLists: ITaskListGroup;
 
     readonly selectedTaskList: ValueSignal<ITaskListActivity>;
-    readonly associateLabelWithTask: IAssociateLabelWithTaskActivity;
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
-    readonly changeTaskCompletion: IChangeTaskCompletionActivity;
-    readonly labelsPopup: ILabelsPopupActivity;
 
     init(): void;
     load(): void;
@@ -154,15 +151,6 @@ export interface ITaskListGroup {
     readonly items: ArraySignal<ITaskListActivity>;
     addNew(): void;
     remove(tla: ITaskListActivity): void;
-}
-
-export interface ILabelsPopupActivity {
-    show(over: HTMLElement, action: (label: ILabel, el: HTMLElement) => void): void;
-    hide(): void;
-    activate(label: ILabel, el: HTMLSpanElement): any;
-    init(labelsPopupDiv: HTMLDivElement): void;
-    queryText: ValueSignal<string>;
-    keyUp(e: KeyboardEvent): void;
 }
 
 export interface ITaskListActivity {
@@ -193,14 +181,6 @@ export interface IEditTaskTitleActivity extends IActivityController {
     keyUp(e: KeyboardEvent): void;
     confirm(): void;
     cancel(): void;
-}
-
-export interface IChangeTaskCompletionActivity extends IActivityController {
-    perform(task: ITask, isDone: HTMLInputElement): any;
-}
-
-export interface IAssociateLabelWithTaskActivity extends IActivityController {
-    changeAssociation(label: ILabel): void;
 }
 
 export interface ISearchTaskListActivity extends IActivityController {

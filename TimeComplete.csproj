@@ -15,7 +15,7 @@
     <RootNamespace>TimeComplete</RootNamespace>
     <AssemblyName>TimeComplete</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -83,8 +83,6 @@
     <TypeScriptCompile Include="src\common.ts" />
     <TypeScriptCompile Include="src\controllers\TaskListGroup.ts" />
     <TypeScriptCompile Include="src\controllers\AddTaskActivity.ts" />
-    <TypeScriptCompile Include="src\controllers\AssociateLabelWithTaskActivity.ts" />
-    <TypeScriptCompile Include="src\controllers\ChangeTaskCompletionActivity.ts" />
     <TypeScriptCompile Include="src\controllers\EditTaskTitleActivity.ts" />
     <TypeScriptCompile Include="src\controllers\SearchTaskListActivity.ts" />
     <TypeScriptCompile Include="src\controllers\SelectTaskActivity.ts" />
@@ -95,7 +93,6 @@
     <TypeScriptCompile Include="src\data\Note.ts" />
     <TypeScriptCompile Include="src\data\Label.ts" />
     <TypeScriptCompile Include="src\data\LabelStyle.ts" />
-    <TypeScriptCompile Include="src\controllers\LabelsPopupActivity.ts" />
     <TypeScriptCompile Include="src\operations\IncrementCounter.ts" />
     <TypeScriptCompile Include="src\io\SessionStore.ts" />
     <TypeScriptCompile Include="src\data\Task.ts" />
@@ -130,7 +127,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52504</DevelopmentServerPort>
+          <DevelopmentServerPort>55111</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/TimeComplete</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

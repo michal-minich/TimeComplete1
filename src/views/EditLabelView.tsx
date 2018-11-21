@@ -9,11 +9,7 @@ import { ILabel, IApp, ValueSignal } from "../interfaces";
 import { R } from "../common";
 
 
-export let beginEditLabel: (label: ILabel, el: HTMLSpanElement) => void;
-
-
-export const editLabelView = (a: IApp) => {
-
+export default function editLabelView(a: IApp) {
 
     const editLabelName = R.data("");
     const editColor = R.data("");
@@ -55,9 +51,6 @@ export const editLabelView = (a: IApp) => {
         editColor(label.style.backColor.value);
         labelSignal(label);
     }
-
-
-    beginEditLabel = begin;
 
 
     function confirm(): void {
@@ -119,5 +112,5 @@ export const editLabelView = (a: IApp) => {
     }
 
 
-    return view;
+    return { view, begin };
 };

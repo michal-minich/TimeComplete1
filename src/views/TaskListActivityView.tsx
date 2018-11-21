@@ -2,8 +2,10 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ITaskListActivity, ISearchTaskListActivity } from "../interfaces";
+import { IApp, ITaskListActivity, ISearchTaskListActivity, ITask, ILabel } from "../interfaces";
 import { onMouseDown } from "../common";
+import { LabelsPopupView } from "./LabelsPopupView";
+import DateTime from "../data/DateTime";
 
 
 export let queryTextBox: HTMLInputElement;
@@ -29,7 +31,7 @@ function queryBorder(a: IApp, tla: ITaskListActivity) {
 }
 
 
-export const taskListActivityView = (a: IApp, tla: ITaskListActivity) =>
+export const taskListActivityView = (a: IApp, tla: ITaskListActivity, lpv: LabelsPopupView) =>
     <div onMouseDown={() => a.activity.selectedTaskList(tla)}
          style={queryBorder(a, tla)}
          className={"task-list-activity " +
@@ -57,46 +59,72 @@ export const taskListActivityView = (a: IApp, tla: ITaskListActivity) =>
             <table className="task-list lined-list">
                 <thead></thead>
                 <tbody>
-                {taskListViewBody(a, tla.searchTaskListActivity)}
+                {taskListViewBody(a, tla.searchTaskListActivity, lpv)}
                 </tbody>
             </table>
         </div>
     </div>;
 
 
-const taskListViewBody = (a: IApp, stla: ISearchTaskListActivity) =>
-    stla.query.resultTasks().map(t => {
+const taskListViewBody = (a: IApp, stla: ISearchTaskListActivity, lpv: LabelsPopupView) => {
+
+
+    function perform(task: ITask, isDone: HTMLInputElement): any {
+        if (isDone.checked) {
+            task.completedOn = new DateTime("2019");
+        } else {
+            task.completedOn = undefined;
+        }
+    }
+
+
+    function changeAssociation(label: ILabel): void {
+        const t = a.activity.selectTask.selectedTask!;
+        if (t.associatedLabels().some(al => al.name === label.name)) {
+            t.associatedLabels.remove(label);
+        } else {
+            t.associatedLabels.push(label);
+        }
+    }
+
+
+    const view = stla.query.resultTasks().map(t => {
         let doneChk: HTMLInputElement | undefined = undefined;
         let titleTd: HTMLTableDataCellElement | undefined = undefined;
-        return <tr onMouseDown={() => a.activity.selectTask.selectedTask = t}
-                   className={a.activity.selectTask.selectedTask === t ? "selected-task" : ""}>
-                   <td>
-                       <input
-                           ref={doneChk}
-                           type="checkbox"
-                           checked={t.completedOn !== undefined}
-                           onChange={() => a.activity.changeTaskCompletion.perform(t, doneChk!)}/>
-                   </td>
-                   <td ref={titleTd}
-                       tabIndex={1}
-                       onFocus={() => a.activity.editTaskTitle.begin(t, titleTd!)}
-                       className={t.completedOn !== undefined
-                           ? "completed-task"
-                           : ""}>
-                       {t.title}
-                   </td>
-                   <td className="label-tag-container"
-                       fn={(onMouseDown((e) => a.activity.labelsPopup.show(e.target as HTMLElement,
-                           (l, el) => a.activity.associateLabelWithTask.changeAssociation(l)
-                       )))}>
-                       {t.associatedLabels
-                           .orderBy(al => al.id)
-                           .map(al =>
-                               <span
-                                   className="label-tag"
-                                   title={al.name}
-                                   style={{ backgroundColor: al.style.backColor.value }}>
-                               </span>)}
-                   </td>
-               </tr>;
+        const view2 =
+            <tr onMouseDown={() => a.activity.selectTask.selectedTask = t}
+                className={a.activity.selectTask.selectedTask === t ? "selected-task" : ""}>
+                <td>
+                    <input
+                        ref={doneChk}
+                        type="checkbox"
+                        checked={t.completedOn !== undefined}
+                        onChange={() => perform(t, doneChk!)}/>
+                </td>
+                <td ref={titleTd}
+                    tabIndex={1}
+                    onFocus={() => a.activity.editTaskTitle.begin(t, titleTd!)}
+                    className={t.completedOn !== undefined
+                        ? "completed-task"
+                        : ""}>
+                    {t.title}
+                </td>
+                <td className="label-tag-container"
+                    fn={(onMouseDown((e) => lpv.show(e.target as HTMLElement,
+                        (l, el) => changeAssociation(l)
+                    )))}>
+                    {t.associatedLabels.orderBy(al => al.id).map(al =>
+                        <span
+                            className="label-tag"
+                            title={al.name}
+                            style={{ backgroundColor: al.style.backColor.value }}>
+                        </span>)}
+                </td>
+            </tr>;
+
+        return view2;
+
     });
+
+    return view;
+};
