@@ -1,34 +1,29 @@
-﻿import S, { DataSignal } from "s-js";
-import App from "../controllers/App";
-import { ILabel, ILabelStyle } from "../interfaces";
+﻿import { ILabel, ILabelStyle, ValueSignal, IApp, WritableArraySignal } from "../interfaces";
+import { R } from "../common";
 
 
 export default class Label implements ILabel {
 
-    constructor(name: string, style: ILabelStyle) {
-        this.nameSignal = S.data(name);
+    constructor(
+        private readonly app: IApp,
+        name: string,
+        readonly style: ILabelStyle) {
+
+        this.nameSignal = R.data(name);
         this.style = style;
-        this.parentSignal = S.data(undefined);
+        //this.associatedLabels = R.array();
     }
 
 
-    private readonly nameSignal: DataSignal<string>;
-    private readonly parentSignal: DataSignal<ILabel | undefined>;
+    private readonly nameSignal: ValueSignal<string>;
 
 
-    id = App.instance.idCounter.getNext();
-    createdOn = App.instance.clock.now();
-
-
-    readonly style: ILabelStyle;
+    id = this.app.idCounter.getNext();
+    createdOn = this.app.clock.now();
+    //readonly associatedLabels: WritableArraySignal<ILabel>;
 
 
     get name(): string { return this.nameSignal(); }
 
     set name(value: string) { this.nameSignal(value); }
-
-
-    get parent(): ILabel | undefined { return this.parentSignal(); }
-
-    set parent(value: ILabel | undefined) { this.parentSignal(value); }
 }

@@ -1,23 +1,22 @@
-import S, { DataSignal } from "s-js";
-import { ILabelsPopupActivity, ILabel, IApp } from "../interfaces";
+import { ILabelsPopupActivity, ILabel, IApp, ValueSignal } from "../interfaces";
+import { R } from "../common";
 
 
 export default class LabelsPopupActivity implements ILabelsPopupActivity {
 
     private action!: (label: ILabel, el: HTMLSpanElement) => void;
     private labelsPopupDiv!: HTMLDivElement;
-    private readonly app: IApp;
+
 
     keyUp(e: KeyboardEvent): void {
     }
 
 
-    queryText: DataSignal<string>;
+    queryText: ValueSignal<string>;
 
 
-    constructor(app: IApp) {
-        this.app = app;
-        this.queryText = S.data("");
+    constructor(private readonly app: IApp) {
+        this.queryText = R.data("");
     }
 
 

@@ -1,25 +1,25 @@
-﻿import S, { DataSignal } from "s-js";
-import { IEditLabelActivity, ILabel, IApp } from "../interfaces";
+﻿import { IEditLabelActivity, ILabel, IApp, ValueSignal } from "../interfaces";
 import Color from "../data/Color";
 import { editLabelDiv } from "../views/EditLabelView";
+import { R } from "../common";
 
 
 export default class EditLabelActivity implements IEditLabelActivity {
 
     constructor(app: IApp) {
         this.app = app;
-        this.editLabelName = S.data("");
-        this.editColor = S.data("");
-        this.nextModeNameSignal = S.data("Edit");
-        this.labelSignal = S.data(undefined);
+        this.editLabelName = R.data("");
+        this.editColor = R.data("");
+        this.nextModeNameSignal = R.data("Edit");
+        this.labelSignal = R.data(undefined);
     }
 
 
     private readonly app: IApp;
-    readonly editLabelName: DataSignal<string>;
-    readonly editColor: DataSignal<string>;
-    private readonly nextModeNameSignal: DataSignal<string>;
-    private readonly labelSignal: DataSignal<ILabel | undefined>;
+    readonly editLabelName: ValueSignal<string>;
+    readonly editColor: ValueSignal<string>;
+    private readonly nextModeNameSignal: ValueSignal<string>;
+    private readonly labelSignal: ValueSignal<ILabel | undefined>;
 
 
     begin(label: ILabel, el: HTMLSpanElement): void {
@@ -39,9 +39,9 @@ export default class EditLabelActivity implements IEditLabelActivity {
         const l = this.labelSignal()!;
 
         for (let tla of this.app.activity.taskLists.items()) {
-            const qt = tla.searchTaskListActivity.query.textSample;
-            tla.searchTaskListActivity.query.text = qt.replace("#" + l.name,
-                "#" + this.editLabelName());
+            const qt = R.sample(tla.searchTaskListActivity.query.text);
+            tla.searchTaskListActivity.query.text(qt.replace("#" + l.name,
+                "#" + this.editLabelName()));
         }
 
         l.name = this.editLabelName();
@@ -64,16 +64,16 @@ export default class EditLabelActivity implements IEditLabelActivity {
 
 
     delete(): void {
-        S.freeze(() => {
+        R.freeze(() => {
             const l = this.labelSignal()!;
-            for (let t of this.app.data.tasks.items()) {
+            for (let t of this.app.data.tasks()) {
                 t.associatedLabels.remove(l);
             }
             for (let tla of this.app.activity.taskLists.items()) {
-                const qt = tla.searchTaskListActivity.query.textSample;
-                tla.searchTaskListActivity.query.text = qt.replace("#" + l.name, "");
+                const qt = R.sample(tla.searchTaskListActivity.query.text);
+                tla.searchTaskListActivity.query.text(qt.replace("#" + l.name, ""));
             }
-            this.app.data.labels.removeLabel(l);
+            this.app.data.labels.remove(l);
             this.cleanup();
         });
     }

@@ -1,6 +1,4 @@
-﻿import S, { DataSignal } from "s-js";
-import TaskListActivity from "./TaskListActivity";
-import AddLabelActivity from "./AddLabelActivity";
+﻿import TaskListActivity from "./TaskListActivity";
 import AssociateLabelWithTaskActivity from "./AssociateLabelWithTaskActivity";
 import SelectTaskActivity from "./SelectTaskActivity";
 import EditLabelActivity from "./EditLabelActivity";
@@ -8,20 +6,17 @@ import EditTaskTitleActivity from "./EditTaskTitleActivity";
 import LabelsPopupActivity from "./LabelsPopupActivity";
 import ChangeTaskCompletionActivity from "./ChangeTaskCompletionActivity";
 import TaskListGroup from "./TaskListGroup";
-import TaskList from "../data/TaskList";
-import LabelList from "../data/LabelList";
-import { SessionStore } from "../io/SessionStore";
+import SessionStore from "../io/SessionStore";
 import Clock from "../io/Clock";
 import Serializer from "../operations/Serializer";
 import IncrementCounter from "../operations/IncrementCounter";
-import { download, saveWithSerialize } from "../common";
+import { download, saveWithSerialize, R, findById } from "../common";
 import {
     IApp,
     IAppData,
     IAppActivities,
     IDataStore,
     ITaskListActivity,
-    IAddLabelActivity,
     IAssociateLabelWithTaskActivity,
     ISelectTaskActivity,
     IEditTaskTitleActivity,
@@ -34,13 +29,16 @@ import {
     ITaskListGroup,
     IEditLabelActivity,
     ILabelsPopupActivity,
-    IAppRuntimeSettings
+    IAppRuntimeSettings,
+    ILabel,
+    ITask,
+    ValueSignal,
+    INotesList
 } from "../interfaces";
 import AppRuntimeSettings from "./AppRuntimeSettings";
 
 
 export default class App implements IApp {
-    static instance: IApp;
 
     readonly data: IAppData;
     readonly activity: IAppActivities;
@@ -51,9 +49,8 @@ export default class App implements IApp {
     readonly idCounter: IIdProvider<number> = new IncrementCounter();
 
     constructor() {
-        App.instance = this;
 
-        this.data = new AppData();
+        this.data = new AppData(this);
         this.activity = new AppActivities(this);
         this.settings = new AppRuntimeSettings();
 
@@ -64,9 +61,9 @@ export default class App implements IApp {
 
     generateLocalStorageDownload(): void {
         const data = {
-            labels: App.instance.localStore.load("labels"),
-            tasks: App.instance.localStore.load("tasks"),
-            activities: App.instance.localStore.load("activities")
+            labels: this.localStore.load("labels"),
+            tasks: this.localStore.load("tasks"),
+            activities: this.localStore.load("activities")
         };
         download("export.json", JSON.stringify(data));
     }
@@ -80,24 +77,35 @@ export default class App implements IApp {
 export class AppData implements IAppData {
     tasks!: ITaskList;
     labels!: ILabelList;
+    notes!: INotesList;
+
+    constructor(private readonly app: IApp) {}
+
+    init(): void {
+        this.labels = R.array();
+        this.tasks = R.array();
+        this.notes = R.array();
+    }
 
     load(): void {
         const savedLabels = new SessionStore().loadOrUndefined("labels");
         this.labels = savedLabels === undefined
-            ? new LabelList([])
-            : new Serializer().fromPlainObject<LabelList>(savedLabels, "LabelList");
+            ? R.array()
+            : new Serializer(this.app).fromPlainObject<ILabelList>(savedLabels, "LabelList");
 
         const savedTasks = new SessionStore().loadOrUndefined("tasks");
         this.tasks = savedTasks === undefined
-            ? new TaskList([])
-            : new Serializer().fromPlainObject<TaskList>(savedTasks, "TaskList");
+            ? R.array()
+            : new Serializer(this.app).fromPlainObject<ITaskList>(savedTasks, "TaskList");
 
-        S(() => {
-            saveWithSerialize("labels", this.labels.items());
+        R.compute(() => {
+            const labels = this.labels();
+            saveWithSerialize(this.app, "labels", labels);
         });
 
-        S(() => {
-            saveWithSerialize("tasks", this.tasks.items());
+        R.compute(() => {
+            const tasks = this.tasks();
+            saveWithSerialize(this.app, "tasks", tasks);
         });
     }
 }
@@ -108,8 +116,7 @@ export class AppActivities implements IAppActivities {
     private readonly app: IApp;
     readonly taskLists: ITaskListGroup;
 
-    selectedTaskList!: DataSignal<ITaskListActivity>;
-    readonly addLabel: IAddLabelActivity;
+    selectedTaskList!: ValueSignal<ITaskListActivity>;
     readonly associateLabelWithTask: IAssociateLabelWithTaskActivity;
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
@@ -120,7 +127,6 @@ export class AppActivities implements IAppActivities {
     constructor(app: IApp) {
         this.app = app;
         this.taskLists = new TaskListGroup(app, []);
-        this.addLabel = new AddLabelActivity(app);
         this.associateLabelWithTask = new AssociateLabelWithTaskActivity(app);
         this.selectTask = new SelectTaskActivity(app);
         this.editTaskTitle = new EditTaskTitleActivity(app);
@@ -129,26 +135,30 @@ export class AppActivities implements IAppActivities {
         this.labelsPopup = new LabelsPopupActivity(app);
     }
 
+    init(): void {
+        this.taskLists.add(new TaskListActivity(this.app));
+        this.selectedTaskList = R.data(this.taskLists.items()[0]);
+    }
 
     load(): void {
         const s = this.app.localStore.loadOrUndefined<IAppActivitiesSettings>("activities");
         if (s) {
             for (let tl of s.taskLists) {
                 const tla = new TaskListActivity(this.app);
-                tla.searchTaskListActivity.query.text = tl.taskQueryText;
+                tla.searchTaskListActivity.query.text(tl.taskQueryText);
                 tla.addTaskActivity.newTitle(tl.newTaskTitle);
                 this.taskLists.add(tla);
             }
             if (s.selectedTask) {
-                const t = this.app.data.tasks.byId(s.selectedTask);
+                const t = findById(this.app.data.tasks, s.selectedTask);
                 this.selectTask.selectedTask = t;
             }
         }
         if (this.taskLists.items().length === 0)
             this.taskLists.add(new TaskListActivity(this.app));
-        this.selectedTaskList = S.data(this.taskLists.items()[0]);
+        this.selectedTaskList = R.data(this.taskLists.items()[0]);
 
-        S(() => this.save());
+        R.compute(() => this.save());
     }
 
 
@@ -156,7 +166,7 @@ export class AppActivities implements IAppActivities {
         const st = this.selectTask.selectedTask;
         const s: IAppActivitiesSettings = {
             taskLists: this.taskLists.items().map(tl => ({
-                taskQueryText: tl.searchTaskListActivity.query.text,
+                taskQueryText: tl.searchTaskListActivity.query.text(),
                 newTaskTitle: tl.addTaskActivity.newTitle()
             })),
             selectedTask: st ? st.id : undefined

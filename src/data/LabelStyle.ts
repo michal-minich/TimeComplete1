@@ -1,20 +1,21 @@
-﻿import S, { DataSignal } from "s-js";
-import { ILabelStyle, IColor, LabelTextColor } from "../interfaces";
+﻿import { ILabelStyle, IColor, LabelTextColor, ValueSignal } from "../interfaces";
+import { R } from "../common";
+import Color from "./Color";
 
 export default class LabelStyle implements ILabelStyle {
 
-    private readonly backColorSignal: DataSignal<IColor>;
-    private readonly textColorSignal: DataSignal<IColor>;
-    private readonly textColorInUseSignal: DataSignal<LabelTextColor>;
+    private readonly backColorSignal: ValueSignal<IColor>;
+    private readonly customTextColorSignal: ValueSignal<IColor>;
+    private readonly textColorInUseSignal: ValueSignal<LabelTextColor>;
 
     constructor(
         backColor: IColor,
-        textColor: IColor,
+        customTextColor: IColor,
         textColorInUse: LabelTextColor = LabelTextColor.Custom) {
 
-        this.backColorSignal = S.data(backColor);
-        this.textColorSignal = S.data(textColor);
-        this.textColorInUseSignal = S.data(textColorInUse);
+        this.backColorSignal = R.data(backColor);
+        this.customTextColorSignal = R.data(customTextColor);
+        this.textColorInUseSignal = R.data(textColorInUse);
     }
 
     get backColor(): IColor { return this.backColorSignal(); }
@@ -22,9 +23,23 @@ export default class LabelStyle implements ILabelStyle {
     set backColor(value: IColor) { this.backColorSignal(value); }
 
 
-    get textColor(): IColor { return this.textColorSignal(); }
+    get textColor(): IColor {
+        switch (this.textColorInUse) {
+        case LabelTextColor.BlackOrWhite:
+            return new Color("white");
+        case LabelTextColor.Inverted:
+            return new Color("white");
+        case LabelTextColor.Custom:
+            return this.customTextColor;
+        default:
+            throw undefined;
+        }
+    }
 
-    set textColor(value: IColor) { this.textColorSignal(value); }
+
+    get customTextColor(): IColor { return this.customTextColorSignal(); }
+
+    set customTextColor(value: IColor) { this.customTextColorSignal(value); }
 
 
     get textColorInUse(): LabelTextColor { return this.textColorInUseSignal(); }

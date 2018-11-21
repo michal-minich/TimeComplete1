@@ -1,4 +1,3 @@
-import S from "s-js";
 import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 Surplus;
@@ -6,12 +5,12 @@ import data from "surplus-mixin-data";
 import { IApp, ILabelStyle } from "../interfaces";
 import { taskListActivityView } from "./TaskListActivityView";
 import { labelsPopupView } from "./LabelsPopupView";
-import { onMouseDown, indexOfMin, removeTextSelections } from "../common";
+import { onMouseDown, indexOfMin, removeTextSelections, R } from "../common";
 import { editLabelView } from "./EditLabelView";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
-let numColumnsSignal = S.data(3);
+let numColumnsSignal = R.data(3);
 
 export function labelInlineStyle(ls: ILabelStyle) {
     return { backgroundColor: ls.backColor.value, color: ls.textColor.value };
@@ -29,7 +28,7 @@ window.addEventListener("mouseup",
 
 export const mainView = (a: IApp) =>
     <div>
-        <div className="tab-bar">
+        <div className="tab-bar hidden">
             <img className="logo" src="favicon.png" alt="Time Complete"/>
             <span className="tab active-tab">Tasks 1</span>
             <span className="tab">Tasks 2</span>
@@ -41,15 +40,34 @@ export const mainView = (a: IApp) =>
         <div className="toolbar">
             <button fn={onMouseDown((e) => a.activity.labelsPopup.show(e.target as HTMLElement,
                 (l, el) => a.activity.editLabel.begin(l, el)))}>
-                Labels
+                Labels <span className="drop-down-triangle">&#x25BC;</span>
             </button>
-            <button onClick={() => a.activity.taskLists.addNew()}>Add</button>
+            <button>
+                Notes <span className="drop-down-triangle">&#x25BC;</span>
+            </button>
+            <button onClick={() => a.activity.taskLists.addNew()}>
+                Add <span className="drop-down-triangle">&#x25BC;</span>
+            </button>
             <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
-            <input className="main-search-input" type="search" placeholder="Search"/>
-            <input className="view-filter" type="search" placeholder="View Filter"/>
             <input className="view-filter" type="number" fn={data(numColumnsSignal)}/>
+            <input className="view-filter" type="search" placeholder="View Filter"/>
+            <ul className="add-menu menu">
+                <li onClick={() => a.activity.taskLists.addNew()}>Add New Task List</li>
+                <li onClick={() => a.activity.taskLists.addNew()}>Add New Note</li>
+                <li onClick={() => a.activity.taskLists.addNew()}>Add Footer</li>
+            </ul>
+            <ul className="more-menu menu">
+                <li className="columns-menu">
+                    <span>Columns</span>
+                    <input type="checkbox" id="auto-columns-count"/><label htmlFor="auto-columns-count">Auto</label>
+                    <button>-</button>
+                    
+                    <button>+</button>
+                </li>
+                <li onClick={() => a.generateLocalStorageDownload()}>Export Data</li>
+            </ul>
         </div>
-        {labelsPopupView(a, a.activity.labelsPopup, a.data.labels.items)}
+        {labelsPopupView(a, a.activity.labelsPopup, a.data.labels)}
         {editLabelView(a)}
         <div className="view-area">
             <textarea

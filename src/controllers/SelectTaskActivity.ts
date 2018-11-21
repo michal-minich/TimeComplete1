@@ -1,15 +1,14 @@
-﻿import S from "s-js";
-import { IApp, ISelectTaskActivity, ITask } from "../interfaces";
+﻿import { IApp, ISelectTaskActivity, ITask } from "../interfaces";
+import { R } from "../common";
 
 
 export default class SelectTaskActivity implements ISelectTaskActivity {
 
-    private readonly app: IApp;
-    private selectedTaskSignal = S.data(undefined as (ITask | undefined));
+
+    private selectedTaskSignal = R.data(undefined as (ITask | undefined));
 
 
-    constructor(app: IApp) {
-        this.app = app;
+    constructor(private readonly app: IApp) {
     }
 
 

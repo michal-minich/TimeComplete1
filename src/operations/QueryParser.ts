@@ -1,12 +1,9 @@
-﻿import { IQueryElement } from "../interfaces";
-import App from "../controllers/App";
+﻿import { IQueryElement, IApp } from "../interfaces";
 
 
 export class QueryText implements IQueryElement {
 
-    value: string;
-
-    constructor(value: string) { this.value = value; }
+    constructor(public value: string) {}
 
     makeString(): string { return this.value; }
 }
@@ -14,23 +11,21 @@ export class QueryText implements IQueryElement {
 
 export class QueryLabel implements IQueryElement {
 
-    value: string;
+    constructor(private readonly app: IApp, public value: string) {}
 
-    constructor(value: string) { this.value = value; }
-
-    makeString(): string { return App.instance.settings.labelPrefix + this.value; }
+    makeString(): string { return this.app.settings.labelPrefix + this.value; }
 }
 
 
 export module QueryParser {
 
-    export function parse(queryTextText: string): IQueryElement[] {
+    export function parse(app: IApp, queryTextText: string): IQueryElement[] {
         const queryItems: IQueryElement[] = [];
         const iterator = getTokenIterator(queryTextText, 0);
         let tok: string | undefined;
         while ((tok = iterator()) !== undefined) {
-            if (tok[0] === App.instance.settings.labelPrefix) {
-                queryItems.push(new QueryLabel(tok.substring(1)));
+            if (tok[0] === app.settings.labelPrefix) {
+                queryItems.push(new QueryLabel(app, tok.substring(1)));
             } else {
                 queryItems.push(new QueryText(tok));
             }

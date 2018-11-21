@@ -1,11 +1,11 @@
-﻿import S from "s-js";
-import { IApp, ITask, IEditTaskTitleActivity } from "../interfaces";
+﻿import { IApp, ITask, IEditTaskTitleActivity } from "../interfaces";
 import { taskEditTextBox } from "../views/MainView";
+import { R } from "../common";
 
 
 export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
 
-    newName = S.data("");
+    newName = R.data("");
     private readonly app: IApp;
     private task!: ITask;
 
@@ -24,8 +24,8 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
             .parentElement!.parentElement!.parentElement!.parentElement!;
         const pr = p.getBoundingClientRect();
         const txtStyle = taskEditTextBox.style;
-        txtStyle.left = (p.offsetLeft + r.left - pr.left + 1) + "px";
-        txtStyle.top = (p.offsetTop + r.top - pr.top + titleTd.offsetHeight - 20) + "px";
+        txtStyle.left = (p.offsetLeft + r.left - pr.left) + "px";
+        txtStyle.top = (p.offsetTop + r.top - pr.top + titleTd.offsetHeight - 22) + "px";
         txtStyle.width = (titleTd.offsetWidth) + "px";
         txtStyle.height = (titleTd.offsetHeight - 2) + "px";
         txtStyle.visibility = "visible";

@@ -10,13 +10,23 @@ export type Indexer<T> = { [key: string]: T };
 export type JsonValueType =
     string | number | boolean | object | string[] | number[] | boolean[] | object[];
 
-export function isDataSignal(v: any): v is DataSignal<any> {
+export function isValueSignal(v: any): v is ValueSignal<any> {
     return typeof v === "function" && (v as any).name === "data";
 }
 
-export function isSArray(v: any): v is RArray<any> {
-    return typeof v === "function" && (v as any).name === "array";
+export function isArraySignal(v: NonNullable<object>): v is WritableArraySignal<any> {
+    return typeof (v as any).mapS === "function";
 }
+
+export type ArraySignal<T> = SArray<T>;
+
+export type WritableArraySignal<T> = SDataArray<T>;
+
+export type ValueSignal<T> = DataSignal<T>;
+
+
+// Data =====================================================================
+
 
 export interface IColor {
     readonly value: string;
@@ -25,14 +35,6 @@ export interface IColor {
 export interface IDateTime {
     readonly value: string;
 }
-
-export type RArray<T> = SArray<T>;
-
-export type WArray<T> = SDataArray<T>;
-
-
-// Data =====================================================================
-
 
 export interface IDomainObject {
     readonly id: number;
@@ -43,33 +45,24 @@ export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
     return typeof (v as any).id === "number" && typeof (v as any).createdOn.value === "string";
 }
 
-export interface IList<T> {
-    readonly items: RArray<T>;
+export interface IList<T> extends ArraySignal<T> {
 }
 
-export interface IWritableList<T> {
-    readonly items: RArray<T>;
-    add(label: T): void;
+export interface IWritableList<T> extends IList<T> {
+    push(label: T): void;
     remove(label: T): void;
-}
-
-export interface IDomainObjectList<T extends IDomainObject> extends IList<T> {
-    byId(id: number): T;
-}
-
-export function isDomainObjectList(v: NonNullable<object>): v is IDomainObjectList<any> {
-    return typeof (v as any).items === "function" && typeof (v as any).byId === "function";
 }
 
 export interface ILabel extends IDomainObject {
     name: string;
     readonly style: ILabelStyle;
-    parent: ILabel | undefined;
+    //readonly associatedLabels: WritableArraySignal<ILabel>;
 }
 
 export interface ILabelStyle {
     backColor: IColor;
-    textColor: IColor;
+    readonly textColor: IColor;
+    customTextColor: IColor;
     textColorInUse: LabelTextColor;
 }
 
@@ -82,23 +75,28 @@ export enum LabelTextColor {
 export interface ITask extends IDomainObject {
     title: string;
     completedOn: IDateTime | undefined;
-    readonly associatedLabels: IAssociatedLabels;
+    readonly associatedLabels: WritableArraySignal<ILabel>;
 }
 
-export interface IAssociatedLabels extends IDomainObjectList<ILabel> {
-    add(label: ILabel): void;
+export interface ITaskList extends IList<ITask> {
+    unshift(task: ITask): void;
+}
+
+export interface ILabelList extends IList<ILabel> {
+    unshift(label: ILabel): void;
     remove(label: ILabel): void;
 }
 
-export interface ITaskList extends IDomainObjectList<ITask> {
-    readonly items: RArray<ITask>;
-    addTask(task: ITask): void;
+export interface INotesList extends IList<INote> {
+    unshift(label: ILabel): void;
+    remove(label: ILabel): void;
 }
 
-export interface ILabelList extends IDomainObjectList<ILabel> {
-    readonly items: RArray<ILabel>;
-    addLabel(label: ILabel): void;
-    removeLabel(label: ILabel): void;
+export interface INote extends IDomainObject {
+    text: string;
+    readonly associatedLabels: WritableArraySignal<ILabel>;
+    readonly labelsFromText: ArraySignal<ILabel>;
+    readonly allLabels: ArraySignal<ILabel>;
 }
 
 
@@ -121,21 +119,22 @@ export interface IApp {
 export interface IAppData {
     readonly tasks: ITaskList;
     readonly labels: ILabelList;
+    init(): void;
     load(): void;
 }
 
 export interface IAppActivities {
     readonly taskLists: ITaskListGroup;
 
-    readonly selectedTaskList: DataSignal<ITaskListActivity>;
-    readonly addLabel: IAddLabelActivity;
+    readonly selectedTaskList: ValueSignal<ITaskListActivity>;
     readonly associateLabelWithTask: IAssociateLabelWithTaskActivity;
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
     readonly changeTaskCompletion: IChangeTaskCompletionActivity;
     readonly editLabel: IEditLabelActivity;
     readonly labelsPopup: ILabelsPopupActivity;
-
+    
+    init(): void;
     load(): void;
 }
 
@@ -152,8 +151,8 @@ export interface IAppActivitiesSettings {
 }
 
 export interface ITaskListGroup {
-    readonly items: RArray<ITaskListActivity>;
     add(tla: ITaskListActivity): void;
+    readonly items: ArraySignal<ITaskListActivity>;
     addNew(): void;
     remove(tla: ITaskListActivity): void;
 }
@@ -163,8 +162,8 @@ export interface IEditLabelActivity {
     commit(): void;
     rollback(): void;
     delete(): void;
-    readonly editLabelName: DataSignal<string>;
-    readonly editColor: DataSignal<string>;
+    readonly editLabelName: ValueSignal<string>;
+    readonly editColor: ValueSignal<string>;
     keyUp(e: KeyboardEvent): void;
     switchMode(): void;
     readonly nextModeName: string;
@@ -176,7 +175,7 @@ export interface ILabelsPopupActivity {
     hide(): void;
     activate(label: ILabel, el: HTMLSpanElement): any;
     init(labelsPopupDiv: HTMLDivElement): void;
-    queryText: DataSignal<string>;
+    queryText: ValueSignal<string>;
     keyUp(e: KeyboardEvent): void;
 }
 
@@ -196,22 +195,15 @@ export interface ISelectTaskActivity extends IActivityController {
 }
 
 export interface IAddTaskActivity extends IActivityController {
-    newTitle: DataSignal<string>;
+    newTitle: ValueSignal<string>;
     keyUp(e: KeyboardEvent): void;
-    commit(): void;
-    rollback(): void;
-}
-
-export interface IAddLabelActivity extends IActivityController {
-    newName: DataSignal<string>;
-    keyUp(e: KeyboardEvent): any;
     commit(): void;
     rollback(): void;
 }
 
 export interface IEditTaskTitleActivity extends IActivityController {
     begin(t: ITask, titleTd: HTMLTableDataCellElement): void;
-    newName: DataSignal<string>;
+    newName: ValueSignal<string>;
     keyUp(e: KeyboardEvent): void;
     commit(): void;
     rollback(): void;
@@ -229,7 +221,6 @@ export interface ISearchTaskListActivity extends IActivityController {
     begin(): void;
     addOrRemoveLabelFromQuery(l: ILabel): void;
     keyUp(e: KeyboardEvent): void;
-    resultTasks(): ITask[];
     query: IQueryMatcher;
     rollback(): void;
     //searchedTasks(taskQuery: string): SArray<ITask>;
@@ -243,14 +234,13 @@ export interface IQueryElement {
 }
 
 export interface IQueryMatcher {
-    text: string;
-    readonly textSignal: DataSignal<string>;
-    readonly textSample: string;
+    readonly text: ValueSignal<string>;
     generalSearchMatches(queryText: string): boolean;
+    resultTasks(): ITask[];
     matches(obj: IDomainObject): boolean;
     taskMatches(task: ITask): boolean;
     labelMatches(label: ILabel): boolean;
-    readonly labels: RArray<ILabel>;
+    readonly labels: ArraySignal<ILabel>;
     includeLabel(label: ILabel): void;
     excludeLabel(label: ILabel): void;
     readonly firstLabelColor: string | undefined;
@@ -272,6 +262,17 @@ export interface IToolbarActivity {
 }
 
 
+export interface IPopUpMenu extends IWindow {
+    showAt(content: HTMLElement, e: MouseEvent): void;
+}
+
+
+export interface IWindow {
+    showBelow(content: HTMLElement, el: HTMLElement): void;
+    hide(): void;
+}
+
+
 // IO =======================================================================
 
 
@@ -289,7 +290,7 @@ export interface IDataStore {
 // Operations ===============================================================
 
 
-export interface IReadonlyDataSignal<T> {
+export interface IReadonlyValueSignal<T> {
     (): T;
 }
 

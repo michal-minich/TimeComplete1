@@ -12,10 +12,10 @@ export default class AssociateLabelWithTaskActivity implements IAssociateLabelWi
 
     changeAssociation(label: ILabel): void {
         const t = this.app.activity.selectTask.selectedTask!;
-        if (t.associatedLabels.items().some(al => al.name === label.name)) {
+        if (t.associatedLabels().some(al => al.name === label.name)) {
             t.associatedLabels.remove(label);
         } else {
-            t.associatedLabels.add(label);
+            t.associatedLabels.push(label);
         }
     }
 }

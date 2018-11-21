@@ -15,7 +15,7 @@
     <RootNamespace>TimeComplete</RootNamespace>
     <AssemblyName>TimeComplete</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -78,11 +78,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\components\Window.ts" />
     <TypeScriptCompile Include="src\controllers\AppRuntimeSettings.ts" />
     <TypeScriptCompile Include="src\common.ts" />
     <TypeScriptCompile Include="src\controllers\EditLabelActivity.ts" />
     <TypeScriptCompile Include="src\controllers\TaskListGroup.ts" />
-    <TypeScriptCompile Include="src\controllers\AddLabelActivity.ts" />
     <TypeScriptCompile Include="src\controllers\AddTaskActivity.ts" />
     <TypeScriptCompile Include="src\controllers\AssociateLabelWithTaskActivity.ts" />
     <TypeScriptCompile Include="src\controllers\ChangeTaskCompletionActivity.ts" />
@@ -93,14 +93,13 @@
     <TypeScriptCompile Include="src\controllers\App.ts" />
     <TypeScriptCompile Include="src\data\Color.ts" />
     <TypeScriptCompile Include="src\data\DateTime.ts" />
+    <TypeScriptCompile Include="src\data\Note.ts" />
     <TypeScriptCompile Include="src\data\Label.ts" />
     <TypeScriptCompile Include="src\data\LabelStyle.ts" />
     <TypeScriptCompile Include="src\controllers\LabelsPopupActivity.ts" />
     <TypeScriptCompile Include="src\operations\IncrementCounter.ts" />
     <TypeScriptCompile Include="src\io\SessionStore.ts" />
     <TypeScriptCompile Include="src\data\Task.ts" />
-    <TypeScriptCompile Include="src\data\TaskList.ts" />
-    <TypeScriptCompile Include="src\data\LabelList.ts" />
     <TypeScriptCompile Include="src\interfaces.ts" />
     <TypeScriptCompile Include="src\io\Clock.ts" />
     <TypeScriptCompile Include="src\controllers\QueryMatcher.ts" />
@@ -111,7 +110,7 @@
     <TypeScriptCompile Include="src\views\LabelsPopupView.tsx" />
     <TypeScriptCompile Include="src\views\TaskListActivityView.tsx" />
     <TypeScriptCompile Include="src\views\NewLabelView.tsx" />
-    <TypeScriptCompile Include="src\views\Mainview.tsx" />
+    <TypeScriptCompile Include="src\views\MainView.tsx" />
     <TypeScriptCompile Include="src\views\TaskListsSearchesView.tsx" />
   </ItemGroup>
   <ItemGroup>
@@ -130,11 +129,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52504</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:55111</IISUrl>
+          <IISUrl>http://localhost/TimeComplete</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

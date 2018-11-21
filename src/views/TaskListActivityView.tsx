@@ -41,7 +41,7 @@ export const taskListActivityView = (a: IApp, tla: ITaskListActivity) =>
                 ref={queryTextBox}
                 onFocus={() => tla.searchTaskListActivity.begin()}
                 onKeyUp={(e: KeyboardEvent) => tla.searchTaskListActivity.keyUp(e)}
-                fn={data(tla.searchTaskListActivity.query.textSignal)}
+                fn={data(tla.searchTaskListActivity.query.text)}
                 style={queryBackground(tla)}/>
             <button
                 onClick={() => a.activity.taskLists.remove(tla)}>
@@ -65,7 +65,7 @@ export const taskListActivityView = (a: IApp, tla: ITaskListActivity) =>
 
 
 const taskListViewBody = (a: IApp, stla: ISearchTaskListActivity) =>
-    stla.resultTasks().map(t => {
+    stla.query.resultTasks().map(t => {
         let doneChk: HTMLInputElement | undefined = undefined;
         let titleTd: HTMLTableDataCellElement | undefined = undefined;
         return <tr onMouseDown={() => a.activity.selectTask.selectedTask = t}
@@ -89,7 +89,7 @@ const taskListViewBody = (a: IApp, stla: ISearchTaskListActivity) =>
                        fn={(onMouseDown((e) => a.activity.labelsPopup.show(e.target as HTMLElement,
                            (l, el) => a.activity.associateLabelWithTask.changeAssociation(l)
                        )))}>
-                       {t.associatedLabels.items
+                       {t.associatedLabels
                            .orderBy(al => al.id)
                            .map(al =>
                                <span

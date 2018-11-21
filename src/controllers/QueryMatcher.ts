@@ -1,56 +1,69 @@
-﻿import S, { DataSignal } from "s-js";
-import SArray, { SDataArray } from "s-array";
-import {
+﻿import {
         ILabel,
         IQueryMatcher,
         IQueryElement,
         IDomainObject,
         ITask,
+        IApp,
+        ValueSignal,
+        ArraySignal,
     }
     from "../interfaces";
-import App from "./App";
 import { QueryText, QueryLabel, QueryParser } from "../operations/QueryParser";
+import { R } from "../common";
 
 
-export class QueryMatcher implements IQueryMatcher {
+export default class QueryMatcher implements IQueryMatcher {
 
-    readonly textSignal: DataSignal<string>;
-    readonly labels: SDataArray<ILabel>;
+    readonly text: ValueSignal<string>;
+    readonly labels: ArraySignal<ILabel>;
 
-    constructor() {
-        this.textSignal = S.data("");
-        this.labels = SArray([]);
+
+    constructor(private readonly app: IApp) {
+        this.text = R.data("");
+        this.labels = R.array();
     }
 
-    generalSearchMatches(queryText: string): boolean { return false; }
 
-    matches(obj: IDomainObject): boolean { return false; }
+    generalSearchMatches(queryText: string): boolean {
+        throw undefined;
+    }
 
-    labelMatches(label: ILabel): boolean { return false; }
 
-    includeLabel(label: ILabel): void {}
+    matches(obj: IDomainObject): boolean {
+        throw undefined;
+    }
 
-    excludeLabel(label: ILabel): void {}
 
-    get text(): string { return this.textSignal(); }
+    labelMatches(label: ILabel): boolean {
+        throw undefined;
+    }
 
-    set text(value: string) { this.textSignal(value); }
 
-    get textSample(): string { return S.sample(this.textSignal); }
+    includeLabel(label: ILabel): void {
+        throw undefined;
+    }
+
+
+    excludeLabel(label: ILabel): void {
+        throw undefined;
+    }
 
 
     queryItems: IQueryElement[] = [];
     firstLabelColor: string | undefined;
 
+
     parseTokens() {
-            this.queryItems = QueryParser.parse(this.text);
-            const label = this.firstLabel();
-            if (label) {
-                const l = App.instance.data.labels.items().find(l => l.name === label.value);
-                if (l)
-                    this.firstLabelColor = l.style.backColor.value;
-            }
+        this.queryItems = QueryParser.parse(this.app, this.text());
+        const label = this.firstLabel();
+        if (label) {
+            const l = this.app.data.labels().find(l => l.name === label.value);
+            if (l)
+                this.firstLabelColor = l.style.backColor.value;
+        }
     }
+
 
     taskMatches(t: ITask): boolean {
         this.parseTokens();
@@ -61,7 +74,7 @@ export class QueryMatcher implements IQueryMatcher {
                     return false;
             } else if (qi instanceof QueryLabel) {
                 let found = false;
-                for (const al of t.associatedLabels.items()) {
+                for (const al of t.associatedLabels()) {
                     if (al.name.indexOf(qi.value) !== -1) {
                         found = true;
                         break;
@@ -72,6 +85,11 @@ export class QueryMatcher implements IQueryMatcher {
             }
         }
         return true;
+    }
+
+
+    resultTasks(): ITask[] {
+        return this.app.data.tasks().filter(t => this.taskMatches(t));
     }
 
 
@@ -87,7 +105,7 @@ export class QueryMatcher implements IQueryMatcher {
         const ls: ILabel[] = [];
         for (let qi of this.queryItems)
             if (qi instanceof QueryLabel) {
-                const l = App.instance.data.labels.items()
+                const l = this.app.data.labels()
                     .find(l2 => l2.name === (qi as QueryLabel).value);
                 if (l)
                     ls.push(l);

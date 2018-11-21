@@ -1,7 +1,7 @@
 ﻿import { IDataStore } from "../interfaces";
 
 
-export class SessionStore implements IDataStore {
+export default class SessionStore implements IDataStore {
 
     save<T extends object>(key: string, value: T): void {
         const v = JSON.stringify(value);

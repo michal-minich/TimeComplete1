@@ -1,7 +1,5 @@
 ﻿import {
-    isDataSignal,
-    isSArray,
-    isDomainObjectList,
+    isValueSignal,
     isDomainObject,
     Indexer,
     JsonValueType,
@@ -11,20 +9,24 @@
     ITask,
     IDateTime,
     LabelTextColor,
-    RArray
+    ArraySignal,
+    IApp,
+    WritableArraySignal,
+    isArraySignal
 } from "../interfaces";
 import Label from "../data/Label";
 import Color from "../data/Color";
-import LabelList from "../data/LabelList";
 import DateTime from "../data/DateTime";
 import Task from "../data/Task";
-import TaskList from "../data/TaskList";
-import { AssociatedLabels } from "../data/Task";
-import App from "../controllers/App";
 import LabelStyle from "../data/LabelStyle";
+import { R, findById } from "../common";
 
 
 export default class Serializer implements ISerializer {
+
+
+    constructor(private readonly app: IApp) {}
+
 
     serialize<T extends object>(value: T): string {
         const o = this.toPlainObject(value);
@@ -54,10 +56,10 @@ export default class Serializer implements ISerializer {
         case "boolean":
             return v;
         case "function":
-            if (isDataSignal(v)) {
+            if (isValueSignal(v)) {
                 return this.toPlain(v(), objLevel);
-            } else if (isSArray(v)) {
-                return this.toPlain((v as RArray<any>)(), objLevel);
+            } else if (isArraySignal(v)) {
+                return this.toPlain((v as ArraySignal<any>)(), objLevel);
             }
             return undefined;
         case "undefined":
@@ -69,9 +71,9 @@ export default class Serializer implements ISerializer {
                 if (isDomainObject(v)) {
                     // ReSharper disable once TsResolvedFromInaccessibleModule
                     return v.id;
-                } else if (isDomainObjectList(v)) {
+                } else if (isArraySignal(v)) {
                     // ReSharper disable once TsResolvedFromInaccessibleModule
-                    return this.toPlain(v.items, objLevel);
+                    return this.toPlain(v(), objLevel);
                 }
             }
             if (Array.isArray(v)) {
@@ -87,6 +89,8 @@ export default class Serializer implements ISerializer {
             } else {
                 const o: Indexer<JsonValueType> = {};
                 for (let k of Object.keys(v)) {
+                    if (k === "app")
+                        continue;
                     const f2 = this.toPlain(v[k], ++objLevel);
                     if (f2 !== undefined) {
                         if (k.endsWith("Signal"))
@@ -112,11 +116,12 @@ export default class Serializer implements ISerializer {
             return new DateTime(o.value) as any as T;
         case "Label":
             const l = new Label(
+                this.app,
                 o.name,
                 new
                 LabelStyle(
                     this.fromPlainObject<IColor>(o.style.backColor, "Color"),
-                    this.fromPlainObject<IColor>(o.style.textColor, "Color"),
+                    this.fromPlainObject<IColor>(o.style.customTextColor, "Color"),
                     o.style.textColorInUse as LabelTextColor));
             l.id = o.id;
             l.createdOn = this.fromPlainObject<IDateTime>(
@@ -124,15 +129,15 @@ export default class Serializer implements ISerializer {
                 "DateTime");
             return l as any as T;
         case "Task":
-            let associatedLabels: AssociatedLabels;
+            let associatedLabels: WritableArraySignal<ILabel>;
             if (o.associatedLabels) {
-                associatedLabels = this.fromPlainObject<AssociatedLabels>(
+                associatedLabels = this.fromPlainObject<WritableArraySignal<ILabel>>(
                     o.associatedLabels,
                     "AssociatedLabels");
             } else {
-                associatedLabels = new AssociatedLabels([]);
+                associatedLabels = R.array([]);
             }
-            const t = new Task(o.title, associatedLabels);
+            const t = new Task(this.app, o.title, associatedLabels);
             t.id = o.id;
             t.createdOn = this.fromPlainObject<IDateTime>(
                 o.createdOn,
@@ -150,7 +155,7 @@ export default class Serializer implements ISerializer {
                 const i = this.fromPlainObject<ILabel>(item, "Label");
                 items.push(i);
             }
-            const ls = new LabelList(items);
+            const ls = R.array(items);
             return ls as any as T;
         }
         case "TaskList":
@@ -160,17 +165,17 @@ export default class Serializer implements ISerializer {
                 const i = this.fromPlainObject<ITask>(item, "Task");
                 items.push(i);
             }
-            const ts = new TaskList(items);
+            const ts = R.array(items);
             return ts as any as T;
         }
         case "AssociatedLabels":
         {
             const items: ILabel[] = [];
             for (let item of o) {
-                const i = App.instance.data.labels.byId(item);
+                const i = findById(this.app.data.labels, item);
                 items.push(i);
             }
-            const als = new AssociatedLabels(items);
+            const als = R.array(items);
             return als as any as T;
         }
         default:

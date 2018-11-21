@@ -1,7 +1,7 @@
-﻿import S from "s-js";
-import { AddTaskActivity, } from "./AddTaskActivity";
+﻿import { AddTaskActivity, } from "./AddTaskActivity";
 import { SearchTaskListActivity } from "./SearchTaskListActivity";
 import { IApp, ITaskListActivity, IAddTaskActivity, ISearchTaskListActivity } from "../interfaces";
+import { R } from "../common";
 
 
 export default class TaskListActivity implements ITaskListActivity {
@@ -19,6 +19,6 @@ export default class TaskListActivity implements ITaskListActivity {
     }
 
     get estimatedHeight(): number {
-        return S.sample(() => this.searchTaskListActivity.resultTasks().length * 15 + 30);
+        return R.sample(() => this.searchTaskListActivity.query.resultTasks().length * 15 + 30);
     }
 }

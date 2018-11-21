@@ -1,29 +1,26 @@
-﻿import S, { DataSignal } from "s-js";
-import SArray, { SDataArray } from "s-array";
-import App from "../controllers/App";
-import { ITask, ILabel, IDateTime, IAssociatedLabels } from "../interfaces";
-import { findById } from "../common";
+﻿import { ITask, IDateTime, ILabel, IApp, ValueSignal, WritableArraySignal, ILabel as ILabel1 } from "../interfaces";
+import { R } from "../common";
 
 
 export default class Task implements ITask {
 
-    constructor(title: string, associatedLabels?: AssociatedLabels) {
-        this.titleSignal = S.data(title);
-        this.associatedLabels = associatedLabels
-            ? associatedLabels
-            : new AssociatedLabels([]);
+    constructor(
+        private readonly app: IApp,
+        title: string,
+        associatedLabels?: WritableArraySignal<ILabel>) {
+
+        this.titleSignal = R.data(title);
+        this.associatedLabels = associatedLabels ? associatedLabels : R.array([]);
     }
 
 
-    private readonly titleSignal: DataSignal<string>;
-    private readonly completedOnSignal = S.data<IDateTime | undefined>(undefined);
+    private readonly titleSignal: ValueSignal<string>;
+    private readonly completedOnSignal = R.data<IDateTime | undefined>(undefined);
 
 
-    id = App.instance.idCounter.getNext();
-    createdOn = App.instance.clock.now();
-
-
-    readonly associatedLabels: AssociatedLabels;
+    id = this.app.idCounter.getNext();
+    createdOn = this.app.clock.now();
+    readonly associatedLabels: WritableArraySignal<ILabel1>;
 
 
     get title(): string { return this.titleSignal(); }
@@ -34,25 +31,4 @@ export default class Task implements ITask {
     get completedOn(): IDateTime | undefined { return this.completedOnSignal(); }
 
     set completedOn(value: IDateTime | undefined) { this.completedOnSignal(value); }
-}
-
-
-export class AssociatedLabels implements IAssociatedLabels {
-
-    constructor(labels: ILabel[]) {
-        this.items = SArray(labels);
-    }
-
-
-    readonly items: SDataArray<ILabel>;
-
-
-    add(label: ILabel): void { this.items.push(label); }
-
-    remove(label: ILabel): void { this.items.remove(label); }
-
-
-    byId(id: number): ILabel {
-        return findById(this.items, id);
-    }
 }

@@ -5,10 +5,10 @@
     "noImplicitReturns": true,
     //"noUnusedLocals": true,
     //"noUnusedParameters": true,
-    "target": "es2018",
+    "target": "esnext",
     "jsx": "preserve",
     "sourceMap": false,
     "moduleResolution": "node",
-    "lib": ["dom", "dom.iterable", "es6", "es2018"]
+    "lib": ["dom", "dom.iterable", "es6", "esnext"]
   }
 }

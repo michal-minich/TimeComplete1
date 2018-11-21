@@ -1,17 +1,17 @@
-﻿import SArray, { SDataArray } from "s-array";
-import { IApp, ITaskListGroup, ITaskListActivity } from "../interfaces";
+﻿import { IApp, ITaskListGroup, ITaskListActivity, WritableArraySignal } from "../interfaces";
 import TaskListActivity from "./TaskListActivity";
+import { R } from "../common";
 
 
 export default class TaskListGroup implements ITaskListGroup {
 
-    items: SDataArray<ITaskListActivity>;
+    items: WritableArraySignal<ITaskListActivity>;
     private readonly app: IApp;
 
 
     constructor(app: IApp, items: ITaskListActivity[]) {
         this.app = app;
-        this.items = SArray(items);
+        this.items = R.array(items);
     }
 
 
