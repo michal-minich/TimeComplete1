@@ -14,6 +14,13 @@ export const newLabelView = (a: IApp) => {
     const newName = R.data("");
 
 
+    const view = <input type="text"
+                        placeholder="new label"
+                        className="new-label-input label"
+                        fn={data(newName)}
+                        onKeyUp={keyUp}/>;
+
+
     function confirm(): void {
         if (newName() === "")
             return;
@@ -33,18 +40,12 @@ export const newLabelView = (a: IApp) => {
 
 
     function keyUp(e: KeyboardEvent): any {
-        if (e.keyCode === 13)
+        if (e.key === "Enter")
             confirm();
-        else if (e.keyCode === 27)
+        else if (e.key === "Escape")
             cancel();
     }
 
-    const view = <input type="text"
-                        placeholder="new label"
-                        className="new-label-input label"
-                        fn={data(newName)}
-                        onKeyUp={keyUp}/>;
 
     return view;
-
 };

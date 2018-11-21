@@ -34,9 +34,9 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
     }
 
 
-    commit(): void {
+    confirm(): void {
         if (this.newName().trim() === "") {
-            this.rollback();
+            this.cancel();
         } else {
             this.task.title = this.newName();
             this.cleanup();
@@ -44,7 +44,7 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
     }
 
 
-    rollback(): void {
+    cancel(): void {
         this.cleanup();
     }
 
@@ -56,11 +56,11 @@ export default class EditTaskTitleActivity implements IEditTaskTitleActivity {
 
 
     keyUp(e: KeyboardEvent): void {
-        if (e.keyCode === 13) {
-            this.commit();
+        if (e.key === "Enter") {
+            this.confirm();
             e.preventDefault();
-        } else if (e.keyCode === 27) {
-            this.rollback();
+        } else if (e.key === "Escape") {
+            this.cancel();
         }
     }
 }

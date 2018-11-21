@@ -6,16 +6,16 @@ import { R } from "../common";
 
 export class AddTaskActivity implements IAddTaskActivity {
 
-    private searchTaskListActivity: ISearchTaskListActivity;
     readonly newTitle = R.data("");
 
 
-    constructor(private readonly app: IApp, searchTaskListActivity: ISearchTaskListActivity) {
-        this.searchTaskListActivity = searchTaskListActivity;
+    constructor(
+        private readonly app: IApp,
+        private readonly searchTaskListActivity: ISearchTaskListActivity) {
     }
 
 
-    commit(): void {
+    confirm(): void {
         if (this.newTitle() === "")
             return;
         let title = this.newTitle();
@@ -42,15 +42,15 @@ export class AddTaskActivity implements IAddTaskActivity {
     }
 
 
-    rollback(): void {
+    cancel(): void {
         this.newTitle("");
     }
 
 
     keyUp(e: KeyboardEvent): void {
-        if (e.keyCode === 13)
-            this.commit();
-        else if (e.keyCode === 27)
-            this.rollback();
+        if (e.key === "Enter")
+            this.confirm();
+        else if (e.key === "Escape")
+            this.cancel();
     }
 }

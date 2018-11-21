@@ -1,7 +1,6 @@
 ﻿import TaskListActivity from "./TaskListActivity";
 import AssociateLabelWithTaskActivity from "./AssociateLabelWithTaskActivity";
 import SelectTaskActivity from "./SelectTaskActivity";
-import EditLabelActivity from "./EditLabelActivity";
 import EditTaskTitleActivity from "./EditTaskTitleActivity";
 import LabelsPopupActivity from "./LabelsPopupActivity";
 import ChangeTaskCompletionActivity from "./ChangeTaskCompletionActivity";
@@ -27,11 +26,8 @@ import {
     ITaskList,
     IAppActivitiesSettings,
     ITaskListGroup,
-    IEditLabelActivity,
     ILabelsPopupActivity,
     IAppRuntimeSettings,
-    ILabel,
-    ITask,
     ValueSignal,
     INotesList
 } from "../interfaces";
@@ -121,7 +117,6 @@ export class AppActivities implements IAppActivities {
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
     readonly changeTaskCompletion: IChangeTaskCompletionActivity;
-    readonly editLabel: IEditLabelActivity;
     readonly labelsPopup: ILabelsPopupActivity;
 
     constructor(app: IApp) {
@@ -131,7 +126,6 @@ export class AppActivities implements IAppActivities {
         this.selectTask = new SelectTaskActivity(app);
         this.editTaskTitle = new EditTaskTitleActivity(app);
         this.changeTaskCompletion = new ChangeTaskCompletionActivity(app);
-        this.editLabel = new EditLabelActivity(app);
         this.labelsPopup = new LabelsPopupActivity(app);
     }
 

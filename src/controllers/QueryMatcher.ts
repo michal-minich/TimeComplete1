@@ -58,7 +58,7 @@ export default class QueryMatcher implements IQueryMatcher {
         this.queryItems = QueryParser.parse(this.app, this.text());
         const label = this.firstLabel();
         if (label) {
-            const l = this.app.data.labels().find(l => l.name === label.value);
+            const l = this.app.data.labels().find(l2 => l2.name === label.value);
             if (l)
                 this.firstLabelColor = l.style.backColor.value;
         }

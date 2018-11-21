@@ -131,9 +131,8 @@ export interface IAppActivities {
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
     readonly changeTaskCompletion: IChangeTaskCompletionActivity;
-    readonly editLabel: IEditLabelActivity;
     readonly labelsPopup: ILabelsPopupActivity;
-    
+
     init(): void;
     load(): void;
 }
@@ -155,19 +154,6 @@ export interface ITaskListGroup {
     readonly items: ArraySignal<ITaskListActivity>;
     addNew(): void;
     remove(tla: ITaskListActivity): void;
-}
-
-export interface IEditLabelActivity {
-    begin(label: ILabel, el: HTMLSpanElement): void;
-    commit(): void;
-    rollback(): void;
-    delete(): void;
-    readonly editLabelName: ValueSignal<string>;
-    readonly editColor: ValueSignal<string>;
-    keyUp(e: KeyboardEvent): void;
-    switchMode(): void;
-    readonly nextModeName: string;
-    label: ILabel | undefined;
 }
 
 export interface ILabelsPopupActivity {
@@ -197,16 +183,16 @@ export interface ISelectTaskActivity extends IActivityController {
 export interface IAddTaskActivity extends IActivityController {
     newTitle: ValueSignal<string>;
     keyUp(e: KeyboardEvent): void;
-    commit(): void;
-    rollback(): void;
+    confirm(): void;
+    cancel(): void;
 }
 
 export interface IEditTaskTitleActivity extends IActivityController {
     begin(t: ITask, titleTd: HTMLTableDataCellElement): void;
     newName: ValueSignal<string>;
     keyUp(e: KeyboardEvent): void;
-    commit(): void;
-    rollback(): void;
+    confirm(): void;
+    cancel(): void;
 }
 
 export interface IChangeTaskCompletionActivity extends IActivityController {

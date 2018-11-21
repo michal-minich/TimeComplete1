@@ -34,7 +34,7 @@ export class SearchTaskListActivity implements ISearchTaskListActivity {
 
 
     keyUp(e: KeyboardEvent): void {
-        if (e.keyCode === 27)
+        if (e.key === "Escape")
             this.rollback();
     }
 

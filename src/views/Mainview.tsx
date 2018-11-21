@@ -1,12 +1,13 @@
 import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
+// noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ILabelStyle } from "../interfaces";
 import { taskListActivityView } from "./TaskListActivityView";
 import { labelsPopupView } from "./LabelsPopupView";
 import { onMouseDown, indexOfMin, removeTextSelections, R } from "../common";
-import { editLabelView } from "./EditLabelView";
+import { editLabelView, beginEditLabel } from "./EditLabelView";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
@@ -39,7 +40,7 @@ export const mainView = (a: IApp) =>
         </div>
         <div className="toolbar">
             <button fn={onMouseDown((e) => a.activity.labelsPopup.show(e.target as HTMLElement,
-                (l, el) => a.activity.editLabel.begin(l, el)))}>
+                (l, el) => beginEditLabel(l, el)))}>
                 Labels <span className="drop-down-triangle">&#x25BC;</span>
             </button>
             <button>
@@ -53,15 +54,15 @@ export const mainView = (a: IApp) =>
             <input className="view-filter" type="search" placeholder="View Filter"/>
             <ul className="add-menu menu">
                 <li onClick={() => a.activity.taskLists.addNew()}>Add New Task List</li>
-                <li onClick={() => a.activity.taskLists.addNew()}>Add New Note</li>
-                <li onClick={() => a.activity.taskLists.addNew()}>Add Footer</li>
+                <li>Add New Note</li>
+                <li>Add Footer</li>
             </ul>
             <ul className="more-menu menu">
                 <li className="columns-menu">
                     <span>Columns</span>
                     <input type="checkbox" id="auto-columns-count"/><label htmlFor="auto-columns-count">Auto</label>
                     <button>-</button>
-                    
+
                     <button>+</button>
                 </li>
                 <li onClick={() => a.generateLocalStorageDownload()}>Export Data</li>
@@ -74,7 +75,7 @@ export const mainView = (a: IApp) =>
                 ref={taskEditTextBox}
                 fn={data(a.activity.editTaskTitle.newName)}
                 onKeyUp={(e: KeyboardEvent) => a.activity.editTaskTitle.keyUp(e)}
-                onBlur={() => a.activity.editTaskTitle.commit()}
+                onBlur={() => a.activity.editTaskTitle.confirm()}
                 className="task-text-edit-box selected-task"></textarea>
             <table className="task-list-activities">
                 <tr>
