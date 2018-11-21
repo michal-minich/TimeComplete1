@@ -8,6 +8,7 @@ import { taskListActivityView } from "./TaskListActivityView";
 import { labelsPopupView } from "./LabelsPopupView";
 import { onMouseDown, indexOfMin, removeTextSelections, R } from "../common";
 import editLabelView from "./EditLabelView";
+import TaskListActivity from "../controllers/TaskListActivity";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
@@ -45,20 +46,22 @@ export default function mainView(a: IApp) {
             </div>
             <div className="toolbar">
                 <button fn={onMouseDown((e) => lpv.show(e.target as HTMLElement,
-                (l, el) => elv.begin(l, el)))}>
+                    (l, el) => elv.begin(l, el)))}>
                     Labels <span className="drop-down-triangle">&#x25BC;</span>
                 </button>
                 <button>
                     Notes <span className="drop-down-triangle">&#x25BC;</span>
                 </button>
-                <button onClick={() => a.activity.taskLists.addNew()}>
+                <button onClick={() => a.activity.dashboard.unshift(new TaskListActivity(a))}>
                     Add <span className="drop-down-triangle">&#x25BC;</span>
                 </button>
                 <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
                 <input className="view-filter" type="number" fn={data(numColumnsSignal)}/>
                 <input className="view-filter" type="search" placeholder="View Filter"/>
                 <ul className="add-menu menu">
-                    <li onClick={() => a.activity.taskLists.addNew()}>Add New Task List</li>
+                    <li onClick={() => a.activity.dashboard.unshift(new TaskListActivity(a))}>
+                        Add New Task List
+                    </li>
                     <li>Add New Note</li>
                     <li>Add Footer</li>
                 </ul>
@@ -92,7 +95,7 @@ export default function mainView(a: IApp) {
                                 tds.push(document.createElement("td"));
                                 tdsHeight.push(0);
                             }
-                            const items = a.activity.taskLists.items();
+                            const items = a.activity.dashboard.items();
                             for (let tla2 of items) {
                                 const col = indexOfMin(tdsHeight);
                                 const v = taskListActivityView(a, tla2, lpv);

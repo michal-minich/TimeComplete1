@@ -12,7 +12,11 @@ export function findById<T extends IDomainObject>(items: ArraySignal<T>, id: num
 }
 
 
-export function saveWithSerialize<T extends object>(app: IApp, key: string, value: ArrayLike<T>): void {
+export function saveWithSerialize<T extends object>(
+    app: IApp,
+    key: string,
+    value: ArrayLike<T>): void {
+
     const sv = new Serializer(app).toPlainObject(value);
     app.localStore.save(key, sv);
 }

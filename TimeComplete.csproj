@@ -81,7 +81,7 @@
     <TypeScriptCompile Include="src\components\Window.ts" />
     <TypeScriptCompile Include="src\controllers\AppRuntimeSettings.ts" />
     <TypeScriptCompile Include="src\common.ts" />
-    <TypeScriptCompile Include="src\controllers\TaskListGroup.ts" />
+    <TypeScriptCompile Include="src\data\Dashboard.ts" />
     <TypeScriptCompile Include="src\controllers\AddTaskActivity.ts" />
     <TypeScriptCompile Include="src\controllers\EditTaskTitleActivity.ts" />
     <TypeScriptCompile Include="src\controllers\SearchTaskListActivity.ts" />

@@ -2,7 +2,7 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ITaskListActivity, ISearchTaskListActivity, ITask, ILabel } from "../interfaces";
+import { IApp, IDashItem, ISearchTaskListActivity, ITask, ILabel } from "../interfaces";
 import { onMouseDown } from "../common";
 import { LabelsPopupView } from "./LabelsPopupView";
 import DateTime from "../data/DateTime";
@@ -11,42 +11,42 @@ import DateTime from "../data/DateTime";
 export let queryTextBox: HTMLInputElement;
 
 
-function queryColor(tla: ITaskListActivity): string {
+function queryColor(tla: IDashItem): string {
     const c = tla.searchTaskListActivity.query.firstLabelColor;
     return c ? c : "rgb(101, 101, 101)";
 }
 
 
-export function queryBackground(tla: ITaskListActivity) {
+export function queryBackground(tla: IDashItem) {
     return { backgroundColor: queryColor(tla) };
 }
 
 
-function queryBorder(a: IApp, tla: ITaskListActivity) {
-    if (a.activity.selectedTaskList() === tla) {
-        return { borderColor: queryColor(tla) };
+function queryBorder(a: IApp, di: IDashItem) {
+    if (a.activity.dashboard.selected() === di) {
+        return { borderColor: queryColor(di) };
     } else {
         return { borderColor: "rgb(223, 223, 223)" };
     }
 }
 
 
-export const taskListActivityView = (a: IApp, tla: ITaskListActivity, lpv: LabelsPopupView) =>
-    <div onMouseDown={() => a.activity.selectedTaskList(tla)}
-         style={queryBorder(a, tla)}
+export const taskListActivityView = (a: IApp, di: IDashItem, lpv: LabelsPopupView) =>
+    <div onMouseDown={() => a.activity.dashboard.selected(di)}
+         style={queryBorder(a, di)}
          className={"task-list-activity " +
-             (a.activity.selectedTaskList() === tla ? "selected-task-list-activity" : "")}>
-        <div className="header" style={queryBackground(tla)}>
+             (a.activity.dashboard.selected() === di ? "selected-task-list-activity" : "")}>
+        <div className="header" style={queryBackground(di)}>
             <input
                 spellCheck={false}
                 type="text"
                 ref={queryTextBox}
-                onFocus={() => tla.searchTaskListActivity.begin()}
-                onKeyUp={(e: KeyboardEvent) => tla.searchTaskListActivity.keyUp(e)}
-                fn={data(tla.searchTaskListActivity.query.text)}
-                style={queryBackground(tla)}/>
+                onFocus={() => di.searchTaskListActivity.begin()}
+                onKeyUp={(e: KeyboardEvent) => di.searchTaskListActivity.keyUp(e)}
+                fn={data(di.searchTaskListActivity.query.text)}
+                style={queryBackground(di)}/>
             <button
-                onClick={() => a.activity.taskLists.remove(tla)}>
+                onClick={() => a.activity.dashboard.remove(di)}>
                 X
             </button>
         </div>
@@ -54,12 +54,12 @@ export const taskListActivityView = (a: IApp, tla: ITaskListActivity, lpv: Label
             <input type="text"
                    placeholder="new task"
                    className="new-task-input"
-                   onKeyUp={(e: KeyboardEvent) => tla.addTaskActivity.keyUp(e)}
-                   fn={data(tla.addTaskActivity.newTitle)}/>
+                   onKeyUp={(e: KeyboardEvent) => di.addTaskActivity.keyUp(e)}
+                   fn={data(di.addTaskActivity.newTitle)}/>
             <table className="task-list lined-list">
                 <thead></thead>
                 <tbody>
-                {taskListViewBody(a, tla.searchTaskListActivity, lpv)}
+                {taskListViewBody(a, di.searchTaskListActivity, lpv)}
                 </tbody>
             </table>
         </div>

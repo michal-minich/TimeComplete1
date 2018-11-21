@@ -124,9 +124,7 @@ export interface IAppData {
 }
 
 export interface IAppActivities {
-    readonly taskLists: ITaskListGroup;
-
-    readonly selectedTaskList: ValueSignal<ITaskListActivity>;
+    readonly dashboard: IDashboard;
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
 
@@ -146,14 +144,14 @@ export interface IAppActivitiesSettings {
     selectedTask?: number;
 }
 
-export interface ITaskListGroup {
-    add(tla: ITaskListActivity): void;
-    readonly items: ArraySignal<ITaskListActivity>;
-    addNew(): void;
-    remove(tla: ITaskListActivity): void;
+export interface IDashboard {
+    readonly items: ArraySignal<IDashItem>;
+    unshift(di: IDashItem): void;
+    remove(di: IDashItem): void;
+    readonly selected: ValueSignal<IDashItem | undefined>;
 }
 
-export interface ITaskListActivity {
+export interface IDashItem {
     readonly addTaskActivity: IAddTaskActivity;
     readonly searchTaskListActivity: ISearchTaskListActivity;
     readonly estimatedHeight: number;

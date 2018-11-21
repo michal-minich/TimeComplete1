@@ -56,7 +56,7 @@ export default function editLabelView(a: IApp) {
     function confirm(): void {
         const l = labelSignal()!;
 
-        for (let tla of a.activity.taskLists.items()) {
+        for (let tla of a.activity.dashboard.items()) {
             const qt = R.sample(tla.searchTaskListActivity.query.text);
             tla.searchTaskListActivity.query.text(qt.replace("#" + l.name,
                 "#" + editLabelName()));
@@ -87,7 +87,7 @@ export default function editLabelView(a: IApp) {
             for (let t of a.data.tasks()) {
                 t.associatedLabels.remove(l);
             }
-            for (let tla of a.activity.taskLists.items()) {
+            for (let tla of a.activity.dashboard.items()) {
                 const qt = R.sample(tla.searchTaskListActivity.query.text);
                 tla.searchTaskListActivity.query.text(qt.replace("#" + l.name, ""));
             }

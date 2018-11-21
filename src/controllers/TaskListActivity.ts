@@ -1,10 +1,10 @@
 ﻿import { AddTaskActivity, } from "./AddTaskActivity";
 import { SearchTaskListActivity } from "./SearchTaskListActivity";
-import { IApp, ITaskListActivity, IAddTaskActivity, ISearchTaskListActivity } from "../interfaces";
+import { IApp, IDashItem, IAddTaskActivity, ISearchTaskListActivity } from "../interfaces";
 import { R } from "../common";
 
 
-export default class TaskListActivity implements ITaskListActivity {
+export default class TaskListActivity implements IDashItem {
 
     private readonly app: IApp;
     readonly addTaskActivity: IAddTaskActivity;

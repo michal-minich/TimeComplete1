@@ -1,4 +1,4 @@
-﻿import { ITask, IDateTime, ILabel, IApp, ValueSignal, WritableArraySignal, ILabel as ILabel1 } from "../interfaces";
+﻿import { ITask, IDateTime, ILabel, IApp, ValueSignal, WritableArraySignal } from "../interfaces";
 import { R } from "../common";
 
 
@@ -20,7 +20,7 @@ export default class Task implements ITask {
 
     id = this.app.idCounter.getNext();
     createdOn = this.app.clock.now();
-    readonly associatedLabels: WritableArraySignal<ILabel1>;
+    readonly associatedLabels: WritableArraySignal<ILabel>;
 
 
     get title(): string { return this.titleSignal(); }

@@ -1,7 +1,7 @@
 ﻿import TaskListActivity from "./TaskListActivity";
 import SelectTaskActivity from "./SelectTaskActivity";
 import EditTaskTitleActivity from "./EditTaskTitleActivity";
-import TaskListGroup from "./TaskListGroup";
+import Dashboard from "../data/Dashboard";
 import SessionStore from "../io/SessionStore";
 import Clock from "../io/Clock";
 import Serializer from "../operations/Serializer";
@@ -12,7 +12,6 @@ import {
     IAppData,
     IAppActivities,
     IDataStore,
-    ITaskListActivity,
     ISelectTaskActivity,
     IEditTaskTitleActivity,
     IClock,
@@ -20,12 +19,12 @@ import {
     ILabelList,
     ITaskList,
     IAppActivitiesSettings,
-    ITaskListGroup,
+    IDashboard,
     IAppRuntimeSettings,
-    ValueSignal,
     INotesList
 } from "../interfaces";
 import AppRuntimeSettings from "./AppRuntimeSettings";
+import mainView from "../views/MainView";
 
 
 export default class App implements IApp {
@@ -38,7 +37,7 @@ export default class App implements IApp {
     readonly clock: IClock = new Clock();
     readonly idCounter: IIdProvider<number> = new IncrementCounter();
 
-    constructor() {
+    constructor(el: Element) {
 
         this.data = new AppData(this);
         this.activity = new AppActivities(this);
@@ -46,6 +45,8 @@ export default class App implements IApp {
 
         this.data.load();
         this.activity.load();
+
+        el.appendChild(mainView(this));
     }
 
 
@@ -104,22 +105,19 @@ export class AppData implements IAppData {
 export class AppActivities implements IAppActivities {
 
     private readonly app: IApp;
-    readonly taskLists: ITaskListGroup;
-
-    selectedTaskList!: ValueSignal<ITaskListActivity>;
+    readonly dashboard: IDashboard;
     readonly selectTask: ISelectTaskActivity;
     readonly editTaskTitle: IEditTaskTitleActivity;
 
     constructor(app: IApp) {
         this.app = app;
-        this.taskLists = new TaskListGroup(app, []);
+        this.dashboard = new Dashboard(app, []);
         this.selectTask = new SelectTaskActivity(app);
         this.editTaskTitle = new EditTaskTitleActivity(app);
     }
 
     init(): void {
-        this.taskLists.add(new TaskListActivity(this.app));
-        this.selectedTaskList = R.data(this.taskLists.items()[0]);
+        this.dashboard.unshift(new TaskListActivity(this.app));
     }
 
     load(): void {
@@ -129,16 +127,15 @@ export class AppActivities implements IAppActivities {
                 const tla = new TaskListActivity(this.app);
                 tla.searchTaskListActivity.query.text(tl.taskQueryText);
                 tla.addTaskActivity.newTitle(tl.newTaskTitle);
-                this.taskLists.add(tla);
+                this.dashboard.unshift(tla);
             }
             if (s.selectedTask) {
                 const t = findById(this.app.data.tasks, s.selectedTask);
                 this.selectTask.selectedTask = t;
             }
         }
-        if (this.taskLists.items().length === 0)
-            this.taskLists.add(new TaskListActivity(this.app));
-        this.selectedTaskList = R.data(this.taskLists.items()[0]);
+        if (this.dashboard.items().length === 0)
+            this.dashboard.unshift(new TaskListActivity(this.app));
 
         R.compute(() => this.save());
     }
@@ -147,7 +144,7 @@ export class AppActivities implements IAppActivities {
     private save(): void {
         const st = this.selectTask.selectedTask;
         const s: IAppActivitiesSettings = {
-            taskLists: this.taskLists.items().map(tl => ({
+            taskLists: this.dashboard.items().map(tl => ({
                 taskQueryText: tl.searchTaskListActivity.query.text(),
                 newTaskTitle: tl.addTaskActivity.newTitle()
             })),
