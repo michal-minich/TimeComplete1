@@ -9,7 +9,7 @@
         ArraySignal,
     }
     from "../interfaces";
-import { QueryText, QueryLabel, QueryParser } from "../operations/QueryParser";
+import { QueryText, QueryLabel, QueryParser } from "./QueryParser";
 import { R } from "../common";
 
 
@@ -68,7 +68,7 @@ export default class QueryMatcher implements IQueryMatcher {
     taskMatches(t: ITask): boolean {
         this.parseTokens();
         const title = t.title;
-        for (let qi of this.queryItems) {
+        for (const qi of this.queryItems) {
             if (qi instanceof QueryText) {
                 if (title.indexOf(qi.value) === -1)
                     return false;
@@ -94,7 +94,7 @@ export default class QueryMatcher implements IQueryMatcher {
 
 
     private firstLabel(): QueryLabel | undefined {
-        for (let qi of this.queryItems)
+        for (const qi of this.queryItems)
             if (qi instanceof QueryLabel)
                 return qi;
         return undefined;
@@ -103,7 +103,7 @@ export default class QueryMatcher implements IQueryMatcher {
 
     get existingLabels(): ILabel[] {
         const ls: ILabel[] = [];
-        for (let qi of this.queryItems)
+        for (const qi of this.queryItems)
             if (qi instanceof QueryLabel) {
                 const l = this.app.data.labels()
                     .find(l2 => l2.name === (qi as QueryLabel).value);

@@ -3,10 +3,11 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { labelInlineStyle } from "./MainView";
-import LabelStyle from "../data/LabelStyle";
+import LabelStyle from "../data/ColorStyle";
 import Color from "../data/Color";
 import { ILabel, IApp, ValueSignal } from "../interfaces";
 import { R } from "../common";
+import TasksDashItem from "../data/TasksDashItem";
 
 
 export default function editLabelView(a: IApp) {
@@ -56,9 +57,11 @@ export default function editLabelView(a: IApp) {
     function confirm(): void {
         const l = labelSignal()!;
 
-        for (let tla of a.activity.dashboard.items()) {
-            const qt = R.sample(tla.searchTaskListActivity.query.text);
-            tla.searchTaskListActivity.query.text(qt.replace("#" + l.name,
+        for (const di of a.dashboard.items()) {
+            if (!(di instanceof TasksDashItem))
+                continue;
+            const qt = R.sample(di.query.text);
+            di.query.text(qt.replace("#" + l.name,
                 "#" + editLabelName()));
         }
 
@@ -84,12 +87,14 @@ export default function editLabelView(a: IApp) {
     function del(): void {
         R.freeze(() => {
             const l = labelSignal()!;
-            for (let t of a.data.tasks()) {
+            for (const t of a.data.tasks()) {
                 t.associatedLabels.remove(l);
             }
-            for (let tla of a.activity.dashboard.items()) {
-                const qt = R.sample(tla.searchTaskListActivity.query.text);
-                tla.searchTaskListActivity.query.text(qt.replace("#" + l.name, ""));
+            for (const di of a.dashboard.items()) {
+                if (!(di instanceof TasksDashItem))
+                    continue;
+                const qt = R.sample(di.query.text);
+                di.query.text(qt.replace("#" + l.name, ""));
             }
             a.data.labels.remove(l);
             cleanup();

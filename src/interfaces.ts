@@ -45,21 +45,13 @@ export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
     return typeof (v as any).id === "number" && typeof (v as any).createdOn.value === "string";
 }
 
-export interface IList<T> extends ArraySignal<T> {
-}
-
-export interface IWritableList<T> extends IList<T> {
-    push(label: T): void;
-    remove(label: T): void;
-}
-
 export interface ILabel extends IDomainObject {
     name: string;
-    readonly style: ILabelStyle;
+    readonly style: IColorStyle;
     //readonly associatedLabels: WritableArraySignal<ILabel>;
 }
 
-export interface ILabelStyle {
+export interface IColorStyle {
     backColor: IColor;
     readonly textColor: IColor;
     customTextColor: IColor;
@@ -78,20 +70,6 @@ export interface ITask extends IDomainObject {
     readonly associatedLabels: WritableArraySignal<ILabel>;
 }
 
-export interface ITaskList extends IList<ITask> {
-    unshift(task: ITask): void;
-}
-
-export interface ILabelList extends IList<ILabel> {
-    unshift(label: ILabel): void;
-    remove(label: ILabel): void;
-}
-
-export interface INotesList extends IList<INote> {
-    unshift(label: ILabel): void;
-    remove(label: ILabel): void;
-}
-
 export interface INote extends IDomainObject {
     text: string;
     readonly associatedLabels: WritableArraySignal<ILabel>;
@@ -104,9 +82,7 @@ export interface INote extends IDomainObject {
 
 
 export interface IApp {
-    readonly data: IAppData;
-    readonly activity: IAppActivities;
-    readonly settings: IAppRuntimeSettings;
+    readonly data: IData;
 
     readonly localStore: IDataStore;
     readonly clock: IClock;
@@ -114,32 +90,32 @@ export interface IApp {
 
     generateLocalStorageDownload(): void;
     importLocalStorageDownload(): void;
-}
 
-export interface IAppData {
-    readonly tasks: ITaskList;
-    readonly labels: ILabelList;
-    init(): void;
-    load(): void;
-}
-
-export interface IAppActivities {
     readonly dashboard: IDashboard;
-    readonly selectTask: ISelectTaskActivity;
-    readonly editTaskTitle: IEditTaskTitleActivity;
 
     init(): void;
     load(): void;
 }
 
-export interface IAppRuntimeSettings {
+export interface IData {
+    readonly tasks: WritableArraySignal<ITask>;
+    readonly labels: WritableArraySignal<ILabel>;
+    readonly notes: WritableArraySignal<INote>;
+    readonly tabs: WritableArraySignal<ITabPage>;
+    init(): void;
+    load(): void;
+    readonly settings: ISettings;
+    selectedTask: ITask | undefined;
+}
+
+export interface ISettings {
     readonly labelPrefix: string;
 }
 
 export interface IAppActivitiesSettings {
     taskLists: Array<{
-        taskQueryText: string;
-        newTaskTitle: string;
+        taskQueryText: string | undefined;
+        newTaskTitle: string | undefined;
     }>;
     selectedTask?: number;
 }
@@ -152,45 +128,17 @@ export interface IDashboard {
 }
 
 export interface IDashItem {
-    readonly addTaskActivity: IAddTaskActivity;
-    readonly searchTaskListActivity: ISearchTaskListActivity;
     readonly estimatedHeight: number;
 }
 
-export interface IActivityController {
-    //perform, commit, rollback, reset
+export interface ITasksDashBoard extends IDashboard {
+    readonly filter: IQueryMatcher;
+    displayColumnsCount: number;
 }
 
-
-export interface ISelectTaskActivity extends IActivityController {
-    selectedTask: ITask | undefined;
-}
-
-export interface IAddTaskActivity extends IActivityController {
-    newTitle: ValueSignal<string>;
-    keyUp(e: KeyboardEvent): void;
-    confirm(): void;
-    cancel(): void;
-}
-
-export interface IEditTaskTitleActivity extends IActivityController {
-    begin(t: ITask, titleTd: HTMLTableDataCellElement): void;
-    newName: ValueSignal<string>;
-    keyUp(e: KeyboardEvent): void;
-    confirm(): void;
-    cancel(): void;
-}
-
-export interface ISearchTaskListActivity extends IActivityController {
-    begin(): void;
-    addOrRemoveLabelFromQuery(l: ILabel): void;
-    keyUp(e: KeyboardEvent): void;
+export interface ITasksDashItem extends IDashItem {
+    readonly newTitle: ValueSignal<string>;
     query: IQueryMatcher;
-    rollback(): void;
-    //searchedTasks(taskQuery: string): SArray<ITask>;
-}
-
-export interface ITabBarActivity extends IWritableList<ITabPage> {
 }
 
 export interface IQueryElement {
@@ -212,17 +160,19 @@ export interface IQueryMatcher {
 
 export interface ITabPage {
     title: string;
-    readonly search: IQueryMatcher;
-    readonly filter: IQueryMatcher;
-    displayColumnsCount: number;
+    readonly style: IColorStyle;
     close(): void;
+    content: any;
 }
 
 export interface IToolbarActivity {
     showLabelsPopup(): void;
     showTasksPopup(): void;
+    showNotesPopup(): void;
     showSearchPopup(): void;
+
     addTaskListView(): void;
+    addNote(): void;
 }
 
 

@@ -18,7 +18,7 @@ import Label from "../data/Label";
 import Color from "../data/Color";
 import DateTime from "../data/DateTime";
 import Task from "../data/Task";
-import LabelStyle from "../data/LabelStyle";
+import LabelStyle from "../data/ColorStyle";
 import { R, findById } from "../common";
 
 
@@ -79,7 +79,7 @@ export default class Serializer implements ISerializer {
             if (Array.isArray(v)) {
                 //return v.map((i: any) => this.toPlain(i));
                 const a: JsonValueType[] = [];
-                for (let item of v) {
+                for (const item of v) {
                     const plainItem = this.toPlain(item, objLevel);
                     if (plainItem === undefined)
                         throw undefined;
@@ -88,14 +88,15 @@ export default class Serializer implements ISerializer {
                 return a;
             } else {
                 const o: Indexer<JsonValueType> = {};
-                for (let k of Object.keys(v)) {
+                for (const k of Object.keys(v)) {
                     if (k === "app")
                         continue;
                     const f2 = this.toPlain(v[k], ++objLevel);
                     if (f2 !== undefined) {
                         if (k.endsWith("Signal"))
-                            k = k.substring(0, k.length - 6);
-                        o[k] = f2;
+                            o[k.substring(0, k.length - 6)] = f2;
+                        else
+                            o[k] = f2;
                     }
                 }
                 return o;
@@ -151,7 +152,7 @@ export default class Serializer implements ISerializer {
         case "LabelList":
         {
             const items: ILabel[] = [];
-            for (let item of o) {
+            for (const item of o) {
                 const i = this.fromPlainObject<ILabel>(item, "Label");
                 items.push(i);
             }
@@ -161,7 +162,7 @@ export default class Serializer implements ISerializer {
         case "TaskList":
         {
             const items: ITask[] = [];
-            for (let item of o) {
+            for (const item of o) {
                 const i = this.fromPlainObject<ITask>(item, "Task");
                 items.push(i);
             }
@@ -171,7 +172,7 @@ export default class Serializer implements ISerializer {
         case "AssociatedLabels":
         {
             const items: ILabel[] = [];
-            for (let item of o) {
+            for (const item of o) {
                 const i = findById(this.app.data.labels, item);
                 items.push(i);
             }

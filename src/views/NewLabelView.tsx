@@ -2,7 +2,7 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 Surplus;
 import data from "surplus-mixin-data";
-import LabelStyle from "../data/LabelStyle";
+import LabelStyle from "../data/ColorStyle";
 import Color from "../data/Color";
 import { R } from "../common";
 import Label from "../data/Label";
@@ -27,7 +27,7 @@ export const newLabelView = (a: IApp) => {
         const l = new Label(a, newName(), new LabelStyle(new Color("gray"), new Color("white")));
         a.data.labels.unshift(l);
         newName("");
-        const t = a.activity.selectTask.selectedTask;
+        const t = a.data.selectedTask;
         if (t) {
             t.associatedLabels.push(l);
         }

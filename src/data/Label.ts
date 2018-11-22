@@ -1,4 +1,4 @@
-﻿import { ILabel, ILabelStyle, ValueSignal, IApp } from "../interfaces";
+﻿import { ILabel, IColorStyle as ILabelStyle, ValueSignal, IApp } from "../interfaces";
 import { R } from "../common";
 
 

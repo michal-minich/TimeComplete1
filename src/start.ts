@@ -1,4 +1,4 @@
-import App from "./controllers/App";
+import App from "./components/App";
 import { IApp } from "./interfaces";
 import { R } from "./common";
 

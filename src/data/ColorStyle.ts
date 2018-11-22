@@ -1,8 +1,9 @@
-﻿import { ILabelStyle, IColor, LabelTextColor, ValueSignal } from "../interfaces";
+﻿import { IColorStyle, IColor, LabelTextColor, ValueSignal } from "../interfaces";
 import { R } from "../common";
 import Color from "./Color";
 
-export default class LabelStyle implements ILabelStyle {
+
+export default class LabelStyle implements IColorStyle {
 
     private readonly backColorSignal: ValueSignal<IColor>;
     private readonly customTextColorSignal: ValueSignal<IColor>;

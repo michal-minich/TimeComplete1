@@ -15,7 +15,7 @@
     <RootNamespace>TimeComplete</RootNamespace>
     <AssemblyName>TimeComplete</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -78,36 +78,35 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\data\Data.ts" />
     <TypeScriptCompile Include="src\components\Window.ts" />
-    <TypeScriptCompile Include="src\controllers\AppRuntimeSettings.ts" />
+    <TypeScriptCompile Include="src\data\Settings.ts" />
     <TypeScriptCompile Include="src\common.ts" />
     <TypeScriptCompile Include="src\data\Dashboard.ts" />
-    <TypeScriptCompile Include="src\controllers\AddTaskActivity.ts" />
-    <TypeScriptCompile Include="src\controllers\EditTaskTitleActivity.ts" />
-    <TypeScriptCompile Include="src\controllers\SearchTaskListActivity.ts" />
-    <TypeScriptCompile Include="src\controllers\SelectTaskActivity.ts" />
-    <TypeScriptCompile Include="src\controllers\TaskListActivity.ts" />
-    <TypeScriptCompile Include="src\controllers\App.ts" />
+    <TypeScriptCompile Include="src\data\TasksDashItem.ts" />
+    <TypeScriptCompile Include="src\components\App.ts" />
     <TypeScriptCompile Include="src\data\Color.ts" />
     <TypeScriptCompile Include="src\data\DateTime.ts" />
     <TypeScriptCompile Include="src\data\Note.ts" />
     <TypeScriptCompile Include="src\data\Label.ts" />
-    <TypeScriptCompile Include="src\data\LabelStyle.ts" />
+    <TypeScriptCompile Include="src\data\ColorStyle.ts" />
     <TypeScriptCompile Include="src\operations\IncrementCounter.ts" />
     <TypeScriptCompile Include="src\io\SessionStore.ts" />
     <TypeScriptCompile Include="src\data\Task.ts" />
     <TypeScriptCompile Include="src\interfaces.ts" />
     <TypeScriptCompile Include="src\io\Clock.ts" />
-    <TypeScriptCompile Include="src\controllers\QueryMatcher.ts" />
+    <TypeScriptCompile Include="src\operations\QueryMatcher.ts" />
     <TypeScriptCompile Include="src\operations\QueryParser.ts" />
     <TypeScriptCompile Include="src\start.ts" />
     <TypeScriptCompile Include="src\operations\Serializer.ts" />
     <TypeScriptCompile Include="src\views\EditLabelView.tsx" />
     <TypeScriptCompile Include="src\views\LabelsPopupView.tsx" />
-    <TypeScriptCompile Include="src\views\TaskListActivityView.tsx" />
+    <TypeScriptCompile Include="src\views\EditTaskTitleView.tsx" />
+    <TypeScriptCompile Include="src\views\AddTaskView.tsx" />
+    <TypeScriptCompile Include="src\views\TasksDashItemView.tsx" />
+    <TypeScriptCompile Include="src\views\TaskListView.tsx" />
     <TypeScriptCompile Include="src\views\NewLabelView.tsx" />
     <TypeScriptCompile Include="src\views\MainView.tsx" />
-    <TypeScriptCompile Include="src\views\TaskListsSearchesView.tsx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

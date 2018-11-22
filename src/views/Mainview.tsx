@@ -3,20 +3,23 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ILabelStyle } from "../interfaces";
-import { taskListActivityView } from "./TaskListActivityView";
+import { IApp, IColorStyle as ILabelStyle } from "../interfaces";
 import { labelsPopupView } from "./LabelsPopupView";
 import { onMouseDown, indexOfMin, removeTextSelections, R } from "../common";
 import editLabelView from "./EditLabelView";
-import TaskListActivity from "../controllers/TaskListActivity";
+import TasksDashItem from "../data/TasksDashItem";
+import { tasksDashItemView } from "./TasksDashItemView";
+import editTaskTitleView from "./EditTaskTitleView";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
 let numColumnsSignal = R.data(3);
 
+
 export function labelInlineStyle(ls: ILabelStyle) {
     return { backgroundColor: ls.backColor.value, color: ls.textColor.value };
 }
+
 
 window.addEventListener("mouseup",
     () => {
@@ -28,10 +31,12 @@ window.addEventListener("mouseup",
     },
     false);
 
+
 export default function mainView(a: IApp) {
 
     const elv = editLabelView(a);
     const lpv = labelsPopupView(a, a.data.labels);
+    const ettv = editTaskTitleView(a);
 
     const view =
         <div>
@@ -52,14 +57,14 @@ export default function mainView(a: IApp) {
                 <button>
                     Notes <span className="drop-down-triangle">&#x25BC;</span>
                 </button>
-                <button onClick={() => a.activity.dashboard.unshift(new TaskListActivity(a))}>
+                <button onClick={() => a.dashboard.unshift(new TasksDashItem(a))}>
                     Add <span className="drop-down-triangle">&#x25BC;</span>
                 </button>
                 <button onClick={() => a.generateLocalStorageDownload()}>Export</button>
                 <input className="view-filter" type="number" fn={data(numColumnsSignal)}/>
                 <input className="view-filter" type="search" placeholder="View Filter"/>
                 <ul className="add-menu menu">
-                    <li onClick={() => a.activity.dashboard.unshift(new TaskListActivity(a))}>
+                    <li onClick={() => a.dashboard.unshift(new TasksDashItem(a))}>
                         Add New Task List
                     </li>
                     <li>Add New Note</li>
@@ -79,12 +84,7 @@ export default function mainView(a: IApp) {
             {lpv.view}
             {elv.view}
             <div className="view-area">
-                <textarea
-                ref={taskEditTextBox}
-                fn={data(a.activity.editTaskTitle.newName)}
-                onKeyUp={(e: KeyboardEvent) => a.activity.editTaskTitle.keyUp(e)}
-                onBlur={() => a.activity.editTaskTitle.confirm()}
-                className="task-text-edit-box selected-task"></textarea>
+                {ettv.view}
                 <table className="task-list-activities">
                     <tr>
                         {() => {
@@ -95,12 +95,13 @@ export default function mainView(a: IApp) {
                                 tds.push(document.createElement("td"));
                                 tdsHeight.push(0);
                             }
-                            const items = a.activity.dashboard.items();
-                            for (let tla2 of items) {
+                            for (const di of a.dashboard.items()) {
+                                if (!(di instanceof TasksDashItem))
+                                    continue;
                                 const col = indexOfMin(tdsHeight);
-                                const v = taskListActivityView(a, tla2, lpv);
+                                const v = tasksDashItemView(a, di, lpv, ettv);
                                 tds[col].appendChild(v);
-                                tdsHeight[col] += tla2.estimatedHeight;
+                                tdsHeight[col] += di.estimatedHeight;
                             }
                             return tds;
                         }}
