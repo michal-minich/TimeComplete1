@@ -1,7 +1,6 @@
 ﻿import S from "s-js"
 import SArray from "s-array";
-import { IDomainObject, ArraySignal, ValueSignal, IApp, WritableArraySignal } from "./interfaces";
-import Serializer from "./operations/Serializer";
+import { IDomainObject, ArraySignal, ValueSignal, WritableArraySignal } from "./interfaces";
 
 
 export function findById<T extends IDomainObject>(items: ArraySignal<T>, id: number): T {
@@ -9,16 +8,6 @@ export function findById<T extends IDomainObject>(items: ArraySignal<T>, id: num
     if (item === undefined)
         throw "Item with key '" + id + "' is not present.";
     return item;
-}
-
-
-export function saveWithSerialize<T extends object>(
-    app: IApp,
-    key: string,
-    value: ArrayLike<T>): void {
-
-    const sv = new Serializer(app).toPlainObject(value);
-    app.localStore.save(key, sv);
 }
 
 
@@ -72,12 +61,27 @@ export function indexOfMin(array: ArrayLike<any>): number {
 }
 
 
+export function isValueSignal(v: any): v is ValueSignal<any> {
+    return typeof v === "function" && (v as any).name === "data";
+}
+
+
+export function isArraySignal(v: NonNullable<object>): v is WritableArraySignal<any> {
+    return typeof (v as any).mapS === "function";
+}
+
+
+export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
+    return typeof (v as any).id === "number" && typeof (v as any).createdOn.value === "string";
+}
+
+
 export module R {
 
-    //export function compute<T>(fn: () => T): () => T;
-    //export function compute<T>(fn: (v: T) => T, seed: T): () => T;
-    export function compute<T>(fn: () => T): () => T {
-        return S(fn);
+    export function compute<T>(fn: () => T): () => T;
+    export function compute<T>(fn: (v: T) => T, seed: T): () => T;
+    export function compute<T>(fn: any, seed?: T): () => T {
+        return (S as any)(fn, seed);
     }
 
     export function root<T>(fn: (dispose: () => void) => T): T {
@@ -105,5 +109,11 @@ export module R {
 
     export function freeze<T>(signal: ValueSignal<T>): T {
         return S.freeze(signal);
+    }
+
+    export function on<T>(ev: () => any, fn: () => T): () => T;
+    export function on<T>(ev: () => any, fn: (v: T) => T, seed: T, onchanges?: boolean): () => T;
+    export function on<T>(ev: () => any, fn?: any, seed?: T, onchanges?: boolean): T {
+        return (S.on as any)(ev, fn, seed, onchanges);
     }
 }

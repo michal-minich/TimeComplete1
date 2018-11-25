@@ -5,8 +5,8 @@
         IDomainObject,
         ITask,
         IApp,
-        ValueSignal,
         ArraySignal,
+        IQuery,
     }
     from "../interfaces";
 import { QueryText, QueryLabel, QueryParser } from "./QueryParser";
@@ -15,14 +15,27 @@ import { R } from "../common";
 
 export default class QueryMatcher implements IQueryMatcher {
 
-    readonly text: ValueSignal<string>;
-    readonly labels: ArraySignal<ILabel>;
+    private readonly labelsSignal: ArraySignal<ILabel>;
+    private qis!: IQueryElement[];
+    private lc: string | undefined;
 
 
     constructor(private readonly app: IApp) {
-        this.text = R.data("");
-        this.labels = R.array();
+        this.labelsSignal = R.array();
     }
+
+
+    update(query: IQuery): void {
+        this.qis = QueryParser.parse(this.app, query.text());
+        const label = this.firstLabel();
+        if (label) {
+            const l = this.app.data.labels().find(l2 => l2.name === label.value);
+            if (l)
+                this.lc = l.style.backColor.value;
+        }
+    }
+
+    get labels(): ArraySignal<ILabel> { return this.labelsSignal; }
 
 
     generalSearchMatches(queryText: string): boolean {
@@ -50,23 +63,13 @@ export default class QueryMatcher implements IQueryMatcher {
     }
 
 
-    queryItems: IQueryElement[] = [];
-    firstLabelColor: string | undefined;
+    get queryItems(): IQueryElement[] { return this.qis; }
 
 
-    parseTokens() {
-        this.queryItems = QueryParser.parse(this.app, this.text());
-        const label = this.firstLabel();
-        if (label) {
-            const l = this.app.data.labels().find(l2 => l2.name === label.value);
-            if (l)
-                this.firstLabelColor = l.style.backColor.value;
-        }
-    }
+    get firstLabelColor(): string | undefined { return this.lc; }
 
 
     taskMatches(t: ITask): boolean {
-        this.parseTokens();
         const title = t.title;
         for (const qi of this.queryItems) {
             if (qi instanceof QueryText) {

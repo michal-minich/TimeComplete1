@@ -7,10 +7,19 @@ export default class Task implements ITask {
     constructor(
         private readonly app: IApp,
         title: string,
-        associatedLabels?: WritableArraySignal<ILabel>) {
+        associatedLabels?: WritableArraySignal<ILabel>,
+        id?: number,
+        createdOn?: IDateTime) {
 
         this.titleSignal = R.data(title);
         this.associatedLabels = associatedLabels ? associatedLabels : R.array([]);
+        if (id) {
+            this.id = id;
+            this.createdOn = createdOn!;
+        } else {
+            this.id = this.app.idCounter.getNext();
+            this.createdOn = this.app.clock.now();
+        }
     }
 
 
@@ -18,8 +27,8 @@ export default class Task implements ITask {
     private readonly completedOnSignal = R.data<IDateTime | undefined>(undefined);
 
 
-    id = this.app.idCounter.getNext();
-    createdOn = this.app.clock.now();
+    id: number;
+    createdOn: IDateTime;
     readonly associatedLabels: WritableArraySignal<ILabel>;
 
 

@@ -1,56 +1,119 @@
-﻿import { R, saveWithSerialize } from "../common";
+﻿import { R, download } from "../common";
 import SessionStore from "../io/SessionStore"
 import Serializer from "../operations/Serializer"
-import { IData, ITask, WritableArraySignal, ILabel, INote, ISettings, IApp, ITabPage } from "../interfaces";
+import {
+        IData,
+        ITask,
+        WritableArraySignal,
+        ILabel,
+        INote,
+        ISettings,
+        IApp,
+        ITab
+    } from
+    "../interfaces";
 import Settings from "./Settings";
+import { addTab } from "./Tab";
 
-export class Data implements IData {
+
+export default class Data implements IData {
 
     tasks!: WritableArraySignal<ITask>;
     labels!: WritableArraySignal<ILabel>;
     notes!: WritableArraySignal<INote>;
-    tabs!: WritableArraySignal<ITabPage>;
+    tabs!: WritableArraySignal<ITab>;
 
-    readonly settings: ISettings;
+    settings!: ISettings;
     selectedTask: ITask | undefined;
 
 
     constructor(private readonly app: IApp) {
-        this.settings = new Settings();
     }
 
 
-    init(): void {
-        this.labels = R.array();
-        this.tasks = R.array();
-        this.notes = R.array();
-        this.tabs = R.array();
-    }
+    load() {
 
+        this.settings = this.loadObj<ISettings>("settings", "Settings", () => new Settings());
+        this.labels = this.loadArray<ILabel>("labels", "Label");
+        this.tasks = this.loadArray<ITask>("tasks", "Task");
+        this.notes = this.loadArray<INote>("notes", "Note");
+        this.tabs = this.loadArray<ITab>("tabs", "Tab");
 
-    load(): void {
-        const savedLabels = new SessionStore().loadOrUndefined("labels");
-        this.labels = savedLabels === undefined
-            ? R.array()
-            : new Serializer(this.app).fromPlainObject<WritableArraySignal<ILabel>>(
-                savedLabels,
-                "LabelList");
-
-        const savedTasks = new SessionStore().loadOrUndefined("tasks");
-        this.tasks = savedTasks === undefined
-            ? R.array()
-            : new Serializer(this.app).fromPlainObject<WritableArraySignal<ITask>>(
-                savedTasks,
-                "TaskList");
+        console.log("a");
+        const xx = this.tabs();
+        if (xx.length === 0) {
+            console.log("x");
+            addTab(this.app);
+        }
+        console.log("b");
 
         R.compute(() => {
             const labels = this.labels();
-            saveWithSerialize(this.app, "labels", labels);
+            this.saveWithSerialize(this.app, "labels", labels);
         });
 
         R.compute(() => {
             const tasks = this.tasks();
-            saveWithSerialize(this.app, "tasks", tasks);
+            this.saveWithSerialize(this.app, "tasks", tasks);
         });
+
+        R.compute(() => {
+            const notes = this.notes();
+            this.saveWithSerialize(this.app, "notes", notes);
+        });
+
+        R.compute(() => {
+            const tabs = this.tabs();
+            this.saveWithSerialize(this.app, "tabs", tabs);
+        });
+
+        R.compute(() => {
+            const sett = this.settings;
+            this.saveWithSerialize(this.app, "settings", sett);
+        });
+    }
+
+
+    loadArray<T extends object>(key: string, type: string): WritableArraySignal<T> {
+        const arr = new SessionStore().loadOrUndefined(key);
+        return arr === undefined
+            ? R.array()
+            : new Serializer(this.app)
+            .fromArray<T>(arr as object[], type);
+    }
+
+
+    loadObj<T extends object>(key: string, type: string, init: () => T): T {
+        const o = new SessionStore().loadOrUndefined(key);
+        return o === undefined
+            ? init()
+            : new Serializer(this.app).fromPlainObject<T>(o, type);
+    }
+
+
+    saveWithSerialize<T extends object>(
+        app: IApp,
+        key: string,
+        value: T): void {
+
+        const sv = new Serializer(app).toPlainObject(value);
+        app.localStore.save(key, sv);
+    }
+
+
+    generateLocalStorageDownload(): void {
+        const s = this.app.localStore;
+        const data = {
+            labels: s.load("labels"),
+            tasks: s.load("tasks"),
+            notes: s.load("notes"),
+            tabs: s.load("tabs"),
+            activities: s.load("activities")
+        };
+        download("export.json", JSON.stringify(data));
+    }
+
+
+    importLocalStorageDownload(): void {
     }
 }

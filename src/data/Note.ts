@@ -1,17 +1,34 @@
-﻿import { INote, ValueSignal, ILabel, ArraySignal, IApp, WritableArraySignal } from "../interfaces";
+﻿import {
+    INote,
+    ValueSignal,
+    ILabel,
+    ArraySignal,
+    IApp,
+    WritableArraySignal,
+    IDateTime
+} from "../interfaces";
 import { R } from "../common";
 
 
 export default class Note implements INote {
 
-    constructor(private readonly app: IApp) {
+    constructor(private readonly app: IApp,
+        id?: number,
+        createdOn?: IDateTime) {
         this.textSignal = R.data("");
         this.associatedLabels = R.array([]);
+        if (id) {
+            this.id = id;
+            this.createdOn = createdOn!;
+        } else {
+            this.id = this.app.idCounter.getNext();
+            this.createdOn = this.app.clock.now();
+        }
     }
 
 
-    id = this.app.idCounter.getNext();
-    createdOn = this.app.clock.now();
+    id: number;
+    createdOn: IDateTime;
     readonly associatedLabels: WritableArraySignal<ILabel>;
     private readonly textSignal: ValueSignal<string>;
 

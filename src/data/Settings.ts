@@ -1,6 +1,10 @@
 import { ISettings } from "../interfaces";
+import { R } from "../common";
 
 
 export default class Settings implements ISettings {
-    readonly labelPrefix: string = "#";
+    labelPrefix = R.data("#");
+    selectedTabIndex = R.data(0);
+    dashboardColumnsCount = R.data(3);
+    lastId = 0;
 }

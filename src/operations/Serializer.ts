@@ -1,25 +1,36 @@
 ﻿import {
-    isValueSignal,
-    isDomainObject,
     Indexer,
     JsonValueType,
     ISerializer,
     ILabel,
     IColor,
-    ITask,
     IDateTime,
-    LabelTextColor,
+    TextColorUsage,
     ArraySignal,
     IApp,
     WritableArraySignal,
-    isArraySignal
+    IDomainObject,
+    IDashboard,
+    IDashItem,
+    IQuery
 } from "../interfaces";
 import Label from "../data/Label";
 import Color from "../data/Color";
 import DateTime from "../data/DateTime";
 import Task from "../data/Task";
-import LabelStyle from "../data/ColorStyle";
-import { R, findById } from "../common";
+import ColorStyle from "../data/ColorStyle";
+import {
+    R,
+    findById,
+    isValueSignal,
+    isDomainObject,
+    isArraySignal
+} from "../common";
+import Settings from "../data/Settings";
+import Tab from "../data/Tab";
+import Dashboard from "../data/Dashboard";
+import TasksDashItem from "../data/TasksDashItem";
+import Query from "../data/Query";
 
 
 export default class Serializer implements ISerializer {
@@ -77,7 +88,6 @@ export default class Serializer implements ISerializer {
                 }
             }
             if (Array.isArray(v)) {
-                //return v.map((i: any) => this.toPlain(i));
                 const a: JsonValueType[] = [];
                 for (const item of v) {
                     const plainItem = this.toPlain(item, objLevel);
@@ -89,7 +99,7 @@ export default class Serializer implements ISerializer {
             } else {
                 const o: Indexer<JsonValueType> = {};
                 for (const k of Object.keys(v)) {
-                    if (k === "app")
+                    if (k === "app" || k === "matcher")
                         continue;
                     const f2 = this.toPlain(v[k], ++objLevel);
                     if (f2 !== undefined) {
@@ -119,68 +129,104 @@ export default class Serializer implements ISerializer {
             const l = new Label(
                 this.app,
                 o.name,
-                new
-                LabelStyle(
-                    this.fromPlainObject<IColor>(o.style.backColor, "Color"),
-                    this.fromPlainObject<IColor>(o.style.customTextColor, "Color"),
-                    o.style.textColorInUse as LabelTextColor));
-            l.id = o.id;
-            l.createdOn = this.fromPlainObject<IDateTime>(
-                o.createdOn,
-                "DateTime");
+                this.getColorStyle(o.style),
+                o.id,
+                this.fromPlainObject<IDateTime>(
+                    o.createdOn,
+                    "DateTime"));
             return l as any as T;
         case "Task":
             let associatedLabels: WritableArraySignal<ILabel>;
             if (o.associatedLabels) {
-                associatedLabels = this.fromPlainObject<WritableArraySignal<ILabel>>(
-                    o.associatedLabels,
-                    "AssociatedLabels");
+                associatedLabels = this.fromRefArray<ILabel>(
+                    o.associatedLabels as number[],
+                    this.app.data.labels);
             } else {
                 associatedLabels = R.array([]);
             }
-            const t = new Task(this.app, o.title, associatedLabels);
-            t.id = o.id;
-            t.createdOn = this.fromPlainObject<IDateTime>(
-                o.createdOn,
-                "DateTime");
+            const t = new Task(
+                this.app,
+                o.title,
+                associatedLabels,
+                o.id,
+                this.fromPlainObject<IDateTime>(
+                    o.createdOn,
+                    "DateTime"));
             if (o.completedOn) {
                 t.completedOn = this.fromPlainObject<IDateTime>(
                     o.completedOn,
                     "DateTime");
             }
             return t as any as T;
-        case "LabelList":
+        case "Tab":
         {
-            const items: ILabel[] = [];
-            for (const item of o) {
-                const i = this.fromPlainObject<ILabel>(item, "Label");
-                items.push(i);
-            }
-            const ls = R.array(items);
-            return ls as any as T;
+            const tab = new Tab(this.app, o.title, this.getColorStyle(o.style));
+            tab.content = this.getDashboard(o.content);
+            return tab as any as T;
         }
-        case "TaskList":
+        case "DashItem":
         {
-            const items: ITask[] = [];
-            for (const item of o) {
-                const i = this.fromPlainObject<ITask>(item, "Task");
-                items.push(i);
-            }
-            const ts = R.array(items);
-            return ts as any as T;
+            const tdi = new TasksDashItem(this.app);
+            tdi.query = this.getQuery(o.query);
+            tdi.newTitle(o.newTitle);
+            return tdi as any as T;
         }
-        case "AssociatedLabels":
+        case "Settings":
         {
-            const items: ILabel[] = [];
-            for (const item of o) {
-                const i = findById(this.app.data.labels, item);
-                items.push(i);
-            }
-            const als = R.array(items);
-            return als as any as T;
+            const s = new Settings();
+            s.labelPrefix = R.data(o.labelPrefix);
+            s.selectedTabIndex = R.data(o.selectedTabIndex);
+            s.dashboardColumnsCount = R.data(o.dashboardColumnsCount);
+            s.lastId = o.lastId;
+            return s as any as T;
         }
         default:
             throw new Error();
         }
+    }
+
+
+    getQuery(o: any): IQuery {
+        const q = new Query(this.app, o.text);
+        return q;
+    }
+
+
+    getDashboard(o: any): IDashboard {
+        const d = new Dashboard(this.app);
+        d.items = this.fromArray<IDashItem>(o.items, "DashItem");
+        d.selected(o.selected);
+        return d;
+    }
+
+
+    getColorStyle(o: any): ColorStyle {
+        return new ColorStyle(
+            this.fromPlainObject<IColor>(o.backColor, "Color"),
+            this.fromPlainObject<IColor>(o.customTextColor, "Color"),
+            o.textColorInUse as TextColorUsage);
+    }
+
+
+    fromRefArray<T extends IDomainObject>(
+        ids: number[],
+        source: ArraySignal<T>): WritableArraySignal<T> {
+
+        const items: T[] = [];
+        for (const id of ids) {
+            const i = findById<T>(source, id);
+            items.push(i);
+        }
+        return R.array(items);
+    }
+
+
+    fromArray<T extends object>(arr: object[], itemType: string): WritableArraySignal<T> {
+        const items: T[] = [];
+        for (const item of arr) {
+            const i = this.fromPlainObject<T>(item, itemType);
+            items.push(i);
+        }
+        return R.array(items);
     }
 }

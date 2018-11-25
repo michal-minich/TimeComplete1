@@ -10,19 +10,15 @@ export type Indexer<T> = { [key: string]: T };
 export type JsonValueType =
     string | number | boolean | object | string[] | number[] | boolean[] | object[];
 
-export function isValueSignal(v: any): v is ValueSignal<any> {
-    return typeof v === "function" && (v as any).name === "data";
-}
-
-export function isArraySignal(v: NonNullable<object>): v is WritableArraySignal<any> {
-    return typeof (v as any).mapS === "function";
-}
-
 export type ArraySignal<T> = SArray<T>;
 
 export type WritableArraySignal<T> = SDataArray<T>;
 
 export type ValueSignal<T> = DataSignal<T>;
+
+export interface IReadonlyValueSignal<T> {
+    (): T;
+}
 
 
 // Data =====================================================================
@@ -41,10 +37,6 @@ export interface IDomainObject {
     readonly createdOn: IDateTime;
 }
 
-export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
-    return typeof (v as any).id === "number" && typeof (v as any).createdOn.value === "string";
-}
-
 export interface ILabel extends IDomainObject {
     name: string;
     readonly style: IColorStyle;
@@ -55,10 +47,10 @@ export interface IColorStyle {
     backColor: IColor;
     readonly textColor: IColor;
     customTextColor: IColor;
-    textColorInUse: LabelTextColor;
+    textColorInUse: TextColorUsage;
 }
 
-export enum LabelTextColor {
+export const enum TextColorUsage {
     BlackOrWhite,
     Inverted,
     Custom
@@ -82,42 +74,30 @@ export interface INote extends IDomainObject {
 
 
 export interface IApp {
-    readonly data: IData;
-
     readonly localStore: IDataStore;
     readonly clock: IClock;
     readonly idCounter: IIdProvider<number>;
-
-    generateLocalStorageDownload(): void;
-    importLocalStorageDownload(): void;
-
     readonly dashboard: IDashboard;
-
-    init(): void;
-    load(): void;
+    readonly data: IData;
 }
 
 export interface IData {
     readonly tasks: WritableArraySignal<ITask>;
     readonly labels: WritableArraySignal<ILabel>;
     readonly notes: WritableArraySignal<INote>;
-    readonly tabs: WritableArraySignal<ITabPage>;
-    init(): void;
-    load(): void;
+    readonly tabs: WritableArraySignal<ITab>;
     readonly settings: ISettings;
+    load(): void;
     selectedTask: ITask | undefined;
+    generateLocalStorageDownload(): void;
+    importLocalStorageDownload(): void;
 }
 
 export interface ISettings {
-    readonly labelPrefix: string;
-}
-
-export interface IAppActivitiesSettings {
-    taskLists: Array<{
-        taskQueryText: string | undefined;
-        newTaskTitle: string | undefined;
-    }>;
-    selectedTask?: number;
+    readonly labelPrefix: ValueSignal<string>;
+    readonly selectedTabIndex: ValueSignal<number>;
+    readonly dashboardColumnsCount: ValueSignal<number>;
+    lastId: number;
 }
 
 export interface IDashboard {
@@ -132,21 +112,26 @@ export interface IDashItem {
 }
 
 export interface ITasksDashBoard extends IDashboard {
-    readonly filter: IQueryMatcher;
+    readonly filter: IQuery;
     displayColumnsCount: number;
 }
 
 export interface ITasksDashItem extends IDashItem {
     readonly newTitle: ValueSignal<string>;
-    query: IQueryMatcher;
+    query: IQuery;
 }
 
 export interface IQueryElement {
     makeString(): string;
 }
 
-export interface IQueryMatcher {
+export interface IQuery {
     readonly text: ValueSignal<string>;
+    readonly matcher: IQueryMatcher;
+}
+
+export interface IQueryMatcher {
+    update(query: IQuery): void;
     generalSearchMatches(queryText: string): boolean;
     resultTasks(): ITask[];
     matches(obj: IDomainObject): boolean;
@@ -156,12 +141,12 @@ export interface IQueryMatcher {
     includeLabel(label: ILabel): void;
     excludeLabel(label: ILabel): void;
     readonly firstLabelColor: string | undefined;
+    readonly existingLabels: ILabel[];
 }
 
-export interface ITabPage {
+export interface ITab {
     title: string;
     readonly style: IColorStyle;
-    close(): void;
     content: any;
 }
 
@@ -204,11 +189,6 @@ export interface IDataStore {
 // Operations ===============================================================
 
 
-export interface IReadonlyValueSignal<T> {
-    (): T;
-}
-
-
 export interface IIdProvider<T> {
     getNext(): T;
     readonly current: T;
@@ -218,4 +198,11 @@ export interface IIdProvider<T> {
 export interface ISerializer {
     serialize<T extends object>(value: T): string;
     deserialize<T extends object>(value: string, type: string): T;
+
+    fromPlainObject<T extends object>(value: object, type: string): T;
+    toPlainObject<T extends object>(value: T): object;
+    fromArray<T extends object>(arr: object[], itemType: string): WritableArraySignal<T>;
+    fromRefArray<T extends IDomainObject>(
+        ids: number[],
+        source: ArraySignal<T>): WritableArraySignal<T>;
 }

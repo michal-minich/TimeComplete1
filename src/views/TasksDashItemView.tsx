@@ -4,7 +4,7 @@ Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ITasksDashItem, ILabel } from "../interfaces";
 import { LabelsPopupView } from "./LabelsPopupView";
-import { taskListView } from "./TaskListView";
+import taskListView from "./TaskListView";
 import { EditTaskTitleView } from "./EditTaskTitleView";
 import addTaskView from "./AddTaskView";
 
@@ -13,7 +13,7 @@ export let queryTextBox: HTMLInputElement;
 
 
 function queryColor(tdi: ITasksDashItem): string {
-    const c = tdi.query.firstLabelColor;
+    const c = tdi.query.matcher.firstLabelColor;
     return c ? c : "rgb(101, 101, 101)";
 }
 
@@ -32,7 +32,10 @@ function queryBorder(a: IApp, tdi: ITasksDashItem) {
 }
 
 
-export function tasksDashItemView(a: IApp, tdi: ITasksDashItem, lpv: LabelsPopupView, ettv: EditTaskTitleView) {
+export function tasksDashItemView(a: IApp,
+    tdi: ITasksDashItem,
+    lpv: LabelsPopupView,
+    ettv: EditTaskTitleView) {
 
     let originalTitle = "";
 
@@ -60,7 +63,7 @@ export function tasksDashItemView(a: IApp, tdi: ITasksDashItem, lpv: LabelsPopup
                 <table className="task-list lined-list">
                     <thead></thead>
                     <tbody>
-                    {taskListView(a, tdi.query.resultTasks(), lpv, ettv)}
+                    {taskListView(a, tdi.query.matcher.resultTasks(), lpv, ettv)}
                     </tbody>
                 </table>
             </div>

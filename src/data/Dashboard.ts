@@ -14,8 +14,8 @@ export default class Dashboard implements IDashboard {
     readonly selected: ValueSignal<IDashItem | undefined>;
 
 
-    constructor(private readonly app: IApp, items: IDashItem[]) {
-        this.items = R.array(items);
+    constructor(private readonly app: IApp) {
+        this.items = R.array([]);
         this.selected = R.data(undefined);
     }
 

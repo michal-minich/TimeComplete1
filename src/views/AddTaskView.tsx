@@ -3,8 +3,8 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ILabel, ITasksDashItem } from "../interfaces";
-import QueryMatcher from "../operations/QueryMatcher";
 import Task from "../data/Task";
+import Query from "../data/Query";
 
 
 export default function addTaskView(a: IApp, tdi: ITasksDashItem) {
@@ -15,17 +15,15 @@ export default function addTaskView(a: IApp, tdi: ITasksDashItem) {
             return;
         let title = tdi.newTitle();
         tdi.newTitle("");
-        const sq = new QueryMatcher(a);
-        sq.text(queryText);
-        const tq = new QueryMatcher(a);
-        tq.text(title);
-        for (const l of tq.existingLabels) {
+        const sq = new Query(a, queryText);
+        const tq = new Query(a, title);
+        for (const l of tq.matcher.existingLabels) {
             title = title.replace("#" + l.name, "");
         }
         title = title.trim().replace("  ", " ");
         const t = new Task(a, title);
-        associateLabels(t, sq.existingLabels);
-        associateLabels(t, tq.existingLabels);
+        associateLabels(t, sq.matcher.existingLabels);
+        associateLabels(t, tq.matcher.existingLabels);
         a.data.tasks.unshift(t);
     }
 

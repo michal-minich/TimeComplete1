@@ -7,10 +7,11 @@ import { LabelsPopupView } from "./LabelsPopupView";
 import DateTime from "../data/DateTime";
 import { EditTaskTitleView } from "./EditTaskTitleView";
 
-export let queryTextBox: HTMLInputElement;
 
-
-export function taskListView(a: IApp, tasks: ITask[], lpv: LabelsPopupView, ettv: EditTaskTitleView) {
+export default function taskListView(a: IApp,
+    tasks: ITask[],
+    lpv: LabelsPopupView,
+    ettv: EditTaskTitleView) {
 
 
     function perform(task: ITask, isDone: HTMLInputElement): any {

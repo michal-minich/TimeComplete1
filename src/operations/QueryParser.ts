@@ -13,7 +13,7 @@ export class QueryLabel implements IQueryElement {
 
     constructor(private readonly app: IApp, public value: string) {}
 
-    makeString(): string { return this.app.data.settings.labelPrefix + this.value; }
+    makeString(): string { return this.app.data.settings.labelPrefix() + this.value; }
 }
 
 
@@ -24,7 +24,7 @@ export module QueryParser {
         const iterator = getTokenIterator(queryTextText, 0);
         let tok: string | undefined;
         while ((tok = iterator()) !== undefined) {
-            if (tok[0] === app.data.settings.labelPrefix) {
+            if (tok[0] === app.data.settings.labelPrefix()) {
                 queryItems.push(new QueryLabel(app, tok.substring(1)));
             } else {
                 queryItems.push(new QueryText(tok));

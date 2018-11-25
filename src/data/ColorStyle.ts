@@ -1,18 +1,18 @@
-﻿import { IColorStyle, IColor, LabelTextColor, ValueSignal } from "../interfaces";
+﻿import { IColorStyle, IColor, TextColorUsage, ValueSignal } from "../interfaces";
 import { R } from "../common";
 import Color from "./Color";
 
 
-export default class LabelStyle implements IColorStyle {
+export default class ColorStyle implements IColorStyle {
 
     private readonly backColorSignal: ValueSignal<IColor>;
     private readonly customTextColorSignal: ValueSignal<IColor>;
-    private readonly textColorInUseSignal: ValueSignal<LabelTextColor>;
+    private readonly textColorInUseSignal: ValueSignal<TextColorUsage>;
 
     constructor(
         backColor: IColor,
         customTextColor: IColor,
-        textColorInUse: LabelTextColor = LabelTextColor.Custom) {
+        textColorInUse: TextColorUsage = TextColorUsage.Custom) {
 
         this.backColorSignal = R.data(backColor);
         this.customTextColorSignal = R.data(customTextColor);
@@ -26,11 +26,11 @@ export default class LabelStyle implements IColorStyle {
 
     get textColor(): IColor {
         switch (this.textColorInUse) {
-        case LabelTextColor.BlackOrWhite:
+        case TextColorUsage.BlackOrWhite:
             return new Color("white");
-        case LabelTextColor.Inverted:
+        case TextColorUsage.Inverted:
             return new Color("white");
-        case LabelTextColor.Custom:
+        case TextColorUsage.Custom:
             return this.customTextColor;
         default:
             throw undefined;
@@ -43,7 +43,7 @@ export default class LabelStyle implements IColorStyle {
     set customTextColor(value: IColor) { this.customTextColorSignal(value); }
 
 
-    get textColorInUse(): LabelTextColor { return this.textColorInUseSignal(); }
+    get textColorInUse(): TextColorUsage { return this.textColorInUseSignal(); }
 
-    set textColorInUse(value: LabelTextColor) { this.textColorInUseSignal(value); }
+    set textColorInUse(value: TextColorUsage) { this.textColorInUseSignal(value); }
 }
