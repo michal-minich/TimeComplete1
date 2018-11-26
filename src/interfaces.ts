@@ -69,6 +69,36 @@ export interface INote extends IDomainObject {
     readonly allLabels: ArraySignal<ILabel>;
 }
 
+export interface ITab {
+    title: string;
+    readonly style: IColorStyle;
+    content: any;
+}
+
+export interface IDashboard {
+    readonly items: ArraySignal<IDashItem>;
+    unshift(di: IDashItem): void;
+    remove(di: IDashItem): void;
+    readonly selected: ValueSignal<IDashItem | undefined>;
+}
+
+export interface ITasksDashItem extends IDashItem {
+    readonly newTitle: ValueSignal<string>;
+    query: IQuery;
+}
+
+export interface IQuery {
+    readonly text: ValueSignal<string>;
+    readonly matcher: IQueryMatcher;
+}
+
+export interface ISettings {
+    readonly labelPrefix: ValueSignal<string>;
+    readonly selectedTabIndex: ValueSignal<number>;
+    readonly dashboardColumnsCount: ValueSignal<number>;
+    lastId: number;
+}
+
 
 // Controllers ==============================================================
 
@@ -93,20 +123,6 @@ export interface IData {
     importLocalStorageDownload(): void;
 }
 
-export interface ISettings {
-    readonly labelPrefix: ValueSignal<string>;
-    readonly selectedTabIndex: ValueSignal<number>;
-    readonly dashboardColumnsCount: ValueSignal<number>;
-    lastId: number;
-}
-
-export interface IDashboard {
-    readonly items: ArraySignal<IDashItem>;
-    unshift(di: IDashItem): void;
-    remove(di: IDashItem): void;
-    readonly selected: ValueSignal<IDashItem | undefined>;
-}
-
 export interface IDashItem {
     readonly estimatedHeight: number;
 }
@@ -116,41 +132,7 @@ export interface ITasksDashBoard extends IDashboard {
     displayColumnsCount: number;
 }
 
-export interface ITasksDashItem extends IDashItem {
-    readonly newTitle: ValueSignal<string>;
-    query: IQuery;
-}
-
-export interface IQueryElement {
-    makeString(): string;
-}
-
-export interface IQuery {
-    readonly text: ValueSignal<string>;
-    readonly matcher: IQueryMatcher;
-}
-
-export interface IQueryMatcher {
-    update(query: IQuery): void;
-    generalSearchMatches(queryText: string): boolean;
-    resultTasks(): ITask[];
-    matches(obj: IDomainObject): boolean;
-    taskMatches(task: ITask): boolean;
-    labelMatches(label: ILabel): boolean;
-    readonly labels: ArraySignal<ILabel>;
-    includeLabel(label: ILabel): void;
-    excludeLabel(label: ILabel): void;
-    readonly firstLabelColor: string | undefined;
-    readonly existingLabels: ILabel[];
-}
-
-export interface ITab {
-    title: string;
-    readonly style: IColorStyle;
-    content: any;
-}
-
-export interface IToolbarActivity {
+export interface IToolbar {
     showLabelsPopup(): void;
     showTasksPopup(): void;
     showNotesPopup(): void;
@@ -158,17 +140,6 @@ export interface IToolbarActivity {
 
     addTaskListView(): void;
     addNote(): void;
-}
-
-
-export interface IPopUpMenu extends IWindow {
-    showAt(content: HTMLElement, e: MouseEvent): void;
-}
-
-
-export interface IWindow {
-    showBelow(content: HTMLElement, el: HTMLElement): void;
-    hide(): void;
 }
 
 
@@ -194,6 +165,23 @@ export interface IIdProvider<T> {
     readonly current: T;
 }
 
+export interface IQueryMatcher {
+    update(query: IQuery): void;
+    generalSearchMatches(queryText: string): boolean;
+    resultTasks(): ITask[];
+    matches(obj: IDomainObject): boolean;
+    taskMatches(task: ITask): boolean;
+    labelMatches(label: ILabel): boolean;
+    readonly labels: ArraySignal<ILabel>;
+    includeLabel(label: ILabel): void;
+    excludeLabel(label: ILabel): void;
+    readonly firstLabelColor: string | undefined;
+    readonly existingLabels: ILabel[];
+}
+
+export interface IQueryElement {
+    makeString(): string;
+}
 
 export interface ISerializer {
     serialize<T extends object>(value: T): string;
@@ -206,3 +194,6 @@ export interface ISerializer {
         ids: number[],
         source: ArraySignal<T>): WritableArraySignal<T>;
 }
+
+
+// Views ====================================================================

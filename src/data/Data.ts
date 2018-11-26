@@ -39,13 +39,8 @@ export default class Data implements IData {
         this.notes = this.loadArray<INote>("notes", "Note");
         this.tabs = this.loadArray<ITab>("tabs", "Tab");
 
-        console.log("a");
-        const xx = this.tabs();
-        if (xx.length === 0) {
-            console.log("x");
+        if (this.tabs().length === 0)
             addTab(this.app);
-        }
-        console.log("b");
 
         R.compute(() => {
             const labels = this.labels();
@@ -108,7 +103,7 @@ export default class Data implements IData {
             tasks: s.load("tasks"),
             notes: s.load("notes"),
             tabs: s.load("tabs"),
-            activities: s.load("activities")
+            settings: s.load("settings")
         };
         download("export.json", JSON.stringify(data));
     }

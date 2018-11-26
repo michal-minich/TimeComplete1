@@ -5,24 +5,22 @@ Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ILabel, ArraySignal } from "../interfaces"
 import { newLabelView } from "./NewLabelView";
-import { labelInlineStyle } from "./MainView";
+import { colorInlineStyle } from "./MainView";
 import { onMouseDown } from "../common";
 import { R } from "../common";
+import windowView from "./windowView";
 
 
-export type LabelsPopupView = {
-    view: Element;
-    show(over: HTMLElement, action: (label: ILabel, el: HTMLSpanElement) => void): void;
-};
+export type LabelsPopupView = ReturnType<typeof labelsPopupView>
 
 
-export const labelsPopupView = (a: IApp, labels: ArraySignal<ILabel>) => {
+export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>) {
 
-    let _action: (label: ILabel, el: HTMLSpanElement) => void;
+    let act: (label: ILabel, el: HTMLSpanElement) => void;
     const queryText = R.data("");
 
-    const view =
-        <div className="labels-popup-view hidden">
+    const content =
+        <div className="labels-popup-view">
             <input type="search"
                    className="hidden"
                    placeholder="Search"
@@ -34,7 +32,7 @@ export const labelsPopupView = (a: IApp, labels: ArraySignal<ILabel>) => {
                     <span
                         className="label"
                         fn={onMouseDown((e) => activate(l, e.target as HTMLSpanElement))}
-                        style={labelInlineStyle(l.style)}>
+                        style={colorInlineStyle(l.style)}>
                         {l.name}
                     </span>
                 )()}
@@ -42,12 +40,15 @@ export const labelsPopupView = (a: IApp, labels: ArraySignal<ILabel>) => {
         </div>;
 
 
+    const view = windowView(a, content);
+
+
     function keyUp(e: KeyboardEvent): void {
     }
 
 
     function activate(label: ILabel, el: HTMLSpanElement): any {
-        _action(label, el);
+        act(label, el);
     }
 
 
@@ -59,18 +60,8 @@ export const labelsPopupView = (a: IApp, labels: ArraySignal<ILabel>) => {
 
 
     function show(over: HTMLElement, action: (label: ILabel, el: HTMLSpanElement) => void): void {
-
-        const r = over.getBoundingClientRect();
-        const divStyle = view.style;
-        divStyle.left = (r.left) + "px";
-        divStyle.top = (r.top + r.height + 4) + "px";
-
-        _action = action;
-        const cl = view.classList;
-        if (cl.contains("hidden"))
-            cl.remove("hidden");
-        else
-            cl.add("hidden");
+        act = action;
+        view.showBelow(over);
 
         document.addEventListener("click", hideMe);
     }
@@ -80,5 +71,5 @@ export const labelsPopupView = (a: IApp, labels: ArraySignal<ILabel>) => {
     }
 
 
-    return { view, show };
+    return { view: view.view, show };
 };

@@ -4,17 +4,13 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { IApp } from "../interfaces";
-import { labelsPopupView } from "./LabelsPopupView";
-import { onMouseDown } from "../common";
-import editLabelView from "./EditLabelView";
 import TasksDashItem from "../data/TasksDashItem";
+import { LabelsPopupView } from "./LabelsPopupView";
+import { EditLabelView } from "./EditLabelView";
 
 
-export default function toolbarView(a: IApp) {
-
-    const elv = editLabelView(a);
-    const lpv = labelsPopupView(a, a.data.labels);
-
+export default function toolbarView(a: IApp, elv: EditLabelView, lpv: LabelsPopupView) {
+    
 
     function addTaskList() {
         const tdi = new TasksDashItem(a);
@@ -24,8 +20,11 @@ export default function toolbarView(a: IApp) {
 
     const view =
         <div className="toolbar">
-            <button fn={onMouseDown((e) => lpv.show(e.target as HTMLElement,
-                (l, el) => elv.begin(l, el)))}>
+            <button onMouseDown={(e: MouseEvent) => {
+
+                lpv.show(e.target as HTMLElement,
+                    (l, el) => elv.begin(l, el));
+            }}>
                 Labels <span className="drop-down-triangle">&#x25BC;</span>
             </button>
             <button>

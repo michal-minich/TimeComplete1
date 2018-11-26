@@ -2,12 +2,15 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 Surplus;
 import data from "surplus-mixin-data";
-import { labelInlineStyle } from "./MainView";
+import { colorInlineStyle } from "./MainView";
 import LabelStyle from "../data/ColorStyle";
 import Color from "../data/Color";
 import { ILabel, IApp, ValueSignal } from "../interfaces";
 import { R } from "../common";
 import TasksDashItem from "../data/TasksDashItem";
+
+
+export type EditLabelView = ReturnType<typeof editLabelView>;
 
 
 export default function editLabelView(a: IApp) {
@@ -21,7 +24,7 @@ export default function editLabelView(a: IApp) {
         <div className={"edit-label " + (labelSignal() === undefined ? "hidden" : "")}>
             <span
                 className="label"
-                style={labelInlineStyle(new LabelStyle(
+                style={colorInlineStyle(new LabelStyle(
                     new Color(editColor()),
                     new Color("white")))}>
                 {editLabelName}

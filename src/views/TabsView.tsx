@@ -4,6 +4,7 @@ import * as Surplus from "surplus";
 Surplus;
 import { IApp, ITab, ArraySignal } from "../interfaces";
 import { addTab } from "../data/Tab";
+import { colorInlineStyle } from "./MainView";
 
 
 export default function tabsView(a: IApp) {
@@ -33,9 +34,10 @@ export default function tabsView(a: IApp) {
 
 
     function tabView(tab: ITab, index: number): HTMLSpanElement {
-        const act = index === a.data.settings.selectedTabIndex() ? " active-tab" : "";
+        const isSel = index === a.data.settings.selectedTabIndex();
         const v =
-            <span className={"tab" + act}
+            <span className={"tab" + (isSel ? " active-tab" : "")}
+                  style={isSel ? colorInlineStyle(tab.style) : {}}
                   onMouseDown={(e: MouseEvent) => activate(e, index)}>
                 {tab.title}
                 <span className="close"

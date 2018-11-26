@@ -15,7 +15,7 @@
     <RootNamespace>TimeComplete</RootNamespace>
     <AssemblyName>TimeComplete</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -81,7 +81,6 @@
     <TypeScriptCompile Include="src\data\Query.ts" />
     <TypeScriptCompile Include="src\data\Tab.ts" />
     <TypeScriptCompile Include="src\data\Data.ts" />
-    <TypeScriptCompile Include="src\components\Window.ts" />
     <TypeScriptCompile Include="src\data\Settings.ts" />
     <TypeScriptCompile Include="src\common.ts" />
     <TypeScriptCompile Include="src\data\Dashboard.ts" />
@@ -102,9 +101,11 @@
     <TypeScriptCompile Include="src\start.ts" />
     <TypeScriptCompile Include="src\operations\Serializer.ts" />
     <TypeScriptCompile Include="src\views\EditLabelView.tsx" />
+    <TypeScriptCompile Include="src\views\WindowView.tsx" />
     <TypeScriptCompile Include="src\views\LabelsPopupView.tsx" />
     <TypeScriptCompile Include="src\views\EditTaskTitleView.tsx" />
     <TypeScriptCompile Include="src\views\AddTaskView.tsx" />
+    <TypeScriptCompile Include="src\views\DashboardView.tsx" />
     <TypeScriptCompile Include="src\views\ToolbarView.tsx" />
     <TypeScriptCompile Include="src\views\TabsView.tsx" />
     <TypeScriptCompile Include="src\views\TasksDashItemView.tsx" />

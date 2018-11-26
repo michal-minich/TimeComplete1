@@ -10,10 +10,7 @@ import { ITask, IApp } from "../interfaces";
 export let taskEditTextBox: HTMLTextAreaElement;
 
 
-export type EditTaskTitleView = {
-    view: Element,
-    begin: (t: ITask, titleTd: HTMLTableDataCellElement) => void;
-};
+export type EditTaskTitleView = ReturnType<typeof editTaskTitleView>
 
 
 export default function editTaskTitleView(a: IApp) {

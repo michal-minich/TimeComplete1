@@ -239,23 +239,6 @@ textarea {
 .task-list-searches {
 }
 
-
-.labels-popup-view {
-    background-color: white;
-    border: 1px solid black;
-    left: 15px;
-    max-width: 300px;
-    min-width: 200px;
-    padding: 5px;
-    position: absolute;
-    top: 90px;
-    z-index: 10;
-}
-
-.labels-popup-view input[type=search] {
-    width: 100%;
-}
-
 #bodyTable tr {
     vertical-align: top;
 }
@@ -396,4 +379,21 @@ textarea {
 .active-tab .close:hover {
     background-color: rgb(108, 108, 108);
     color: darkgray;
+}
+
+.labels-popup-view {
+    max-width: 300px;
+    min-width: 200px;
+}
+
+.labels-popup-view input[type=search] {
+    width: 100%;
+}
+
+.window {
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px;
+    position: absolute;
+    z-index: 10;
 }
