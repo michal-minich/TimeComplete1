@@ -12,7 +12,7 @@ export default function windowView(a: IApp, content: HTMLElement) {
 
 
     const view =
-        <div className="window">
+        <div className="window hidden">
             {content}
         </div>;
 
@@ -31,5 +31,10 @@ export default function windowView(a: IApp, content: HTMLElement) {
     }
 
 
-    return { view, showBelow };
+    function hide() {
+        view.classList.add("hidden");
+    }
+
+
+    return { view, showBelow, hide };
 }

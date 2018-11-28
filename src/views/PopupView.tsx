@@ -3,6 +3,7 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import { IApp } from "../interfaces";
+import windowView from "./windowView";
 
 
 export type PopupView = ReturnType<typeof popupView>
@@ -10,26 +11,40 @@ export type PopupView = ReturnType<typeof popupView>
 
 export default function popupView(a: IApp, content: HTMLElement) {
 
-
-    const view =
-        <div className="window">
-            {content}
-        </div>;
+    let x = 0;
+    const vw = windowView(a, content);
 
 
-    function showBelow(el: HTMLElement): void {
-        const r = el.getBoundingClientRect();
-        const divStyle = view.style;
-        divStyle.left = (r.left) + "px";
-        divStyle.top = (r.top + r.height + 4) + "px";
-
-        const cl = view.classList;
-        if (cl.contains("hidden"))
-            cl.remove("hidden");
-        else
-            cl.add("hidden");
+    function hideMe(e: MouseEvent) {
+        if (hasParent(e.target as HTMLElement, vw.view))
+            return;
+        ++x;
+        if (x <= 1)
+            return;
+        vw.view.classList.add("hidden");
+        document.removeEventListener("mousedown", hideMe);
     }
 
 
-    return { view, showBelow };
+    function hasParent(el: HTMLElement, parent: HTMLElement): boolean {
+        let e: HTMLElement | null = el;
+        while (true) {
+            if (!e)
+                return false;
+            if (e === parent)
+                return true;
+            e = e.parentElement;
+        }
+    }
+
+
+    
+    function showBelow(el: HTMLElement): void {
+        vw.showBelow(el);
+        x = 0;
+        document.addEventListener("click", hideMe);
+    }
+
+
+    return { view: vw.view, showBelow };
 }

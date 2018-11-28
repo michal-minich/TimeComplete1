@@ -11,10 +11,14 @@ import { R } from "../common";
 import popupView from "./PopupView";
 
 
-export type LabelsPopupView = ReturnType<typeof labelsPopupView>
+// export type LabelsPopupView = ReturnType<typeof labelsPopupView>
+// ReSharper disable once InconsistentNaming
+export interface LabelsPopupView {
+    readonly view: HTMLDivElement;
+    readonly show: (over: HTMLElement, action: (label: ILabel, el: HTMLSpanElement) => void) => void;
+}
 
-
-export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>) {
+export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>) : LabelsPopupView {
 
     let act: (label: ILabel, el: HTMLSpanElement) => void;
     const queryText = R.data("");
@@ -51,25 +55,11 @@ export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>) {
         act(label, el);
     }
 
-
-    const hideMe =
-        () => {
-            //this.labelsPopupDiv.classList.add("hidden");
-            //document.removeEventListener("mousedown",hideMe);
-        };
-
-
     function show(over: HTMLElement, action: (label: ILabel, el: HTMLSpanElement) => void): void {
         act = action;
         view.showBelow(over);
-
-        document.addEventListener("click", hideMe);
     }
 
-
-    function hide(): void {
-    }
-
-
-    return { view: view.view, show };
+    
+    return { view: view.view as HTMLDivElement, show };
 };

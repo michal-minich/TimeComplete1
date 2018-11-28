@@ -9,7 +9,7 @@ import Color from "../data/Color";
 import { ILabel, IApp, ValueSignal } from "../interfaces";
 import { R } from "../common";
 import TasksDashItem from "../data/TasksDashItem";
-
+import windowView from "./windowView";
 
 export type EditLabelView = ReturnType<typeof editLabelView>;
 
@@ -18,11 +18,10 @@ export default function editLabelView(a: IApp) {
 
     const editLabelName = R.data("");
     const editColor = R.data("");
-    const nextModeNameSignal = R.data("Edit");
     const labelSignal: ValueSignal<ILabel | undefined> = R.data(undefined);
 
     const view =
-        <div className={"edit-label " + (labelSignal() === undefined ? "hidden" : "")}>
+        <div className="edit-label">
             <span
                 className="label"
                 style={colorInlineStyle(new LabelStyle(
@@ -45,13 +44,11 @@ export default function editLabelView(a: IApp) {
         </div>;
 
 
+    const wv = windowView(a, view);
+
+
     function begin(label: ILabel, el: HTMLSpanElement): void {
-
-        const r = el.getBoundingClientRect();
-        const divStyle = view.style;
-        divStyle.left = (r.left) + "px";
-        divStyle.top = (r.top + r.height + 4) + "px";
-
+        wv.showBelow(el);
         editLabelName(label.name);
         editColor(label.style.backColor.value);
         labelSignal(label);
@@ -81,10 +78,10 @@ export default function editLabelView(a: IApp) {
 
 
     function cleanup(): void {
+        wv.hide();
         labelSignal(undefined);
         editLabelName("");
         editColor("");
-        switchMode();
     }
 
 
@@ -115,11 +112,5 @@ export default function editLabelView(a: IApp) {
     }
 
 
-    function switchMode(): void {
-        const mode = nextModeNameSignal() === "Edit" ? "Cancel" : "Edit";
-        nextModeNameSignal(mode);
-    }
-
-
-    return { view, begin };
+    return { view: wv.view, begin };
 };
