@@ -1,5 +1,6 @@
 import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
+// noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
 import LabelStyle from "../data/ColorStyle";

@@ -7,8 +7,8 @@
         IApp,
         ArraySignal,
         IQuery,
-    }
-    from "../interfaces";
+}
+from "../interfaces";
 import { QueryText, QueryLabel, QueryParser } from "./QueryParser";
 import { R } from "../common";
 
@@ -106,13 +106,14 @@ export default class QueryMatcher implements IQueryMatcher {
 
     get existingLabels(): ILabel[] {
         const ls: ILabel[] = [];
-        for (const qi of this.queryItems)
+        for (const qi of this.queryItems) {
             if (qi instanceof QueryLabel) {
                 const l = this.app.data.labels()
                     .find(l2 => l2.name === (qi as QueryLabel).value);
                 if (l)
                     ls.push(l);
-            };
+            }
+        }
         return ls;
     }
 }

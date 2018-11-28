@@ -36,7 +36,7 @@ export module QueryParser {
 
     export function makeString(elements: ReadonlyArray<IQueryElement>): string {
         return elements.map(e => e.makeString()).join();
-    };
+    }
 
 
     function getTokenIterator(qt: string, pos: number): () => string | undefined {

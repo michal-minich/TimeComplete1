@@ -44,27 +44,27 @@ export default class Data implements IData {
 
         R.compute(() => {
             const labels = this.labels();
-            this.saveWithSerialize(this.app, "labels", labels);
+            Data.saveWithSerialize(this.app, "labels", labels);
         });
 
         R.compute(() => {
             const tasks = this.tasks();
-            this.saveWithSerialize(this.app, "tasks", tasks);
+            Data.saveWithSerialize(this.app, "tasks", tasks);
         });
 
         R.compute(() => {
             const notes = this.notes();
-            this.saveWithSerialize(this.app, "notes", notes);
+            Data.saveWithSerialize(this.app, "notes", notes);
         });
 
         R.compute(() => {
             const tabs = this.tabs();
-            this.saveWithSerialize(this.app, "tabs", tabs);
+            Data.saveWithSerialize(this.app, "tabs", tabs);
         });
 
         R.compute(() => {
             const sett = this.settings;
-            this.saveWithSerialize(this.app, "settings", sett);
+            Data.saveWithSerialize(this.app, "settings", sett);
         });
     }
 
@@ -86,7 +86,7 @@ export default class Data implements IData {
     }
 
 
-    saveWithSerialize<T extends object>(
+    static saveWithSerialize<T extends object>(
         app: IApp,
         key: string,
         value: T): void {

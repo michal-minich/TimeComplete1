@@ -1,5 +1,6 @@
 import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
+// noinspection BadExpressionStatementJS
 Surplus;
 import { IApp, ITask, ILabel } from "../interfaces";
 import { onMouseDown } from "../common";

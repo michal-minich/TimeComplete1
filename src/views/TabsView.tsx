@@ -46,12 +46,12 @@ export default function tabsView(a: IApp) {
                 </span>
             </span>;
         return v;
-    };
+    }
 
 
     const view =
         <div className="tab-bar">
-            <img className="logo" src="favicon.png" alt="Time Complete"/>
+            <img className="logo" src="/favicon.png" alt="Time Complete"/>
             {tabs()()}
             <span onMouseDown={add} className="tab-plus">
                 <span>+</span>

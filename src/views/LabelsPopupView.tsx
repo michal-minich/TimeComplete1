@@ -8,7 +8,7 @@ import { newLabelView } from "./NewLabelView";
 import { colorInlineStyle } from "./MainView";
 import { onMouseDown } from "../common";
 import { R } from "../common";
-import windowView from "./windowView";
+import popupView from "./PopupView";
 
 
 export type LabelsPopupView = ReturnType<typeof labelsPopupView>
@@ -40,7 +40,7 @@ export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>) {
         </div>;
 
 
-    const view = windowView(a, content);
+    const view = popupView(a, content);
 
 
     function keyUp(e: KeyboardEvent): void {
