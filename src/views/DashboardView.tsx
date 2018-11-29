@@ -8,6 +8,8 @@ import TasksDashItem from "../data/TasksDashItem";
 import { LabelsPopupView } from "./LabelsPopupView";
 import { tasksDashItemView } from "./TasksDashItemView";
 import editTaskTitleView from "./EditTaskTitleView";
+import NoteDashItem from "../data/NoteDashItem";
+import { noteDashItemView } from "./NoteDashItemView";
 
 
 export default function dashboardView(a: IApp, lpv: LabelsPopupView) {
@@ -28,12 +30,19 @@ export default function dashboardView(a: IApp, lpv: LabelsPopupView) {
                             tdsHeight.push(0);
                         }
                         for (const di of a.dashboard.items()) {
-                            if (!(di instanceof TasksDashItem))
-                                continue;
-                            const col = indexOfMin(tdsHeight);
-                            const v = tasksDashItemView(a, di, lpv, ettv);
-                            tds[col].appendChild(v);
-                            tdsHeight[col] += di.estimatedHeight;
+                            if (di instanceof TasksDashItem) {
+                                const col = indexOfMin(tdsHeight);
+                                const v = tasksDashItemView(a, di, lpv, ettv);
+                                tds[col].appendChild(v);
+                                tdsHeight[col] += di.estimatedHeight;
+                            } else if (di instanceof NoteDashItem) {
+                                const col = indexOfMin(tdsHeight);
+                                const v = noteDashItemView(a, di);
+                                tds[col].appendChild(v);
+                                tdsHeight[col] += di.estimatedHeight;
+                            } else {
+                                throw undefined;
+                            }
                         }
                         return tds;
                     }}

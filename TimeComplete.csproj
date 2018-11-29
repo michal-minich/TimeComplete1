@@ -15,7 +15,7 @@
     <RootNamespace>TimeComplete</RootNamespace>
     <AssemblyName>TimeComplete</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -84,6 +84,7 @@
     <TypeScriptCompile Include="src\data\Settings.ts" />
     <TypeScriptCompile Include="src\common.ts" />
     <TypeScriptCompile Include="src\data\Dashboard.ts" />
+    <TypeScriptCompile Include="src\data\NoteDashItem.ts" />
     <TypeScriptCompile Include="src\data\TasksDashItem.ts" />
     <TypeScriptCompile Include="src\components\App.ts" />
     <TypeScriptCompile Include="src\data\Color.ts" />
@@ -101,7 +102,9 @@
     <TypeScriptCompile Include="src\start.ts" />
     <TypeScriptCompile Include="src\operations\Serializer.ts" />
     <TypeScriptCompile Include="src\views\EditLabelView.tsx" />
+    <TypeScriptCompile Include="src\views\NoteListView.tsx" />
     <TypeScriptCompile Include="src\views\PopupView.tsx" />
+    <TypeScriptCompile Include="src\views\NoteDashItemView.tsx" />
     <TypeScriptCompile Include="src\views\WindowView.tsx" />
     <TypeScriptCompile Include="src\views\LabelsPopupView.tsx" />
     <TypeScriptCompile Include="src\views\EditTaskTitleView.tsx" />

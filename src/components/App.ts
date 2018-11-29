@@ -29,7 +29,7 @@ export default class App implements IApp {
         this.data.load();
 
         this.clock = new Clock();
-        this.idCounter = new IncrementCounter(this);
+        this.idCounter = new IncrementCounter(this.data.settings.lastId);
 
         el.appendChild(mainView(this));
     }

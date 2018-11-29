@@ -31,11 +31,14 @@ export default function mainView(a: IApp) {
 
     const elv = editLabelView(a);
     const lpv = labelsPopupView(a, a.data.labels);
+    const toolbar = toolbarView(a, elv, lpv);
 
     const view =
         <div>
             {tabsView(a)}
-            {toolbarView(a, elv, lpv)}
+            {toolbar.view}
+            {toolbar.addMenuView}
+            {toolbar.noteListView}
             {lpv.view}
             {elv.view}
             {dashboardView(a, lpv)}

@@ -21,7 +21,7 @@ export default function windowView(a: IApp, content: HTMLElement) {
         const r = el.getBoundingClientRect();
         const divStyle = view.style;
         divStyle.left = (r.left) + "px";
-        divStyle.top = (r.top + r.height + 4) + "px";
+        divStyle.top = (r.top + r.height + 2) + "px";
 
         const cl = view.classList;
         if (cl.contains("hidden"))

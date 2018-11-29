@@ -64,6 +64,7 @@ export interface ITask extends IDomainObject {
 
 export interface INote extends IDomainObject {
     text: string;
+    textSignal: ValueSignal<string>;
     readonly associatedLabels: WritableArraySignal<ILabel>;
     readonly labelsFromText: ArraySignal<ILabel>;
     readonly allLabels: ArraySignal<ILabel>;
@@ -87,6 +88,10 @@ export interface ITasksDashItem extends IDashItem {
     query: IQuery;
 }
 
+export interface INoteDashItem extends IDashItem {
+    readonly noteId: number;
+}
+
 export interface IQuery {
     readonly text: ValueSignal<string>;
     readonly matcher: IQueryMatcher;
@@ -96,7 +101,7 @@ export interface ISettings {
     readonly labelPrefix: ValueSignal<string>;
     readonly selectedTabIndex: ValueSignal<number>;
     readonly dashboardColumnsCount: ValueSignal<number>;
-    lastId: number;
+    readonly lastId: ValueSignal<number>;
 }
 
 

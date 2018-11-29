@@ -32,6 +32,7 @@ import Dashboard from "../data/Dashboard";
 import TasksDashItem from "../data/TasksDashItem";
 import Query from "../data/Query";
 import Note from "../data/Note";
+import NoteDashItem from "../data/NoteDashItem";
 
 
 export default class Serializer implements ISerializer {
@@ -166,10 +167,17 @@ export default class Serializer implements ISerializer {
         }
         case "DashItem":
         {
-            const tdi = new TasksDashItem(this.app);
-            tdi.query = this.getQuery(o.query);
-            tdi.newTitle(o.newTitle);
-            return tdi as any as T;
+            if (typeof o.noteId === "number") {
+                const nti = new NoteDashItem(this.app, o.noteId);
+                return nti as any as T;
+            } else if (typeof o.newTitle === "string") {
+                const tdi = new TasksDashItem(this.app);
+                tdi.query = this.getQuery(o.query);
+                tdi.newTitle(o.newTitle);
+                return tdi as any as T;
+            } else {
+                throw o;
+            }
         }
         case "Settings":
         {
@@ -177,7 +185,7 @@ export default class Serializer implements ISerializer {
             s.labelPrefix = R.data(o.labelPrefix);
             s.selectedTabIndex = R.data(o.selectedTabIndex);
             s.dashboardColumnsCount = R.data(o.dashboardColumnsCount);
-            s.lastId = o.lastId;
+            s.lastId = R.data(o.lastId);
             return s as any as T;
         }
         default:

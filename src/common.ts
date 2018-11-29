@@ -1,6 +1,7 @@
 ﻿import S from "s-js"
 import SArray from "s-array";
-import { IDomainObject, ArraySignal, ValueSignal, WritableArraySignal } from "./interfaces";
+import { IDomainObject, ArraySignal, ValueSignal, WritableArraySignal, INoteDashItem, ITasksDashItem } from
+    "./interfaces";
 
 
 export function findById<T extends IDomainObject>(items: ArraySignal<T>, id: number): T {
@@ -63,6 +64,16 @@ export function indexOfMin(array: ArrayLike<any>): number {
 
 export function isValueSignal(v: any): v is ValueSignal<any> {
     return typeof v === "function" && (v as any).name === "data";
+}
+
+
+export function isNoteDashItem(v: any): v is INoteDashItem {
+    return v.noteId && typeof v.noteId === "number";
+}
+
+
+export function isTasksDashItem(v: any): v is ITasksDashItem {
+    return v.query && v.newTitle;
 }
 
 

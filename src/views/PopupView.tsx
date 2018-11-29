@@ -41,7 +41,7 @@ export default function popupView(a: IApp, content: HTMLElement) {
     function showBelow(el: HTMLElement): void {
         vw.showBelow(el);
         x = 0;
-        document.addEventListener("click", hideMe);
+        document.addEventListener("mousedown", hideMe);
     }
 
 

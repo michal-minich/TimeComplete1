@@ -30,7 +30,7 @@ export default class Note implements INote {
     id: number;
     createdOn: IDateTime;
     associatedLabels: WritableArraySignal<ILabel>;
-    private readonly textSignal: ValueSignal<string>;
+    readonly textSignal: ValueSignal<string>;
 
 
     get labelsFromText(): ArraySignal<ILabel> {
