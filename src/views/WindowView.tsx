@@ -32,7 +32,8 @@ export default function windowView(a: IApp, content: HTMLElement) {
 
 
     function hide() {
-        view.classList.add("hidden");
+        view.classList.add
+            ("hidden");
     }
 
 

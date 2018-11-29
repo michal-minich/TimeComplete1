@@ -18,7 +18,7 @@ export interface LabelsPopupView {
     readonly show: (over: HTMLElement, action: (label: ILabel, el: HTMLSpanElement) => void) => void;
 }
 
-export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>) : LabelsPopupView {
+export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>): LabelsPopupView {
 
     let act: (label: ILabel, el: HTMLSpanElement) => void;
     const queryText = R.data("");
@@ -60,6 +60,6 @@ export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>) : 
         view.showBelow(over);
     }
 
-    
+
     return { view: view.view as HTMLDivElement, show };
 };

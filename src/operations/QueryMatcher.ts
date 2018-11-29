@@ -7,8 +7,8 @@
         IApp,
         ArraySignal,
         IQuery,
-}
-from "../interfaces";
+    }
+    from "../interfaces";
 import { QueryText, QueryLabel, QueryParser } from "./QueryParser";
 import { R } from "../common";
 

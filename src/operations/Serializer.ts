@@ -31,6 +31,7 @@ import Tab from "../data/Tab";
 import Dashboard from "../data/Dashboard";
 import TasksDashItem from "../data/TasksDashItem";
 import Query from "../data/Query";
+import Note from "../data/Note";
 
 
 export default class Serializer implements ISerializer {
@@ -136,18 +137,10 @@ export default class Serializer implements ISerializer {
                     "DateTime"));
             return l as any as T;
         case "Task":
-            let associatedLabels: WritableArraySignal<ILabel>;
-            if (o.associatedLabels) {
-                associatedLabels = this.fromRefArray<ILabel>(
-                    o.associatedLabels as number[],
-                    this.app.data.labels);
-            } else {
-                associatedLabels = R.array([]);
-            }
             const t = new Task(
                 this.app,
                 o.title,
-                associatedLabels,
+                this.getAssociatedLabels(o),
                 o.id,
                 this.fromPlainObject<IDateTime>(
                     o.createdOn,
@@ -163,6 +156,13 @@ export default class Serializer implements ISerializer {
             const tab = new Tab(this.app, o.title, this.getColorStyle(o.style));
             tab.content = this.getDashboard(o.content);
             return tab as any as T;
+        }
+        case "Note":
+        {
+            const n = new Note(this.app, o.id, o.createdOn);
+            n.text = o.text;
+            n.associatedLabels = this.getAssociatedLabels(o);
+            return n as any as T;
         }
         case "DashItem":
         {
@@ -182,6 +182,17 @@ export default class Serializer implements ISerializer {
         }
         default:
             throw new Error();
+        }
+    }
+
+
+    getAssociatedLabels(o: any): WritableArraySignal<ILabel> {
+        if (o.associatedLabels) {
+            return this.fromRefArray<ILabel>(
+                o.associatedLabels as number[],
+                this.app.data.labels);
+        } else {
+            return R.array([]);
         }
     }
 

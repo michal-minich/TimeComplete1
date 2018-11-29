@@ -295,7 +295,17 @@ textarea {
     padding-bottom: 4px;
 }
 
-.menu {
+ul.menu {
+    padding-left: 0px;
+    margin: 0;
+}
+
+.menu li{
+    list-style: none;
+}
+
+.menu li:hover {
+    background-color: lightgray;
 }
 
 .columns-menu {

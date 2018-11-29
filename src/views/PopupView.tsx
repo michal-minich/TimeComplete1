@@ -38,7 +38,6 @@ export default function popupView(a: IApp, content: HTMLElement) {
     }
 
 
-    
     function showBelow(el: HTMLElement): void {
         vw.showBelow(el);
         x = 0;
@@ -46,5 +45,5 @@ export default function popupView(a: IApp, content: HTMLElement) {
     }
 
 
-    return { view: vw.view, showBelow };
-}
+    return { view: vw.view, showBelow, hide: vw.hide };
+};
