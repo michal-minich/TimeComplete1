@@ -59,6 +59,7 @@ export const enum TextColorUsage {
 export interface ITask extends IDomainObject {
     title: string;
     completedOn: IDateTime | undefined;
+    completedOnSignal: ValueSignal<IDateTime | undefined>;
     readonly associatedLabels: WritableArraySignal<ILabel>;
 }
 

@@ -90,9 +90,15 @@ export default class QueryMatcher implements IQueryMatcher {
             const m = this.matchOne(qi.arg, t);
             return !m;
         } else if (qi instanceof QueryLabel) {
-            for (const al of t.associatedLabels()) {
-                if (al.name.indexOf(qi.value) !== -1) {
-                    return true;
+            if (qi.value === "Rest") {
+                throw qi.value;
+            } else if (qi.value === "Todo") {
+                return R.sample(t.completedOnSignal) === undefined;
+            } else {
+                for (const al of t.associatedLabels()) {
+                    if (al.name.indexOf(qi.value) !== -1) {
+                        return true;
+                    }
                 }
             }
             return false;

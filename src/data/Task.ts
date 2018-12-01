@@ -24,7 +24,7 @@ export default class Task implements ITask {
 
 
     private readonly titleSignal: ValueSignal<string>;
-    private readonly completedOnSignal = R.data<IDateTime | undefined>(undefined);
+    readonly completedOnSignal = R.data<IDateTime | undefined>(undefined);
 
 
     id: number;
