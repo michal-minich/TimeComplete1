@@ -101,6 +101,7 @@ export interface IQuery {
 
 export interface ISettings {
     readonly labelPrefix: ValueSignal<string>;
+    readonly negationOperator: ValueSignal<string>;
     readonly selectedTabIndex: ValueSignal<number>;
     readonly dashboardColumnsCount: ValueSignal<number>;
     readonly lastId: ValueSignal<number>;
@@ -137,16 +138,6 @@ export interface IDashItem {
 export interface ITasksDashBoard extends IDashboard {
     readonly filter: IQuery;
     displayColumnsCount: number;
-}
-
-export interface IToolbar {
-    showLabelsPopup(): void;
-    showTasksPopup(): void;
-    showNotesPopup(): void;
-    showSearchPopup(): void;
-
-    addTaskListView(): void;
-    addNote(): void;
 }
 
 

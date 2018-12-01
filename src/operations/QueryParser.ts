@@ -17,6 +17,14 @@ export class QueryLabel implements IQueryElement {
 }
 
 
+export class NotOp implements IQueryElement {
+
+    constructor(private readonly app: IApp, public arg: IQueryElement) {}
+
+    makeString(): string { return this.app.data.settings.negationOperator() + this.arg; }
+}
+
+
 export module QueryParser {
 
     export function parse(app: IApp, queryTextText: string): IQueryElement[] {
@@ -24,13 +32,33 @@ export module QueryParser {
         const iterator = getTokenIterator(queryTextText, 0);
         let tok: string | undefined;
         while ((tok = iterator()) !== undefined) {
-            if (tok[0] === app.data.settings.labelPrefix()) {
-                queryItems.push(new QueryLabel(app, tok.substring(1)));
-            } else {
-                queryItems.push(new QueryText(tok));
-            }
+            const pt = parseOneTok(app, tok, iterator);
+            if (pt === undefined)
+                continue;
+            queryItems.push(pt);
         }
         return queryItems;
+    }
+
+
+    function parseOneTok(
+        app: IApp,
+        tok: string,
+        iterator: () => string | undefined): IQueryElement | undefined {
+
+        if (tok[0] === app.data.settings.labelPrefix()) {
+            return new QueryLabel(app, tok.substring(1));
+        } else if (tok[0] === app.data.settings.negationOperator()) {
+            const tok2 = iterator();
+            if (tok2 === undefined)
+                return undefined;
+            const pt2 = parseOneTok(app, tok2, iterator);
+            if (pt2 === undefined)
+                return undefined;
+            return new NotOp(app, pt2);
+        } else {
+            return new QueryText(tok);
+        }
     }
 
 
@@ -52,6 +80,7 @@ export module QueryParser {
             const ord_hash = "#".charCodeAt(0);
             const ord_dash = "-".charCodeAt(0);
             const ord_space = " ".charCodeAt(0);
+            const ord_ex = "!".charCodeAt(0);
             // ReSharper restore InconsistentNaming
             while (hasWork()) {
                 let ordCh = currentCode();
@@ -64,6 +93,10 @@ export module QueryParser {
                     ordCh = currentCode();
                     if (ordCh === ord_space)
                         break;
+                    else if (ordCh === ord_ex) {
+                        ++pos;
+                        break;
+                    }
                     ++pos;
                 } while (hasWork());
 
