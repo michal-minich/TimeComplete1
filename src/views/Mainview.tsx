@@ -39,6 +39,7 @@ export default function mainView(a: IApp) {
             {toolbar.view}
             {toolbar.addMenuView}
             {toolbar.noteListView}
+            {toolbar.moreMenuView}
             {lpv.view}
             {elv.view}
             {dashboardView(a, lpv)}

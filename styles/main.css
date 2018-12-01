@@ -1,9 +1,12 @@
 body {
-    background-color: white;
-    color: black;
     cursor: default;
     height: 100vh;
     margin: 0;
+}
+
+body {
+    background-color: white;
+    color: black;
 }
 
 * {
@@ -309,6 +312,12 @@ ul.menu {
 .columns-menu {
 }
 
+.columns-menu fieldset {
+    border: none;
+    display: inline;
+    padding: 0;
+}
+
 .drop-down-triangle {
     color: gray;
     font-size: smaller;
@@ -413,8 +422,8 @@ ul.menu {
 .note {
     background-color: white;
     border: 1px solid gray;
-    padding: 2px 4px;
     margin: 4px 0;
+    padding: 2px 4px;
 }
 
 .note:hover {
@@ -422,15 +431,15 @@ ul.menu {
 }
 
 .note-dash {
-    min-height: 50px;
-
     background-color: white;
+
     border: 2px solid rgb(223, 223, 223);
     margin-bottom: 10px;
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 10px;
     max-width: 800px;
+    min-height: 50px;
     min-width: 200px;
 }
 
@@ -444,4 +453,10 @@ ul.menu {
     background-color: rgb(101, 101, 101);
     color: white;
     padding: 4px;
+}
+
+.dash-columns-input {
+    display: inline-block;
+    text-align: center;
+    width: 30px;
 }

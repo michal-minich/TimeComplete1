@@ -11,6 +11,7 @@ import Note from "../data/Note";
 import popupView from "./PopupView";
 import noteListView from "./NoteListView";
 import NoteDashItem from "../data/NoteDashItem";
+import { R } from "../common";
 
 
 export default function toolbarView(a: IApp, elv: EditLabelView, lpv: LabelsPopupView) {
@@ -21,9 +22,36 @@ export default function toolbarView(a: IApp, elv: EditLabelView, lpv: LabelsPopu
             <li onClick={addNote}>Add New Note</li>
         </ul>;
 
+    const cols = a.data.settings.dashboardColumnsCount;
+    const autoCols = R.data(true);
+
+    const moreMenu =
+        <ul className="more-menu menu">
+            <li className="columns-menu">
+                <span>Columns</span>
+                <input type="checkbox" id="auto-columns-count" fn={data(autoCols)}/>
+                <label htmlFor="auto-columns-count">Auto</label>
+                <fieldset disabled={autoCols()}>
+                    <button onMouseDown={() => cols(cols() - 1)}>-</button>
+                    <span className="dash-columns-input">{cols}</span>
+                    <button onMouseDown={() => cols(cols() + 1)}>+</button>
+                </fieldset>
+            </li>
+            <li>
+                <input className="view-filter" type="search" placeholder="View Filter"/>
+            </li>
+            <li onMouseDown={() => a.data.generateLocalStorageDownload()}>Export Data</li>
+        </ul>;
 
     const amv = popupView(a, addMenu);
+    const mmv = popupView(a, moreMenu);
     const nlv = noteListView(a);
+
+
+    function showLabels(e: MouseEvent) {
+        lpv.show(e.target as HTMLElement, (l, el) => elv.begin(l, el));
+    }
+
 
     function addNote() {
         const n = new Note(a);
@@ -50,14 +78,14 @@ export default function toolbarView(a: IApp, elv: EditLabelView, lpv: LabelsPopu
     }
 
 
+    function showMoreMenu(e: MouseEvent) {
+        mmv.showBelow(e.target as HTMLButtonElement);
+    }
+
+
     const view =
         <div className="toolbar">
-            {amv.view}
-            {nlv.view}
-            <button onMouseDown={(e: MouseEvent) => {
-                lpv.show(e.target as HTMLElement,
-                    (l, el) => elv.begin(l, el));
-            }}>
+            <button onMouseDown={showLabels}>
                 Labels <span className="drop-down-triangle">&#x25BC;</span>
             </button>
             <button onMouseDown={showNoteListView}>
@@ -66,22 +94,15 @@ export default function toolbarView(a: IApp, elv: EditLabelView, lpv: LabelsPopu
             <button onMouseDown={showAddMenu}>
                 Add <span className="drop-down-triangle">&#x25BC;</span>
             </button>
-            <button onMouseDown={() => a.data.generateLocalStorageDownload()}>Export</button>
-            <input className="view-filter" type="number" fn={data(a.data.settings
-                .dashboardColumnsCount)}/>
-            <input className="view-filter" type="search" placeholder="View Filter"/>
-            <ul className="more-menu menu">
-                <li className="columns-menu">
-                    <span>Columns</span>
-                    <input type="checkbox" id="auto-columns-count"/>
-                    <label htmlFor="auto-columns-count">Auto</label>
-                    <button>-</button>
-
-                    <button>+</button>
-                </li>
-                <li onMouseDown={() => a.data.generateLocalStorageDownload()}>Export Data</li>
-            </ul>
+            <button onMouseDown={showMoreMenu}>
+                More <span className="drop-down-triangle">&#x25BC;</span>
+            </button>
         </div>;
 
-    return { view, addMenuView: amv.view, noteListView: nlv.view };
+    return {
+        view,
+        addMenuView: amv.view,
+        noteListView: nlv.view,
+        moreMenuView: mmv.view
+    };
 }
