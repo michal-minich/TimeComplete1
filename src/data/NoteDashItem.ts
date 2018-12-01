@@ -1,19 +1,19 @@
-﻿import { IApp, INoteDashItem } from "../interfaces";
+﻿import { IApp, INoteDashItem, INote } from "../interfaces";
 
 
 export default class NoteDashItem implements INoteDashItem {
 
-    readonly noteId: number;
+    readonly note: INote;
     readonly width: number;
     readonly height: number;
 
 
     constructor(
         private readonly app: IApp,
-        noteId: number,
+        note: INote,
         width?: number,
         height?: number) {
-        this.noteId = noteId;
+        this.note = note;
         if (width) {
             this.width = width;
             this.height = height!;

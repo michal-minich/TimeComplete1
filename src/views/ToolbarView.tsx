@@ -57,7 +57,7 @@ export default function toolbarView(a: IApp, elv: EditLabelView, lpv: LabelsPopu
         const n = new Note(a);
         a.data.notes.unshift(n);
         amv.hide();
-        a.dashboard.unshift(new NoteDashItem(a, n.id));
+        a.dashboard.unshift(new NoteDashItem(a, n));
     }
 
 
