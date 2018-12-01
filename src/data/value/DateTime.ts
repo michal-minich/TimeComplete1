@@ -1,4 +1,4 @@
-﻿import { IDateTime } from "../interfaces";
+﻿import { IDateTime } from "../../interfaces";
 
 
 export default class DateTime implements IDateTime {

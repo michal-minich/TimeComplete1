@@ -4,17 +4,17 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { IApp } from "../interfaces";
-import TasksDashItem from "../data/TasksDashItem";
+import TasksDashItem from "../data/dash/TasksDashItem";
 import { LabelsPopupView } from "./LabelsPopupView";
-import { EditLabelView } from "./EditLabelView";
-import Note from "../data/Note";
+import { LabelEditView } from "./LabelEditView";
+import Note from "../data/domain/Note";
 import popupView from "./PopupView";
 import noteListView from "./NoteListView";
-import NoteDashItem from "../data/NoteDashItem";
+import NoteDashItem from "../data/dash/NoteDashItem";
 import { R } from "../common";
 
 
-export default function toolbarView(a: IApp, elv: EditLabelView, lpv: LabelsPopupView) {
+export default function toolbarView(a: IApp, elv: LabelEditView, lpv: LabelsPopupView) {
 
     const addMenu =
         <ul className="add-menu menu">

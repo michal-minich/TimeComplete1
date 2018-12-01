@@ -1,6 +1,6 @@
 ﻿import { IColorStyle, IColor, TextColorUsage, ValueSignal } from "../interfaces";
 import { R } from "../common";
-import Color from "./Color";
+import Color from "./value/Color";
 
 
 export default class ColorStyle implements IColorStyle {

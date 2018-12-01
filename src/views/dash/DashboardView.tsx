@@ -2,19 +2,19 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp } from "../interfaces";
-import { indexOfMin } from "../common";
-import TasksDashItem from "../data/TasksDashItem";
-import { LabelsPopupView } from "./LabelsPopupView";
+import { IApp } from "../../interfaces";
+import { indexOfMin } from "../../common";
+import TasksDashItem from "../../data/dash/TasksDashItem";
+import { LabelsPopupView } from "../LabelsPopupView";
 import { tasksDashItemView } from "./TasksDashItemView";
-import editTaskTitleView from "./EditTaskTitleView";
-import NoteDashItem from "../data/NoteDashItem";
+import taskTitleEditView from "./TaskTitleEditView";
+import NoteDashItem from "../../data/dash/NoteDashItem";
 import { noteDashItemView } from "./NoteDashItemView";
 
 
 export default function dashboardView(a: IApp, lpv: LabelsPopupView) {
 
-    const ettv = editTaskTitleView(a);
+    const ettv = taskTitleEditView(a);
 
     const view =
         <div className="view-area">

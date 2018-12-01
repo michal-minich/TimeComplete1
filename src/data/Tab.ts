@@ -1,8 +1,8 @@
 ﻿import { ITab, ValueSignal, IColorStyle, IApp, TextColorUsage } from "../interfaces";
 import { R } from "../common";
 import ColorStyle from "./ColorStyle";
-import Color from "./Color";
-import Dashboard from "./Dashboard";
+import Color from "./value/Color";
+import Dashboard from "./dash/Dashboard";
 
 
 export default class Tab implements ITab {

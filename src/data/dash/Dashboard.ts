@@ -4,8 +4,8 @@
     WritableArraySignal,
     IDashItem,
     ValueSignal
-} from "../interfaces";
-import { R } from "../common";
+} from "../../interfaces";
+import { R } from "../../common";
 
 
 export default class Dashboard implements IDashboard {

@@ -2,12 +2,12 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, INoteDashItem } from "../interfaces";
+import { IApp, INoteDashItem } from "../../interfaces";
 import data from "surplus-mixin-data";
 
 
 export function noteDashItemView(a: IApp, ndi: INoteDashItem) {
-    
+
     const view =
         <div className="note-dash">
             <div className="header">

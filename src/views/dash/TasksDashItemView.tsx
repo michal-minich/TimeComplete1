@@ -3,11 +3,11 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ITasksDashItem, ILabel } from "../interfaces";
-import { LabelsPopupView } from "./LabelsPopupView";
+import { IApp, ITasksDashItem, ILabel } from "../../interfaces";
+import { LabelsPopupView } from "../LabelsPopupView";
 import taskListView from "./TaskListView";
-import { EditTaskTitleView } from "./EditTaskTitleView";
-import addTaskView from "./AddTaskView";
+import { TaskTitleEditView } from "./TaskTitleEditView";
+import taskAddView from "./TaskAddView";
 
 
 export let queryTextBox: HTMLInputElement;
@@ -36,7 +36,7 @@ function queryBorder(a: IApp, tdi: ITasksDashItem) {
 export function tasksDashItemView(a: IApp,
     tdi: ITasksDashItem,
     lpv: LabelsPopupView,
-    ettv: EditTaskTitleView) {
+    ettv: TaskTitleEditView) {
 
     let originalTitle = "";
 
@@ -60,7 +60,7 @@ export function tasksDashItemView(a: IApp,
                 </button>
             </div>
             <div className="body">
-                {addTaskView(a, tdi)}
+                {taskAddView(a, tdi)}
                 <table className="task-list lined-list">
                     <thead></thead>
                     <tbody>

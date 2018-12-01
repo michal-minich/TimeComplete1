@@ -1,4 +1,4 @@
-﻿import { IApp, INoteDashItem, INote } from "../interfaces";
+﻿import { IApp, INoteDashItem, INote } from "../../interfaces";
 
 
 export default class NoteDashItem implements INoteDashItem {

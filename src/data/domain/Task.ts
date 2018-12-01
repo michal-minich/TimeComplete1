@@ -1,5 +1,5 @@
-﻿import { ITask, IDateTime, ILabel, IApp, ValueSignal, WritableArraySignal } from "../interfaces";
-import { R } from "../common";
+﻿import { ITask, IDateTime, ILabel, IApp, ValueSignal, WritableArraySignal } from "../../interfaces";
+import { R } from "../../common";
 
 
 export default class Task implements ITask {

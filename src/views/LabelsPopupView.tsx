@@ -4,7 +4,7 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ILabel, ArraySignal } from "../interfaces"
-import { newLabelView } from "./NewLabelView";
+import { labelAddView } from "./LabelAddView";
 import { colorInlineStyle } from "./MainView";
 import { onMouseDown } from "../common";
 import { R } from "../common";
@@ -15,7 +15,8 @@ import popupView from "./PopupView";
 // ReSharper disable once InconsistentNaming
 export interface LabelsPopupView {
     readonly view: HTMLDivElement;
-    readonly show: (over: HTMLElement, action: (label: ILabel, el: HTMLSpanElement) => void) => void;
+    readonly show: (over: HTMLElement, action: (label: ILabel, el: HTMLSpanElement) => void) =>
+    void;
 }
 
 export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>): LabelsPopupView {
@@ -31,7 +32,7 @@ export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>): L
                    fn={data(queryText)}
                    onKeyUp={(e: KeyboardEvent) => keyUp(e)}/>
             <div className="label-list-inner">
-                {newLabelView(a)}
+                {labelAddView(a)}
                 {labels.map(l =>
                     <span
                         className="label"

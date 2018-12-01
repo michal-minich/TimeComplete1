@@ -3,12 +3,12 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ILabel, ITasksDashItem } from "../interfaces";
-import Task from "../data/Task";
-import Query from "../data/Query";
+import { IApp, ILabel, ITasksDashItem, ITask } from "../../interfaces";
+import Task from "../../data/domain/Task";
+import Query from "../../data/Query";
 
 
-export default function addTaskView(a: IApp, tdi: ITasksDashItem) {
+export default function taskAddView(a: IApp, tdi: ITasksDashItem) {
 
 
     function confirm(queryText: string): void {
@@ -29,7 +29,7 @@ export default function addTaskView(a: IApp, tdi: ITasksDashItem) {
     }
 
 
-    function associateLabels(t: Task, ls: ILabel[]) {
+    function associateLabels(t: ITask, ls: ILabel[]) {
         for (const l of ls) {
             t.associatedLabels.push(l);
         }

@@ -1,6 +1,6 @@
-﻿import { IApp, ITasksDashItem, ValueSignal, IQuery } from "../interfaces";
-import { R } from "../common";
-import Query from "./Query";
+﻿import { IApp, ITasksDashItem, ValueSignal, IQuery } from "../../interfaces";
+import { R } from "../../common";
+import Query from "./../Query";
 
 
 export default class TasksDashItem implements ITasksDashItem {

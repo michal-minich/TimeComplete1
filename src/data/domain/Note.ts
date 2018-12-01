@@ -6,8 +6,8 @@
     IApp,
     WritableArraySignal,
     IDateTime
-} from "../interfaces";
-import { R } from "../common";
+} from "../../interfaces";
+import { R } from "../../common";
 
 
 export default class Note implements INote {

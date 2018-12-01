@@ -1,6 +1,13 @@
 ﻿import S from "s-js"
 import SArray from "s-array";
-import { IDomainObject, ArraySignal, ValueSignal, WritableArraySignal, INoteDashItem, ITasksDashItem } from
+import {
+        IDomainObject,
+        ArraySignal,
+        ValueSignal,
+        WritableArraySignal,
+        INoteDashItem,
+        ITasksDashItem
+    } from
     "./interfaces";
 
 

@@ -1,4 +1,4 @@
-﻿import DateTime from "../data/DateTime";
+﻿import DateTime from "../data/value/DateTime";
 import { IDateTime, IClock } from "../interfaces";
 
 

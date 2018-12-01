@@ -3,17 +3,17 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { R } from "../common";
-import { ITask, IApp } from "../interfaces";
+import { R } from "../../common";
+import { ITask, IApp } from "../../interfaces";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
 
 
-export type EditTaskTitleView = ReturnType<typeof editTaskTitleView>
+export type TaskTitleEditView = ReturnType<typeof taskTitleEditView>
 
 
-export default function editTaskTitleView(a: IApp) {
+export default function taskTitleEditView(a: IApp) {
 
     const newName = R.data("");
     let task!: ITask;

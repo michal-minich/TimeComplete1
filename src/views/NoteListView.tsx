@@ -5,7 +5,7 @@ Surplus;
 import { IApp, INote } from "../interfaces";
 
 import popupView from "./PopupView";
-import NoteDashItem from "../data/NoteDashItem";
+import NoteDashItem from "../data/dash/NoteDashItem";
 
 export type PopupView = ReturnType<typeof noteListView>
 

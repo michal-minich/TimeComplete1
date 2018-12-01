@@ -14,10 +14,10 @@
     IDashItem,
     IQuery
 } from "../interfaces";
-import Label from "../data/Label";
-import Color from "../data/Color";
-import DateTime from "../data/DateTime";
-import Task from "../data/Task";
+import Label from "../data/domain/Label";
+import Color from "../data/value/Color";
+import DateTime from "../data/value/DateTime";
+import Task from "../data/domain/Task";
 import ColorStyle from "../data/ColorStyle";
 import {
     R,
@@ -28,11 +28,11 @@ import {
 } from "../common";
 import Settings from "../data/Settings";
 import Tab from "../data/Tab";
-import Dashboard from "../data/Dashboard";
-import TasksDashItem from "../data/TasksDashItem";
+import Dashboard from "../data/dash/Dashboard";
+import TasksDashItem from "../data/dash/TasksDashItem";
 import Query from "../data/Query";
-import Note from "../data/Note";
-import NoteDashItem from "../data/NoteDashItem";
+import Note from "../data/domain/Note";
+import NoteDashItem from "../data/dash/NoteDashItem";
 
 
 export default class Serializer implements ISerializer {

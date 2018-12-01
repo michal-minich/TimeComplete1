@@ -5,10 +5,10 @@ Surplus;
 import { IApp, IColorStyle } from "../interfaces";
 import labelsPopupView from "./LabelsPopupView";
 import { removeTextSelections } from "../common";
-import editLabelView from "./EditLabelView";
+import labelEditView from "./LabelEditView";
 import tabsView from "./TabsView";
 import toolbarView from "./ToolbarView";
-import dashboardView from "./DashboardView";
+import dashboardView from "./dash/DashboardView";
 
 
 export function colorInlineStyle(ls: IColorStyle) {
@@ -29,7 +29,7 @@ window.addEventListener("mouseup",
 
 export default function mainView(a: IApp) {
 
-    const elv = editLabelView(a);
+    const elv = labelEditView(a);
     const lpv = labelsPopupView(a, a.data.labels);
     const toolbar = toolbarView(a, elv, lpv);
 

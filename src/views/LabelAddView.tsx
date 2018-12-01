@@ -4,13 +4,13 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import LabelStyle from "../data/ColorStyle";
-import Color from "../data/Color";
+import Color from "../data/value/Color";
 import { R } from "../common";
-import Label from "../data/Label";
+import Label from "../data/domain/Label";
 import { IApp } from "../interfaces";
 
 
-export const newLabelView = (a: IApp) => {
+export const labelAddView = (a: IApp) => {
 
     const newName = R.data("");
 

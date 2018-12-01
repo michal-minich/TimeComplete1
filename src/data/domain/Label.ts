@@ -1,5 +1,5 @@
-﻿import { ILabel, IColorStyle as ILabelStyle, ValueSignal, IApp, IDateTime } from "../interfaces";
-import { R } from "../common";
+﻿import { ILabel, IColorStyle as ILabelStyle, ValueSignal, IApp, IDateTime } from "../../interfaces";
+import { R } from "../../common";
 
 
 export default class Label implements ILabel {

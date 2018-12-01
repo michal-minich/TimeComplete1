@@ -5,16 +5,17 @@ Surplus;
 import data from "surplus-mixin-data";
 import { colorInlineStyle } from "./MainView";
 import LabelStyle from "../data/ColorStyle";
-import Color from "../data/Color";
+import Color from "../data/value/Color";
 import { ILabel, IApp, ValueSignal } from "../interfaces";
 import { R } from "../common";
-import TasksDashItem from "../data/TasksDashItem";
 import windowView from "./windowView";
+import TasksDashItem from "../data/dash/TasksDashItem";
 
-export type EditLabelView = ReturnType<typeof editLabelView>;
+
+export type LabelEditView = ReturnType<typeof labelEditView>;
 
 
-export default function editLabelView(a: IApp) {
+export default function labelEditView(a: IApp) {
 
     const editLabelName = R.data("");
     const editColor = R.data("");

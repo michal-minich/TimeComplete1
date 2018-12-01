@@ -1,4 +1,4 @@
-﻿import { IColor } from "../interfaces";
+﻿import { IColor } from "../../interfaces";
 
 
 export default class Color implements IColor {
