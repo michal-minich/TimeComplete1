@@ -28,9 +28,9 @@
   "devDependencies": {
     "@types/lodash": "latest",
     "surplus-loader": "latest",
-    "ts-loader": "latest",
-    "typescript": "^3.2.0-dev.20181114",
-    "webpack": "latest",
+    "ts-loader": "^5.3.1",
+    "typescript": "^3.2.1",
+    "webpack": "^4.26.1",
     "webpack-cli": "latest"
   }
 }
