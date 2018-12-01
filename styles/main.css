@@ -430,7 +430,12 @@ ul.menu {
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 10px;
-    max-width: 450px;
+    max-width: 800px;
+    min-width: 200px;
+}
+
+.note-dash textarea {
+    max-width: 800px;
     min-width: 200px;
 }
 

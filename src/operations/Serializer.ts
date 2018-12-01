@@ -168,7 +168,7 @@ export default class Serializer implements ISerializer {
         case "DashItem":
         {
             if (typeof o.noteId === "number") {
-                const nti = new NoteDashItem(this.app, o.noteId);
+                const nti = new NoteDashItem(this.app, o.noteId, o.width, o.height);
                 return nti as any as T;
             } else if (typeof o.newTitle === "string") {
                 const tdi = new TasksDashItem(this.app);

@@ -19,7 +19,8 @@ export function noteDashItemView(a: IApp, ndi: INoteDashItem) {
                     X
                 </button>
             </div>
-            <textarea
+            <textarea 
+             style={{ width: ndi.width + "px", height: ndi.height + "px" }}
                 fn={data(n.textSignal)}>
             </textarea>
         </div>;

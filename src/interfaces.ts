@@ -90,6 +90,8 @@ export interface ITasksDashItem extends IDashItem {
 
 export interface INoteDashItem extends IDashItem {
     readonly noteId: number;
+    readonly width: number;
+    readonly height: number;
 }
 
 export interface IQuery {

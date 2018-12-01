@@ -9,6 +9,6 @@
     "jsx": "preserve",
     "sourceMap": false,
     "moduleResolution": "node",
-    "lib": ["dom", "dom.iterable", "es6", "esnext"]
+    "lib": ["dom", "dom.iterable", "es6"]
   }
 }
