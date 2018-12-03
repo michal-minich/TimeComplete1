@@ -33,36 +33,52 @@ export default class Data implements IData {
 
     load() {
 
-        this.settings = this.loadObj<ISettings>("settings", "Settings", () => new Settings());
-        this.labels = this.loadArray<ILabel>("labels", "Label");
-        this.tasks = this.loadArray<ITask>("tasks", "Task");
-        this.notes = this.loadArray<INote>("notes", "Note");
-        this.tabs = this.loadArray<ITab>("tabs", "Tab");
+        try {
 
-        if (this.tabs().length === 0)
-            addTab(this.app);
+            this.settings = this.loadObj<ISettings>("settings", "Settings", () => new Settings());
+            this.labels = this.loadArray<ILabel>("labels", "Label");
+            this.tasks = this.loadArray<ITask>("tasks", "Task");
+            this.notes = this.loadArray<INote>("notes", "Note");
+            this.tabs = this.loadArray<ITab>("tabs", "Tab");
 
-        R.compute(() => {
+        } catch (ex) {
+
+            this.settings = new Settings();
+            this.labels = R.array();
+            this.tasks = R.array();
+            this.notes = R.array();
+            this.tabs = R.array();
+
+            console.log(ex);
+            return;
+
+        } finally {
+
+            if (this.tabs().length === 0)
+                addTab(this.app);
+        }
+
+        R.onAny(() => {
             const labels = this.labels();
             Data.saveWithSerialize(this.app, "labels", labels);
         });
 
-        R.compute(() => {
+        R.onAny(() => {
             const tasks = this.tasks();
             Data.saveWithSerialize(this.app, "tasks", tasks);
         });
 
-        R.compute(() => {
+        R.onAny(() => {
             const notes = this.notes();
             Data.saveWithSerialize(this.app, "notes", notes);
         });
 
-        R.compute(() => {
+        R.onAny(() => {
             const tabs = this.tabs();
             Data.saveWithSerialize(this.app, "tabs", tabs);
         });
 
-        R.compute(() => {
+        R.onAny(() => {
             const sett = this.settings;
             Data.saveWithSerialize(this.app, "settings", sett);
         });
@@ -109,6 +125,28 @@ export default class Data implements IData {
     }
 
 
+    handleFiles(input: HTMLInputElement) {
+        const file: any = input.files![0];
+        const fr = new FileReader();
+        fr.addEventListener("load",
+            () => {
+                const json = fr.result as string;
+                const obj = JSON.parse(json) as any;
+                new SessionStore().save("labels", obj.labels);
+                new SessionStore().save("tasks", obj.tasks);
+                new SessionStore().save("notes", obj.notes);
+                new SessionStore().save("tabs", obj.tabs);
+                new SessionStore().save("settings", obj.settings);
+                console.log(obj);
+            });
+        fr.readAsText(file);
+    }
+
+
     importLocalStorageDownload(): void {
+        const input = document.createElement("input")!;
+        input.type = "file";
+        input.addEventListener("change", () => this.handleFiles(input), false);
+        input.click();
     }
 }

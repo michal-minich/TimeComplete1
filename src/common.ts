@@ -96,9 +96,9 @@ export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
 
 export module R {
 
-    export function compute<T>(fn: () => T): () => T;
-    export function compute<T>(fn: (v: T) => T, seed: T): () => T;
-    export function compute<T>(fn: any, seed?: T): () => T {
+    export function onAny<T>(fn: () => T): () => T;
+    export function onAny<T>(fn: (v: T) => T, seed: T): () => T;
+    export function onAny<T>(fn: any, seed?: T): () => T {
         return (S as any)(fn, seed);
     }
 
@@ -133,5 +133,29 @@ export module R {
     export function on<T>(ev: () => any, fn: (v: T) => T, seed: T, onchanges?: boolean): () => T;
     export function on<T>(ev: () => any, fn?: any, seed?: T, onchanges?: boolean): T {
         return (S.on as any)(ev, fn, seed, onchanges);
+    }
+
+
+    export function onAdd<T>(arr : ArraySignal<T>, action: (item : T) => void) {
+        S(() => {
+            arr.map(
+                (a) => {
+                    console.log(action(a));
+                },
+                () => {},
+                () => {});
+        });
+    }
+
+
+    export function onRemove<T>(arr: ArraySignal<T>, action: (item: T) => void) {
+        S(() => {
+            arr.map(
+                () => {},
+                (r) => {
+                    console.log(action(r));
+                },
+                () => {});
+        });
     }
 }

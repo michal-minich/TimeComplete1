@@ -41,6 +41,7 @@ export default function toolbarView(a: IApp, elv: LabelEditView, lpv: LabelsPopu
                 <input className="view-filter" type="search" placeholder="View Filter"/>
             </li>
             <li onMouseDown={() => a.data.generateLocalStorageDownload()}>Export Data</li>
+            <li onClick={() => a.data.importLocalStorageDownload()}>Import Data</li>
         </ul>;
 
     const amv = popupView(a, addMenu);
