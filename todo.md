@@ -1,4 +1,3 @@
-- import json file
 
 searches:
 - rest task and label summary footer
@@ -51,6 +50,5 @@ future:
 - allow to link children labels into parent label
 
 queries:
-- implement negation
 - implement or in queries. emphasis or-red labels differently than and-ned
 - implement braces in queries

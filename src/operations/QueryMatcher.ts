@@ -76,10 +76,10 @@ export default class QueryMatcher implements IQueryMatcher {
             return true;
         for (const qi of this.queryItems) {
             const m = this.matchOne(qi, t);
-            if (m)
-                return true;
+            if (!m)
+                return false;
         }
-        return false;
+        return true;
     }
 
 
@@ -94,6 +94,8 @@ export default class QueryMatcher implements IQueryMatcher {
                 throw qi.value;
             } else if (qi.value === "Todo") {
                 return R.sample(t.completedOnSignal) === undefined;
+            } else if (qi.value === "Done") {
+                return R.sample(t.completedOnSignal) !== undefined;
             } else {
                 for (const al of t.associatedLabels()) {
                     if (al.name.indexOf(qi.value) !== -1) {
