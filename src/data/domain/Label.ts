@@ -1,26 +1,56 @@
-﻿import { ILabel, IColorStyle as ILabelStyle, ValueSignal, IApp, IDateTime } from "../../interfaces";
+﻿import {
+        ILabel,
+        IColorStyle,
+        ValueSignal,
+        IApp,
+        IDateTime,
+        WhatEvent,
+        ILabelChangeName,
+        ILabelCreate,
+        ILabelChangeStyle
+    } from
+    "../../interfaces";
 import { R } from "../../common";
 
 
 export default class Label implements ILabel {
 
-    constructor(
+    private constructor(
         private readonly app: IApp,
         name: string,
-        readonly style: ILabelStyle,
-        id?: number,
-        createdOn?: IDateTime) {
+        readonly style: IColorStyle,
+        id: number,
+        createdOn: IDateTime) {
 
         this.nameSignal = R.data(name);
         this.style = style;
-        if (id) {
-            this.id = id;
-            this.createdOn = createdOn!;
-        } else {
-            this.id = this.app.idCounter.getNext();
-            this.createdOn = this.app.clock.now();
-        }
+        this.id = id;
+        this.createdOn = createdOn;
         //this.associatedLabels = R.array();
+    }
+
+
+    static createNew(app: IApp, name: string, style: IColorStyle): ILabel {
+
+        const l = new Label(app, name, style, app.idCounter.getNext(), app.clock.now());
+        const s: ILabelChangeStyle = {
+            backColor: style.backColor.value,
+            customTextColor: style.customTextColor.value,
+            textColorInUse: style.textColorInUse
+        };
+        const d: ILabelCreate = { id: l.id, createdOn: l.createdOn.value, name: name, style: s };
+        app.sync.push(WhatEvent.LabelCreate, d);
+        return l;
+    }
+
+
+    static createFromStore(app: IApp,
+        name: string,
+        style: IColorStyle,
+        id: number,
+        createdOn: IDateTime): ILabel {
+
+        return new Label(app, name, style, id, createdOn);
     }
 
 
@@ -34,5 +64,11 @@ export default class Label implements ILabel {
 
     get name(): string { return this.nameSignal(); }
 
-    set name(value: string) { this.nameSignal(value); }
+    set name(value: string) {
+        if (this.nameSignal() === value)
+            return;
+        const d: ILabelChangeName = { name: value };
+        this.app.sync.push(WhatEvent.LabelChangeName, d);
+        this.nameSignal(value);
+    }
 }

@@ -2,7 +2,7 @@ import { DataSignal } from "s-js";
 import { SArray, SDataArray } from "s-array";
 
 
-// General ==================================================================
+// General ====================================================================
 
 
 export type Indexer<T> = { [key: string]: T };
@@ -21,7 +21,7 @@ export interface IReadonlyValueSignal<T> {
 }
 
 
-// Data =====================================================================
+// Data =======================================================================
 
 
 export interface IColor {
@@ -109,7 +109,7 @@ export interface ISettings {
 }
 
 
-// Controllers ==============================================================
+// Controllers ================================================================
 
 
 export interface IApp {
@@ -118,6 +118,7 @@ export interface IApp {
     readonly idCounter: IIdProvider<number>;
     readonly dashboard: IDashboard;
     readonly data: IData;
+    readonly sync: ISyncLog;
 }
 
 export interface IData {
@@ -142,7 +143,69 @@ export interface ITasksDashBoard extends IDashboard {
 }
 
 
-// IO =======================================================================
+// Sync =======================================================================
+
+
+export interface IChange {
+    what: WhatEvent;
+    data: any;
+}
+
+
+export interface ISyncEvent extends IChange {
+    id: number;
+    on: string;
+    what: WhatEvent;
+    data: any;
+}
+
+
+export const enum WhatEvent {
+
+    // label
+    LabelCreate,
+    LabelDelete,
+    LabelChangeName,
+    LabelChangeStyle,
+
+    // task
+    TaskCreate,
+    TaskDelete,
+    TaskChangeTitle,
+    TaskCompletedOnChange,
+    TaskAssociateLabel,
+    TaskDisassociateLabel,
+
+    // note
+    NoteCreate,
+    NoteDelete,
+    TaskChangeText,
+}
+
+
+export interface ILabelCreate {
+    id: number;
+    createdOn: string;
+    name: string;
+    style: ILabelChangeStyle;
+}
+
+export interface ILabelChangeName {
+    name: string;
+}
+
+export interface ILabelChangeStyle {
+    backColor: string;
+    customTextColor: string;
+    textColorInUse: TextColorUsage;
+}
+
+export interface ISyncLog {
+    push(we: WhatEvent, data:any): void;
+}
+
+
+// IO =========================================================================
 
 
 export interface IClock {
@@ -156,7 +219,7 @@ export interface IDataStore {
 }
 
 
-// Operations ===============================================================
+// Operations =================================================================
 
 
 export interface IIdProvider<T> {
@@ -195,4 +258,4 @@ export interface ISerializer {
 }
 
 
-// Views ====================================================================
+// Views ======================================================================

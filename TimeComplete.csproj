@@ -92,6 +92,7 @@
     <TypeScriptCompile Include="src\data\domain\Note.ts" />
     <TypeScriptCompile Include="src\data\domain\Label.ts" />
     <TypeScriptCompile Include="src\data\ColorStyle.ts" />
+    <TypeScriptCompile Include="src\events\Events.ts" />
     <TypeScriptCompile Include="src\operations\IncrementCounter.ts" />
     <TypeScriptCompile Include="src\io\SessionStore.ts" />
     <TypeScriptCompile Include="src\data\domain\Task.ts" />

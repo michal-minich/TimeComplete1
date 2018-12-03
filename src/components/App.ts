@@ -11,6 +11,7 @@ import {
 } from "../interfaces";
 import mainView from "../views/MainView";
 import Data from "../data/Data";
+import { SyncLog } from "../events/Events";
 
 
 export default class App implements IApp {
@@ -21,6 +22,8 @@ export default class App implements IApp {
 
     readonly data: IData;
 
+    readonly sync: SyncLog;
+
     constructor(el: Element) {
 
         this.localStore = new SessionStore();
@@ -30,6 +33,8 @@ export default class App implements IApp {
 
         this.clock = new Clock();
         this.idCounter = new IncrementCounter(this.data.settings.lastId);
+
+        this.sync = new SyncLog(this);
 
         el.appendChild(mainView(this));
     }

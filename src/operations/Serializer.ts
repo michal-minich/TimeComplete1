@@ -128,7 +128,7 @@ export default class Serializer implements ISerializer {
         case "DateTime":
             return new DateTime(o.value) as any as T;
         case "Label":
-            const l = new Label(
+            const l = Label.createFromStore(
                 this.app,
                 o.name,
                 this.getColorStyle(o.style),
