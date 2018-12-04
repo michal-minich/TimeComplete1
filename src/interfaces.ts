@@ -194,6 +194,10 @@ export interface ILabelChangeName {
     name: string;
 }
 
+export interface IDomainObjectDeleteEvent {
+    id: number;
+}
+
 export interface ILabelChangeStyle {
     backColor: string;
     customTextColor: string;
@@ -201,7 +205,11 @@ export interface ILabelChangeStyle {
 }
 
 export interface ISyncLog {
-    push(we: WhatEvent, data:any): void;
+    push(we: WhatEvent, data: any): void;
+    pushLabelCreate(l: ILabel): void;
+    pushLabelRemove(l: ILabel): void;
+    pushTaskCreate(t: ITask): void;
+    pushTaskRemove(t: ITask): void;
 }
 
 

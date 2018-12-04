@@ -58,6 +58,12 @@ export default class Data implements IData {
                 addTab(this.app);
         }
 
+        this.setupStoreSave();
+    }
+
+
+    private setupStoreSave() {
+
         R.onAny(() => {
             const labels = this.labels();
             Data.saveWithSerialize(this.app, "labels", labels);

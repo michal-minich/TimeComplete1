@@ -136,6 +136,19 @@ export module R {
     }
 
 
+    export function onArrayChange<T>(
+        arr: ArraySignal<T>,
+        addedAction: (item: T) => void,
+        removedAction: (item: T) => void) {
+        S(() => {
+            arr.map(
+                addedAction,
+                removedAction,
+                () => {});
+        });
+    }
+
+
     export function onAdd<T>(arr : ArraySignal<T>, action: (item : T) => void) {
         S(() => {
             arr.map(

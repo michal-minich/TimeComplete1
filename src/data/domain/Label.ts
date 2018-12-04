@@ -31,15 +31,7 @@ export default class Label implements ILabel {
 
 
     static createNew(app: IApp, name: string, style: IColorStyle): ILabel {
-
         const l = new Label(app, name, style, app.idCounter.getNext(), app.clock.now());
-        const s: ILabelChangeStyle = {
-            backColor: style.backColor.value,
-            customTextColor: style.customTextColor.value,
-            textColorInUse: style.textColorInUse
-        };
-        const d: ILabelCreate = { id: l.id, createdOn: l.createdOn.value, name: name, style: s };
-        app.sync.push(WhatEvent.LabelCreate, d);
         return l;
     }
 
