@@ -5,8 +5,12 @@
         WhatEvent,
         ITask,
         ILabel,
-        ILabelCreate,
-        IDomainObjectDeleteEvent
+        ILabelCreateEvent,
+        IFieldChangeEvent,
+        INote,
+        ITab,
+        ITaskCreateEvent,
+        ValueSignal
     }
     from "../interfaces";
 import { R } from "../common";
@@ -28,12 +32,40 @@ export class SyncLog implements ISyncLog {
 
         R.onArrayChange(this.app.data.labels,
             (l) => this.pushLabelCreate(l),
-            (l) => this.pushLabelRemove(l));
+            (l) => this.pushLabelDelete(l));
 
         R.onArrayChange(this.app.data.tasks,
             (t) => this.pushTaskCreate(t),
-            (t) => this.pushTaskRemove(t));
+            (t) => this.pushTaskDelete(t));
 
+        R.onArrayChange(this.app.data.notes,
+            (n) => this.pushNoteCreate(n),
+            (n) => this.pushNoteDelete(n));
+
+        R.onArrayChange(this.app.data.tabs,
+            (t) => this.pushTabCreate(t),
+            (t) => this.pushTabDelete(t));
+
+        this.pushFieldChange(
+            WhatEvent.TabLabelPrefixChange,
+            this.app.data.settings.labelPrefix);
+
+        this.pushFieldChange(
+            WhatEvent.TabNegationOperatorChange,
+            this.app.data.settings.negationOperator);
+
+        this.pushFieldChange(
+            WhatEvent.TabSelectedTabIndexChange,
+            this.app.data.settings.selectedTabIndex);
+
+        this.pushFieldChange(
+            WhatEvent.TabDashboardColumnsCountChange,
+            this.app.data.settings.dashboardColumnsCount);
+    }
+
+
+    pushFieldChange<T>(we: WhatEvent, s: ValueSignal<T>) {
+        R.on(s, () => this.push(we, { value: s() }));
     }
 
 
@@ -50,7 +82,7 @@ export class SyncLog implements ISyncLog {
 
 
     pushLabelCreate(l: ILabel): void {
-        const d: ILabelCreate = {
+        const d: ILabelCreateEvent = {
             id: l.id,
             createdOn: l.createdOn.value,
             name: l.name,
@@ -64,18 +96,53 @@ export class SyncLog implements ISyncLog {
     }
 
 
-    pushLabelRemove(l: ILabel): void {
-        const d: IDomainObjectDeleteEvent = { id: l.id };
+    pushLabelDelete(l: ILabel): void {
+        const d: IFieldChangeEvent = { value: l.id };
         this.push(WhatEvent.LabelDelete, d);
     }
 
-    pushTaskCreate(t: ITask): void {
 
+    pushTaskCreate(t: ITask): void {
+        const d: ITaskCreateEvent = {
+            id: t.id,
+            createdOn: t.createdOn.value,
+        };
+        this.push(WhatEvent.TaskCreate, d);
     }
 
 
-    pushTaskRemove(t: ITask): void {
-        const d: IDomainObjectDeleteEvent = { id: t.id };
+    pushTaskDelete(t: ITask): void {
+        const d: IFieldChangeEvent = { value: t.id };
         this.push(WhatEvent.TaskDelete, d);
+    }
+
+
+    pushNoteCreate(n: INote): void {
+        const d: ITaskCreateEvent = {
+            id: n.id,
+            createdOn: n.createdOn.value,
+        };
+        this.push(WhatEvent.NoteCreate, d);
+    }
+
+
+    pushNoteDelete(n: INote): void {
+        const d: IFieldChangeEvent = { value: n.id };
+        this.push(WhatEvent.NoteDelete, d);
+    }
+
+
+    pushTabCreate(t: ITab): void {
+        const d: ITaskCreateEvent = {
+            id: t.id,
+            createdOn: t.createdOn.value,
+        };
+        this.push(WhatEvent.TabCreate, d);
+    }
+
+
+    pushTabDelete(t: ITab): void {
+        const d: IFieldChangeEvent = { value: t.id };
+        this.push(WhatEvent.TabDelete, d);
     }
 }

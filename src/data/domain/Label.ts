@@ -5,9 +5,7 @@
         IApp,
         IDateTime,
         WhatEvent,
-        ILabelChangeName,
-        ILabelCreate,
-        ILabelChangeStyle
+        IFieldChangeEvent
     } from
     "../../interfaces";
 import { R } from "../../common";
@@ -59,7 +57,7 @@ export default class Label implements ILabel {
     set name(value: string) {
         if (this.nameSignal() === value)
             return;
-        const d: ILabelChangeName = { name: value };
+        const d: IFieldChangeEvent = { value: value };
         this.app.sync.push(WhatEvent.LabelChangeName, d);
         this.nameSignal(value);
     }

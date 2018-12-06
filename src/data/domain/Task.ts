@@ -13,6 +13,7 @@ export default class Task implements ITask {
 
         this.titleSignal = R.data(title);
         this.associatedLabels = associatedLabels ? associatedLabels : R.array([]);
+
         if (id) {
             this.id = id;
             this.createdOn = createdOn!;

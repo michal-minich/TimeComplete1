@@ -13,7 +13,8 @@ import {
     } from
     "../interfaces";
 import Settings from "./Settings";
-import { addTab } from "./Tab";
+import { addTab } from "./domain/Tab";
+import IncrementCounter from "../operations/IncrementCounter";
 
 
 export default class Data implements IData {
@@ -36,6 +37,7 @@ export default class Data implements IData {
         try {
 
             this.settings = this.loadObj<ISettings>("settings", "Settings", () => new Settings());
+            this.app.idCounter = new IncrementCounter(this.settings.lastId);
             this.labels = this.loadArray<ILabel>("labels", "Label");
             this.tasks = this.loadArray<ITask>("tasks", "Task");
             this.notes = this.loadArray<INote>("notes", "Note");

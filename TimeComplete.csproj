@@ -79,7 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\data\Query.ts" />
-    <TypeScriptCompile Include="src\data\Tab.ts" />
+    <TypeScriptCompile Include="src\data\domain\Tab.ts" />
     <TypeScriptCompile Include="src\data\Data.ts" />
     <TypeScriptCompile Include="src\data\Settings.ts" />
     <TypeScriptCompile Include="src\common.ts" />

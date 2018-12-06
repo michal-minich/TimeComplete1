@@ -71,7 +71,7 @@ export interface INote extends IDomainObject {
     readonly allLabels: ArraySignal<ILabel>;
 }
 
-export interface ITab {
+export interface ITab extends IDomainObject {
     title: string;
     readonly style: IColorStyle;
     content: any;
@@ -115,7 +115,7 @@ export interface ISettings {
 export interface IApp {
     readonly localStore: IDataStore;
     readonly clock: IClock;
-    readonly idCounter: IIdProvider<number>;
+    idCounter: IIdProvider<number>;
     readonly dashboard: IDashboard;
     readonly data: IData;
     readonly sync: ISyncLog;
@@ -166,7 +166,7 @@ export const enum WhatEvent {
     LabelCreate,
     LabelDelete,
     LabelChangeName,
-    LabelChangeStyle,
+    LabelChangeColorStyle,
 
     // task
     TaskCreate,
@@ -180,25 +180,46 @@ export const enum WhatEvent {
     NoteCreate,
     NoteDelete,
     TaskChangeText,
+
+    // tab
+    TabCreate,
+    TabDelete,
+    TabChangeTitle,
+    TabChangeColorStyle,
+    TabChangeContent,
+
+    // settings
+    TabLabelPrefixChange,
+    TabNegationOperatorChange,
+    TabSelectedTabIndexChange,
+    TabDashboardColumnsCountChange,
 }
 
 
-export interface ILabelCreate {
+export interface IDomainObjectCreateEvent {
     id: number;
     createdOn: string;
+}
+
+export interface ILabelCreateEvent extends IDomainObjectCreateEvent {
     name: string;
-    style: ILabelChangeStyle;
+    style: ILabelChangeStyleEvent;
 }
 
-export interface ILabelChangeName {
-    name: string;
+export interface ITaskCreateEvent extends IDomainObjectCreateEvent {
 }
 
-export interface IDomainObjectDeleteEvent {
-    id: number;
+export interface INoteCreateEvent extends IDomainObjectCreateEvent {
 }
 
-export interface ILabelChangeStyle {
+export interface ITabCreateEvent extends IDomainObjectCreateEvent {
+}
+
+export interface IFieldChangeEvent {
+    value: string | number | boolean;
+}
+
+export interface ILabelChangeStyleEvent {
     backColor: string;
     customTextColor: string;
     textColorInUse: TextColorUsage;
@@ -206,10 +227,6 @@ export interface ILabelChangeStyle {
 
 export interface ISyncLog {
     push(we: WhatEvent, data: any): void;
-    pushLabelCreate(l: ILabel): void;
-    pushLabelRemove(l: ILabel): void;
-    pushTaskCreate(t: ITask): void;
-    pushTaskRemove(t: ITask): void;
 }
 
 

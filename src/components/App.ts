@@ -18,7 +18,7 @@ export default class App implements IApp {
 
     readonly localStore: IDataStore;
     readonly clock: IClock;
-    readonly idCounter: IIdProvider<number>;
+    idCounter!: IIdProvider<number>;
 
     readonly data: IData;
 
@@ -27,12 +27,10 @@ export default class App implements IApp {
     constructor(el: Element) {
 
         this.localStore = new SessionStore();
+        this.clock = new Clock();
 
         this.data = new Data(this);
         this.data.load();
-
-        this.clock = new Clock();
-        this.idCounter = new IncrementCounter(this.data.settings.lastId);
 
         this.sync = new SyncLog(this);
 

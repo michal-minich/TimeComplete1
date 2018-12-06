@@ -12,11 +12,14 @@ import { R } from "../../common";
 
 export default class Note implements INote {
 
-    constructor(private readonly app: IApp,
+    constructor(
+        private readonly app: IApp,
         id?: number,
         createdOn?: IDateTime) {
+
         this.textSignal = R.data("");
         this.associatedLabels = R.array([]);
+
         if (id) {
             this.id = id;
             this.createdOn = createdOn!;

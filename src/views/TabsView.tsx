@@ -3,7 +3,7 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import { IApp, ITab, ArraySignal } from "../interfaces";
-import { addTab } from "../data/Tab";
+import { addTab } from "../data/domain/Tab";
 import { colorInlineStyle } from "./MainView";
 
 

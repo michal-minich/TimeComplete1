@@ -27,7 +27,7 @@ import {
     isArraySignal
 } from "../common";
 import Settings from "../data/Settings";
-import Tab from "../data/Tab";
+import Tab from "../data/domain/Tab";
 import Dashboard from "../data/dash/Dashboard";
 import TasksDashItem from "../data/dash/TasksDashItem";
 import Query from "../data/Query";
@@ -133,9 +133,7 @@ export default class Serializer implements ISerializer {
                 o.name,
                 this.getColorStyle(o.style),
                 o.id,
-                this.fromPlainObject<IDateTime>(
-                    o.createdOn,
-                    "DateTime"));
+                this.fromPlainObject<IDateTime>(o.createdOn, "DateTime"));
             return l as any as T;
         case "Task":
             const t = new Task(
@@ -143,9 +141,7 @@ export default class Serializer implements ISerializer {
                 o.title,
                 this.getAssociatedLabels(o),
                 o.id,
-                this.fromPlainObject<IDateTime>(
-                    o.createdOn,
-                    "DateTime"));
+                this.fromPlainObject<IDateTime>(o.createdOn, "DateTime"));
             if (o.completedOn) {
                 t.completedOn = this.fromPlainObject<IDateTime>(
                     o.completedOn,
@@ -154,7 +150,12 @@ export default class Serializer implements ISerializer {
             return t as any as T;
         case "Tab":
         {
-            const tab = new Tab(this.app, o.title, this.getColorStyle(o.style));
+            const tab = new Tab(
+                this.app,
+                o.title,
+                this.getColorStyle(o.style),
+                o.id,
+                o.createdOn ? this.fromPlainObject<IDateTime>(o.createdOn, "DateTime") : undefined);
             tab.content = this.getDashboard(o.content);
             return tab as any as T;
         }
