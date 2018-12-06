@@ -101,7 +101,7 @@ export default class Serializer implements ISerializer {
             } else {
                 const o: Indexer<JsonValueType> = {};
                 for (const k of Object.keys(v)) {
-                    if (k === "app" || k === "matcher")
+                    if (k === "app" || k === "matcher" || k === "type")
                         continue;
                     const f2 = this.toPlain(v[k], ++objLevel);
                     if (f2 !== undefined) {

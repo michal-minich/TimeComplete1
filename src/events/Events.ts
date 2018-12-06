@@ -1,148 +1,147 @@
 ﻿import {
-        IApp,
-        ISyncLog,
-        ISyncEvent,
-        WhatEvent,
-        ITask,
-        ILabel,
-        ILabelCreateEvent,
-        IFieldChangeEvent,
-        INote,
-        ITab,
-        ITaskCreateEvent,
-        ValueSignal
-    }
-    from "../interfaces";
+		IApp,
+		ISyncLog,
+		ISyncEvent,
+		WhatEvent,
+		ITask,
+		ILabel,
+		ILabelCreateEvent,
+		INote,
+		ITab,
+		ITaskCreateEvent,
+		ValueSignal,
+		IDomainObject,
+		IDeleteEvent,
+		INoteCreateEvent,
+		ITabCreateEvent,
+		IColorStyle,
+		IColorStyleChangeEvent
+	}
+	from "../interfaces";
 import { R } from "../common";
 
 
 export class SyncLog implements ISyncLog {
 
 
-    private readonly ses: ISyncEvent[];
+	private readonly ses: ISyncEvent[];
+	private eventIdCounter = 0;
 
 
-    constructor(private readonly app: IApp) {
-        this.ses = [];
-        this.setupSync();
-    }
+	constructor(private readonly app: IApp) {
+		this.ses = [];
+		this.setupSync();
+	}
 
 
-    private setupSync() {
+	private setupSync() {
 
-        R.onArrayChange(this.app.data.labels,
-            (l) => this.pushLabelCreate(l),
-            (l) => this.pushLabelDelete(l));
+		R.onArrayChange(this.app.data.labels,
+			(l) => this.pushLabelCreate(l),
+			(l) => this.pushDelete(l));
 
-        R.onArrayChange(this.app.data.tasks,
-            (t) => this.pushTaskCreate(t),
-            (t) => this.pushTaskDelete(t));
+		R.onArrayChange(this.app.data.tasks,
+			(t) => this.pushTaskCreate(t),
+			(t) => this.pushDelete(t));
 
-        R.onArrayChange(this.app.data.notes,
-            (n) => this.pushNoteCreate(n),
-            (n) => this.pushNoteDelete(n));
+		R.onArrayChange(this.app.data.notes,
+			(n) => this.pushNoteCreate(n),
+			(n) => this.pushDelete(n));
 
-        R.onArrayChange(this.app.data.tabs,
-            (t) => this.pushTabCreate(t),
-            (t) => this.pushTabDelete(t));
+		R.onArrayChange(this.app.data.tabs,
+			(t) => this.pushTabCreate(t),
+			(t) => this.pushDelete(t));
 
-        this.pushFieldChange(
-            WhatEvent.TabLabelPrefixChange,
-            this.app.data.settings.labelPrefix);
+		this.pushFieldChange(
+			"settings.labelPrefix",
+			this.app.data.settings.labelPrefix);
 
-        this.pushFieldChange(
-            WhatEvent.TabNegationOperatorChange,
-            this.app.data.settings.negationOperator);
+		this.pushFieldChange(
+			"settings.negationOperator",
+			this.app.data.settings.negationOperator);
 
-        this.pushFieldChange(
-            WhatEvent.TabSelectedTabIndexChange,
-            this.app.data.settings.selectedTabIndex);
+		this.pushFieldChange(
+			"settings.selectedTabIndex",
+			this.app.data.settings.selectedTabIndex);
 
-        this.pushFieldChange(
-            WhatEvent.TabDashboardColumnsCountChange,
-            this.app.data.settings.dashboardColumnsCount);
-    }
+		this.pushFieldChange(
+			"settings.dashboardColumnsCount",
+			this.app.data.settings.dashboardColumnsCount);
+	}
 
+	push(we: WhatEvent, data: any) {
+		const se: ISyncEvent = {
+			eventId: ++this.eventIdCounter,
+			on: this.app.clock.now().value,
+			what: we,
+			data: data
+		};
+		this.ses.push(se);
+		console.log(se);
+	}
 
-    pushFieldChange<T>(we: WhatEvent, s: ValueSignal<T>) {
-        R.on(s, () => this.push(we, { value: s() }));
-    }
-
-
-    push(we: WhatEvent, data: any) {
-        const se: ISyncEvent = {
-            id: this.app.idCounter.getNext(),
-            on: this.app.clock.now().value,
-            what: we,
-            data: data
-        };
-        this.ses.push(se);
-        console.log(se);
-    }
-
-
-    pushLabelCreate(l: ILabel): void {
-        const d: ILabelCreateEvent = {
-            id: l.id,
-            createdOn: l.createdOn.value,
-            name: l.name,
-            style: {
-                backColor: l.style.backColor.value,
-                customTextColor: l.style.customTextColor.value,
-                textColorInUse: l.style.textColorInUse
-            }
-        };
-        this.push(WhatEvent.LabelCreate, d);
-    }
+	pushDelete(o: IDomainObject): void {
+		const d: IDeleteEvent = { id: o.id };
+		this.push("object.delete", d);
+	}
 
 
-    pushLabelDelete(l: ILabel): void {
-        const d: IFieldChangeEvent = { value: l.id };
-        this.push(WhatEvent.LabelDelete, d);
-    }
+	pushFieldChange<T>(we: WhatEvent, s: ValueSignal<T>) {
+		R.on(s, () => this.push(we, { value: s() }));
+	}
 
 
-    pushTaskCreate(t: ITask): void {
-        const d: ITaskCreateEvent = {
-            id: t.id,
-            createdOn: t.createdOn.value,
-        };
-        this.push(WhatEvent.TaskCreate, d);
-    }
+	pushLabelCreate(l: ILabel): void {
+		const d: ILabelCreateEvent = {
+			type: l.type,
+			id: l.id,
+			createdOn: l.createdOn.value,
+			name: l.name,
+			style: this.getColorStyle(l.style)
+		};
+		this.push("label.style", d);
+	}
 
 
-    pushTaskDelete(t: ITask): void {
-        const d: IFieldChangeEvent = { value: t.id };
-        this.push(WhatEvent.TaskDelete, d);
-    }
+	pushTaskCreate(t: ITask): void {
+		const d: ITaskCreateEvent = {
+			type: t.type,
+			id: t.id,
+			createdOn: t.createdOn.value,
+			title: t.title
+		};
+		this.push("object.add", d);
+	}
 
 
-    pushNoteCreate(n: INote): void {
-        const d: ITaskCreateEvent = {
-            id: n.id,
-            createdOn: n.createdOn.value,
-        };
-        this.push(WhatEvent.NoteCreate, d);
-    }
+	pushNoteCreate(n: INote): void {
+		const d: INoteCreateEvent = {
+			type: n.type,
+			id: n.id,
+			createdOn: n.createdOn.value,
+			text: n.text
+		};
+		this.push("object.add", d);
+	}
 
 
-    pushNoteDelete(n: INote): void {
-        const d: IFieldChangeEvent = { value: n.id };
-        this.push(WhatEvent.NoteDelete, d);
-    }
+	pushTabCreate(t: ITab): void {
+		const d: ITabCreateEvent = {
+			type: t.type,
+			id: t.id,
+			createdOn: t.createdOn.value,
+			title: t.title,
+			style: this.getColorStyle(t.style)
+		};
+		this.push("object.add", d);
+	}
 
 
-    pushTabCreate(t: ITab): void {
-        const d: ITaskCreateEvent = {
-            id: t.id,
-            createdOn: t.createdOn.value,
-        };
-        this.push(WhatEvent.TabCreate, d);
-    }
-
-
-    pushTabDelete(t: ITab): void {
-        const d: IFieldChangeEvent = { value: t.id };
-        this.push(WhatEvent.TabDelete, d);
-    }
+	private getColorStyle(s: IColorStyle): IColorStyleChangeEvent {
+		return {
+			backColor: s.backColor.value,
+			customTextColor: s.customTextColor.value,
+			textColorInUse: s.textColorInUse
+		};
+	}
 }

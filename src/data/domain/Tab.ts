@@ -26,6 +26,7 @@ export default class Tab implements ITab {
         }
     }
 
+    readonly type = "tab";
     id: number;
     createdOn: IDateTime;
     private readonly titleSignal: ValueSignal<string>;

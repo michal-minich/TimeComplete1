@@ -4,7 +4,6 @@
         ValueSignal,
         IApp,
         IDateTime,
-        WhatEvent,
         IFieldChangeEvent
     } from
     "../../interfaces";
@@ -46,7 +45,8 @@ export default class Label implements ILabel {
 
     private readonly nameSignal: ValueSignal<string>;
 
-
+	
+    readonly type = "label";
     id: number;
     createdOn: IDateTime;
     //readonly associatedLabels: WritableArraySignal<ILabel>;
@@ -57,8 +57,8 @@ export default class Label implements ILabel {
     set name(value: string) {
         if (this.nameSignal() === value)
             return;
-        const d: IFieldChangeEvent = { value: value };
-        this.app.sync.push(WhatEvent.LabelChangeName, d);
+        const d: IFieldChangeEvent = { id: this.id, value: value };
+        this.app.sync.push("label.name", d);
         this.nameSignal(value);
     }
 }
