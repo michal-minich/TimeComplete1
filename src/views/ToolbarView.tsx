@@ -22,7 +22,6 @@ export default function toolbarView(a: IApp, elv: LabelEditView, lpv: LabelsPopu
             <li onClick={addNote}>Add New Note</li>
         </ul>;
 
-    const cols = a.data.settings.dashboardColumnsCount;
     const autoCols = R.data(true);
 
     const moreMenu =
@@ -32,9 +31,9 @@ export default function toolbarView(a: IApp, elv: LabelEditView, lpv: LabelsPopu
                 <input type="checkbox" id="auto-columns-count" fn={data(autoCols)}/>
                 <label htmlFor="auto-columns-count">Auto</label>
                 <fieldset disabled={autoCols()}>
-                    <button onMouseDown={() => cols(cols() - 1)}>-</button>
-                    <span className="dash-columns-input">{cols}</span>
-                    <button onMouseDown={() => cols(cols() + 1)}>+</button>
+                    <button onMouseDown={() => --a.data.settings.dashboardColumnsCount}>-</button>
+                    <span className="dash-columns-input">{a.data.settings.dashboardColumnsCount}</span>
+                    <button onMouseDown={() => ++a.data.settings.dashboardColumnsCount}>+</button>
                 </fieldset>
             </li>
             <li>
@@ -56,7 +55,7 @@ export default function toolbarView(a: IApp, elv: LabelEditView, lpv: LabelsPopu
 
     function addNote() {
         const n = new Note(a);
-        a.data.notes.unshift(n);
+        a.data.noteAdd(n);
         amv.hide();
         a.dashboard.unshift(new NoteDashItem(a, n));
     }

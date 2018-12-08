@@ -25,8 +25,10 @@ export const labelAddView = (a: IApp) => {
     function confirm(): void {
         if (newName() === "")
             return;
-        const l = Label.createNew(a, newName(), new LabelStyle(new Color("gray"), new Color("white")));
-        a.data.labels.unshift(l);
+        const l = Label.createNew(a,
+            newName(),
+            new LabelStyle(new Color("gray"), new Color("white")));
+        a.data.labelAdd(l);
         newName("");
         const t = a.data.selectedTask;
         if (t) {

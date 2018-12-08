@@ -8,20 +8,20 @@ import Dashboard from "../dash/Dashboard";
 export default class Tab implements ITab {
 
     constructor(
-        private readonly app: IApp, 
-        title: string, 
+        private readonly app: IApp,
+        title: string,
         style: IColorStyle,
         id?: number,
         createdOn?: IDateTime) {
 
         this.titleSignal = R.data(title);
-        this.style = style;  
+        this.style = style;
 
         if (id) {
             this.id = id;
             this.createdOn = createdOn!;
         } else {
-            this.id = this.app.idCounter.getNext();
+            this.id = this.app.data.idCounter.getNext();
             this.createdOn = this.app.clock.now();
         }
     }
@@ -51,6 +51,6 @@ export function addTab(a: IApp): void {
             new Color("white"),
             TextColorUsage.BlackOrWhite));
     tab.content = new Dashboard(a);
-    a.data.tabs.push(tab);
-    a.data.settings.selectedTabIndex(a.data.tabs().length - 1);
+    a.data.tabAdd(tab);
+    a.data.settings.selectedTabIndex = a.data.tabs().length - 1;
 }

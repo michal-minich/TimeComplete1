@@ -1,20 +1,18 @@
-import { IIdProvider, ValueSignal } from "../interfaces";
+import { IIdProvider, IApp } from "../interfaces";
 
 
 export default class IncrementCounter implements IIdProvider<number> {
 
     private value = 0;
-    private readonly lastId: ValueSignal<number>;
 
-    constructor(lastId: ValueSignal<number>) {
-        this.lastId = lastId;
-        this.value = lastId();
+    constructor(private readonly app: IApp) {
+        this.value = app.data.settings.lastId;
     }
 
 
     getNext(): number {
         const v = ++this.value;
-        this.lastId(v);
+        this.app.data.settings.lastId = v;
         return v;
     }
 

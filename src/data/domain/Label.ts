@@ -28,7 +28,7 @@ export default class Label implements ILabel {
 
 
     static createNew(app: IApp, name: string, style: IColorStyle): ILabel {
-        const l = new Label(app, name, style, app.idCounter.getNext(), app.clock.now());
+        const l = new Label(app, name, style, app.data.idCounter.getNext(), app.clock.now());
         return l;
     }
 
@@ -45,7 +45,7 @@ export default class Label implements ILabel {
 
     private readonly nameSignal: ValueSignal<string>;
 
-	
+
     readonly type = "label";
     id: number;
     createdOn: IDateTime;
@@ -57,8 +57,7 @@ export default class Label implements ILabel {
     set name(value: string) {
         if (this.nameSignal() === value)
             return;
-        const d: IFieldChangeEvent = { id: this.id, value: value };
-        this.app.sync.push("label.name", d);
+        this.app.data.sync.pushField("label.name", this, this.name);
         this.nameSignal(value);
     }
 }

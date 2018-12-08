@@ -16,15 +16,16 @@ export default function tabsView(a: IApp) {
     function activate(e: MouseEvent, index: number): void {
         if ((e.target as HTMLElement).classList.contains("close"))
             return;
-        a.data.settings.selectedTabIndex(index);
+        a.data.settings.selectedTabIndex = index;
     }
 
 
     function close(index: number): void {
-        const selIx = a.data.settings.selectedTabIndex();
+        const selIx = a.data.settings.selectedTabIndex;
         if (selIx > index || selIx === (a.data.tabs().length - 1))
-            a.data.settings.selectedTabIndex(selIx - 1);
-        a.data.tabs.splice(index, 1);
+            a.data.settings.selectedTabIndex = selIx - 1;
+	    const t = a.data.tabs()[index];
+        a.data.tabDelete(t);
     }
 
 
@@ -34,7 +35,7 @@ export default function tabsView(a: IApp) {
 
 
     function tabView(tab: ITab, index: number): HTMLSpanElement {
-        const isSel = index === a.data.settings.selectedTabIndex();
+        const isSel = index === a.data.settings.selectedTabIndex;
         const v =
             <span className={"tab" + (isSel ? " active-tab" : "")}
                   style={isSel ? colorInlineStyle(tab.style) : {}}

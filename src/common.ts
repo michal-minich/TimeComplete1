@@ -149,7 +149,7 @@ export module R {
     }
 
 
-    export function onAdd<T>(arr : ArraySignal<T>, action: (item : T) => void) {
+    export function onAdd<T>(arr: ArraySignal<T>, action: (item: T) => void) {
         S(() => {
             arr.map(
                 (a) => {

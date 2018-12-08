@@ -98,7 +98,7 @@ export default function labelEditView(a: IApp) {
                 const qt = R.sample(di.query.text);
                 di.query.text(qt.replace("#" + l.name, ""));
             }
-            a.data.labels.remove(l);
+            a.data.labelDelete(l);
             cleanup();
         });
     }

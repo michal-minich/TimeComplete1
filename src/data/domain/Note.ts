@@ -24,12 +24,12 @@ export default class Note implements INote {
             this.id = id;
             this.createdOn = createdOn!;
         } else {
-            this.id = this.app.idCounter.getNext();
+            this.id = this.app.data.idCounter.getNext();
             this.createdOn = this.app.clock.now();
         }
     }
 
-	
+
     readonly type = "note";
     id: number;
     createdOn: IDateTime;

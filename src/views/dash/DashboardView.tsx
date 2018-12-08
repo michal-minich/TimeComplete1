@@ -24,7 +24,7 @@ export default function dashboardView(a: IApp, lpv: LabelsPopupView) {
                     {() => {
                         const tds: HTMLTableCellElement[] = [];
                         const tdsHeight: number[] = [];
-                        const numColumns = a.data.settings.dashboardColumnsCount();
+                        const numColumns = a.data.settings.dashboardColumnsCount;
                         for (let i = 0; i < numColumns; i++) {
                             tds.push(document.createElement("td"));
                             tdsHeight.push(0);

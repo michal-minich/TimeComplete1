@@ -184,10 +184,10 @@ export default class Serializer implements ISerializer {
         case "Settings":
         {
             const s = new Settings();
-            s.labelPrefix = R.data(o.labelPrefix);
-            s.selectedTabIndex = R.data(o.selectedTabIndex);
-            s.dashboardColumnsCount = R.data(o.dashboardColumnsCount);
-            s.lastId = R.data(o.lastId);
+            s.labelPrefix = o.labelPrefix;
+            s.selectedTabIndex = o.selectedTabIndex;
+            s.dashboardColumnsCount = o.dashboardColumnsCount;
+            s.lastId = o.lastI;
             return s as any as T;
         }
         default:

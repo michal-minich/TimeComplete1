@@ -18,7 +18,7 @@ export default class Task implements ITask {
             this.id = id;
             this.createdOn = createdOn!;
         } else {
-            this.id = this.app.idCounter.getNext();
+            this.id = this.app.data.idCounter.getNext();
             this.createdOn = this.app.clock.now();
         }
     }
@@ -27,7 +27,7 @@ export default class Task implements ITask {
     private readonly titleSignal: ValueSignal<string>;
     readonly completedOnSignal = R.data<IDateTime | undefined>(undefined);
 
-	
+
     readonly type = "task";
     id: number;
     createdOn: IDateTime;

@@ -25,7 +25,7 @@ export default function taskAddView(a: IApp, tdi: ITasksDashItem) {
         const t = new Task(a, title);
         associateLabels(t, sq.matcher.existingLabels);
         associateLabels(t, tq.matcher.existingLabels);
-        a.data.tasks.unshift(t);
+        a.data.taskAdd(t);
     }
 
 
