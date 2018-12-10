@@ -3,7 +3,7 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import LabelStyle from "../data/ColorStyle";
+import LabelStyle from "../data/value/ColorStyle";
 import Color from "../data/value/Color";
 import { R } from "../common";
 import Label from "../data/domain/Label";
@@ -27,12 +27,12 @@ export const labelAddView = (a: IApp) => {
             return;
         const l = Label.createNew(a,
             newName(),
-            new LabelStyle(new Color("gray"), new Color("white")));
+            new LabelStyle(a, new Color("gray"), new Color("white")));
         a.data.labelAdd(l);
         newName("");
         const t = a.data.selectedTask;
         if (t) {
-            t.associatedLabels.push(l);
+            t.addLabel(l);
         }
     }
 

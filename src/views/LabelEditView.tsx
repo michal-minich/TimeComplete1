@@ -4,7 +4,7 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { colorInlineStyle } from "./MainView";
-import LabelStyle from "../data/ColorStyle";
+import ColorStyle from "../data/value/ColorStyle";
 import Color from "../data/value/Color";
 import { ILabel, IApp, ValueSignal } from "../interfaces";
 import { R } from "../common";
@@ -25,7 +25,8 @@ export default function labelEditView(a: IApp) {
         <div className="edit-label">
             <span
                 className="label"
-                style={colorInlineStyle(new LabelStyle(
+                style={colorInlineStyle(new ColorStyle(
+                    a,
                     new Color(editColor()),
                     new Color("white")))}>
                 {editLabelName}
@@ -59,7 +60,7 @@ export default function labelEditView(a: IApp) {
     function confirm(): void {
         const l = labelSignal()!;
 
-        for (const di of a.dashboard.items()) {
+        for (const di of a.data.dashboard.items()) {
             if (!(di instanceof TasksDashItem))
                 continue;
             const qt = R.sample(di.query.text);
@@ -90,9 +91,9 @@ export default function labelEditView(a: IApp) {
         R.freeze(() => {
             const l = labelSignal()!;
             for (const t of a.data.tasks()) {
-                t.associatedLabels.remove(l);
+                t.removeLabel(l);
             }
-            for (const di of a.dashboard.items()) {
+            for (const di of a.data.dashboard.items()) {
                 if (!(di instanceof TasksDashItem))
                     continue;
                 const qt = R.sample(di.query.text);

@@ -51,29 +51,31 @@ export class SyncLog implements ISyncLog {
     }
 
 
-    pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value: T) {
+    pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value?: T) {
         const d: IFieldChangeEvent = { id: o.id, value: value };
+        this.push(we, d);
+    }
+
+
+    pushField2<T extends SimpleType>(we: WhatEvent, id: number, value?: T) {
+        const d: IFieldChangeEvent = { id: id, value: value };
         this.push(we, d);
     }
 
 
     pushLabelCreate(l: ILabel): void {
         const d: ILabelCreateEvent = {
-            type: l.type,
-            id: l.id,
-            createdOn: l.createdOn.value,
+            ...this.getObject(l),
             name: l.name,
             style: this.getColorStyle(l.style)
         };
-        this.push("label.style", d);
+        this.push("object.add", d);
     }
 
 
     pushTaskCreate(t: ITask): void {
         const d: ITaskCreateEvent = {
-            type: t.type,
-            id: t.id,
-            createdOn: t.createdOn.value,
+            ...this.getObject(t),
             title: t.title
         };
         this.push("object.add", d);
@@ -82,9 +84,7 @@ export class SyncLog implements ISyncLog {
 
     pushNoteCreate(n: INote): void {
         const d: INoteCreateEvent = {
-            type: n.type,
-            id: n.id,
-            createdOn: n.createdOn.value,
+            ...this.getObject(n),
             text: n.text
         };
         this.push("object.add", d);
@@ -93,9 +93,7 @@ export class SyncLog implements ISyncLog {
 
     pushTabCreate(t: ITab): void {
         const d: ITabCreateEvent = {
-            type: t.type,
-            id: t.id,
-            createdOn: t.createdOn.value,
+            ...this.getObject(t),
             title: t.title,
             style: this.getColorStyle(t.style)
         };
@@ -108,6 +106,15 @@ export class SyncLog implements ISyncLog {
             backColor: s.backColor.value,
             customTextColor: s.customTextColor.value,
             textColorInUse: s.textColorInUse
+        };
+    }
+
+
+    private getObject(o: IDomainObject) {
+        return {
+            type: o.type,
+            id: o.id,
+            createdOn: o.createdOn.value,
         };
     }
 }

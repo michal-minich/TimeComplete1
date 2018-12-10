@@ -31,7 +31,7 @@ export default function taskAddView(a: IApp, tdi: ITasksDashItem) {
 
     function associateLabels(t: ITask, ls: ILabel[]) {
         for (const l of ls) {
-            t.associatedLabels.push(l);
+            t.addLabel(l);
         }
     }
 

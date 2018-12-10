@@ -80,7 +80,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="src\data\Query.ts" />
     <TypeScriptCompile Include="src\data\domain\Tab.ts" />
-    <TypeScriptCompile Include="src\data\Data.ts" />
+    <TypeScriptCompile Include="src\components\Data.ts" />
     <TypeScriptCompile Include="src\data\Settings.ts" />
     <TypeScriptCompile Include="src\common.ts" />
     <TypeScriptCompile Include="src\data\dash\Dashboard.ts" />
@@ -91,7 +91,7 @@
     <TypeScriptCompile Include="src\data\value\DateTime.ts" />
     <TypeScriptCompile Include="src\data\domain\Note.ts" />
     <TypeScriptCompile Include="src\data\domain\Label.ts" />
-    <TypeScriptCompile Include="src\data\ColorStyle.ts" />
+    <TypeScriptCompile Include="src\data\value\ColorStyle.ts" />
     <TypeScriptCompile Include="src\components\SyncLog.ts" />
     <TypeScriptCompile Include="src\operations\IncrementCounter.ts" />
     <TypeScriptCompile Include="src\io\LocalStore.ts" />

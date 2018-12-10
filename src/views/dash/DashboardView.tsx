@@ -29,7 +29,7 @@ export default function dashboardView(a: IApp, lpv: LabelsPopupView) {
                             tds.push(document.createElement("td"));
                             tdsHeight.push(0);
                         }
-                        for (const di of a.dashboard.items()) {
+                        for (const di of a.data.dashboard.items()) {
                             if (di instanceof TasksDashItem) {
                                 const col = indexOfMin(tdsHeight);
                                 const v = tasksDashItemView(a, di, lpv, ettv);

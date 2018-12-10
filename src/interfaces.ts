@@ -48,6 +48,7 @@ export interface ILabel extends IDomainObject {
 }
 
 export interface IColorStyle {
+    ownerId: number | undefined;
     backColor: IColor;
     readonly textColor: IColor;
     customTextColor: IColor;
@@ -64,7 +65,9 @@ export interface ITask extends IDomainObject {
     title: string;
     completedOn: IDateTime | undefined;
     completedOnSignal: ValueSignal<IDateTime | undefined>;
-    readonly associatedLabels: WritableArraySignal<ILabel>;
+    readonly associatedLabels: ArraySignal<ILabel>;
+    addLabel(l: ILabel): void;
+    removeLabel(l: ILabel): void;
 }
 
 export interface INote extends IDomainObject {
@@ -119,13 +122,13 @@ export interface ISettings {
 export interface IApp {
     readonly localStore: IDataStore;
     readonly clock: IClock;
-    readonly dashboard: IDashboard;
     readonly data: IData;
 }
 
 export interface IData {
     readonly idCounter: IIdProvider<number>;
-	readonly sync: ISyncLog;
+    readonly sync: ISyncLog;
+    readonly dashboard: IDashboard;
     readonly tasks: ArraySignal<ITask>;
     readonly labels: ArraySignal<ILabel>;
     readonly notes: ArraySignal<INote>;
@@ -183,7 +186,6 @@ export type WhatEvent =
 
     // label
     | "label.name"
-    | "label.style"
 
     //task 
     | "task.title"
@@ -196,8 +198,12 @@ export type WhatEvent =
 
     //tab 
     | "tab.title"
-    | "tab.style"
     | "tab.content"
+
+    // color style
+    | "style.backColor"
+    | "style.customTextColor"
+    | "style.textColorInUse"
 
     //settings 
     | "settings.labelPrefix"
@@ -233,7 +239,7 @@ export interface ITabCreateEvent extends IDomainObjectCreateEvent {
 
 export interface IFieldChangeEvent {
     id: number;
-    value: SimpleType;
+    value?: SimpleType;
 }
 
 export interface IDeleteEvent {
@@ -247,7 +253,8 @@ export interface IColorStyleChangeEvent {
 }
 
 export interface ISyncLog {
-    pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value: T): void;
+    pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value?: T): void;
+    pushField2<T extends SimpleType>(we: WhatEvent, id: number, value?: T): void;
     pushDelete(o: IDomainObject): void;
     pushLabelCreate(l: ILabel): void;
     pushTaskCreate(t: ITask): void;

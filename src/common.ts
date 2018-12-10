@@ -171,4 +171,8 @@ export module R {
                 () => {});
         });
     }
+
+
+    export module C {
+    }
 }

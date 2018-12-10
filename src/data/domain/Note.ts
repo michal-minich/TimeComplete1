@@ -49,5 +49,10 @@ export default class Note implements INote {
 
     get text(): string { return this.textSignal(); }
 
-    set text(value: string) { this.textSignal(value); }
+    set text(value: string) {
+        if (this.textSignal() === value)
+            return;
+        this.textSignal(value);
+        this.app.data.sync.pushField("note.text", this, value);
+    }
 }

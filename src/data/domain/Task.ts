@@ -36,10 +36,32 @@ export default class Task implements ITask {
 
     get title(): string { return this.titleSignal(); }
 
-    set title(value: string) { this.titleSignal(value); }
+    set title(value: string) {
+        if (this.titleSignal() === value)
+            return;
+        this.titleSignal(value);
+        this.app.data.sync.pushField("task.title", this, value);
+    }
 
 
     get completedOn(): IDateTime | undefined { return this.completedOnSignal(); }
 
-    set completedOn(value: IDateTime | undefined) { this.completedOnSignal(value); }
+    set completedOn(value: IDateTime | undefined) {
+        if ((this.completedOnSignal() === undefined && value === undefined) ||
+            (this.completedOnSignal()!.value === value!.value))
+            return;
+        this.completedOnSignal(value);
+        this.app.data.sync.pushField(
+            "task.completedOn",
+            this,
+            value === undefined ? undefined : value.value);
+    }
+
+    addLabel(l: ILabel): void {
+        this.associatedLabels.push(l);
+    }
+
+    removeLabel(l: ILabel): void {
+        this.associatedLabels.remove(l);
+    }
 }

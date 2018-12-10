@@ -18,7 +18,7 @@ import Label from "../data/domain/Label";
 import Color from "../data/value/Color";
 import DateTime from "../data/value/DateTime";
 import Task from "../data/domain/Task";
-import ColorStyle from "../data/ColorStyle";
+import ColorStyle from "../data/value/ColorStyle";
 import {
     R,
     findById,
@@ -101,7 +101,7 @@ export default class Serializer implements ISerializer {
             } else {
                 const o: Indexer<JsonValueType> = {};
                 for (const k of Object.keys(v)) {
-                    if (k === "app" || k === "matcher" || k === "type")
+                    if (k === "app" || k === "matcher" || k === "type" || k === "ownerId")
                         continue;
                     const f2 = this.toPlain(v[k], ++objLevel);
                     if (f2 !== undefined) {
@@ -131,7 +131,7 @@ export default class Serializer implements ISerializer {
             const l = Label.createFromStore(
                 this.app,
                 o.name,
-                this.getColorStyle(o.style),
+                this.getColorStyle(o.style, o.id),
                 o.id,
                 this.fromPlainObject<IDateTime>(o.createdOn, "DateTime"));
             return l as any as T;
@@ -153,7 +153,7 @@ export default class Serializer implements ISerializer {
             const tab = new Tab(
                 this.app,
                 o.title,
-                this.getColorStyle(o.style),
+                this.getColorStyle(o.style, o.id),
                 o.id,
                 o.createdOn ? this.fromPlainObject<IDateTime>(o.createdOn, "DateTime") : undefined);
             tab.content = this.getDashboard(o.content);
@@ -221,11 +221,13 @@ export default class Serializer implements ISerializer {
     }
 
 
-    getColorStyle(o: any): ColorStyle {
+    getColorStyle(o: any, ownerId: number): ColorStyle {
         return new ColorStyle(
+            this.app,
             this.fromPlainObject<IColor>(o.backColor, "Color"),
             this.fromPlainObject<IColor>(o.customTextColor, "Color"),
-            o.textColorInUse as TextColorUsage);
+            o.textColorInUse as TextColorUsage,
+            ownerId);
     }
 
 

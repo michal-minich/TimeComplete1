@@ -4,7 +4,6 @@
         ValueSignal,
         IApp,
         IDateTime,
-        IFieldChangeEvent
     } from
     "../../interfaces";
 import { R } from "../../common";
@@ -20,6 +19,7 @@ export default class Label implements ILabel {
         createdOn: IDateTime) {
 
         this.nameSignal = R.data(name);
+        style.ownerId = id;
         this.style = style;
         this.id = id;
         this.createdOn = createdOn;
@@ -57,7 +57,7 @@ export default class Label implements ILabel {
     set name(value: string) {
         if (this.nameSignal() === value)
             return;
-        this.app.data.sync.pushField("label.name", this, this.name);
         this.nameSignal(value);
+        this.app.data.sync.pushField("label.name", this, value);
     }
 }

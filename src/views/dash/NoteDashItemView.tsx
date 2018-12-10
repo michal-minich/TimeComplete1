@@ -12,7 +12,7 @@ export function noteDashItemView(a: IApp, ndi: INoteDashItem) {
         <div className="note-dash">
             <div className="header">
                 {ndi.note.id}
-                <button onClick={() => a.dashboard.remove(ndi)}>
+                <button onClick={() => a.data.dashboard.remove(ndi)}>
                     X
                 </button>
             </div>

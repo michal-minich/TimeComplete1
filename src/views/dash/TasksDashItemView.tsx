@@ -25,7 +25,7 @@ export function queryBackground(tdi: ITasksDashItem) {
 
 
 function queryBorder(a: IApp, tdi: ITasksDashItem) {
-    if (a.dashboard.selected() === tdi) {
+    if (a.data.dashboard.selected() === tdi) {
         return { borderColor: queryColor(tdi) };
     } else {
         return { borderColor: "rgb(223, 223, 223)" };
@@ -41,10 +41,10 @@ export function tasksDashItemView(a: IApp,
     let originalTitle = "";
 
     const view =
-        <div onMouseDown={() => a.dashboard.selected(tdi)}
+        <div onMouseDown={() => a.data.dashboard.selected(tdi)}
              style={queryBorder(a, tdi)}
              className={"task-list-activity " +
-                 (a.dashboard.selected() === tdi ? "selected-task-list-activity" : "")}>
+                 (a.data.dashboard.selected() === tdi ? "selected-task-list-activity" : "")}>
             <div className="header" style={queryBackground(tdi)}>
                 <input
                     spellCheck={false}
@@ -55,7 +55,7 @@ export function tasksDashItemView(a: IApp,
                     fn={data(tdi.query.text)}
                     style={queryBackground(tdi)}/>
                 <button
-                    onClick={() => a.dashboard.remove(tdi)}>
+                    onClick={() => a.data.dashboard.remove(tdi)}>
                     X
                 </button>
             </div>

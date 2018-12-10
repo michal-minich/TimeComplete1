@@ -57,13 +57,13 @@ export default function toolbarView(a: IApp, elv: LabelEditView, lpv: LabelsPopu
         const n = new Note(a);
         a.data.noteAdd(n);
         amv.hide();
-        a.dashboard.unshift(new NoteDashItem(a, n));
+        a.data.dashboard.unshift(new NoteDashItem(a, n));
     }
 
 
     function addTaskList() {
         const tdi = new TasksDashItem(a);
-        a.dashboard.unshift(tdi);
+        a.data.dashboard.unshift(tdi);
         amv.hide();
     }
 

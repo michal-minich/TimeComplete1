@@ -4,11 +4,10 @@ import {
     IApp,
     IData,
     IDataStore,
-    IClock,
-    IDashboard
+    IClock
 } from "../interfaces";
 import mainView from "../views/MainView";
-import Data from "../data/Data";
+import Data from "./Data";
 
 
 export default class App implements IApp {
@@ -17,8 +16,8 @@ export default class App implements IApp {
     readonly clock: IClock;
     readonly data: IData;
 
-	
-	constructor(el: Element) {
+
+    constructor(el: Element) {
 
         this.localStore = new LocalStore();
         this.clock = new Clock();
@@ -26,11 +25,5 @@ export default class App implements IApp {
         this.data.load();
 
         el.appendChild(mainView(this));
-    }
-
-
-    get dashboard(): IDashboard {
-        const d = this.data;
-        return d.tabs()[d.settings.selectedTabIndex].content as IDashboard;
     }
 }

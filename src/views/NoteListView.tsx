@@ -23,7 +23,7 @@ export default function noteListView(a: IApp) {
 
 
     function activateNote(n: INote) {
-        a.dashboard.unshift(new NoteDashItem(a, n));
+        a.data.dashboard.unshift(new NoteDashItem(a, n));
         popView.hide();
     }
 

@@ -27,9 +27,9 @@ export default function taskListView(a: IApp,
     function changeAssociation(label: ILabel): void {
         const t = a.data.selectedTask!;
         if (t.associatedLabels().some(al => al.name === label.name)) {
-            t.associatedLabels.remove(label);
+            t.removeLabel(label);
         } else {
-            t.associatedLabels.push(label);
+            t.addLabel(label);
         }
     }
 

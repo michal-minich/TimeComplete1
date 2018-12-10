@@ -24,7 +24,7 @@ export default function tabsView(a: IApp) {
         const selIx = a.data.settings.selectedTabIndex;
         if (selIx > index || selIx === (a.data.tabs().length - 1))
             a.data.settings.selectedTabIndex = selIx - 1;
-	    const t = a.data.tabs()[index];
+        const t = a.data.tabs()[index];
         a.data.tabDelete(t);
     }
 
