@@ -194,3 +194,9 @@ export module C {
             throw "requires is false";
     }
 }
+
+
+export module Notify {
+
+
+}

@@ -181,8 +181,8 @@ export interface ISyncEvent extends IChange {
 export type WhatEvent =
 
     // domain objects
-    | "object.add"
-    | "object.remove"
+    | "object.create"
+    | "object.delete"
 
     // label
     | "label.name"

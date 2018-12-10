@@ -63,7 +63,7 @@ export module QueryParser {
 
 
     export function makeString(elements: ReadonlyArray<IQueryElement>): string {
-        return elements.map(e => e.makeString()).join();
+        return elements.map(e => e.makeString()).join(" ");
     }
 
 

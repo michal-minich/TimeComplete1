@@ -47,7 +47,7 @@ export class SyncLog implements ISyncLog {
 
     pushDelete(o: IDomainObject): void {
         const d: IDeleteEvent = { id: o.id };
-        this.push("object.remove", d);
+        this.push("object.delete", d);
     }
 
 
@@ -69,7 +69,7 @@ export class SyncLog implements ISyncLog {
             name: l.name,
             style: this.getColorStyle(l.style)
         };
-        this.push("object.add", d);
+        this.push("object.create", d);
     }
 
 
@@ -78,7 +78,7 @@ export class SyncLog implements ISyncLog {
             ...this.getObject(t),
             title: t.title
         };
-        this.push("object.add", d);
+        this.push("object.create", d);
     }
 
 
@@ -87,7 +87,7 @@ export class SyncLog implements ISyncLog {
             ...this.getObject(n),
             text: n.text
         };
-        this.push("object.add", d);
+        this.push("object.create", d);
     }
 
 
@@ -97,7 +97,7 @@ export class SyncLog implements ISyncLog {
             title: t.title,
             style: this.getColorStyle(t.style)
         };
-        this.push("object.add", d);
+        this.push("object.create", d);
     }
 
 

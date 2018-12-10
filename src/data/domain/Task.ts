@@ -67,9 +67,11 @@ export default class Task implements ITask {
 
     addLabel(l: ILabel): void {
         this.associatedLabels.push(l);
+        this.app.data.sync.pushField("task.associatedLabels.add", this, l.id);
     }
 
     removeLabel(l: ILabel): void {
         this.associatedLabels.remove(l);
+        this.app.data.sync.pushField("task.associatedLabels.remove", this, l.id);
     }
 }
