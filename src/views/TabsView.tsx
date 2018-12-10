@@ -7,38 +7,38 @@ import { addTab } from "../data/domain/Tab";
 import { colorInlineStyle } from "./MainView";
 
 
-export default function tabsView(a: IApp) {
+export default function tabsView(app: IApp) {
 
 
-    function add() { addTab(a) }
+    function add() { addTab(app) }
 
 
     function activate(e: MouseEvent, index: number): void {
         if ((e.target as HTMLElement).classList.contains("close"))
             return;
-        a.data.settings.selectedTabIndex = index;
+        app.data.settings.selectedTabIndex = index;
     }
 
 
     function close(index: number): void {
-        const selIx = a.data.settings.selectedTabIndex;
-        if (selIx > index || selIx === (a.data.tabs().length - 1))
-            a.data.settings.selectedTabIndex = selIx - 1;
-        const t = a.data.tabs()[index];
+        const selIx = app.data.settings.selectedTabIndex;
+        if (selIx > index || selIx === (app.data.tabs().length - 1))
+            app.data.settings.selectedTabIndex = selIx - 1;
+        const t = app.data.tabs()[index];
         if (!confirm("Close tab '" + t.title + "'?")) {
             return;
         }
-        a.data.tabDelete(t);
+        app.data.tabDelete(t);
     }
 
 
     function tabs(): ArraySignal<HTMLSpanElement> {
-        return a.data.tabs.map((tab, el, i) => tabView(tab, i));
+        return app.data.tabs.map((tab, el, i) => tabView(tab, i));
     }
 
 
     function tabView(tab: ITab, index: number): HTMLSpanElement {
-        const isSel = index === a.data.settings.selectedTabIndex;
+        const isSel = index === app.data.settings.selectedTabIndex;
         const v =
             <span className={"tab" + (isSel ? " active-tab" : "")}
                   style={isSel ? colorInlineStyle(tab.style) : {}}

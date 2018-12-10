@@ -8,7 +8,7 @@ import Task from "../../data/domain/Task";
 import Query from "../../data/Query";
 
 
-export default function taskAddView(a: IApp, tdi: ITasksDashItem) {
+export default function taskAddView(app: IApp, tdi: ITasksDashItem) {
 
 
     function confirm(queryText: string): void {
@@ -16,16 +16,16 @@ export default function taskAddView(a: IApp, tdi: ITasksDashItem) {
             return;
         let title = tdi.newTitle();
         tdi.newTitle("");
-        const sq = new Query(a, queryText);
-        const tq = new Query(a, title);
+        const sq = new Query(app, queryText);
+        const tq = new Query(app, title);
         for (const l of tq.matcher.existingLabels) {
             title = title.replace("#" + l.name, "");
         }
         title = title.trim().replace("  ", " ");
-        const t = new Task(a, title);
+        const t = new Task(app, title);
         associateLabels(t, sq.matcher.existingLabels);
         associateLabels(t, tq.matcher.existingLabels);
-        a.data.taskAdd(t);
+        app.data.taskAdd(t);
     }
 
 

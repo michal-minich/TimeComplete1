@@ -15,14 +15,17 @@ import popupView from "./PopupView";
 // ReSharper disable once InconsistentNaming
 export interface LabelsPopupView {
     readonly view: HTMLDivElement;
-    readonly show: (over: HTMLElement, action: (label: ILabel, el: HTMLSpanElement) => void) =>
-    void;
+    readonly show: (
+        over: HTMLElement,
+        isForLabel: boolean,
+        action: (label: ILabel, el: HTMLSpanElement) => void) => void;
 }
 
-export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>): LabelsPopupView {
+export default function labelsPopupView(app: IApp, labels: ArraySignal<ILabel>): LabelsPopupView {
 
     let act: (label: ILabel, el: HTMLSpanElement) => void;
     const queryText = R.data("");
+    const lav = labelAddView(app);
 
     const content =
         <div className="labels-popup-view">
@@ -32,7 +35,7 @@ export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>): L
                    fn={data(queryText)}
                    onKeyUp={(e: KeyboardEvent) => keyUp(e)}/>
             <div className="label-list-inner">
-                {labelAddView(a)}
+                {lav.view}
                 {labels.map(l =>
                     <span
                         className="label"
@@ -45,7 +48,7 @@ export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>): L
         </div>;
 
 
-    const view = popupView(a, content);
+    const view = popupView(app, content);
 
 
     function keyUp(e: KeyboardEvent): void {
@@ -56,8 +59,13 @@ export default function labelsPopupView(a: IApp, labels: ArraySignal<ILabel>): L
         act(label, el);
     }
 
-    function show(over: HTMLElement, action: (label: ILabel, el: HTMLSpanElement) => void): void {
+    function show(
+        over: HTMLElement,
+        isForTask: boolean,
+        action: (label: ILabel, el: HTMLSpanElement) => void): void {
+
         act = action;
+        lav.isForTask = isForTask;
         view.showBelow(over);
     }
 

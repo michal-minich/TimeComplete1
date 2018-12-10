@@ -14,7 +14,7 @@ import NoteDashItem from "../data/dash/NoteDashItem";
 import { R } from "../common";
 
 
-export default function toolbarView(a: IApp, elv: LabelEditView, lpv: LabelsPopupView) {
+export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPopupView) {
 
     const addMenu =
         <ul className="add-menu menu">
@@ -31,39 +31,39 @@ export default function toolbarView(a: IApp, elv: LabelEditView, lpv: LabelsPopu
                 <input type="checkbox" id="auto-columns-count" fn={data(autoCols)}/>
                 <label htmlFor="auto-columns-count">Auto</label>
                 <fieldset disabled={autoCols()}>
-                    <button onMouseDown={() => --a.data.settings.dashboardColumnsCount}>-</button>
-                    <span className="dash-columns-input">{a.data.settings.dashboardColumnsCount}</span>
-                    <button onMouseDown={() => ++a.data.settings.dashboardColumnsCount}>+</button>
+                    <button onMouseDown={() => --app.data.settings.dashboardColumnsCount}>-</button>
+                    <span className="dash-columns-input">{app.data.settings.dashboardColumnsCount}</span>
+                    <button onMouseDown={() => ++app.data.settings.dashboardColumnsCount}>+</button>
                 </fieldset>
             </li>
             <li>
                 <input className="view-filter" type="search" placeholder="View Filter"/>
             </li>
-            <li onMouseDown={() => a.data.generateLocalStorageDownload()}>Export Data</li>
-            <li onClick={() => a.data.importLocalStorageDownload()}>Import Data</li>
+            <li onMouseDown={() => app.data.generateLocalStorageDownload()}>Export Data</li>
+            <li onClick={() => app.data.importLocalStorageDownload()}>Import Data</li>
         </ul>;
 
-    const amv = popupView(a, addMenu);
-    const mmv = popupView(a, moreMenu);
-    const nlv = noteListView(a);
+    const amv = popupView(app, addMenu);
+    const mmv = popupView(app, moreMenu);
+    const nlv = noteListView(app);
 
 
     function showLabels(e: MouseEvent) {
-        lpv.show(e.target as HTMLElement, (l, el) => elv.begin(l, el));
+        lpv.show(e.target as HTMLElement, false, (l, el) => elv.begin(l, el));
     }
 
 
     function addNote() {
-        const n = new Note(a, "");
-        a.data.noteAdd(n);
+        const n = new Note(app, "");
+        app.data.noteAdd(n);
         amv.hide();
-        a.data.dashboard.unshift(new NoteDashItem(a, n));
+        app.data.dashboard.unshift(new NoteDashItem(app, n));
     }
 
 
     function addTaskList() {
-        const tdi = new TasksDashItem(a);
-        a.data.dashboard.unshift(tdi);
+        const tdi = new TasksDashItem(app, "");
+        app.data.dashboard.unshift(tdi);
         amv.hide();
     }
 
@@ -98,6 +98,7 @@ export default function toolbarView(a: IApp, elv: LabelEditView, lpv: LabelsPopu
                 More <span className="drop-down-triangle">&#x25BC;</span>
             </button>
         </div>;
+
 
     return {
         view,

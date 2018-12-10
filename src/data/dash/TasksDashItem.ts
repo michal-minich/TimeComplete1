@@ -9,8 +9,8 @@ export default class TasksDashItem implements ITasksDashItem {
     readonly newTitle: ValueSignal<string>;
 
 
-    constructor(private readonly app: IApp) {
-        this.query = new Query(app);
+    constructor(private readonly app: IApp, query: string) {
+        this.query = new Query(app, query);
         this.newTitle = R.data("");
     }
 

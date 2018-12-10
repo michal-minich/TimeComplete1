@@ -33,7 +33,7 @@ function queryBorder(a: IApp, tdi: ITasksDashItem) {
 }
 
 
-export function tasksDashItemView(a: IApp,
+export function tasksDashItemView(app: IApp,
     tdi: ITasksDashItem,
     lpv: LabelsPopupView,
     ettv: TaskTitleEditView) {
@@ -41,10 +41,10 @@ export function tasksDashItemView(a: IApp,
     let originalTitle = "";
 
     const view =
-        <div onMouseDown={() => a.data.dashboard.selected(tdi)}
-             style={queryBorder(a, tdi)}
+        <div onMouseDown={() => app.data.dashboard.selected(tdi)}
+             style={queryBorder(app, tdi)}
              className={"task-list-activity " +
-                 (a.data.dashboard.selected() === tdi ? "selected-task-list-activity" : "")}>
+                 (app.data.dashboard.selected() === tdi ? "selected-task-list-activity" : "")}>
             <div className="header" style={queryBackground(tdi)}>
                 <input
                     spellCheck={false}
@@ -55,16 +55,16 @@ export function tasksDashItemView(a: IApp,
                     fn={data(tdi.query.text)}
                     style={queryBackground(tdi)}/>
                 <button
-                    onClick={() => a.data.dashboard.remove(tdi)}>
+                    onClick={() => app.data.dashboard.remove(tdi)}>
                     X
                 </button>
             </div>
             <div className="body">
-                {taskAddView(a, tdi)}
+                {taskAddView(app, tdi)}
                 <table className="task-list lined-list">
                     <thead></thead>
                     <tbody>
-                    {taskListView(a, tdi.query.matcher.resultTasks(), lpv, ettv)}
+                    {taskListView(app, tdi.query.matcher.resultTasks(), lpv, ettv)}
                     </tbody>
                 </table>
             </div>
@@ -73,7 +73,7 @@ export function tasksDashItemView(a: IApp,
 
     function begin(): void {
         originalTitle = tdi.query.text();
-        a.data.selectedTask = undefined;
+        app.data.selectedTask = undefined;
     }
 
 

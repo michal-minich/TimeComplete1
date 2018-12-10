@@ -27,22 +27,22 @@ window.addEventListener("mouseup",
     false);
 
 
-export default function mainView(a: IApp) {
+export default function mainView(app: IApp) {
 
-    const elv = labelEditView(a);
-    const lpv = labelsPopupView(a, a.data.labels);
-    const toolbar = toolbarView(a, elv, lpv);
+    const elv = labelEditView(app);
+    const lpv = labelsPopupView(app, app.data.labels);
+    const toolbar = toolbarView(app, elv, lpv);
 
     const view =
         <div>
-            {tabsView(a)}
+            {tabsView(app)}
             {toolbar.view}
             {toolbar.addMenuView}
             {toolbar.noteListView}
             {toolbar.moreMenuView}
             {lpv.view}
             {elv.view}
-            {dashboardView(a, lpv)}
+            {dashboardView(app, lpv)}
         </div>;
 
     return view;

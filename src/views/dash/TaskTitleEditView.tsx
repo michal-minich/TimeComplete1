@@ -13,7 +13,7 @@ export let taskEditTextBox: HTMLTextAreaElement;
 export type TaskTitleEditView = ReturnType<typeof taskTitleEditView>
 
 
-export default function taskTitleEditView(a: IApp) {
+export default function taskTitleEditView(app: IApp) {
 
     const newName = R.data("");
     let task!: ITask;
@@ -21,7 +21,7 @@ export default function taskTitleEditView(a: IApp) {
 
     function begin(t: ITask, titleTd: HTMLTableDataCellElement): void {
         task = t;
-        a.data.selectedTask = t;
+        app.data.selectedTask = t;
         newName(t.title);
         const r = titleTd.getBoundingClientRect();
         const p = titleTd.parentElement!.parentElement!

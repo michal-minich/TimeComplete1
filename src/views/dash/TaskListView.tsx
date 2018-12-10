@@ -9,7 +9,7 @@ import DateTime from "../../data/value/DateTime";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 
 
-export default function taskListView(a: IApp,
+export default function taskListView(app: IApp,
     tasks: ITask[],
     lpv: LabelsPopupView,
     ettv: TaskTitleEditView) {
@@ -25,7 +25,7 @@ export default function taskListView(a: IApp,
 
 
     function changeAssociation(label: ILabel): void {
-        const t = a.data.selectedTask!;
+        const t = app.data.selectedTask!;
         if (t.associatedLabels().some(al => al.name === label.name)) {
             t.removeLabel(label);
         } else {
@@ -38,8 +38,8 @@ export default function taskListView(a: IApp,
         let doneChk: HTMLInputElement | undefined = undefined;
         let titleTd: HTMLTableDataCellElement | undefined = undefined;
         const view2 =
-            <tr onMouseDown={() => a.data.selectedTask = t}
-                className={a.data.selectedTask === t ? "selected-task" : ""}>
+            <tr onMouseDown={() => app.data.selectedTask = t}
+                className={app.data.selectedTask === t ? "selected-task" : ""}>
                 <td>
                     <input
                         ref={doneChk}
@@ -56,7 +56,9 @@ export default function taskListView(a: IApp,
                     {t.title}
                 </td>
                 <td className="label-tag-container"
-                    fn={(onMouseDown((e) => lpv.show(e.target as HTMLElement,
+                    fn={(onMouseDown((e) => lpv.show(
+                        e.target as HTMLElement,
+                        true,
                         (l, el) => changeAssociation(l)
                     )))}>
                     {t.associatedLabels.orderBy(al => al.id).map(al =>

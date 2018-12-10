@@ -9,10 +9,10 @@ import windowView from "./windowView";
 export type PopupView = ReturnType<typeof popupView>
 
 
-export default function popupView(a: IApp, content: HTMLElement) {
+export default function popupView(app: IApp, content: HTMLElement) {
 
     let x = 0;
-    const vw = windowView(a, content);
+    const vw = windowView(app, content);
 
 
     function hideMe(e: MouseEvent) {

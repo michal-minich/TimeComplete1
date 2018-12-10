@@ -10,20 +10,20 @@ import NoteDashItem from "../data/dash/NoteDashItem";
 export type PopupView = ReturnType<typeof noteListView>
 
 
-export default function noteListView(a: IApp) {
+export default function noteListView(app: IApp) {
 
 
     const view =
         <div className="note-list">
-            {a.data.notes().map(noteView)}
+            {app.data.notes().map(noteView)}
         </div>;
 
 
-    const popView = popupView(a, view);
+    const popView = popupView(app, view);
 
 
     function activateNote(n: INote) {
-        a.data.dashboard.unshift(new NoteDashItem(a, n));
+        app.data.dashboard.unshift(new NoteDashItem(app, n));
         popView.hide();
     }
 

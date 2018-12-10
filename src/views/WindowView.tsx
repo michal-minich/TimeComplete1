@@ -8,7 +8,7 @@ import { IApp } from "../interfaces";
 export type WindowView = ReturnType<typeof windowView>
 
 
-export default function windowView(a: IApp, content: HTMLElement) {
+export default function windowView(app: IApp, content: HTMLElement) {
 
 
     const view =
@@ -19,21 +19,14 @@ export default function windowView(a: IApp, content: HTMLElement) {
 
     function showBelow(el: HTMLElement): void {
         const r = el.getBoundingClientRect();
-        const divStyle = view.style;
-        divStyle.left = (r.left) + "px";
-        divStyle.top = (r.top + r.height + 2) + "px";
-
-        const cl = view.classList;
-        if (cl.contains("hidden"))
-            cl.remove("hidden");
-        else
-            cl.add("hidden");
+        view.style.left = (r.left) + "px";
+        view.style.top = (r.top + r.height + 0) + "px";
+        view.classList.toggle("hidden");
     }
 
 
     function hide() {
-        view.classList.add
-            ("hidden");
+        view.classList.add("hidden");
     }
 
 

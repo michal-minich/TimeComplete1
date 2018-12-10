@@ -176,8 +176,7 @@ export default class Serializer implements ISerializer {
                 const nti = new NoteDashItem(this.app, n, o.width, o.height);
                 return nti as any as T;
             } else if (typeof o.newTitle === "string") {
-                const tdi = new TasksDashItem(this.app);
-                tdi.query = this.getQuery(o.query);
+                const tdi = new TasksDashItem(this.app, o.query.text);
                 tdi.newTitle(o.newTitle);
                 return tdi as any as T;
             } else {

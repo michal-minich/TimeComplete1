@@ -6,13 +6,13 @@ import { IApp, INoteDashItem } from "../../interfaces";
 import data from "surplus-mixin-data";
 
 
-export function noteDashItemView(a: IApp, ndi: INoteDashItem) {
+export function noteDashItemView(app: IApp, ndi: INoteDashItem) {
 
     const view =
         <div className="note-dash">
             <div className="header">
                 {ndi.note.id}
-                <button onClick={() => a.data.dashboard.remove(ndi)}>
+                <button onClick={() => app.data.dashboard.remove(ndi)}>
                     X
                 </button>
             </div>

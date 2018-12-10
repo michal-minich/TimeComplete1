@@ -12,9 +12,9 @@ import NoteDashItem from "../../data/dash/NoteDashItem";
 import { noteDashItemView } from "./NoteDashItemView";
 
 
-export default function dashboardView(a: IApp, lpv: LabelsPopupView) {
+export default function dashboardView(app: IApp, lpv: LabelsPopupView) {
 
-    const ettv = taskTitleEditView(a);
+    const ettv = taskTitleEditView(app);
 
     const view =
         <div className="view-area">
@@ -24,20 +24,20 @@ export default function dashboardView(a: IApp, lpv: LabelsPopupView) {
                     {() => {
                         const tds: HTMLTableCellElement[] = [];
                         const tdsHeight: number[] = [];
-                        const numColumns = a.data.settings.dashboardColumnsCount;
+                        const numColumns = app.data.settings.dashboardColumnsCount;
                         for (let i = 0; i < numColumns; i++) {
                             tds.push(document.createElement("td"));
                             tdsHeight.push(0);
                         }
-                        for (const di of a.data.dashboard.items()) {
+                        for (const di of app.data.dashboard.items()) {
                             if (di instanceof TasksDashItem) {
                                 const col = indexOfMin(tdsHeight);
-                                const v = tasksDashItemView(a, di, lpv, ettv);
+                                const v = tasksDashItemView(app, di, lpv, ettv);
                                 tds[col].appendChild(v);
                                 tdsHeight[col] += di.estimatedHeight;
                             } else if (di instanceof NoteDashItem) {
                                 const col = indexOfMin(tdsHeight);
-                                const v = noteDashItemView(a, di);
+                                const v = noteDashItemView(app, di);
                                 tds[col].appendChild(v);
                                 tdsHeight[col] += di.estimatedHeight;
                             } else {

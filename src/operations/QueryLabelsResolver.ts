@@ -4,12 +4,12 @@ import { QueryParser, QueryLabel, NotOp } from "./QueryParser";
 
 export module QueryLabelsResolver {
 
-    export type ResolveLabels = ReturnType<typeof resolveLabels>
+    export type ResolveLabels = ReturnType<typeof resolveLabelTitle>
 
 
     export function resolveLabelTitle(app: IApp, title: string) {
 
-        const tokens = QueryParser.parse(app, text);
+        const tokens = QueryParser.parse(app, title);
 
         const queryLabelElements = tokens
             .filter(tok => tok instanceof QueryLabel) as QueryLabel[];
