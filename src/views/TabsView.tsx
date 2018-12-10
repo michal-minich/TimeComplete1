@@ -25,6 +25,9 @@ export default function tabsView(a: IApp) {
         if (selIx > index || selIx === (a.data.tabs().length - 1))
             a.data.settings.selectedTabIndex = selIx - 1;
         const t = a.data.tabs()[index];
+        if (!confirm("Close tab '" + t.title + "'?")) {
+            return;
+        }
         a.data.tabDelete(t);
     }
 

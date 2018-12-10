@@ -29,7 +29,7 @@ export default class ColorStyle implements IColorStyle {
     get backColor(): IColor { return this.backColorSignal(); }
 
     set backColor(value: IColor) {
-        if (this.backColorSignal() === value)
+        if (this.backColorSignal().value === value.value)
             return;
         this.backColorSignal(value);
         this.app.data.sync.pushField2("style.backColor", this.ownerId!, value.value);
@@ -53,7 +53,7 @@ export default class ColorStyle implements IColorStyle {
     get customTextColor(): IColor { return this.customTextColorSignal(); }
 
     set customTextColor(value: IColor) {
-        if (this.customTextColorSignal() === value)
+        if (this.customTextColorSignal().value === value.value)
             return;
         this.customTextColorSignal(value);
         this.app.data.sync.pushField2("style.customTextColor", this.ownerId!, value.value);

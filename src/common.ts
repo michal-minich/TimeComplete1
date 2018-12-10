@@ -171,8 +171,26 @@ export module R {
                 () => {});
         });
     }
+}
 
 
-    export module C {
+export module C {
+
+
+    export function assume(condition: boolean) {
+        if (!condition)
+            throw "assume is false";
+    }
+
+
+    export function assert(condition: boolean) {
+        if (!condition)
+            throw "assert is false";
+    }
+
+
+    export function req(condition: boolean) {
+        if (!condition)
+            throw "requires is false";
     }
 }

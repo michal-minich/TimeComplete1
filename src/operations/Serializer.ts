@@ -128,6 +128,7 @@ export default class Serializer implements ISerializer {
         case "DateTime":
             return new DateTime(o.value) as any as T;
         case "Label":
+        {
             const l = Label.createFromStore(
                 this.app,
                 o.name,
@@ -135,19 +136,22 @@ export default class Serializer implements ISerializer {
                 o.id,
                 this.fromPlainObject<IDateTime>(o.createdOn, "DateTime"));
             return l as any as T;
+        }
         case "Task":
+        {
+            const co = o.completedOn
+                ? this.fromPlainObject<IDateTime>(o.completedOn, "DateTime")
+                : undefined;
             const t = new Task(
                 this.app,
                 o.title,
                 this.getAssociatedLabels(o),
+                co,
                 o.id,
                 this.fromPlainObject<IDateTime>(o.createdOn, "DateTime"));
-            if (o.completedOn) {
-                t.completedOn = this.fromPlainObject<IDateTime>(
-                    o.completedOn,
-                    "DateTime");
-            }
+
             return t as any as T;
+        }
         case "Tab":
         {
             const tab = new Tab(
@@ -161,8 +165,7 @@ export default class Serializer implements ISerializer {
         }
         case "Note":
         {
-            const n = new Note(this.app, o.id, o.createdOn);
-            n.text = o.text;
+            const n = new Note(this.app, o.text, o.id, o.createdOn);
             n.associatedLabels = this.getAssociatedLabels(o);
             return n as any as T;
         }

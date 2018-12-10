@@ -14,10 +14,11 @@ export default class Note implements INote {
 
     constructor(
         private readonly app: IApp,
+        text: string,
         id?: number,
         createdOn?: IDateTime) {
 
-        this.textSignal = R.data("");
+        this.textSignal = R.data(text);
         this.associatedLabels = R.array([]);
 
         if (id) {

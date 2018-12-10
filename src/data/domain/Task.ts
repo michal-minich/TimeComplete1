@@ -1,4 +1,11 @@
-﻿import { ITask, IDateTime, ILabel, IApp, ValueSignal, WritableArraySignal } from "../../interfaces";
+﻿import {
+    ITask,
+    IDateTime,
+    ILabel,
+    IApp,
+    ValueSignal,
+    WritableArraySignal
+} from "../../interfaces";
 import { R } from "../../common";
 
 
@@ -8,11 +15,13 @@ export default class Task implements ITask {
         private readonly app: IApp,
         title: string,
         associatedLabels?: WritableArraySignal<ILabel>,
+        completedOn?: IDateTime,
         id?: number,
         createdOn?: IDateTime) {
 
         this.titleSignal = R.data(title);
         this.associatedLabels = associatedLabels ? associatedLabels : R.array([]);
+        this.completedOnSignal = R.data(completedOn);
 
         if (id) {
             this.id = id;
@@ -25,7 +34,7 @@ export default class Task implements ITask {
 
 
     private readonly titleSignal: ValueSignal<string>;
-    readonly completedOnSignal = R.data<IDateTime | undefined>(undefined);
+    readonly completedOnSignal: ValueSignal<IDateTime | undefined>;
 
 
     readonly type = "task";
@@ -47,14 +56,13 @@ export default class Task implements ITask {
     get completedOn(): IDateTime | undefined { return this.completedOnSignal(); }
 
     set completedOn(value: IDateTime | undefined) {
-        if ((this.completedOnSignal() === undefined && value === undefined) ||
-            (this.completedOnSignal()!.value === value!.value))
+        const cur = this.completedOnSignal();
+        const val = value === undefined ? undefined : value.value;
+        // ReSharper disable once QualifiedExpressionMaybeNull
+        if ((cur === undefined ? undefined : cur.value) === val)
             return;
         this.completedOnSignal(value);
-        this.app.data.sync.pushField(
-            "task.completedOn",
-            this,
-            value === undefined ? undefined : value.value);
+        this.app.data.sync.pushField("task.completedOn", this, val);
     }
 
     addLabel(l: ILabel): void {
