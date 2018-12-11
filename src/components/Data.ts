@@ -207,7 +207,7 @@ export default class Data implements IData {
 
 
     tabAdd(t: ITab): void {
-        this.tabs.unshift(t);
+        this.tabs.push(t);
         this.sync.pushTabCreate(t);
     }
 

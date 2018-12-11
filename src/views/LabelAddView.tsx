@@ -11,12 +11,15 @@ import { IApp } from "../interfaces";
 import TasksDashItem from "../data/dash/TasksDashItem";
 
 
-export const labelAddView = (app: IApp) => {
+export var labelAddViewState: {
+    isForTask: boolean;
+    hideWindow: () => void;
+} = { isForTask: false, hideWindow: () => {} };
+
+
+export default function labelAddView(app: IApp) {
 
     const newName = R.data("");
-
-
-    let isForTask: boolean = false;
 
 
     const view = <input type="text"
@@ -36,12 +39,13 @@ export const labelAddView = (app: IApp) => {
             new LabelStyle(app, new Color("gray"), new Color("white")));
         app.data.labelAdd(l);
         newName("");
-        if (isForTask) {
+        if (labelAddViewState.isForTask) {
             const t = app.data.selectedTask;
             if (t)
                 t.addLabel(l);
         }
-        addTaskList(labelName);
+        addTaskList(app.data.settings.labelPrefix + labelName);
+        labelAddViewState.hideWindow();
     }
 
 
@@ -64,5 +68,5 @@ export const labelAddView = (app: IApp) => {
     }
 
 
-    return { view, isForTask };
+    return { view };
 };

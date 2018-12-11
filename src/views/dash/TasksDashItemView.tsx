@@ -8,7 +8,8 @@ import { LabelsPopupView } from "../LabelsPopupView";
 import taskListView from "./TaskListView";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 import taskAddView from "./TaskAddView";
-
+import { getButton } from "../../common";
+import popupView from "../PopupView";
 
 export let queryTextBox: HTMLInputElement;
 
@@ -24,8 +25,8 @@ export function queryBackground(tdi: ITasksDashItem) {
 }
 
 
-function queryBorder(a: IApp, tdi: ITasksDashItem) {
-    if (a.data.dashboard.selected() === tdi) {
+function queryBorder(app: IApp, tdi: ITasksDashItem) {
+    if (app.data.dashboard.selected() === tdi) {
         return { borderColor: queryColor(tdi) };
     } else {
         return { borderColor: "rgb(223, 223, 223)" };
@@ -39,6 +40,25 @@ export function tasksDashItemView(app: IApp,
     ettv: TaskTitleEditView) {
 
     let originalTitle = "";
+
+    const menu =
+        <ul className="more-menu menu">
+            <li onMouseDown={close}>Close</li>
+        </ul>;
+
+
+    function close() {
+        app.data.dashboard.remove(tdi);
+    }
+
+
+    const mv = popupView(app, menu);
+
+
+    function showMenu(e: MouseEvent) {
+        mv.showBelow(getButton(e.target));
+    }
+
 
     const view =
         <div onMouseDown={() => app.data.dashboard.selected(tdi)}
@@ -54,10 +74,9 @@ export function tasksDashItemView(app: IApp,
                     onKeyUp={(e: KeyboardEvent) => keyUp(e)}
                     fn={data(tdi.query.text)}
                     style={queryBackground(tdi)}/>
-                <button
-                    onClick={() => app.data.dashboard.remove(tdi)}>
-                    X
-                </button>
+                <span className="button" onMouseDown={showMenu}>
+                    <span className="drop-down-triangle">&#x25BC;</span>
+                </span>
             </div>
             <div className="body">
                 {taskAddView(app, tdi)}

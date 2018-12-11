@@ -94,6 +94,15 @@ export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
 }
 
 
+export function getButton(et: EventTarget | HTMLElement | null) : HTMLElement {
+    C.nn(et);
+    const el = et as HTMLElement;
+    if (el.classList.contains("button"))
+        return el;
+    return getButton(el.parentElement);
+}
+
+
 export module R {
 
     export function onAny<T>(fn: () => T): () => T;
@@ -176,22 +185,33 @@ export module R {
 
 export module C {
 
-
-    export function assume(condition: boolean) {
+    export function assume(condition: boolean): void {
         if (!condition)
             throw "assume is false";
     }
 
 
-    export function assert(condition: boolean) {
+    export function assert(condition: boolean): void {
         if (!condition)
             throw "assert is false";
     }
 
 
-    export function req(condition: boolean) {
+    export function req(condition: boolean): void {
         if (!condition)
             throw "requires is false";
+    }
+
+
+    export function nn(value: any): void {
+        if (value === null)
+            throw "value is null";
+    }
+
+
+    export function defined(value: any): void {
+        if (value === undefined)
+            throw "value is undefined";
     }
 }
 

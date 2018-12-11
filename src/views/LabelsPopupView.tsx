@@ -4,7 +4,7 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ILabel, ArraySignal } from "../interfaces"
-import { labelAddView } from "./LabelAddView";
+import labelAddView, { labelAddViewState } from "./LabelAddView";
 import { colorInlineStyle } from "./MainView";
 import { onMouseDown } from "../common";
 import { R } from "../common";
@@ -61,11 +61,12 @@ export default function labelsPopupView(app: IApp, labels: ArraySignal<ILabel>):
 
     function show(
         over: HTMLElement,
-        isForTask: boolean,
+        isForTask2: boolean,
         action: (label: ILabel, el: HTMLSpanElement) => void): void {
 
         act = action;
-        lav.isForTask = isForTask;
+        labelAddViewState.isForTask = isForTask2;
+        labelAddViewState.hideWindow = view.hide;
         view.showBelow(over);
     }
 

@@ -11,7 +11,7 @@ import Note from "../data/domain/Note";
 import popupView from "./PopupView";
 import noteListView from "./NoteListView";
 import NoteDashItem from "../data/dash/NoteDashItem";
-import { R } from "../common";
+import { R, C, getButton } from "../common";
 
 
 export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPopupView) {
@@ -48,11 +48,6 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
     const nlv = noteListView(app);
 
 
-    function showLabels(e: MouseEvent) {
-        lpv.show(e.target as HTMLElement, false, (l, el) => elv.begin(l, el));
-    }
-
-
     function addNote() {
         const n = new Note(app, "");
         app.data.noteAdd(n);
@@ -68,35 +63,40 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
     }
 
 
-    function showAddMenu(e: MouseEvent) {
-        amv.showBelow(e.target as HTMLButtonElement);
+    function showLabels(e: MouseEvent) {
+        lpv.show(getButton(e.target), false, (l, el) => elv.begin(l, el));
     }
 
 
     function showNoteListView(e: MouseEvent) {
-        nlv.showBelow(e.target as HTMLButtonElement);
+        nlv.showBelow(getButton(e.target));
+    }
+
+
+    function showAddMenu(e: MouseEvent) {
+        amv.showBelow(getButton(e.target));
     }
 
 
     function showMoreMenu(e: MouseEvent) {
-        mmv.showBelow(e.target as HTMLButtonElement);
+        mmv.showBelow(getButton(e.target));
     }
 
 
     const view =
         <div className="toolbar">
-            <button onMouseDown={showLabels}>
+            <span className="button" onMouseDown={showLabels}>
                 Labels <span className="drop-down-triangle">&#x25BC;</span>
-            </button>
-            <button onMouseDown={showNoteListView}>
+            </span>
+            <span className="button" onMouseDown={showNoteListView}>
                 Notes <span className="drop-down-triangle">&#x25BC;</span>
-            </button>
-            <button onMouseDown={showAddMenu}>
+            </span>
+            <span className="button" onMouseDown={showAddMenu}>
                 Add <span className="drop-down-triangle">&#x25BC;</span>
-            </button>
-            <button onMouseDown={showMoreMenu}>
+            </span>
+            <span className="button" onMouseDown={showMoreMenu}>
                 More <span className="drop-down-triangle">&#x25BC;</span>
-            </button>
+            </span>
         </div>;
 
 
