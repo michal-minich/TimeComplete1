@@ -83,8 +83,15 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
     }
 
 
+    function selectedTabColor() {
+        const tab = app.data.tabs()[app.data.settings.selectedTabIndex];
+        return tab.style.backColor.value;
+    }
+
+
     const view =
-        <div className="toolbar">
+        <div className="toolbar"
+             style={{ borderTopColor: selectedTabColor() }}>
             <span className="menu-button button" onMouseDown={showLabels}>
                 Labels <span className="drop-down-triangle">&#x25BC;</span>
             </span>
