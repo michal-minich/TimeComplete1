@@ -9,7 +9,8 @@ import taskListView from "./TaskListView";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 import taskAddView from "./TaskAddView";
 import { getButton } from "../../common";
-import popupView from "../PopupView";
+import { PopupView } from "../PopupView";
+
 
 export let queryTextBox: HTMLInputElement;
 
@@ -37,26 +38,14 @@ function queryBorder(app: IApp, tdi: ITasksDashItem) {
 export function tasksDashItemView(app: IApp,
     tdi: ITasksDashItem,
     lpv: LabelsPopupView,
-    ettv: TaskTitleEditView) {
+    ettv: TaskTitleEditView,
+    tasksMenu: PopupView) {
 
     let originalTitle = "";
 
-    const menu =
-        <ul className="more-menu menu">
-            <li onMouseDown={close}>Close</li>
-        </ul>;
-
-
-    function close() {
-        app.data.dashboard.remove(tdi);
-    }
-
-
-    const mv = popupView(app, menu);
-
 
     function showMenu(e: MouseEvent) {
-        mv.showBelow(getButton(e.target));
+        tasksMenu.showBelow(getButton(e.target));
     }
 
 
@@ -74,8 +63,8 @@ export function tasksDashItemView(app: IApp,
                     onKeyUp={(e: KeyboardEvent) => keyUp(e)}
                     fn={data(tdi.query.text)}
                     style={queryBackground(tdi)}/>
-                <span className="button" onMouseDown={showMenu}>
-                    <span className="drop-down-triangle">&#x25BC;</span>
+                <span className="burger-button button" onMouseDown={showMenu}>
+                    <span className="drop-down-burger">&#x2261;</span>
                 </span>
             </div>
             <div className="body">

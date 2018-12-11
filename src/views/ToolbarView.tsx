@@ -11,7 +11,7 @@ import Note from "../data/domain/Note";
 import popupView from "./PopupView";
 import noteListView from "./NoteListView";
 import NoteDashItem from "../data/dash/NoteDashItem";
-import { R, C, getButton } from "../common";
+import { R, getButton } from "../common";
 
 
 export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPopupView) {
@@ -85,16 +85,16 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
 
     const view =
         <div className="toolbar">
-            <span className="button" onMouseDown={showLabels}>
+            <span className="menu-button button" onMouseDown={showLabels}>
                 Labels <span className="drop-down-triangle">&#x25BC;</span>
             </span>
-            <span className="button" onMouseDown={showNoteListView}>
+            <span className="menu-button button" onMouseDown={showNoteListView}>
                 Notes <span className="drop-down-triangle">&#x25BC;</span>
             </span>
-            <span className="button" onMouseDown={showAddMenu}>
+            <span className="menu-button button" onMouseDown={showAddMenu}>
                 Add <span className="drop-down-triangle">&#x25BC;</span>
             </span>
-            <span className="button" onMouseDown={showMoreMenu}>
+            <span className="menu-button button" onMouseDown={showMoreMenu}>
                 More <span className="drop-down-triangle">&#x25BC;</span>
             </span>
         </div>;

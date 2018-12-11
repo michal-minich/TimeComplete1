@@ -94,7 +94,7 @@ export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
 }
 
 
-export function getButton(et: EventTarget | HTMLElement | null) : HTMLElement {
+export function getButton(et: EventTarget | HTMLElement | null): HTMLElement {
     C.nn(et);
     const el = et as HTMLElement;
     if (el.classList.contains("button"))

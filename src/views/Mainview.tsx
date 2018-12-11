@@ -2,13 +2,14 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, IColorStyle } from "../interfaces";
+import { IApp, IColorStyle, ITasksDashItem } from "../interfaces";
 import labelsPopupView from "./LabelsPopupView";
 import { removeTextSelections } from "../common";
 import labelEditView from "./LabelEditView";
 import tabsView from "./TabsView";
 import toolbarView from "./ToolbarView";
 import dashboardView from "./dash/DashboardView";
+import popupView from "./PopupView";
 
 
 export function colorInlineStyle(ls: IColorStyle) {
@@ -29,6 +30,20 @@ window.addEventListener("mouseup",
 
 export default function mainView(app: IApp) {
 
+
+    function closeSelected() {
+        app.data.dashboard.remove(app.data.dashboard.selected() as ITasksDashItem);
+        // ReSharper disable once VariableUsedInInnerScopeBeforeDeclared
+        mv.hide();
+    }
+
+    const tasksMenu =
+        <ul className="more-menu menu">
+            <li onMouseDown={closeSelected}>Close</li>
+        </ul>;
+
+
+    const mv = popupView(app, tasksMenu);
     const elv = labelEditView(app);
     const lpv = labelsPopupView(app, app.data.labels);
     const toolbar = toolbarView(app, elv, lpv);
@@ -42,7 +57,8 @@ export default function mainView(app: IApp) {
             {toolbar.moreMenuView}
             {lpv.view}
             {elv.view}
-            {dashboardView(app, lpv)}
+            {mv.view}
+            {dashboardView(app, lpv, mv)}
         </div>;
 
     return view;

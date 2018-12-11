@@ -26,7 +26,7 @@ export module QueryLabelsResolver {
         const labelsToExclude = (tokens
                 .filter(tok => tok instanceof NotOp && tok.arg instanceof QueryLabel) as NotOp[])
             .map(no => no.arg as QueryLabel);
-        
+
         const nonLabelTokens = tokens
             .filter(tok => !(tok instanceof QueryLabel));
 

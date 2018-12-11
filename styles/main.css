@@ -54,44 +54,26 @@ body {
     /*border-top-left-radius: 7px;
     border-top-right-radius: 7px;*/
     color: white;
-    padding: 4px;
+    padding: 2px;
 }
 
 .task-list-activity .header input:first-child {
     background-color: rgb(101, 101, 101);
     border: none;
     color: white;
-    width: calc(100% - 40px);
     cursor: default;
+    margin: 1px;
+    margin-left: 2px;
+    width: calc(100% - 27px);
 }
 
 .button {
-    text-align: right;
 }
 
-.task-list-activity .header .button {
-    border: none;
-    color: black;
-    float: right;
-    width: 20px;
-    padding: 0px 3px;
-}
 
-.task-list-activity .header .button:hover {
-    background-color: rgb(113, 113, 113);
-}
-
-.task-list-activity .header input:nth-child(3) {
-    /*border-top-right-radius: 6px;*/
-}
 
 .task-list-activity .body {
     border: 1px solid rgb(226, 226, 226);
-    /*background-color: whitesmoke;*/
-}
-
-.task-list-activity .body input {
-    /*background-color: whitesmoke;*/
 }
 
 .task-list {
@@ -279,21 +261,21 @@ body {
     width: calc(100vw - 0px);
 }
 
-.toolbar .button,
+.toolbar .menu-button,
 .toolbar input {
     margin: 0px 0px;
     padding: 4px 8px;
     padding-bottom: 6px;
 }
 
-.toolbar .button {
+.toolbar .menu-button {
     background-color: rgb(230, 230, 230);
     border: none;
     color: #454545;
     display: inline-block;
 }
 
-.toolbar .button:hover {
+.toolbar .menu-button:hover {
     background-color: rgb(209, 209, 209);
     border: none;
     color: #454545;
@@ -342,6 +324,23 @@ ul.menu {
     margin-left: -1px;
 }
 
+.burger-button {
+    background-color: transparent;
+    padding: 0px 5px;
+    padding-bottom: 2px;
+    position: relative;
+    top: -1px;
+}
+
+.burger-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.drop-down-burger {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+
 .add-menu {
 }
 
@@ -382,8 +381,8 @@ ul.menu {
     border-radius: 10px;
     color: gray;
     font-weight: bold;
-    padding: 0 5px;
     margin: -3px;
+    padding: 0 5px;
 }
 
 .tab-plus:hover {
