@@ -165,7 +165,7 @@ export default class Serializer implements ISerializer {
         }
         case "Note":
         {
-            const n = new Note(this.app, o.text, o.id, o.createdOn);
+            const n = new Note(this.app, o.title || "Note", o.text, o.id, o.createdOn);
             n.associatedLabels = this.getAssociatedLabels(o);
             return n as any as T;
         }

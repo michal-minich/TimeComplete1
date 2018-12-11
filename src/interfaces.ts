@@ -73,6 +73,8 @@ export interface ITask extends IDomainObject {
 export interface INote extends IDomainObject {
     text: string;
     textSignal: ValueSignal<string>;
+    title: string;
+    titleSignal: ValueSignal<string>;
     readonly associatedLabels: WritableArraySignal<ILabel>;
     readonly labelsFromText: ArraySignal<ILabel>;
     readonly allLabels: ArraySignal<ILabel>;
@@ -195,6 +197,7 @@ export type WhatEvent =
 
     //note 
     | "note.text"
+    | "note.title"
 
     //tab 
     | "tab.title"

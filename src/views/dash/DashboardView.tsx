@@ -13,7 +13,11 @@ import { noteDashItemView } from "./NoteDashItemView";
 import { PopupView }from "../PopupView";
 
 
-export default function dashboardView(app: IApp, lpv: LabelsPopupView, tasksMenu: PopupView) {
+export default function dashboardView(
+    app: IApp, 
+    lpv: LabelsPopupView,
+    tasksMenu: PopupView,
+    noteMenu: PopupView) {
 
 
     const ettv = taskTitleEditView(app);
@@ -40,7 +44,7 @@ export default function dashboardView(app: IApp, lpv: LabelsPopupView, tasksMenu
 
             } else if (di instanceof NoteDashItem) {
                 const col = indexOfMin(tdsHeight);
-                const v = noteDashItemView(app, di);
+                const v = noteDashItemView(app, di, noteMenu);
                 tds[col].appendChild(v);
                 tdsHeight[col] += di.estimatedHeight;
 

@@ -3,34 +3,37 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ITasksDashItem, ILabel } from "../../interfaces";
+import { IApp, ITasksDashItem, ILabel, IDashItem } from "../../interfaces";
 import { LabelsPopupView } from "../LabelsPopupView";
 import taskListView from "./TaskListView";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 import taskAddView from "./TaskAddView";
 import { getButton } from "../../common";
 import { PopupView } from "../PopupView";
+import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
 export let queryTextBox: HTMLInputElement;
 
 
-function queryColor(tdi: ITasksDashItem): string {
-    const c = tdi.query.matcher.firstLabelColor;
-    return c ? c : "rgb(101, 101, 101)";
+function queryColor(di: IDashItem): string {
+    let c: string | undefined = undefined;
+    if (di instanceof TasksDashItem)
+        c = di.query.matcher.firstLabelColor;
+    return c || "rgb(101, 101, 101)";
 }
 
 
-export function queryBackground(tdi: ITasksDashItem) {
-    return { backgroundColor: queryColor(tdi) };
+export function queryBackground(di: IDashItem) {
+    return { backgroundColor: queryColor(di) };
 }
 
 
-function queryBorder(app: IApp, tdi: ITasksDashItem) {
-    if (app.data.dashboard.selected() === tdi) {
-        return { borderColor: queryColor(tdi) };
+export function queryBorder(app: IApp, di: IDashItem) {
+    if (app.data.dashboard.selected() === di) {
+        return { borderColor: queryColor(di) };
     } else {
-        return { borderColor: "rgb(223, 223, 223)" };
+        return { borderColor: "rgb(230, 230, 230)" };
     }
 }
 
@@ -52,8 +55,8 @@ export function tasksDashItemView(app: IApp,
     const view =
         <div onMouseDown={() => app.data.dashboard.selected(tdi)}
              style={queryBorder(app, tdi)}
-             className={"task-list-activity " +
-                 (app.data.dashboard.selected() === tdi ? "selected-task-list-activity" : "")}>
+             className={"dash-item tasks-dash " +
+                 (app.data.dashboard.selected() === tdi ? "selected-dash-item" : "")}>
             <div className="header" style={queryBackground(tdi)}>
                 <input
                     spellCheck={false}

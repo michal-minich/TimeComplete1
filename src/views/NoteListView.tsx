@@ -32,7 +32,7 @@ export default function noteListView(app: IApp) {
         const v =
             <div className="note"
                  onClick={() => activateNote(n)}>
-                {n.id + " " + n.text.substring(0, 100)}
+                {(n.title + ": " + n.text).substring(0, 100)}
             </div>;
 
         return v;

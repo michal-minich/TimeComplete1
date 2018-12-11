@@ -14,10 +14,12 @@ export default class Note implements INote {
 
     constructor(
         private readonly app: IApp,
+        title: string,
         text: string,
         id?: number,
         createdOn?: IDateTime) {
-
+        
+        this.titleSignal = R.data(title);
         this.textSignal = R.data(text);
         this.associatedLabels = R.array([]);
 
@@ -36,6 +38,7 @@ export default class Note implements INote {
     createdOn: IDateTime;
     associatedLabels: WritableArraySignal<ILabel>;
     readonly textSignal: ValueSignal<string>;
+    readonly titleSignal: ValueSignal<string>;
 
 
     get labelsFromText(): ArraySignal<ILabel> {
@@ -55,5 +58,15 @@ export default class Note implements INote {
             return;
         this.textSignal(value);
         this.app.data.sync.pushField("note.text", this, value);
+    }
+
+
+    get title(): string { return this.titleSignal(); }
+
+    set title(value: string) {
+        if (this.titleSignal() === value)
+            return;
+        this.titleSignal(value);
+        this.app.data.sync.pushField("note.title", this, value);
     }
 }

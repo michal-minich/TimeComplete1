@@ -4,24 +4,74 @@ import * as Surplus from "surplus";
 Surplus;
 import { IApp, INoteDashItem } from "../../interfaces";
 import data from "surplus-mixin-data";
+import { getButton } from "../../common";
+import { PopupView } from "../PopupView";
+import { queryBorder } from "./TasksDashItemView";
 
 
-export function noteDashItemView(app: IApp, ndi: INoteDashItem) {
+export let queryTextBox: HTMLInputElement;
+
+let originalTitle = "";
+
+
+export function noteDashItemView(
+    app: IApp,
+    ndi: INoteDashItem,
+    noteMenu: PopupView) {
+
+
+    function showMenu(e: MouseEvent) {
+        noteMenu.showBelow(getButton(e.target));
+    }
 
     const view =
-        <div className="note-dash">
+        <div
+            onMouseDown={() => app.data.dashboard.selected(ndi)}
+            style={queryBorder(app, ndi)}
+            className={"dash-item note-dash " +
+                (app.data.dashboard.selected() === ndi ? "selected-dash-item" : "")}>
             <div className="header">
-                {ndi.note.id}
-                <button onClick={() => app.data.dashboard.remove(ndi)}>
-                    X
-                </button>
+                <input
+                    spellCheck={false}
+                    type="text"
+                    ref={queryTextBox}
+                    onFocus={() => begin()}
+                    onKeyUp={(e: KeyboardEvent) => keyUp(e)}
+                    fn={data(ndi.note.titleSignal)}/>
+                <span className="burger-button button" onMouseDown={showMenu}>
+                    <span className="drop-down-burger">&#x2261;</span>
+                </span>
             </div>
+
             <textarea 
              style={{ width: ndi.width + "px", height: ndi.height + "px" }}
                 fn={data(ndi.note.textSignal)}>
             </textarea>
         </div>;
 
+
+    function begin(): void {
+        originalTitle = ndi.note.titleSignal();
+        app.data.selectedTask = undefined;
+    }
+
+
+    function rollback(): void {
+        if (originalTitle === "__NEXT_EMPTY__") {
+            originalTitle = ndi.note.titleSignal();
+            ndi.note.titleSignal("");
+
+        } else {
+            ndi.note.titleSignal(originalTitle);
+            originalTitle = "__NEXT_EMPTY__";
+        }
+    }
+
+
+    function keyUp(e: KeyboardEvent): void {
+        if (e.key === "Escape")
+            rollback();
+    }
 
     return view;
 }

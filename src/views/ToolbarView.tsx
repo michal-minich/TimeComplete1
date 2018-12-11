@@ -49,7 +49,7 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
 
 
     function addNote() {
-        const n = new Note(app, "");
+        const n = new Note(app, "Note", "");
         app.data.noteAdd(n);
         amv.hide();
         app.data.dashboard.unshift(new NoteDashItem(app, n));
