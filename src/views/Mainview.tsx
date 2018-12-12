@@ -77,8 +77,15 @@ export default function mainView(app: IApp) {
     const lpv = labelsPopupView(app, app.data.labels);
     const toolbar = toolbarView(app, elv, lpv);
 
+
+    function hideMenus() {
+        tm.hide();
+        nm.hide();
+    }
+
+
     const view =
-        <div>
+        <div onMouseDown={hideMenus}>
             {tabsView(app)}
             {toolbar.view}
             {toolbar.addMenuView}

@@ -52,8 +52,14 @@ export function tasksDashItemView(app: IApp,
     }
 
 
+    function selectSelf(e: MouseEvent) {
+        app.data.dashboard.selected(tdi);
+        e.cancelBubble = true;
+    }
+
+
     const view =
-        <div onMouseDown={() => app.data.dashboard.selected(tdi)}
+        <div onMouseDown={(e: MouseEvent) => selectSelf(e)}
              style={queryBorder(app, tdi)}
              className={"dash-item tasks-dash " +
                  (app.data.dashboard.selected() === tdi ? "selected-dash-item" : "")}>

@@ -189,17 +189,17 @@ export type WhatEvent =
     // label
     | "label.name"
 
-    //task 
+    // task 
     | "task.title"
     | "task.completedOn"
     | "task.associatedLabels.add"
     | "task.associatedLabels.remove"
 
-    //note 
+    // note 
     | "note.text"
     | "note.title"
 
-    //tab 
+    // tab 
     | "tab.title"
     | "tab.content"
 
@@ -208,12 +208,19 @@ export type WhatEvent =
     | "style.customTextColor"
     | "style.textColorInUse"
 
-    //settings 
+    // settings 
     | "settings.labelPrefix"
     | "settings.negationOperator"
     | "settings.selectedTabIndex"
     | "settings.dashboardColumnsCount"
-    | "settings.lastId";
+    | "settings.lastId"
+
+    // dash 
+    | "dash.note.note"
+    | "dash.note.width"
+    | "dash.note.height"
+
+    | "dash.tasks.filter";
 
 
 export interface IDomainObjectCreateEvent {

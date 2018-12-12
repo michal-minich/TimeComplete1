@@ -51,7 +51,7 @@ export default function taskAddView(app: IApp, tdi: ITasksDashItem) {
 
     const view =
         <input type="text"
-               placeholder="new task"
+               placeholder="add new task"
                className="new-task-input"
                onKeyUp={(e: KeyboardEvent) => keyUp(e)}
                fn={data(tdi.newTitle)}/>;

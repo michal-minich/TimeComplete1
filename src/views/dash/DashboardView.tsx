@@ -14,7 +14,7 @@ import { PopupView }from "../PopupView";
 
 
 export default function dashboardView(
-    app: IApp, 
+    app: IApp,
     lpv: LabelsPopupView,
     tasksMenu: PopupView,
     noteMenu: PopupView) {
@@ -56,8 +56,14 @@ export default function dashboardView(
     }
 
 
+    function deselect() {
+        app.data.dashboard.selected(undefined);
+    }
+
+
     const view =
-        <div className="view-area">
+        <div className="view-area"
+             onMouseDown={deselect}>
             {ettv.view}
             <table className="task-list-activities">
                 <tr>{items}</tr>

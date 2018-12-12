@@ -24,9 +24,16 @@ export function noteDashItemView(
         noteMenu.showBelow(getButton(e.target));
     }
 
+
+    function selectSelf(e: MouseEvent) {
+        app.data.dashboard.selected(ndi);
+        e.cancelBubble = true;
+    }
+
+
     const view =
         <div
-            onMouseDown={() => app.data.dashboard.selected(ndi)}
+            onMouseDown={(e: MouseEvent) => selectSelf(e)}
             style={queryBorder(app, ndi)}
             className={"dash-item note-dash " +
                 (app.data.dashboard.selected() === ndi ? "selected-dash-item" : "")}>
