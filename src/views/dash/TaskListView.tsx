@@ -4,7 +4,7 @@ import * as Surplus from "surplus";
 Surplus;
 import { IApp, ITask, ILabel } from "../../interfaces";
 import { onMouseDown } from "../../common";
-import { LabelsPopupView } from "./../LabelsPopupView";
+import { LabelsPopupView } from "./../popup/LabelsPopupView";
 import DateTime from "../../data/value/DateTime";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 

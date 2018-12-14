@@ -8,7 +8,6 @@ export default class Settings implements ISettings {
     private labelPrefixSignal = R.data("#");
     private negationOperatorSignal = R.data("!");
     private selectedTabIndexSignal = R.data(0);
-    private dashboardColumnsCountSignal = R.data(3);
     private lastIdSignal = R.data(0);
 
 
@@ -27,12 +26,7 @@ export default class Settings implements ISettings {
     set selectedTabIndex(value: number) { this.selectedTabIndexSignal(value); }
 
 
-    get dashboardColumnsCount(): number { return this.dashboardColumnsCountSignal(); }
-
-    set dashboardColumnsCount(value: number) { this.dashboardColumnsCountSignal(value); }
-
-
-    get lastId(): number { return this.dashboardColumnsCountSignal(); }
+    get lastId(): number { return this.lastIdSignal(); }
 
     set lastId(value: number) { this.lastIdSignal(value); }
 }

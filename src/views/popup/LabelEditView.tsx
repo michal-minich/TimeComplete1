@@ -3,13 +3,13 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { colorInlineStyle } from "./MainView";
-import ColorStyle from "../data/value/ColorStyle";
-import Color from "../data/value/Color";
-import { ILabel, IApp, ValueSignal } from "../interfaces";
-import { R } from "../common";
-import windowView from "./windowView";
-import TasksDashItem from "../data/dash/TasksDashItem";
+import { colorInlineStyle } from "../MainView";
+import ColorStyle from "../../data/value/ColorStyle";
+import Color from "../../data/value/Color";
+import { ILabel, IApp, ValueSignal } from "../../interfaces";
+import { R } from "../../common";
+import windowView from "./../windowView";
+import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
 export type LabelEditView = ReturnType<typeof labelEditView>;

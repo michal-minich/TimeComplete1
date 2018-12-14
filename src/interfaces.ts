@@ -86,16 +86,9 @@ export interface ITab extends IDomainObject {
     content: any;
 }
 
-export interface IDashboard {
-    readonly items: ArraySignal<IDashItem>;
-    unshift(di: IDashItem): void;
-    remove(di: IDashItem): void;
-    readonly selected: ValueSignal<IDashItem | undefined>;
-}
-
 export interface ITasksDashItem extends IDashItem {
     readonly newTitle: ValueSignal<string>;
-    query: IQuery;
+    readonly query: IQuery;
 }
 
 export interface INoteDashItem extends IDashItem {
@@ -113,8 +106,20 @@ export interface ISettings {
     labelPrefix: string;
     negationOperator: string;
     selectedTabIndex: number;
-    dashboardColumnsCount: number;
     lastId: number;
+}
+
+export interface IDashboard {
+    readonly items: ArraySignal<IDashItem>;
+    unshift(di: IDashItem): void;
+    remove(di: IDashItem): void;
+    readonly selected: ValueSignal<IDashItem | undefined>;
+    readonly query: IQuery;
+    dashboardColumnsCount: number;
+}
+
+export interface IDashItem {
+    readonly estimatedHeight: number;
 }
 
 
@@ -152,15 +157,6 @@ export interface IData {
 
     tabAdd(t: ITab): void;
     tabDelete(t: ITab): void;
-}
-
-export interface IDashItem {
-    readonly estimatedHeight: number;
-}
-
-export interface ITasksDashBoard extends IDashboard {
-    readonly filter: IQuery;
-    displayColumnsCount: number;
 }
 
 

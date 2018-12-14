@@ -5,19 +5,20 @@ Surplus;
 import { IApp } from "../../interfaces";
 import { indexOfMin } from "../../common";
 import TasksDashItem from "../../data/dash/TasksDashItem";
-import { LabelsPopupView } from "../LabelsPopupView";
+import { LabelsPopupView } from "../popup/LabelsPopupView";
 import { tasksDashItemView } from "./TasksDashItemView";
 import taskTitleEditView from "./TaskTitleEditView";
 import NoteDashItem from "../../data/dash/NoteDashItem";
 import { noteDashItemView } from "./NoteDashItemView";
-import { PopupView }from "../PopupView";
+import { TaskMenuView } from "../popup/TaskMenuView";
+import { NoteMenuView }from "../popup/NoteMenuView";
 
 
 export default function dashboardView(
     app: IApp,
     lpv: LabelsPopupView,
-    tasksMenu: PopupView,
-    noteMenu: PopupView) {
+    tasksMenu: TaskMenuView,
+    noteMenu: NoteMenuView) {
 
 
     const ettv = taskTitleEditView(app);
@@ -27,7 +28,7 @@ export default function dashboardView(
 
         const tds: HTMLTableCellElement[] = [];
         const tdsHeight: number[] = [];
-        const numColumns = app.data.settings.dashboardColumnsCount;
+        const numColumns = app.data.dashboard.dashboardColumnsCount;
 
         for (let i = 0; i < numColumns; i++) {
             tds.push(document.createElement("td"));

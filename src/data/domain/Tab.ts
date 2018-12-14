@@ -55,7 +55,7 @@ export function addTab(a: IApp): void {
             new Color("white"),
             TextColorUsage.BlackOrWhite),
     );
-    tab.content = new Dashboard(a);
+    tab.content = new Dashboard(a, "");
     a.data.tabAdd(tab);
     a.data.settings.selectedTabIndex = a.data.tabs().length - 1;
 }

@@ -3,12 +3,12 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ILabel, ArraySignal } from "../interfaces"
+import { IApp, ILabel, ArraySignal } from "../../interfaces"
 import labelAddView, { labelAddViewState } from "./LabelAddView";
-import { colorInlineStyle } from "./MainView";
-import { onMouseDown } from "../common";
-import { R } from "../common";
-import popupView from "./PopupView";
+import { colorInlineStyle } from "../MainView";
+import { onMouseDown } from "../../common";
+import { R } from "../../common";
+import popupView from "../PopupView";
 
 
 // export type LabelsPopupView = ReturnType<typeof labelsPopupView>

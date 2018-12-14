@@ -5,7 +5,7 @@ import Query from "./../Query";
 
 export default class TasksDashItem implements ITasksDashItem {
 
-    query: IQuery;
+    readonly query: IQuery;
     readonly newTitle: ValueSignal<string>;
 
 

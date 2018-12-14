@@ -4,12 +4,12 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { IApp, ITasksDashItem, ILabel, IDashItem } from "../../interfaces";
-import { LabelsPopupView } from "../LabelsPopupView";
+import { LabelsPopupView } from "./../popup/LabelsPopupView";
 import taskListView from "./TaskListView";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 import taskAddView from "./TaskAddView";
 import { getButton } from "../../common";
-import { PopupView } from "../PopupView";
+import { TaskMenuView } from "../popup/TaskMenuView";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
@@ -42,7 +42,7 @@ export function tasksDashItemView(app: IApp,
     tdi: ITasksDashItem,
     lpv: LabelsPopupView,
     ettv: TaskTitleEditView,
-    tasksMenu: PopupView) {
+    tasksMenu: TaskMenuView) {
 
     let originalTitle = "";
 

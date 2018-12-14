@@ -5,11 +5,11 @@ Surplus;
 import data from "surplus-mixin-data";
 import { IApp } from "../interfaces";
 import TasksDashItem from "../data/dash/TasksDashItem";
-import { LabelsPopupView } from "./LabelsPopupView";
-import { LabelEditView } from "./LabelEditView";
+import { LabelsPopupView } from "./popup/LabelsPopupView";
+import { LabelEditView } from "./popup/LabelEditView";
 import Note from "../data/domain/Note";
 import popupView from "./PopupView";
-import noteListView from "./NoteListView";
+import noteListView from "./popup/NoteListView";
 import NoteDashItem from "../data/dash/NoteDashItem";
 import { R, getButton } from "../common";
 
@@ -31,13 +31,17 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
                 <input type="checkbox" id="auto-columns-count" fn={data(autoCols)}/>
                 <label htmlFor="auto-columns-count">Auto</label>
                 <fieldset disabled={autoCols()}>
-                    <button onMouseDown={() => --app.data.settings.dashboardColumnsCount}>-</button>
-                    <span className="dash-columns-input">{app.data.settings.dashboardColumnsCount}</span>
-                    <button onMouseDown={() => ++app.data.settings.dashboardColumnsCount}>+</button>
+                    <button onMouseDown={() => --app.data.dashboard.dashboardColumnsCount}>-</button>
+                    <span className="dash-columns-input">{() => app.data.dashboard.dashboardColumnsCount}</span>
+                    <button onMouseDown={() => ++app.data.dashboard.dashboardColumnsCount}>+</button>
                 </fieldset>
             </li>
             <li>
-                <input className="view-filter" type="search" placeholder="View Filter"/>
+                <input
+                    className="view-filter"
+                    type="search"
+                    placeholder="View Filter"
+                    fn={data(app.data.dashboard.query.text)}/>
             </li>
             <li onMouseDown={() => app.data.generateLocalStorageDownload()}>Export Data</li>
             <li onClick={() => app.data.importLocalStorageDownload()}>Import Data</li>

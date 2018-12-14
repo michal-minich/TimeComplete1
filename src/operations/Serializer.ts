@@ -188,8 +188,7 @@ export default class Serializer implements ISerializer {
             const s = new Settings();
             s.labelPrefix = o.labelPrefix;
             s.selectedTabIndex = o.selectedTabIndex;
-            s.dashboardColumnsCount = o.dashboardColumnsCount;
-            s.lastId = o.lastI;
+            s.lastId = o.lastId;
             return s as any as T;
         }
         default:
@@ -209,14 +208,8 @@ export default class Serializer implements ISerializer {
     }
 
 
-    getQuery(o: any): IQuery {
-        const q = new Query(this.app, o.text);
-        return q;
-    }
-
-
     getDashboard(o: any): IDashboard {
-        const d = new Dashboard(this.app);
+        const d = new Dashboard(this.app, o.query.text);
         d.items = this.fromArray<IDashItem>(o.items, "DashItem");
         d.selected(o.selected);
         return d;

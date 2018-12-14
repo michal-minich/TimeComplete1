@@ -2,10 +2,10 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, INote } from "../interfaces";
+import { IApp, INote } from "../../interfaces";
 
-import popupView from "./PopupView";
-import NoteDashItem from "../data/dash/NoteDashItem";
+import popupView from "../PopupView";
+import NoteDashItem from "../../data/dash/NoteDashItem";
 
 export type PopupView = ReturnType<typeof noteListView>
 

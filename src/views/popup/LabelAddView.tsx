@@ -3,12 +3,12 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import LabelStyle from "../data/value/ColorStyle";
-import Color from "../data/value/Color";
-import { R } from "../common";
-import Label from "../data/domain/Label";
-import { IApp } from "../interfaces";
-import TasksDashItem from "../data/dash/TasksDashItem";
+import LabelStyle from "../../data/value/ColorStyle";
+import Color from "../../data/value/Color";
+import { R } from "../../common";
+import Label from "../../data/domain/Label";
+import { IApp } from "../../interfaces";
+import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
 export var labelAddViewState: {

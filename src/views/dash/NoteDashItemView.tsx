@@ -5,7 +5,7 @@ Surplus;
 import { IApp, INoteDashItem } from "../../interfaces";
 import data from "surplus-mixin-data";
 import { getButton } from "../../common";
-import { PopupView } from "../PopupView";
+import { NoteMenuView } from "../popup/NoteMenuView";
 import { queryBorder } from "./TasksDashItemView";
 
 
@@ -17,7 +17,7 @@ let originalTitle = "";
 export function noteDashItemView(
     app: IApp,
     ndi: INoteDashItem,
-    noteMenu: PopupView) {
+    noteMenu: NoteMenuView) {
 
 
     function showMenu(e: MouseEvent) {
