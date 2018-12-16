@@ -459,3 +459,11 @@ ul.menu {
     text-align: center;
     width: 30px;
 }
+
+.show-hide-filtered-out {
+    text-align: center;
+    background-color: rgb(216, 216, 216);
+    color: gray;
+    font-size: smaller;
+    padding: 0;
+}

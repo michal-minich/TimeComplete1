@@ -18,7 +18,7 @@ export default class Note implements INote {
         text: string,
         id?: number,
         createdOn?: IDateTime) {
-        
+
         this.titleSignal = R.data(title);
         this.textSignal = R.data(text);
         this.associatedLabels = R.array([]);

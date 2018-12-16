@@ -95,7 +95,7 @@ export class SyncLog implements ISyncLog {
         const d: ITabCreateEvent = {
             ...this.getObject(t),
             title: t.title,
-            style: this.getColorStyle(t.style)
+            customStyle: t.customStyle ? this.getColorStyle(t.customStyle) : undefined
         };
         this.push("object.create", d);
     }

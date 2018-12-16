@@ -11,8 +11,7 @@
     WritableArraySignal,
     IDomainObject,
     IDashboard,
-    IDashItem,
-    IQuery
+    IDashItem
 } from "../interfaces";
 import Label from "../data/domain/Label";
 import Color from "../data/value/Color";
@@ -30,7 +29,6 @@ import Settings from "../data/Settings";
 import Tab from "../data/domain/Tab";
 import Dashboard from "../data/dash/Dashboard";
 import TasksDashItem from "../data/dash/TasksDashItem";
-import Query from "../data/Query";
 import Note from "../data/domain/Note";
 import NoteDashItem from "../data/dash/NoteDashItem";
 
@@ -157,7 +155,7 @@ export default class Serializer implements ISerializer {
             const tab = new Tab(
                 this.app,
                 o.title,
-                this.getColorStyle(o.style, o.id),
+                o.customStyle ? this.getColorStyle(o.customStyle, o.id) : undefined,
                 o.id,
                 o.createdOn ? this.fromPlainObject<IDateTime>(o.createdOn, "DateTime") : undefined);
             tab.content = this.getDashboard(o.content);

@@ -17,7 +17,7 @@ export default class QueryMatcher implements IQueryMatcher {
 
     private readonly labelsSignal: ArraySignal<ILabel>;
     private qis!: IQueryElement[];
-    private lc: string | undefined;
+    firstLabel: ILabel | undefined;
     private wasUpdate = R.data(true);
 
 
@@ -29,11 +29,11 @@ export default class QueryMatcher implements IQueryMatcher {
     update(query: IQuery): void {
         this.wasUpdate(true);
         this.qis = QueryParser.parse(this.app, query.text());
-        const label = this.firstLabel();
+        const label = this.firstQueryLabel();
         if (label) {
             const l = this.app.data.labels().find(l2 => l2.name === label.value);
             if (l)
-                this.lc = l.style.backColor.value;
+                this.firstLabel = l;
         }
     }
 
@@ -66,9 +66,6 @@ export default class QueryMatcher implements IQueryMatcher {
 
 
     get queryItems(): IQueryElement[] { return this.qis; }
-
-
-    get firstLabelColor(): string | undefined { return this.lc; }
 
 
     taskMatches(t: ITask): boolean {
@@ -116,7 +113,7 @@ export default class QueryMatcher implements IQueryMatcher {
     }
 
 
-    private firstLabel(): QueryLabel | undefined {
+    private firstQueryLabel(): QueryLabel | undefined {
         for (const qi of this.queryItems)
             if (qi instanceof QueryLabel)
                 return qi;

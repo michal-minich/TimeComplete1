@@ -10,12 +10,13 @@ export default class Tab implements ITab {
     constructor(
         private readonly app: IApp,
         title: string,
-        readonly style: IColorStyle,
+        readonly customStyle: IColorStyle | undefined,
         id?: number,
         createdOn?: IDateTime) {
 
         this.titleSignal = R.data(title);
-        style.ownerId = id;
+        if (customStyle)
+            customStyle.ownerId = id;
 
         if (id) {
             this.id = id;
@@ -41,8 +42,18 @@ export default class Tab implements ITab {
         this.app.data.sync.pushField("tab.title", this, value);
     }
 
+
     content: any;
 
+
+    get style(): IColorStyle | undefined {
+        if (this.content instanceof Dashboard) {
+            const l = this.content.query.matcher.firstLabel;
+            if (l)
+                return l.style;
+        }
+        return this.customStyle;
+    }
 };
 
 

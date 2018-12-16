@@ -1,14 +1,14 @@
-import * as Surplus from "surplus";
+﻿import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ITasksDashItem, ILabel, IDashItem } from "../../interfaces";
+import { IApp, ITasksDashItem, ILabel, IDashItem, ITask } from "../../interfaces";
 import { LabelsPopupView } from "./../popup/LabelsPopupView";
 import taskListView from "./TaskListView";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 import taskAddView from "./TaskAddView";
-import { getButton } from "../../common";
+import { getButton, R } from "../../common";
 import { TaskMenuView } from "../popup/TaskMenuView";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
@@ -17,10 +17,12 @@ export let queryTextBox: HTMLInputElement;
 
 
 function queryColor(di: IDashItem): string {
-    let c: string | undefined = undefined;
-    if (di instanceof TasksDashItem)
-        c = di.query.matcher.firstLabelColor;
-    return c || "rgb(101, 101, 101)";
+    if (di instanceof TasksDashItem) {
+        const l = di.query.matcher.firstLabel;
+        if (l)
+            return l.style.backColor.value;
+    }
+    return "rgb(101, 101, 101)";
 }
 
 
@@ -45,7 +47,7 @@ export function tasksDashItemView(app: IApp,
     tasksMenu: TaskMenuView) {
 
     let originalTitle = "";
-
+    const showFilteredOut = R.data(false);
 
     function showMenu(e: MouseEvent) {
         tasksMenu.showBelow(getButton(e.target));
@@ -56,6 +58,57 @@ export function tasksDashItemView(app: IApp,
         app.data.dashboard.selected(tdi);
         e.cancelBubble = true;
     }
+
+
+    function resultTasks() {
+        const vt = app.data.dashboard.query.matcher.resultTasks();
+        const rt = tdi.query.matcher.resultTasks();
+        const inx: ITask[] = [];
+        const out: ITask[] = [];
+        for (const t of rt) {
+            if (vt.indexOf(t) !== -1) {
+                inx.push(t);
+            } else {
+                out.push(t);
+            }
+        }
+        return { inx, out };
+    }
+
+
+    function taskList(tasks: { inx: ITask[], out: ITask[] }): HTMLElement[] {
+
+        if (tasks.out.length === 0)
+            return [];
+
+        const done = tasks.out.filter(t => t.completedOn !== undefined).length;
+        const filteredOut = tasks.out.length - done;
+
+        let text = "";
+
+        if (done !== 0)
+            text = done + " done";
+
+        if (filteredOut !== 0)
+            text += (done === 0 ? "" : " and ") + filteredOut + " filtered out";
+
+        const v =
+            <table>
+                <tr>
+                    <td className="show-hide-filtered-out" colSpan={3}
+                        onClick={() => showFilteredOut(!showFilteredOut())}>
+                        {showFilteredOut() ? "▲ hide " : "▼ show "}
+                        {text}
+                        {showFilteredOut() ? " ▲" : " ▼"}
+                    </td>
+                </tr>
+                <tbody className={showFilteredOut() ? "" : "hidden"}>
+                {taskListView(app, tasks.out, lpv, ettv)}
+                </tbody>
+            </table>;
+
+        return Array.from(v.childNodes) as HTMLElement[];
+    };
 
 
     const view =
@@ -81,8 +134,9 @@ export function tasksDashItemView(app: IApp,
                 <table className="task-list lined-list">
                     <thead></thead>
                     <tbody>
-                    {taskListView(app, tdi.query.matcher.resultTasks(), lpv, ettv)}
+                    {taskListView(app, resultTasks().inx, lpv, ettv)}
                     </tbody>
+                    {taskList(resultTasks())}
                 </table>
             </div>
         </div>;

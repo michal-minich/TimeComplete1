@@ -2,7 +2,7 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, IColorStyle, INoteDashItem, IDashboard } from "../interfaces";
+import { IApp, IColorStyle } from "../interfaces";
 import labelsPopupView from "./popup/LabelsPopupView";
 import { removeTextSelections } from "../common";
 import labelEditView from "./popup/LabelEditView";
@@ -13,8 +13,11 @@ import taskMenuView from "./popup/TaskMenuView";
 import noteMenuView from "./popup/NoteMenuView";
 
 
-export function colorInlineStyle(ls: IColorStyle) {
-    return { backgroundColor: ls.backColor.value, color: ls.textColor.value };
+export function colorInlineStyle(ls: IColorStyle | undefined) {
+    if (ls)
+        return { backgroundColor: ls.backColor.value, color: ls.textColor.value };
+    else
+        return { backgroundColor: "gray", color: "white" };
 }
 
 
@@ -30,15 +33,15 @@ window.addEventListener("mouseup",
 
 
 export default function mainView(app: IApp) {
-    
-    
+
+
     const tm = taskMenuView(app);
     const nm = noteMenuView(app);
     const elv = labelEditView(app);
     const lpv = labelsPopupView(app, app.data.labels);
     const toolbar = toolbarView(app, elv, lpv);
 
-    
+
     const view =
         <div>
             {tabsView(app)}

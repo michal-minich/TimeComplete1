@@ -31,9 +31,12 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
                 <input type="checkbox" id="auto-columns-count" fn={data(autoCols)}/>
                 <label htmlFor="auto-columns-count">Auto</label>
                 <fieldset disabled={autoCols()}>
-                    <button onMouseDown={() => --app.data.dashboard.dashboardColumnsCount}>-</button>
-                    <span className="dash-columns-input">{() => app.data.dashboard.dashboardColumnsCount}</span>
-                    <button onMouseDown={() => ++app.data.dashboard.dashboardColumnsCount}>+</button>
+                    <button onMouseDown={() => --app.data.dashboard.dashboardColumnsCount
+}>-</button>
+                    <span className="dash-columns-input">{() => app.data.dashboard
+                        .dashboardColumnsCount}</span>
+                    <button onMouseDown={() => ++app.data.dashboard.dashboardColumnsCount
+}>+</button>
                 </fieldset>
             </li>
             <li>
@@ -89,7 +92,10 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
 
     function selectedTabColor() {
         const tab = app.data.tabs()[app.data.settings.selectedTabIndex];
-        return tab.style.backColor.value;
+        if (tab.style)
+            return tab.style.backColor.value;
+        else
+            return "gray";
     }
 
 

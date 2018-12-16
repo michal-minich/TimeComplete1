@@ -82,7 +82,8 @@ export interface INote extends IDomainObject {
 
 export interface ITab extends IDomainObject {
     title: string;
-    readonly style: IColorStyle;
+    readonly style: IColorStyle | undefined;
+    readonly customStyle: IColorStyle | undefined;
     content: any;
 }
 
@@ -215,7 +216,6 @@ export type WhatEvent =
     | "dash.note.note"
     | "dash.note.width"
     | "dash.note.height"
-
     | "dash.tasks.filter";
 
 
@@ -240,7 +240,7 @@ export interface INoteCreateEvent extends IDomainObjectCreateEvent {
 
 export interface ITabCreateEvent extends IDomainObjectCreateEvent {
     title: string;
-    style: IColorStyleChangeEvent;
+    customStyle: IColorStyleChangeEvent | undefined;
 }
 
 export interface IFieldChangeEvent {
@@ -301,7 +301,7 @@ export interface IQueryMatcher {
     readonly labels: ArraySignal<ILabel>;
     includeLabel(label: ILabel): void;
     excludeLabel(label: ILabel): void;
-    readonly firstLabelColor: string | undefined;
+    readonly firstLabel: ILabel | undefined;
     readonly existingLabels: ILabel[];
 }
 
