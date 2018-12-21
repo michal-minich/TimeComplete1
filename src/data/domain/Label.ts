@@ -15,20 +15,20 @@ export default class Label implements ILabel {
         private readonly app: IApp,
         name: string,
         readonly style: IColorStyle,
+        public version: number,
         id: number,
         createdOn: IDateTime) {
 
         this.nameSignal = R.data(name);
-        style.ownerId = id;
+        style.owner = this;
         this.style = style;
         this.id = id;
         this.createdOn = createdOn;
-        //this.associatedLabels = R.array();
     }
 
 
     static createNew(app: IApp, name: string, style: IColorStyle): ILabel {
-        const l = new Label(app, name, style, app.data.idCounter.getNext(), app.clock.now());
+        const l = new Label(app, name, style, 1, app.data.getNextId(), app.clock.now());
         return l;
     }
 
@@ -36,10 +36,11 @@ export default class Label implements ILabel {
     static createFromStore(app: IApp,
         name: string,
         style: IColorStyle,
+        version: number,
         id: number,
         createdOn: IDateTime): ILabel {
 
-        return new Label(app, name, style, id, createdOn);
+        return new Label(app, name, style, version, id, createdOn);
     }
 
 
@@ -49,7 +50,6 @@ export default class Label implements ILabel {
     readonly type = "label";
     id: number;
     createdOn: IDateTime;
-    //readonly associatedLabels: WritableArraySignal<ILabel>;
 
 
     get name(): string { return this.nameSignal(); }

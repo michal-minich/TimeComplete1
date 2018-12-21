@@ -1,4 +1,4 @@
-﻿import { IColorStyle, IColor, TextColorUsage, ValueSignal, IApp } from "../../interfaces";
+﻿import { IColorStyle, IColor, TextColorUsage, ValueSignal, IApp, IDomainObject } from "../../interfaces";
 import { R } from "../../common";
 import Color from "./Color";
 
@@ -13,17 +13,15 @@ export default class ColorStyle implements IColorStyle {
         private readonly app: IApp,
         backColor: IColor,
         customTextColor: IColor,
-        textColorInUse: TextColorUsage = TextColorUsage.Custom,
-        ownerId?: number | undefined) {
+        textColorInUse: TextColorUsage = TextColorUsage.Custom) {
 
         this.backColorSignal = R.data(backColor);
         this.customTextColorSignal = R.data(customTextColor);
         this.textColorInUseSignal = R.data(textColorInUse);
-        this.ownerId = ownerId;
     }
 
 
-    ownerId: number | undefined;
+    owner!: IDomainObject;
 
 
     get backColor(): IColor { return this.backColorSignal(); }
@@ -32,7 +30,7 @@ export default class ColorStyle implements IColorStyle {
         if (this.backColorSignal().value === value.value)
             return;
         this.backColorSignal(value);
-        this.app.data.sync.pushField2("style.backColor", this.ownerId!, value.value);
+        this.app.data.sync.pushField("style.backColor", this.owner, value.value);
     }
 
 
@@ -56,7 +54,7 @@ export default class ColorStyle implements IColorStyle {
         if (this.customTextColorSignal().value === value.value)
             return;
         this.customTextColorSignal(value);
-        this.app.data.sync.pushField2("style.customTextColor", this.ownerId!, value.value);
+        this.app.data.sync.pushField("style.customTextColor", this.owner, value.value);
     }
 
 
@@ -66,6 +64,6 @@ export default class ColorStyle implements IColorStyle {
         if (this.textColorInUseSignal() === value)
             return;
         this.textColorInUseSignal(value);
-        this.app.data.sync.pushField2("style.textColorInUse", this.ownerId!, value);
+        this.app.data.sync.pushField("style.textColorInUse", this.owner, value);
     }
 }

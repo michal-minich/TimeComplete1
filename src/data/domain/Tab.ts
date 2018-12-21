@@ -11,18 +11,19 @@ export default class Tab implements ITab {
         private readonly app: IApp,
         title: string,
         readonly customStyle: IColorStyle | undefined,
+        public version: number,
         id?: number,
         createdOn?: IDateTime) {
 
         this.titleSignal = R.data(title);
         if (customStyle)
-            customStyle.ownerId = id;
+            customStyle.owner = this;
 
         if (id) {
             this.id = id;
             this.createdOn = createdOn!;
         } else {
-            this.id = this.app.data.idCounter.getNext();
+            this.id = this.app.data.getNextId();
             this.createdOn = this.app.clock.now();
         }
     }
@@ -65,6 +66,7 @@ export function addTab(a: IApp): void {
             new Color("gray"),
             new Color("white"),
             TextColorUsage.BlackOrWhite),
+        1
     );
     tab.content = new Dashboard(a, "");
     a.data.tabAdd(tab);

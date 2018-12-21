@@ -38,6 +38,7 @@ export interface IDateTime {
 export interface IDomainObject {
     readonly type: DomainObjectType;
     readonly id: number;
+    version: number;
     readonly createdOn: IDateTime;
 }
 
@@ -48,7 +49,7 @@ export interface ILabel extends IDomainObject {
 }
 
 export interface IColorStyle {
-    ownerId: number | undefined;
+    owner: IDomainObject;
     backColor: IColor;
     readonly textColor: IColor;
     customTextColor: IColor;
@@ -134,7 +135,7 @@ export interface IApp {
 }
 
 export interface IData {
-    readonly idCounter: IIdProvider<number>;
+    getNextId(): number;
     readonly sync: ISyncLog;
     readonly dashboard: IDashboard;
     readonly tasks: ArraySignal<ITask>;
@@ -245,11 +246,13 @@ export interface ITabCreateEvent extends IDomainObjectCreateEvent {
 
 export interface IFieldChangeEvent {
     id: number;
+    version: number;
     value?: SimpleType;
 }
 
 export interface IDeleteEvent {
     id: number;
+    version: number;
 }
 
 export interface IColorStyleChangeEvent {
@@ -260,7 +263,6 @@ export interface IColorStyleChangeEvent {
 
 export interface ISyncLog {
     pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value?: T): void;
-    pushField2<T extends SimpleType>(we: WhatEvent, id: number, value?: T): void;
     pushDelete(o: IDomainObject): void;
     pushLabelCreate(l: ILabel): void;
     pushTaskCreate(t: ITask): void;
@@ -285,11 +287,6 @@ export interface IDataStore {
 
 // Operations =================================================================
 
-
-export interface IIdProvider<T> {
-    getNext(): T;
-    readonly current: T;
-}
 
 export interface IQueryMatcher {
     update(query: IQuery): void;

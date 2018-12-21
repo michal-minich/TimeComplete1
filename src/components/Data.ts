@@ -10,20 +10,17 @@ import {
         ISettings,
         IApp,
         ITab,
-        IIdProvider,
         ISyncLog,
         IDashboard
     } from
     "../interfaces";
 import Settings from "../data/Settings";
 import { addTab } from "../data/domain/Tab";
-import IncrementCounter from "../operations/IncrementCounter";
 import { SyncLog } from "../components/SyncLog";
 
 
 export default class Data implements IData {
 
-    idCounter!: IIdProvider<number>;
     readonly sync: ISyncLog;
     tasks!: WritableArraySignal<ITask>;
     labels!: WritableArraySignal<ILabel>;
@@ -43,7 +40,6 @@ export default class Data implements IData {
         try {
 
             this.settings = this.loadObj<ISettings>("settings", "Settings", () => new Settings());
-            this.idCounter = new IncrementCounter(this.app);
             this.labels = this.loadArray<ILabel>("labels", "Label");
             this.tasks = this.loadArray<ITask>("tasks", "Task");
             this.notes = this.loadArray<INote>("notes", "Note");
@@ -72,6 +68,11 @@ export default class Data implements IData {
 
     get dashboard(): IDashboard {
         return this.tabs()[this.settings.selectedTabIndex].content as IDashboard;
+    }
+
+    
+    getNextId(): number {
+        return ++this.app.data.settings.lastId;
     }
 
 

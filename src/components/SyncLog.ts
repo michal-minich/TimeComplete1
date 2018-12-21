@@ -19,6 +19,7 @@
         SimpleType
     }
     from "../interfaces";
+import { C } from "../common";
 
 
 export class SyncLog implements ISyncLog {
@@ -46,24 +47,22 @@ export class SyncLog implements ISyncLog {
 
 
     pushDelete(o: IDomainObject): void {
-        const d: IDeleteEvent = { id: o.id };
+        C.assume(o.version >= 1);
+        const d: IDeleteEvent = { id: o.id, version: o.version };
         this.push("object.delete", d);
     }
 
 
     pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value?: T) {
-        const d: IFieldChangeEvent = { id: o.id, value: value };
-        this.push(we, d);
-    }
-
-
-    pushField2<T extends SimpleType>(we: WhatEvent, id: number, value?: T) {
-        const d: IFieldChangeEvent = { id: id, value: value };
+        C.assume(o.version >= 1);
+        ++o.version;
+        const d: IFieldChangeEvent = { id: o.id, version: o.version, value: value };
         this.push(we, d);
     }
 
 
     pushLabelCreate(l: ILabel): void {
+        C.assume(l.version === 1);
         const d: ILabelCreateEvent = {
             ...this.getObject(l),
             name: l.name,
@@ -74,6 +73,7 @@ export class SyncLog implements ISyncLog {
 
 
     pushTaskCreate(t: ITask): void {
+        C.assume(t.version === 1);
         const d: ITaskCreateEvent = {
             ...this.getObject(t),
             title: t.title
@@ -83,6 +83,7 @@ export class SyncLog implements ISyncLog {
 
 
     pushNoteCreate(n: INote): void {
+        C.assume(n.version === 1);
         const d: INoteCreateEvent = {
             ...this.getObject(n),
             text: n.text
@@ -92,6 +93,7 @@ export class SyncLog implements ISyncLog {
 
 
     pushTabCreate(t: ITab): void {
+        C.assume(t.version === 1);
         const d: ITabCreateEvent = {
             ...this.getObject(t),
             title: t.title,
@@ -114,7 +116,7 @@ export class SyncLog implements ISyncLog {
         return {
             type: o.type,
             id: o.id,
-            createdOn: o.createdOn.value,
+            createdOn: o.createdOn.value
         };
     }
 }

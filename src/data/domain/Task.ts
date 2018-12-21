@@ -14,6 +14,7 @@ export default class Task implements ITask {
     constructor(
         private readonly app: IApp,
         title: string,
+        public version: number,
         associatedLabels?: WritableArraySignal<ILabel>,
         completedOn?: IDateTime,
         id?: number,
@@ -27,7 +28,7 @@ export default class Task implements ITask {
             this.id = id;
             this.createdOn = createdOn!;
         } else {
-            this.id = this.app.data.idCounter.getNext();
+            this.id = this.app.data.getNextId();
             this.createdOn = this.app.clock.now();
         }
     }

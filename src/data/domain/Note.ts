@@ -16,6 +16,7 @@ export default class Note implements INote {
         private readonly app: IApp,
         title: string,
         text: string,
+        public version: number,
         id?: number,
         createdOn?: IDateTime) {
 
@@ -27,7 +28,7 @@ export default class Note implements INote {
             this.id = id;
             this.createdOn = createdOn!;
         } else {
-            this.id = this.app.data.idCounter.getNext();
+            this.id = this.app.data.getNextId();
             this.createdOn = this.app.clock.now();
         }
     }

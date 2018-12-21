@@ -22,7 +22,7 @@ export default function taskAddView(app: IApp, tdi: ITasksDashItem) {
             title = title.replace("#" + l.name, "");
         }
         title = title.trim().replace("  ", " ");
-        const t = new Task(app, title);
+        const t = new Task(app, title, 1);
         associateLabels(t, sq.matcher.existingLabels);
         associateLabels(t, tq.matcher.existingLabels);
         app.data.taskAdd(t);

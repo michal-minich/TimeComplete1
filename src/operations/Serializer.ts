@@ -99,9 +99,12 @@ export default class Serializer implements ISerializer {
             } else {
                 const o: Indexer<JsonValueType> = {};
                 for (const k of Object.keys(v)) {
-                    if (k === "app" || k === "matcher" || k === "type" || k === "ownerId")
+                    if (k === "app" || k === "matcher" || k === "type" || k === "owner")
                         continue;
                     const f2 = this.toPlain(v[k], ++objLevel);
+                    if (k === "version" && o[k] === undefined) {
+                        o[k] = 1;
+                    }
                     if (f2 !== undefined) {
                         if (k.endsWith("Signal"))
                             o[k.substring(0, k.length - 6)] = f2;
@@ -130,7 +133,8 @@ export default class Serializer implements ISerializer {
             const l = Label.createFromStore(
                 this.app,
                 o.name,
-                this.getColorStyle(o.style, o.id),
+                this.getColorStyle(o.style, o),
+                o.version,
                 o.id,
                 this.fromPlainObject<IDateTime>(o.createdOn, "DateTime"));
             return l as any as T;
@@ -143,6 +147,7 @@ export default class Serializer implements ISerializer {
             const t = new Task(
                 this.app,
                 o.title,
+                o.version,
                 this.getAssociatedLabels(o),
                 co,
                 o.id,
@@ -156,6 +161,7 @@ export default class Serializer implements ISerializer {
                 this.app,
                 o.title,
                 o.customStyle ? this.getColorStyle(o.customStyle, o.id) : undefined,
+                o.version,
                 o.id,
                 o.createdOn ? this.fromPlainObject<IDateTime>(o.createdOn, "DateTime") : undefined);
             tab.content = this.getDashboard(o.content);
@@ -163,7 +169,7 @@ export default class Serializer implements ISerializer {
         }
         case "Note":
         {
-            const n = new Note(this.app, o.title || "Note", o.text, o.id, o.createdOn);
+            const n = new Note(this.app, o.title || "Note", o.text, o.version, o.id, o.createdOn);
             n.associatedLabels = this.getAssociatedLabels(o);
             return n as any as T;
         }
@@ -214,13 +220,14 @@ export default class Serializer implements ISerializer {
     }
 
 
-    getColorStyle(o: any, ownerId: number): ColorStyle {
-        return new ColorStyle(
+    getColorStyle(o: any, owner: IDomainObject): ColorStyle {
+        const cs = new ColorStyle(
             this.app,
             this.fromPlainObject<IColor>(o.backColor, "Color"),
             this.fromPlainObject<IColor>(o.customTextColor, "Color"),
-            o.textColorInUse as TextColorUsage,
-            ownerId);
+            o.textColorInUse as TextColorUsage);
+        cs.owner = owner;
+        return cs;
     }
 
 

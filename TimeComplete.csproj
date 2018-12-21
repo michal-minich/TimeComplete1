@@ -93,7 +93,6 @@
     <TypeScriptCompile Include="src\data\domain\Label.ts" />
     <TypeScriptCompile Include="src\data\value\ColorStyle.ts" />
     <TypeScriptCompile Include="src\components\SyncLog.ts" />
-    <TypeScriptCompile Include="src\operations\IncrementCounter.ts" />
     <TypeScriptCompile Include="src\io\LocalStore.ts" />
     <TypeScriptCompile Include="src\data\domain\Task.ts" />
     <TypeScriptCompile Include="src\interfaces.ts" />
