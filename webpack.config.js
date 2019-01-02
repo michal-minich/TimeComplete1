@@ -4,7 +4,7 @@ module.exports = {
     entry: "./src/start.ts",
     devtool: false/*"inline-source-map"*/,
     output: {
-        filename: "./main.js"
+        filename: "../wwwroot/scripts/main.js"
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js"]
