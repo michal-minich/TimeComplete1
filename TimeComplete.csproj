@@ -13,7 +13,11 @@
     <None Remove="src\views\dash\TaskListView.jsx" />
     <None Remove="src\views\dash\TasksDashItemView.jsx" />
     <None Remove="src\views\dash\TaskTitleEditView.jsx" />
+    <None Remove="src\views\LabelAddView.jsx" />
+    <None Remove="src\views\LabelEditView.jsx" />
+    <None Remove="src\views\LabelsPopupView.jsx" />
     <None Remove="src\views\MainView.jsx" />
+    <None Remove="src\views\NoteListView.jsx" />
     <None Remove="src\views\PopupView.jsx" />
     <None Remove="src\views\popup\LabelAddView.jsx" />
     <None Remove="src\views\popup\LabelEditView.jsx" />

@@ -33,10 +33,14 @@ import Note from "../data/domain/Note";
 import NoteDashItem from "../data/dash/NoteDashItem";
 
 
+
 export default class Serializer implements ISerializer {
 
 
     constructor(private readonly app: IApp) {}
+
+
+    static usedIds : Array<number> = [];
 
 
     serialize<T extends object>(value: T): string {
@@ -130,6 +134,7 @@ export default class Serializer implements ISerializer {
             return new DateTime(o.value) as any as T;
         case "Label":
         {
+            Serializer.usedIds.push(o.id as number);
             const l = Label.createFromStore(
                 this.app,
                 o.name,
@@ -141,6 +146,7 @@ export default class Serializer implements ISerializer {
         }
         case "Task":
         {
+            this.fixDuplicateId(o);
             const co = o.completedOn
                 ? this.fromPlainObject<IDateTime>(o.completedOn, "DateTime")
                 : undefined;
@@ -157,6 +163,7 @@ export default class Serializer implements ISerializer {
         }
         case "Tab":
         {
+            Serializer.usedIds.push(o.id as number);
             const tab = new Tab(
                 this.app,
                 o.title,
@@ -169,6 +176,7 @@ export default class Serializer implements ISerializer {
         }
         case "Note":
         {
+            Serializer.usedIds.push(o.id as number);
             const n = new Note(this.app, o.title || "Note", o.text, o.version, o.id, o.createdOn);
             n.associatedLabels = this.getAssociatedLabels(o);
             return n as any as T;
@@ -198,6 +206,16 @@ export default class Serializer implements ISerializer {
         default:
             throw new Error();
         }
+    }
+
+
+    fixDuplicateId(o: any) {
+        const id = o.id as number;
+        if (Serializer.usedIds.indexOf(id) !== -1) {
+            o.id = this.app.data.getNextId();
+            console.log("Duplicate Id Changed:" + id + "->" + o.id + " " + o.title);
+        }
+        Serializer.usedIds.push(o.id as number);
     }
 
 
