@@ -5,6 +5,6 @@ import { IDateTime, IClock } from "../interfaces";
 export default class Clock implements IClock {
 
     now(): IDateTime {
-        return new DateTime("2018");
+        return new DateTime(Date.now());
     }
 }

@@ -32,7 +32,8 @@ export interface IColor {
 }
 
 export interface IDateTime {
-    readonly value: string;
+    readonly value: number;
+    toLocaleDateTimeString() : string;
 }
 
 export interface IDomainObject {
@@ -173,7 +174,7 @@ export interface IChange {
 
 export interface ISyncEvent extends IChange {
     eventId: number;
-    on: string;
+    on: number;
     what: WhatEvent;
     data: any;
 }
@@ -223,7 +224,7 @@ export type WhatEvent =
 export interface IDomainObjectCreateEvent {
     type: DomainObjectType;
     id: number;
-    createdOn: string;
+    createdOn: number;
 }
 
 export interface ILabelCreateEvent extends IDomainObjectCreateEvent {

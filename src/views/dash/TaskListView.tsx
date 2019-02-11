@@ -17,7 +17,7 @@ export default function taskListView(app: IApp,
 
     function perform(task: ITask, isDone: HTMLInputElement): any {
         if (isDone.checked) {
-            task.completedOn = new DateTime("2019");
+            task.completedOn = new DateTime(Date.now());
         } else {
             task.completedOn = undefined;
         }
@@ -48,6 +48,7 @@ export default function taskListView(app: IApp,
                         onChange={() => perform(t, doneChk!)}/>
                 </td>
                 <td ref={titleTd}
+                    title={"Created: " + t.createdOn.toLocaleDateTimeString() + (t.completedOn ? "\nCompleted: " + t.completedOn.toLocaleDateTimeString() : "")}
                     tabIndex={1}
                     onFocus={() => ettv.begin(t, titleTd!)}
                     className={t.completedOn !== undefined

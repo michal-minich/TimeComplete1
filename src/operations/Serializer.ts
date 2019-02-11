@@ -82,7 +82,7 @@ export default class Serializer implements ISerializer {
         case "object":
             if (v === null)
                 throw undefined;
-            if (objLevel > 0 && typeof v == "object") {
+            if (objLevel > 0 && typeof v === "object") {
                 if (isDomainObject(v)) {
                     // ReSharper disable once TsResolvedFromInaccessibleModule
                     return v.id;
