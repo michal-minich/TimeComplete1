@@ -43,6 +43,7 @@ export default function labelEditView(a: IApp) {
             <button onClick={() => confirm()}>Ok</button>
             <button onClick={() => cancel()}>Cancel</button>
             <button onClick={() => del()}>Delete</button>
+            <button onClick={() => showTaskList()}>Show Task List</button>
         </div>;
 
 
@@ -114,5 +115,12 @@ export default function labelEditView(a: IApp) {
     }
 
 
+    function showTaskList(): void {
+        const l = labelSignal()!;
+        const tdi = new TasksDashItem(a, a.data.settings.labelPrefix + l.name);
+        a.data.dashboard.unshift(tdi);
+    }
+
+    
     return { view: wv.view, begin };
 };
