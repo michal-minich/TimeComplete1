@@ -14,7 +14,7 @@ export default function windowView(app: IApp, content: HTMLElement) {
     const view =
         <div className="window hidden">
             {content}
-        </div>;
+        </div>; 
 
 
     function showBelow(el: HTMLElement): void {

@@ -11,7 +11,8 @@ import {
         IApp,
         ITab,
         ISyncLog,
-        IDashboard
+        IDashboard,
+        IDataStore
     } from
     "../interfaces";
 import Settings from "../data/Settings";
@@ -21,6 +22,7 @@ import { SyncLog } from "../components/SyncLog";
 
 export default class Data implements IData {
 
+    readonly localStore: IDataStore;
     readonly sync: ISyncLog;
     tasks!: WritableArraySignal<ITask>;
     labels!: WritableArraySignal<ILabel>;
@@ -31,6 +33,7 @@ export default class Data implements IData {
 
 
     constructor(private readonly app: IApp) {
+        this.localStore = new LocalStore();
         this.sync = new SyncLog(app);
     }
 
@@ -80,27 +83,27 @@ export default class Data implements IData {
 
         R.onAny(() => {
             const labels = this.labels();
-            Data.saveWithSerialize(this.app, "labels", labels);
+            this.saveWithSerialize(this.app, "labels", labels);
         });
 
         R.onAny(() => {
             const tasks = this.tasks();
-            Data.saveWithSerialize(this.app, "tasks", tasks);
+            this.saveWithSerialize(this.app, "tasks", tasks);
         });
 
         R.onAny(() => {
             const notes = this.notes();
-            Data.saveWithSerialize(this.app, "notes", notes);
+            this.saveWithSerialize(this.app, "notes", notes);
         });
 
         R.onAny(() => {
             const tabs = this.tabs();
-            Data.saveWithSerialize(this.app, "tabs", tabs);
+            this.saveWithSerialize(this.app, "tabs", tabs);
         });
 
         R.onAny(() => {
             const sett = this.settings;
-            Data.saveWithSerialize(this.app, "settings", sett);
+            this.saveWithSerialize(this.app, "settings", sett);
         });
     }
 
@@ -122,18 +125,18 @@ export default class Data implements IData {
     }
 
 
-    private static saveWithSerialize<T extends object>(
+    private saveWithSerialize<T extends object>(
         app: IApp,
         key: string,
         value: T): void {
 
         const sv = new Serializer(app).toPlainObject(value);
-        app.localStore.save(key, sv);
+        this.localStore.save(key, sv);
     }
 
 
     generateLocalStorageDownload(): void {
-        const s = this.app.localStore;
+        const s = this.localStore;
         const data = {
             labels: s.load("labels"),
             tasks: s.load("tasks"),

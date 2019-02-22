@@ -14,7 +14,7 @@ export default class Dashboard implements IDashboard {
 
     items: WritableArraySignal<IDashItem>;
     readonly selected: ValueSignal<IDashItem | undefined>;
-    private dashboardColumnsCountSignal = R.data(3);
+    private columnsCountSignal = R.data(3);
     readonly query: IQuery;
 
 
@@ -35,7 +35,7 @@ export default class Dashboard implements IDashboard {
     }
 
 
-    get dashboardColumnsCount(): number { return this.dashboardColumnsCountSignal(); }
+    get columnsCount(): number { return this.columnsCountSignal(); }
 
-    set dashboardColumnsCount(value: number) { this.dashboardColumnsCountSignal(value); }
+    set columnsCount(value: number) { this.columnsCountSignal(value); }
 }

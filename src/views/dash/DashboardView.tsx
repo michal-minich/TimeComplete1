@@ -28,7 +28,7 @@ export default function dashboardView(
 
         const tds: HTMLTableCellElement[] = [];
         const tdsHeight: number[] = [];
-        const numColumns = app.data.dashboard.dashboardColumnsCount;
+        const numColumns = app.data.dashboard.columnsCount;
 
         for (let i = 0; i < numColumns; i++) {
             tds.push(document.createElement("td"));

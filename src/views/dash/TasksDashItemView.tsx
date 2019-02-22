@@ -165,16 +165,6 @@ export function tasksDashItemView(app: IApp,
             rollback();
     }
 
-
-    function addOrRemoveLabelFromQuery(l: ILabel): void {
-        const ln = l.name;
-        const q = tdi.query.text().trim().replace("  ", " ");
-        if (q.indexOf(ln) === -1) {
-            tdi.query.text(q + " #" + ln);
-        } else {
-            tdi.query.text(q.replace("#" + ln, "").replace("  ", " "));
-        }
-    }
-
+    
     return view;
 }

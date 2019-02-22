@@ -17,15 +17,28 @@ export interface LabelsPopupView {
     readonly view: HTMLDivElement;
     readonly show: (
         over: HTMLElement,
-        isForLabel: boolean,
+        associated: ArraySignal<ILabel> | undefined,
         action: (label: ILabel, el: HTMLSpanElement) => void) => void;
 }
 
-export default function labelsPopupView(app: IApp, labels: ArraySignal<ILabel>): LabelsPopupView {
+export default function labelsPopupView(
+    app: IApp,
+    labels: ArraySignal<ILabel>,): LabelsPopupView {
 
     let act: (label: ILabel, el: HTMLSpanElement) => void;
     const queryText = R.data("");
     const lav = labelAddView(app);
+    let associated2: ArraySignal<ILabel> | undefined;
+
+    function labelStyle(l : ILabel) {
+        const s = colorInlineStyle(l.style);
+        console.log(associated2);
+        console.log(l.name);
+        if (associated2 && associated2().find(a => a.name === l.name) !== undefined) {
+            (s as any).textDecoration = "underline";
+        }
+        return s;
+    }
 
     const content =
         <div className="labels-popup-view">
@@ -40,7 +53,7 @@ export default function labelsPopupView(app: IApp, labels: ArraySignal<ILabel>):
                     <span
                         className="label"
                         fn={onMouseDown((e) => activate(l, e.target as HTMLSpanElement))}
-                        style={colorInlineStyle(l.style)}>
+                        style={labelStyle(l)}>
                         {l.name}
                     </span>
                 )()}
@@ -61,11 +74,12 @@ export default function labelsPopupView(app: IApp, labels: ArraySignal<ILabel>):
 
     function show(
         over: HTMLElement,
-        isForTask2: boolean,
+        associated: ArraySignal<ILabel> | undefined,
         action: (label: ILabel, el: HTMLSpanElement) => void): void {
 
+        associated2 = associated;
         act = action;
-        labelAddViewState.isForTask = isForTask2;
+        labelAddViewState.isForTask = associated !== undefined;
         labelAddViewState.hideWindow = view.hide;
         view.showBelow(over);
     }

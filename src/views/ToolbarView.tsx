@@ -31,11 +31,11 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
                 <input type="checkbox" id="auto-columns-count" fn={data(autoCols)}/>
                 <label htmlFor="auto-columns-count">Auto</label>
                 <fieldset disabled={autoCols()}>
-                    <button onMouseDown={() => --app.data.dashboard.dashboardColumnsCount
+                    <button onMouseDown={() => --app.data.dashboard.columnsCount
 }>-</button>
                     <span className="dash-columns-input">{() => app.data.dashboard
-                        .dashboardColumnsCount}</span>
-                    <button onMouseDown={() => ++app.data.dashboard.dashboardColumnsCount
+                        .columnsCount}</span>
+                    <button onMouseDown={() => ++app.data.dashboard.columnsCount
 }>+</button>
                 </fieldset>
             </li>
@@ -71,7 +71,7 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
 
 
     function showLabels(e: MouseEvent) {
-        lpv.show(getButton(e.target), false, (l, el) => elv.begin(l, el));
+        lpv.show(getButton(e.target), undefined, (l, el) => elv.begin(l, el));
     }
 
 

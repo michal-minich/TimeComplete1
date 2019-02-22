@@ -48,7 +48,9 @@ export default function taskListView(app: IApp,
                         onChange={() => perform(t, doneChk!)}/>
                 </td>
                 <td ref={titleTd}
-                    title={"Created: " + t.createdOn.toLocaleDateTimeString() + (t.completedOn ? "\nCompleted: " + t.completedOn.toLocaleDateTimeString() : "")}
+                    title={"Created: " + t.createdOn.toLocaleDateTimeString() 
+                            + (t.completedOn ? "\nCompleted: " 
+                            + t.completedOn.toLocaleDateTimeString() : "")}
                     tabIndex={1}
                     onFocus={() => ettv.begin(t, titleTd!)}
                     className={t.completedOn !== undefined
@@ -59,7 +61,7 @@ export default function taskListView(app: IApp,
                 <td className="label-tag-container"
                     fn={(onMouseDown((e) => lpv.show(
                         e.target as HTMLElement,
-                        true,
+                        t.associatedLabels,
                         (l, el) => changeAssociation(l)
                     )))}>
                     {t.associatedLabels.orderBy(al => al.id).map(al =>

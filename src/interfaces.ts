@@ -118,7 +118,7 @@ export interface IDashboard {
     remove(di: IDashItem): void;
     readonly selected: ValueSignal<IDashItem | undefined>;
     readonly query: IQuery;
-    dashboardColumnsCount: number;
+    columnsCount: number;
 }
 
 export interface IDashItem {
@@ -130,12 +130,12 @@ export interface IDashItem {
 
 
 export interface IApp {
-    readonly localStore: IDataStore;
     readonly clock: IClock;
     readonly data: IData;
 }
 
 export interface IData {
+    readonly localStore: IDataStore;
     getNextId(): number;
     readonly sync: ISyncLog;
     readonly dashboard: IDashboard;
