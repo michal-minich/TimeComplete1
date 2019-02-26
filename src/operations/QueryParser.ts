@@ -13,7 +13,7 @@ export class QueryLabel implements IQueryElement {
 
     constructor(private readonly app: IApp, public value: string) {}
 
-    makeString(): string { return this.app.data.settings.labelPrefix + this.value; }
+    makeString(): string { return this.app.data.fields.labelPrefix + this.value; }
 }
 
 
@@ -21,7 +21,7 @@ export class NotOp implements IQueryElement {
 
     constructor(private readonly app: IApp, public arg: IQueryElement) {}
 
-    makeString(): string { return this.app.data.settings.negationOperator + this.arg; }
+    makeString(): string { return this.app.data.fields.negationOperator + this.arg; }
 }
 
 
@@ -46,9 +46,9 @@ export module QueryParser {
         tok: string,
         iterator: () => string | undefined): IQueryElement | undefined {
 
-        if (tok[0] === app.data.settings.labelPrefix) {
+        if (tok[0] === app.data.fields.labelPrefix) {
             return new QueryLabel(app, tok.substring(1));
-        } else if (tok[0] === app.data.settings.negationOperator) {
+        } else if (tok[0] === app.data.fields.negationOperator) {
             const tok2 = iterator();
             if (tok2 === undefined)
                 return undefined;

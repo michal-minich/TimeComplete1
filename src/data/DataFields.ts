@@ -1,8 +1,8 @@
-import { ISettings } from "../interfaces";
+import { IDataFields as IDataFields } from "../interfaces";
 import { R } from "../common";
 
 
-export default class Settings implements ISettings {
+export default class DataFields implements IDataFields {
 
 
     private labelPrefixSignal = R.data("#");

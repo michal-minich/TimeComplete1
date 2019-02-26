@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded",
     () => {
         // test1();
         R.root(() => {
-            const app: IApp = new App(document.body);
+            const app: IApp = new App();
             (window as any).app = app; // for debugging in browser
         });
     });

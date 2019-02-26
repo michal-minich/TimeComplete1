@@ -3,11 +3,16 @@
 
 export default class DateTime implements IDateTime {
 
+
+    private readonly jsDate : Date;
+
+
     constructor(readonly value: number) {
+        this.jsDate = new Date(this.value);
     }
 
 
     toLocaleDateTimeString(): string {
-        return new Date(this.value).toLocaleString();
+        return this.jsDate.toLocaleString();
     }
 }

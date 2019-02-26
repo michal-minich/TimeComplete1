@@ -1,9 +1,10 @@
-﻿import Clock from "../io/Clock";
-import {
+﻿import {
     IApp,
     IData,
     IClock
 } from "../interfaces";
+
+import Clock from "../io/Clock";
 import mainView from "../views/MainView";
 import Data from "./Data";
 
@@ -12,60 +13,12 @@ export default class App implements IApp {
 
     readonly clock: IClock;
     readonly data: IData;
-
-
-    constructor(el: Element) {
+    
+    constructor() {
 
         this.clock = new Clock();
         this.data = new Data(this);
         this.data.load();
-
-        //this.debugPrintIds();
-        
-        el.appendChild(mainView(this));
-    }
-
-
-    private debugPrintIds() {
-
-        const ids: Array<{ id: number, type: string }> = [];
-
-        for (let t of this.data.tasks()) {
-            const f = ids.find(i => i.id === t.id);
-            if (f === undefined) {
-                ids.push({ id: t.id, type: "task" });
-            } else {
-                f.type += ", task";
-            }
-        }
-
-        for (let t of this.data.labels()) {
-            const f = ids.find(i => i.id === t.id);
-            if (f === undefined) {
-                ids.push({ id: t.id, type: "label" });
-            } else {
-                f.type += ", label";
-            }
-        }
-
-        for (let t of this.data.notes()) {
-            const f = ids.find(i => i.id === t.id);
-            if (f === undefined) {
-                ids.push({ id: t.id, type: "notes" });
-            } else {
-                f.type += ", notes";
-            }
-        }
-
-        for (let t of this.data.tabs()) {
-            const f = ids.find(i => i.id === t.id);
-            if (f === undefined) {
-                ids.push({ id: t.id, type: "tab" });
-            } else {
-                f.type += ", tab";
-            }
-        }
-
-        console.log(ids);
+        document.body.appendChild(mainView(this));
     }
 }

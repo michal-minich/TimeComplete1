@@ -7,7 +7,7 @@ import {
         WritableArraySignal,
         ILabel,
         INote,
-        ISettings,
+        IDataFields,
         IApp,
         ITab,
         ISyncLog,
@@ -15,7 +15,7 @@ import {
         IDataStore
     } from
     "../interfaces";
-import Settings from "../data/Settings";
+import DataFields from "../data/DataFields";
 import { addTab } from "../data/domain/Tab";
 import { SyncLog } from "../components/SyncLog";
 
@@ -28,7 +28,7 @@ export default class Data implements IData {
     labels!: WritableArraySignal<ILabel>;
     notes!: WritableArraySignal<INote>;
     tabs!: WritableArraySignal<ITab>;
-    settings!: ISettings;
+    fields!: IDataFields;
     selectedTask: ITask | undefined;
 
 
@@ -42,7 +42,7 @@ export default class Data implements IData {
 
         try {
 
-            this.settings = this.loadObj<ISettings>("settings", "Settings", () => new Settings());
+            this.fields = this.loadObj<IDataFields>("fields", "DataFields", () => new DataFields());
             this.labels = this.loadArray<ILabel>("labels", "Label");
             this.tasks = this.loadArray<ITask>("tasks", "Task");
             this.notes = this.loadArray<INote>("notes", "Note");
@@ -50,7 +50,7 @@ export default class Data implements IData {
 
         } catch (ex) {
 
-            this.settings = new Settings();
+            this.fields = new DataFields();
             this.labels = R.array();
             this.tasks = R.array();
             this.notes = R.array();
@@ -70,12 +70,12 @@ export default class Data implements IData {
 
 
     get dashboard(): IDashboard {
-        return this.tabs()[this.settings.selectedTabIndex].content as IDashboard;
+        return this.tabs()[this.fields.selectedTabIndex].content as IDashboard;
     }
 
     
     getNextId(): number {
-        return ++this.app.data.settings.lastId;
+        return ++this.app.data.fields.lastId;
     }
 
 
@@ -102,8 +102,8 @@ export default class Data implements IData {
         });
 
         R.onAny(() => {
-            const sett = this.settings;
-            this.saveWithSerialize(this.app, "settings", sett);
+            const sett = this.fields;
+            this.saveWithSerialize(this.app, "fields", sett);
         });
     }
 
@@ -142,7 +142,7 @@ export default class Data implements IData {
             tasks: s.load("tasks"),
             notes: s.load("notes"),
             tabs: s.load("tabs"),
-            settings: s.load("settings")
+            fields: s.load("fields")
         };
         download("export.json", JSON.stringify(data));
     }
@@ -159,7 +159,7 @@ export default class Data implements IData {
                 new LocalStore().save("tasks", obj.tasks);
                 new LocalStore().save("notes", obj.notes);
                 new LocalStore().save("tabs", obj.tabs);
-                new LocalStore().save("settings", obj.settings);
+                new LocalStore().save("fields", obj.fields);
                 console.log(obj);
             });
         fr.readAsText(file);

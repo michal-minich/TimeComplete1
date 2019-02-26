@@ -25,7 +25,7 @@ import {
     isDomainObject,
     isArraySignal
 } from "../common";
-import Settings from "../data/Settings";
+import DataFields from "../data/DataFields";
 import Tab from "../data/domain/Tab";
 import Dashboard from "../data/dash/Dashboard";
 import TasksDashItem from "../data/dash/TasksDashItem";
@@ -195,9 +195,9 @@ export default class Serializer implements ISerializer {
                 throw o;
             }
         }
-        case "Settings":
+        case "DataFields":
         {
-            const s = new Settings();
+            const s = new DataFields();
             s.labelPrefix = o.labelPrefix;
             s.selectedTabIndex = o.selectedTabIndex;
             s.lastId = o.lastId;

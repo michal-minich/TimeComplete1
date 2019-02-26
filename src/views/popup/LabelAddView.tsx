@@ -44,7 +44,7 @@ export default function labelAddView(app: IApp) {
             if (t)
                 t.addLabel(l);
         }
-        addTaskList(app.data.settings.labelPrefix + labelName);
+        addTaskList(app.data.fields.labelPrefix + labelName);
         labelAddViewState.hideWindow();
     }
 

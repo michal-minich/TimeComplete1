@@ -70,5 +70,5 @@ export function addTab(a: IApp): void {
     );
     tab.content = new Dashboard(a, "");
     a.data.tabAdd(tab);
-    a.data.settings.selectedTabIndex = a.data.tabs().length - 1;
+    a.data.fields.selectedTabIndex = a.data.tabs().length - 1;
 }

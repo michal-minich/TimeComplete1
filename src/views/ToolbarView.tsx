@@ -91,7 +91,7 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
 
 
     function selectedTabColor() {
-        const tab = app.data.tabs()[app.data.settings.selectedTabIndex];
+        const tab = app.data.tabs()[app.data.fields.selectedTabIndex];
         if (tab.style)
             return tab.style.backColor.value;
         else

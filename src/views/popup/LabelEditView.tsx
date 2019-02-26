@@ -117,7 +117,7 @@ export default function labelEditView(a: IApp) {
 
     function showTaskList(): void {
         const l = labelSignal()!;
-        const tdi = new TasksDashItem(a, a.data.settings.labelPrefix + l.name);
+        const tdi = new TasksDashItem(a, a.data.fields.labelPrefix + l.name);
         a.data.dashboard.unshift(tdi);
     }
 

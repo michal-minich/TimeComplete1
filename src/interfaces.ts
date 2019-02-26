@@ -105,7 +105,7 @@ export interface IQuery {
     readonly matcher: IQueryMatcher;
 }
 
-export interface ISettings {
+export interface IDataFields {
     labelPrefix: string;
     negationOperator: string;
     selectedTabIndex: number;
@@ -135,19 +135,23 @@ export interface IApp {
 }
 
 export interface IData {
+    
+    load(): void;
+    generateLocalStorageDownload(): void;
+    importLocalStorageDownload(): void;
+
     readonly localStore: IDataStore;
     getNextId(): number;
     readonly sync: ISyncLog;
+
     readonly dashboard: IDashboard;
+    
     readonly tasks: ArraySignal<ITask>;
     readonly labels: ArraySignal<ILabel>;
     readonly notes: ArraySignal<INote>;
     readonly tabs: ArraySignal<ITab>;
-    readonly settings: ISettings;
-    load(): void;
+    readonly fields: IDataFields;
     selectedTask: ITask | undefined;
-    generateLocalStorageDownload(): void;
-    importLocalStorageDownload(): void;
 
     taskAdd(t: ITask): void;
     taskDelete(t: ITask): void;
@@ -207,12 +211,12 @@ export type WhatEvent =
     | "style.customTextColor"
     | "style.textColorInUse"
 
-    // settings 
-    | "settings.labelPrefix"
-    | "settings.negationOperator"
-    | "settings.selectedTabIndex"
-    | "settings.dashboardColumnsCount"
-    | "settings.lastId"
+    // fields 
+    | "fields.labelPrefix"
+    | "fields.negationOperator"
+    | "fields.selectedTabIndex"
+    | "fields.dashboardColumnsCount"
+    | "fields.lastId"
 
     // dash 
     | "dash.note.note"
