@@ -109,6 +109,8 @@ export interface IDataFields {
     labelPrefix: string;
     negationOperator: string;
     selectedTabIndex: number;
+    selectedDashItemIndex: number;
+    selectedTaskId: number;
     lastId: number;
 }
 
@@ -126,32 +128,28 @@ export interface IDashItem {
 }
 
 
-// Controllers ================================================================
+// Components ================================================================
 
 
 export interface IApp {
     readonly clock: IClock;
+    readonly serializer: ISerializer;
+    readonly localStore: IDataStore;
+    readonly sync: ISyncLog;
     readonly data: IData;
 }
 
 export interface IData {
-    
-    load(): void;
-    generateLocalStorageDownload(): void;
-    importLocalStorageDownload(): void;
-
-    readonly localStore: IDataStore;
-    getNextId(): number;
-    readonly sync: ISyncLog;
-
-    readonly dashboard: IDashboard;
     
     readonly tasks: ArraySignal<ITask>;
     readonly labels: ArraySignal<ILabel>;
     readonly notes: ArraySignal<INote>;
     readonly tabs: ArraySignal<ITab>;
     readonly fields: IDataFields;
+
+    readonly dashboard: IDashboard;
     selectedTask: ITask | undefined;
+    getNextId(): number;
 
     taskAdd(t: ITask): void;
     taskDelete(t: ITask): void;
@@ -164,6 +162,16 @@ export interface IData {
 
     tabAdd(t: ITab): void;
     tabDelete(t: ITab): void;
+}
+
+
+export interface ISyncLog {
+    pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value?: T): void;
+    pushDelete(o: IDomainObject): void;
+    pushLabelCreate(l: ILabel): void;
+    pushTaskCreate(t: ITask): void;
+    pushNoteCreate(n: INote): void;
+    pushTabCreate(t: ITab): void;
 }
 
 
@@ -215,7 +223,8 @@ export type WhatEvent =
     | "fields.labelPrefix"
     | "fields.negationOperator"
     | "fields.selectedTabIndex"
-    | "fields.dashboardColumnsCount"
+    | "fields.selectedDashItemIndex"
+    | "fields.selectedTaskId"
     | "fields.lastId"
 
     // dash 
@@ -264,15 +273,6 @@ export interface IColorStyleChangeEvent {
     backColor: string;
     customTextColor: string;
     textColorInUse: TextColorUsage;
-}
-
-export interface ISyncLog {
-    pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value?: T): void;
-    pushDelete(o: IDomainObject): void;
-    pushLabelCreate(l: ILabel): void;
-    pushTaskCreate(t: ITask): void;
-    pushNoteCreate(n: INote): void;
-    pushTabCreate(t: ITab): void;
 }
 
 

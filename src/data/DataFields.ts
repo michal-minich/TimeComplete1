@@ -8,6 +8,8 @@ export default class DataFields implements IDataFields {
     private labelPrefixSignal = R.data("#");
     private negationOperatorSignal = R.data("!");
     private selectedTabIndexSignal = R.data(0);
+    private selectedDashItemIndexSignal = R.data(0);
+    private selectedTaskIdSignal = R.data(0);
     private lastIdSignal = R.data(0);
 
 
@@ -24,6 +26,16 @@ export default class DataFields implements IDataFields {
     get selectedTabIndex(): number { return this.selectedTabIndexSignal(); }
 
     set selectedTabIndex(value: number) { this.selectedTabIndexSignal(value); }
+
+
+    get selectedDashItemIndex(): number { return this.selectedDashItemIndexSignal(); }
+
+    set selectedDashItemIndex(value: number) { this.selectedDashItemIndexSignal(value); }
+
+
+    get selectedTaskId(): number { return this.selectedTaskIdSignal(); }
+
+    set selectedTaskId(value: number) { this.selectedTaskIdSignal(value); }
 
 
     get lastId(): number { return this.lastIdSignal(); }

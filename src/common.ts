@@ -6,7 +6,7 @@ import {
         ValueSignal,
         WritableArraySignal,
         INoteDashItem,
-        ITasksDashItem
+        ITasksDashItem,
     } from
     "./interfaces";
 
@@ -16,17 +16,6 @@ export function findById<T extends IDomainObject>(items: ArraySignal<T>, id: num
     if (item === undefined)
         throw "Item with key '" + id + "' is not present.";
     return item;
-}
-
-
-export function download(fileName: string, text: string): void {
-    const el = document.createElement("a");
-    el.setAttribute("href", "data:application/json;charset=utf-8," + encodeURIComponent(text));
-    el.setAttribute("download", fileName);
-    el.style.display = "none";
-    document.body.appendChild(el);
-    el.click();
-    document.body.removeChild(el);
 }
 
 

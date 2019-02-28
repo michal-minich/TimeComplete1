@@ -58,7 +58,7 @@ export default class Note implements INote {
         if (this.textSignal() === value)
             return;
         this.textSignal(value);
-        this.app.data.sync.pushField("note.text", this, value);
+        this.app.sync.pushField("note.text", this, value);
     }
 
 
@@ -68,6 +68,6 @@ export default class Note implements INote {
         if (this.titleSignal() === value)
             return;
         this.titleSignal(value);
-        this.app.data.sync.pushField("note.title", this, value);
+        this.app.sync.pushField("note.title", this, value);
     }
 }

@@ -11,7 +11,8 @@ import Note from "../data/domain/Note";
 import popupView from "./PopupView";
 import noteListView from "./popup/NoteListView";
 import NoteDashItem from "../data/dash/NoteDashItem";
-import { R, getButton } from "../common";
+import { R, getButton} from "../common";
+import { AppDataOps } from "../operations/AppDataOps";
 
 
 export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPopupView) {
@@ -31,12 +32,9 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
                 <input type="checkbox" id="auto-columns-count" fn={data(autoCols)}/>
                 <label htmlFor="auto-columns-count">Auto</label>
                 <fieldset disabled={autoCols()}>
-                    <button onMouseDown={() => --app.data.dashboard.columnsCount
-}>-</button>
-                    <span className="dash-columns-input">{() => app.data.dashboard
-                        .columnsCount}</span>
-                    <button onMouseDown={() => ++app.data.dashboard.columnsCount
-}>+</button>
+                    <button onMouseDown={() => --app.data.dashboard.columnsCount}>-</button>
+                    <span className="dash-columns-input">{() => app.data.dashboard.columnsCount}</span>
+                    <button onMouseDown={() => ++app.data.dashboard.columnsCount}>+</button>
                 </fieldset>
             </li>
             <li>
@@ -46,8 +44,8 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
                     placeholder="View Filter"
                     fn={data(app.data.dashboard.query.text)}/>
             </li>
-            <li onMouseDown={() => app.data.generateLocalStorageDownload()}>Export Data</li>
-            <li onClick={() => app.data.importLocalStorageDownload()}>Import Data</li>
+            <li onMouseDown={() => AppDataOps.exportData(app.localStore)}>Export Data</li>
+            <li onClick={() => AppDataOps.importData(app.localStore)}>Import Data</li>
         </ul>;
 
     const amv = popupView(app, addMenu);

@@ -1,4 +1,4 @@
-﻿import { IDataStore } from "../interfaces";
+﻿import { IDataStore } from "../../interfaces";
 
 
 export default class LocalStore implements IDataStore {

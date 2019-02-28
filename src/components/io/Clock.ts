@@ -1,5 +1,5 @@
-﻿import DateTime from "../data/value/DateTime";
-import { IDateTime, IClock } from "../interfaces";
+﻿import DateTime from "../../data/value/DateTime";
+import { IDateTime, IClock } from "../../interfaces";
 
 
 export default class Clock implements IClock {

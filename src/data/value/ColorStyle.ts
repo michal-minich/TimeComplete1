@@ -30,7 +30,7 @@ export default class ColorStyle implements IColorStyle {
         if (this.backColorSignal().value === value.value)
             return;
         this.backColorSignal(value);
-        this.app.data.sync.pushField("style.backColor", this.owner, value.value);
+        this.app.sync.pushField("style.backColor", this.owner, value.value);
     }
 
 
@@ -54,7 +54,7 @@ export default class ColorStyle implements IColorStyle {
         if (this.customTextColorSignal().value === value.value)
             return;
         this.customTextColorSignal(value);
-        this.app.data.sync.pushField("style.customTextColor", this.owner, value.value);
+        this.app.sync.pushField("style.customTextColor", this.owner, value.value);
     }
 
 
@@ -64,6 +64,6 @@ export default class ColorStyle implements IColorStyle {
         if (this.textColorInUseSignal() === value)
             return;
         this.textColorInUseSignal(value);
-        this.app.data.sync.pushField("style.textColorInUse", this.owner, value);
+        this.app.sync.pushField("style.textColorInUse", this.owner, value);
     }
 }

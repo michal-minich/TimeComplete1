@@ -58,6 +58,6 @@ export default class Label implements ILabel {
         if (this.nameSignal() === value)
             return;
         this.nameSignal(value);
-        this.app.data.sync.pushField("label.name", this, value);
+        this.app.sync.pushField("label.name", this, value);
     }
 }

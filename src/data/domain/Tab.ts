@@ -40,7 +40,7 @@ export default class Tab implements ITab {
         if (this.titleSignal() === value)
             return;
         this.titleSignal(value);
-        this.app.data.sync.pushField("tab.title", this, value);
+        this.app.sync.pushField("tab.title", this, value);
     }
 
 

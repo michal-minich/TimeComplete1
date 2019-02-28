@@ -22,7 +22,7 @@
 import { C } from "../common";
 
 
-export class SyncLog implements ISyncLog {
+export default class SyncLog implements ISyncLog {
 
 
     private readonly ses: ISyncEvent[];

@@ -50,7 +50,7 @@ export default class Task implements ITask {
         if (this.titleSignal() === value)
             return;
         this.titleSignal(value);
-        this.app.data.sync.pushField("task.title", this, value);
+        this.app.sync.pushField("task.title", this, value);
     }
 
 
@@ -63,16 +63,16 @@ export default class Task implements ITask {
         if ((cur === undefined ? undefined : cur.value) === val)
             return;
         this.completedOnSignal(value);
-        this.app.data.sync.pushField("task.completedOn", this, val);
+        this.app.sync.pushField("task.completedOn", this, val);
     }
 
     addLabel(l: ILabel): void {
         this.associatedLabels.push(l);
-        this.app.data.sync.pushField("task.associatedLabels.add", this, l.id);
+        this.app.sync.pushField("task.associatedLabels.add", this, l.id);
     }
 
     removeLabel(l: ILabel): void {
         this.associatedLabels.remove(l);
-        this.app.data.sync.pushField("task.associatedLabels.remove", this, l.id);
+        this.app.sync.pushField("task.associatedLabels.remove", this, l.id);
     }
 }
