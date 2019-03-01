@@ -37,20 +37,13 @@ document.addEventListener("DOMContentLoaded",
 
 export default class App implements IApp {
 
-    readonly clock: IClock;
-    readonly serializer: ISerializer;
-    readonly localStore: IDataStore;
-    readonly sync: ISyncLog;
-    readonly data: IData;
+    readonly clock: IClock = new Clock();
+    readonly serializer: ISerializer = new Serializer(this);
+    readonly localStore: IDataStore = new LocalStore();
+    readonly sync: ISyncLog = new SyncLog(this);
+    readonly data: IData = new Data(this);
 
     constructor() {
-
-        this.clock = new Clock();
-        this.clock = new Clock();
-        this.serializer = new Serializer(this);
-        this.localStore = new LocalStore();
-        this.sync = new SyncLog(this);
-        this.data = new Data(this);
 
         AppDataOps.loadAppData(this);
 

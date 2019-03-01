@@ -2,7 +2,7 @@
         IApp,
         ISyncLog,
         ISyncEvent,
-        WhatEvent,
+        SyncChangeType,
         ITask,
         ILabel,
         ILabelCreateEvent,
@@ -34,11 +34,11 @@ export default class SyncLog implements ISyncLog {
     }
 
 
-    private push(we: WhatEvent, data: any) {
+    private push(type: SyncChangeType, data: any) {
         const se: ISyncEvent = {
             eventId: ++this.eventIdCounter,
             on: this.app.clock.now().value,
-            what: we,
+            type: type,
             data: data
         };
         this.ses.push(se);
@@ -53,11 +53,11 @@ export default class SyncLog implements ISyncLog {
     }
 
 
-    pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value?: T) {
+    pushField<T extends SimpleType>(type: SyncChangeType, o: IDomainObject, value?: T) {
         C.assume(o.version >= 1);
         ++o.version;
         const d: IFieldChangeEvent = { id: o.id, version: o.version, value: value };
-        this.push(we, d);
+        this.push(type, d);
     }
 
 

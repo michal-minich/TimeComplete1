@@ -166,7 +166,7 @@ export interface IData {
 
 
 export interface ISyncLog {
-    pushField<T extends SimpleType>(we: WhatEvent, o: IDomainObject, value?: T): void;
+    pushField<T extends SimpleType>(we: SyncChangeType, o: IDomainObject, value?: T): void;
     pushDelete(o: IDomainObject): void;
     pushLabelCreate(l: ILabel): void;
     pushTaskCreate(t: ITask): void;
@@ -178,20 +178,14 @@ export interface ISyncLog {
 // Sync =======================================================================
 
 
-export interface IChange {
-    what: WhatEvent;
-    data: any;
-}
-
-
-export interface ISyncEvent extends IChange {
+export interface ISyncEvent {
     eventId: number;
     on: number;
-    what: WhatEvent;
-    data: any;
+    type: SyncChangeType;
+    data: IDomainObjectCreateEvent | IFieldChangeEvent | IDeleteEvent;
 }
 
-export type WhatEvent =
+export type SyncChangeType =
 
     // domain objects
     | "object.create"

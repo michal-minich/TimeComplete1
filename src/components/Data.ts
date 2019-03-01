@@ -1,13 +1,14 @@
 ﻿import {
         IData,
         ITask,
-        WritableArraySignal,
+        ArraySignal,
         ILabel,
         INote,
         IDataFields,
         IApp,
         ITab,
         IDashboard,
+        WritableArraySignal,
     } from
     "../interfaces";
 
@@ -15,10 +16,10 @@
 export default class Data implements IData {
 
 
-    tasks!: WritableArraySignal<ITask>;
-    labels!: WritableArraySignal<ILabel>;
-    notes!: WritableArraySignal<INote>;
-    tabs!: WritableArraySignal<ITab>;
+    tasks!: ArraySignal<ITask>;
+    labels!: ArraySignal<ILabel>;
+    notes!: ArraySignal<INote>;
+    tabs!: ArraySignal<ITab>;
     fields!: IDataFields;
 
 
@@ -49,49 +50,49 @@ export default class Data implements IData {
     
 
     taskAdd(t: ITask): void {
-        this.tasks.unshift(t);
+        (this.tasks as WritableArraySignal<ITask>).unshift(t);
         this.app.sync.pushTaskCreate(t);
     }
 
 
     taskDelete(t: ITask): void {
-        this.tasks.remove(t);
+        (this.tasks as WritableArraySignal<ITask>).remove(t);
         this.app.sync.pushDelete(t);
     }
 
 
     labelAdd(l: ILabel): void {
-        this.labels.unshift(l);
+        (this.labels as WritableArraySignal<ILabel>).unshift(l);
         this.app.sync.pushLabelCreate(l);
     }
 
 
     labelDelete(l: ILabel): void {
-        this.labels.remove(l);
+        (this.labels as WritableArraySignal<ILabel>).remove(l);
         this.app.sync.pushDelete(l);
     }
 
 
     noteAdd(n: INote): void {
-        this.notes.unshift(n);
+        (this.notes as WritableArraySignal<INote>).unshift(n);
         this.app.sync.pushNoteCreate(n);
     }
 
 
     noteDelete(n: INote): void {
-        this.notes.remove(n);
+        (this.notes as WritableArraySignal<INote>).remove(n);
         this.app.sync.pushDelete(n);
     }
 
 
     tabAdd(t: ITab): void {
-        this.tabs.push(t);
+        (this.tabs as WritableArraySignal<ITab>).push(t);
         this.app.sync.pushTabCreate(t);
     }
 
 
     tabDelete(t: ITab): void {
-        this.tabs.remove(t);
+        (this.tabs as WritableArraySignal<ITab>).remove(t);
         this.app.sync.pushDelete(t);
     }
 }
