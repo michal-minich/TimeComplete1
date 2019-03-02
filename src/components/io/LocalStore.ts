@@ -12,7 +12,7 @@ export default class LocalStore implements IDataStore {
     load<T extends object>(key: string): T {
         const value = this.loadOrUndefined<T>(key);
         if (value === undefined)
-            throw new Error();
+            throw new Error("Value of key '" + key + "' is undefined.");
         return value;
     }
 

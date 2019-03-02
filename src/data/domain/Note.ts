@@ -17,26 +17,22 @@ export default class Note implements INote {
         title: string,
         text: string,
         public version: number,
-        id?: number,
-        createdOn?: IDateTime) {
+        readonly id: number,
+        readonly createdOn: IDateTime) {
 
         this.titleSignal = R.data(title);
         this.textSignal = R.data(text);
         this.associatedLabels = R.array([]);
+    }
 
-        if (id) {
-            this.id = id;
-            this.createdOn = createdOn!;
-        } else {
-            this.id = this.app.data.getNextId();
-            this.createdOn = this.app.clock.now();
-        }
+
+    static createNew(app: IApp, title: string, text: string, version: number): INote {
+        const n = new Note(app, title, text, version, app.data.getNextId(), app.clock.now());
+        return n;
     }
 
 
     readonly type = "note";
-    id: number;
-    createdOn: IDateTime;
     associatedLabels: WritableArraySignal<ILabel>;
     readonly textSignal: ValueSignal<string>;
     readonly titleSignal: ValueSignal<string>;

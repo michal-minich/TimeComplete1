@@ -11,19 +11,16 @@ import { R } from "../../common";
 
 export default class Label implements ILabel {
 
-    private constructor(
+    constructor(
         private readonly app: IApp,
         name: string,
         readonly style: IColorStyle,
         public version: number,
-        id: number,
-        createdOn: IDateTime) {
+        readonly id: number,
+        readonly createdOn: IDateTime) {
 
         this.nameSignal = R.data(name);
         style.owner = this;
-        this.style = style;
-        this.id = id;
-        this.createdOn = createdOn;
     }
 
 
@@ -32,24 +29,11 @@ export default class Label implements ILabel {
         return l;
     }
 
-
-    static createFromStore(app: IApp,
-        name: string,
-        style: IColorStyle,
-        version: number,
-        id: number,
-        createdOn: IDateTime): ILabel {
-
-        return new Label(app, name, style, version, id, createdOn);
-    }
-
-
+    
     private readonly nameSignal: ValueSignal<string>;
 
 
     readonly type = "label";
-    id: number;
-    createdOn: IDateTime;
 
 
     get name(): string { return this.nameSignal(); }

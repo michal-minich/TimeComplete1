@@ -135,7 +135,7 @@ export default class Serializer implements ISerializer {
         case "Label":
         {
             Serializer.usedIds.push(o.id as number);
-            const l = Label.createFromStore(
+            const l = new Label(
                 this.app,
                 o.name,
                 this.getColorStyle(o.style, o),
