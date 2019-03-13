@@ -3,7 +3,7 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import { IApp } from "../../interfaces";
-import popupView from "../PopupView";
+import PopupView from "../PopupView";
 
 
 export type TaskMenuView = ReturnType<typeof taskMenuView>
@@ -23,7 +23,7 @@ export default function taskMenuView(app: IApp) {
         </ul>;
 
 
-    const popup = popupView(app, view);
+    const popup = new PopupView(app, view);
 
 
     return { view: popup.view, showBelow: popup.showBelow };

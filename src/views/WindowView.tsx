@@ -2,33 +2,40 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp } from "../interfaces";
+import { IApp, IWindowView } from "../interfaces";
 
 
-export type WindowView = ReturnType<typeof windowView>
+export default class WindowView implements IWindowView {
+
+    constructor(
+        public readonly app: IApp,
+        content: HTMLElement) {
+
+        this.view = this.render(content);
+    }
 
 
-export default function windowView(app: IApp, content: HTMLElement) {
+    readonly view: HTMLElement;
 
 
-    const view =
-        <div className="window hidden">
-            {content}
-        </div>; 
+    private render(content: HTMLElement): HTMLElement {
+        const view =
+            <div className="window hidden">
+                {content}
+            </div>;
+        return view;
+    }
 
 
-    function showBelow(el: HTMLElement): void {
+    showBelow(el: HTMLElement): void {
         const r = el.getBoundingClientRect();
-        view.style.left = (r.left) + "px";
-        view.style.top = (r.top + r.height + 0) + "px";
-        view.classList.toggle("hidden");
+        this.view.style.left = (r.left) + "px";
+        this.view.style.top = (r.top + r.height + 0) + "px";
+        this.view.classList.toggle("hidden");
     }
 
 
-    function hide() {
-        view.classList.add("hidden");
+    hide() {
+        this.view.classList.add("hidden");
     }
-
-
-    return { view, showBelow, hide };
 }

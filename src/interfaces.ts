@@ -319,3 +319,13 @@ export interface ISerializer {
 
 
 // Views ======================================================================
+
+
+export interface IWindowView {
+    readonly view: HTMLElement;
+    showBelow(el: HTMLElement): void;
+    hide(): void;
+}
+
+export interface IPopupView extends IWindowView {
+}

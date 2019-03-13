@@ -8,7 +8,7 @@ import labelAddView, { labelAddViewState } from "./LabelAddView";
 import { colorInlineStyle } from "../MainView";
 import { onMouseDown } from "../../common";
 import { R } from "../../common";
-import popupView from "../PopupView";
+import PopupView from "../PopupView";
 
 
 // export type LabelsPopupView = ReturnType<typeof labelsPopupView>
@@ -61,7 +61,7 @@ export default function labelsPopupView(
         </div>;
 
 
-    const view = popupView(app, content);
+    const view = new PopupView(app, content);
 
 
     function keyUp(e: KeyboardEvent): void {

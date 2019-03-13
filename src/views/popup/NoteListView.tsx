@@ -4,7 +4,7 @@ import * as Surplus from "surplus";
 Surplus;
 import { IApp, INote } from "../../interfaces";
 
-import popupView from "../PopupView";
+import PopupView from "../PopupView";
 import NoteDashItem from "../../data/dash/NoteDashItem";
 
 export type PopupView = ReturnType<typeof noteListView>
@@ -19,7 +19,7 @@ export default function noteListView(app: IApp) {
         </div>;
 
 
-    const popView = popupView(app, view);
+    const popView = new PopupView(app, view);
 
 
     function activateNote(n: INote) {

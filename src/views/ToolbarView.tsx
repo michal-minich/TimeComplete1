@@ -8,7 +8,7 @@ import TasksDashItem from "../data/dash/TasksDashItem";
 import { LabelsPopupView } from "./popup/LabelsPopupView";
 import { LabelEditView } from "./popup/LabelEditView";
 import Note from "../data/domain/Note";
-import popupView from "./PopupView";
+import PopupView from "./PopupView";
 import noteListView from "./popup/NoteListView";
 import NoteDashItem from "../data/dash/NoteDashItem";
 import { R, getButton} from "../common";
@@ -48,8 +48,8 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
             <li onClick={() => AppDataOps.importData(app.localStore)}>Import Data</li>
         </ul>;
 
-    const amv = popupView(app, addMenu);
-    const mmv = popupView(app, moreMenu);
+    const amv = new PopupView(app, addMenu);
+    const mmv = new PopupView(app, moreMenu);
     const nlv = noteListView(app);
 
 

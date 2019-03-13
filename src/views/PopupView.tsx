@@ -2,31 +2,52 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp } from "../interfaces";
-import windowView from "./windowView";
+import { IApp, IPopupView, IWindowView } from "../interfaces";
+import WindowView from "./windowView";
 
 
-export type PopupView = ReturnType<typeof popupView>
+export default class PopupView implements IPopupView {
+
+    constructor(
+        public readonly app: IApp,
+        content: HTMLElement) {
+
+        this.vw = new WindowView(app, content);
+    }
+
+    private x = 0;
+    private readonly vw: IWindowView;
 
 
-export default function popupView(app: IApp, content: HTMLElement) {
-
-    let x = 0;
-    const vw = windowView(app, content);
-
-
-    function hideMe(e: MouseEvent) {
-        if (hasParent(e.target as HTMLElement, vw.view))
-            return;
-        ++x;
-        if (x <= 1)
-            return;
-        vw.view.classList.add("hidden");
-        document.removeEventListener("mousedown", hideMe);
+    get view(): HTMLElement {
+        return this.vw.view;
     }
 
 
-    function hasParent(el: HTMLElement, parent: HTMLElement): boolean {
+    hide(): void {
+        this.vw.hide();
+    }
+
+
+    showBelow(el: HTMLElement): void {
+        this.vw.showBelow(el);
+        this.x = 0;
+        document.addEventListener("mousedown", this.hideMe);
+    }
+
+
+    private hideMe(e: MouseEvent) {
+        if (this.hasParent(e.target as HTMLElement, this.vw.view))
+            return;
+        ++this.x;
+        if (this.x <= 1)
+            return;
+        this.vw.hide();
+        document.removeEventListener("mousedown", this.hideMe);
+    }
+
+
+    private hasParent(el: HTMLElement, parent: HTMLElement): boolean {
         let e: HTMLElement | null = el;
         while (true) {
             if (!e)
@@ -36,14 +57,4 @@ export default function popupView(app: IApp, content: HTMLElement) {
             e = e.parentElement;
         }
     }
-
-
-    function showBelow(el: HTMLElement): void {
-        vw.showBelow(el);
-        x = 0;
-        document.addEventListener("mousedown", hideMe);
-    }
-
-
-    return { view: vw.view, showBelow, hide: vw.hide };
-};
+}

@@ -3,7 +3,7 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import { IApp, INoteDashItem, IDashboard } from "../../interfaces";
-import popupView from "../PopupView";
+import PopupView from "../PopupView";
 import NoteDashItem from "../../data/dash/NoteDashItem";
 
 
@@ -44,7 +44,7 @@ export default function noteMenuView(app: IApp) {
         </ul>;
 
 
-    const popup = popupView(app, view);
+    const popup = new PopupView(app, view);
 
 
     return { view: popup.view, showBelow: popup.showBelow };

@@ -8,7 +8,7 @@ import ColorStyle from "../../data/value/ColorStyle";
 import Color from "../../data/value/Color";
 import { ILabel, IApp, ValueSignal } from "../../interfaces";
 import { R } from "../../common";
-import windowView from "./../windowView";
+import WindowView from "./../windowView";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
@@ -47,7 +47,7 @@ export default function labelEditView(a: IApp) {
         </div>;
 
 
-    const wv = windowView(a, view);
+    const wv = new WindowView(a, view);
 
 
     function begin(label: ILabel, el: HTMLSpanElement): void {
