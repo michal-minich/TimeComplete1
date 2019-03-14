@@ -339,6 +339,13 @@ export interface INoteListView extends IPopupView {
 export interface INoteMenuView extends IPopupView {
 }
 
+export interface ITaskMenuView extends IPopupView {
+}
+
+export interface ILabelEditView extends IView {
+    begin(label: ILabel, el: HTMLSpanElement): void;
+}
+
 export interface IToolbarView extends IView {
     readonly view: HTMLElement;
     readonly addMenuView: IPopupView;

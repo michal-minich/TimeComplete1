@@ -11,7 +11,8 @@ import NoteDashItem from "../../data/dash/NoteDashItem";
 export default class NoteListView implements INoteListView {
 
     constructor(private readonly app: IApp) {
-        const v = NoteListView.render(this);
+
+        const v = this.render();
         this.popView = new PopupView(app, v);
     }
 
@@ -19,10 +20,10 @@ export default class NoteListView implements INoteListView {
     private popView: IPopupView;
 
 
-    private static render(self: NoteListView) {
+    private render() {
         const view =
             <div className="note-list">
-                {self.app.data.notes().map(self.noteView)}
+                {this.app.data.notes().map(this.noteView)}
             </div>;
         return view;
     }
@@ -38,20 +39,18 @@ export default class NoteListView implements INoteListView {
     }
 
 
-    activateNote(n: INote) {
+    private activateNote: (n: INote) => void = (n) => {
         this.app.data.dashboard.unshift(new NoteDashItem(this.app, n));
         this.popView.hide();
     }
 
 
-    noteView(n: INote) {
-
+    private noteView: (n: INote) => HTMLElement = (n) => {
         const v =
             <div className="note"
                  onClick={() => this.activateNote(n)}>
                 {(n.title + ": " + n.text).substring(0, 100)}
             </div>;
-
         return v;
     }
 

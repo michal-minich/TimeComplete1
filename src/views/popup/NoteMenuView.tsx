@@ -17,7 +17,7 @@ export default class NoteMenuView implements INoteMenuView {
 
     constructor(private readonly app: IApp) {
 
-        const v = NoteMenuView.render(this);
+        const v = this.render();
         this.popup = new PopupView(this.app, v);
     }
 
@@ -40,7 +40,7 @@ export default class NoteMenuView implements INoteMenuView {
     }
 
 
-    private closeSelected() {
+    private closeSelected: () => void = () => {
         const n = this.app.data.dashboard.selected()!;
         this.app.data.dashboard.remove(n);
         // ReSharper disable VariableUsedInInnerScopeBeforeDeclared
@@ -49,7 +49,7 @@ export default class NoteMenuView implements INoteMenuView {
     }
 
 
-    private deleteNote() {
+    private deleteNote: () => void = () => {
         const ndi = this.app.data.dashboard.selected()! as INoteDashItem;
         const n = ndi.note;
         for (const tab of this.app.data.tabs()) {
@@ -65,11 +65,11 @@ export default class NoteMenuView implements INoteMenuView {
     }
 
 
-    private static render(self: NoteMenuView) {
+    private render() {
         const view =
             <ul className="more-menu menu">
-                <li onMouseDown={self.closeSelected}>Close</li>
-                <li onMouseDown={self.deleteNote}>Delete</li>
+                <li onMouseDown={this.closeSelected}>Close</li>
+                <li onMouseDown={this.deleteNote}>Delete</li>
             </ul>;
         return view;
     }

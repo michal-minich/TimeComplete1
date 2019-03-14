@@ -6,121 +6,127 @@ import data from "surplus-mixin-data";
 import { colorInlineStyle } from "../MainView";
 import ColorStyle from "../../data/value/ColorStyle";
 import Color from "../../data/value/Color";
-import { ILabel, IApp, ValueSignal } from "../../interfaces";
+import { ILabel, IApp, ValueSignal, ILabelEditView, IWindowView } from "../../interfaces";
 import { R } from "../../common";
 import WindowView from "./../windowView";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
-export type LabelEditView = ReturnType<typeof labelEditView>;
+export default class LabelEditView implements ILabelEditView {
 
-
-export default function labelEditView(a: IApp) {
-
-    const editLabelName = R.data("");
-    const editColor = R.data("");
-    const labelSignal: ValueSignal<ILabel | undefined> = R.data(undefined);
-
-    const view =
-        <div className="edit-label">
-            <span
-                className="label"
-                style={colorInlineStyle(new ColorStyle(
-                    a,
-                    new Color(editColor()),
-                    new Color("white")))}>
-                {editLabelName}
-            </span>
-            <br/>
-            <input type="text"
-                   fn={data(editLabelName)}
-                   onKeyUp={(e: KeyboardEvent) => keyUp(e)}/>
-            <br/>
-            <input type="text"
-                   fn={data(editColor)}
-                   onKeyUp={(e: KeyboardEvent) => keyUp(e)}/>
-            <br/>
-            <button onClick={() => confirm()}>Ok</button>
-            <button onClick={() => cancel()}>Cancel</button>
-            <button onClick={() => del()}>Delete</button>
-            <button onClick={() => showTaskList()}>Show Task List</button>
-        </div>;
-
-
-    const wv = new WindowView(a, view);
-
-
-    function begin(label: ILabel, el: HTMLSpanElement): void {
-        wv.showBelow(el);
-        editLabelName(label.name);
-        editColor(label.style.backColor.value);
-        labelSignal(label);
+    constructor(private readonly app: IApp) {
+        this.window = new WindowView(app, this.render());
     }
 
 
-    function confirm(): void {
-        const l = labelSignal()!;
+    private readonly window: IWindowView;
+    private readonly editLabelName = R.data("");
+    private readonly editColor = R.data("");
+    private readonly labelSignal: ValueSignal<ILabel | undefined> = R.data(undefined);
 
-        for (const di of a.data.dashboard.items()) {
+
+    private render() {
+        const view =
+            <div className="edit-label">
+                <span
+                    className="label"
+                    style={colorInlineStyle(new ColorStyle(
+                        this.app,
+                        new Color(this.editColor()),
+                        new Color("white")))}>
+                    {this.editLabelName}
+                </span>
+                <br/>
+                <input type="text"
+                       fn={data(this.editLabelName)}
+                       onKeyUp={this.keyUp}/>
+                <br/>
+                <input type="text"
+                       fn={data(this.editColor)}
+                       onKeyUp={this.keyUp}/>
+                <br/>
+                <button onClick={this.confirm}>Ok</button>
+                <button onClick={this.cancel}>Cancel</button>
+                <button onClick={this.del}>Delete</button>
+                <button onClick={this.showTaskList}>Show Task List</button>
+            </div>;
+        return view;
+    }
+
+
+    get view() {
+        return this.window.view;
+    }
+
+
+    begin(label: ILabel, el: HTMLSpanElement): void {
+        this.window.showBelow(el);
+        this.editLabelName(label.name);
+        this.editColor(label.style.backColor.value);
+        this.labelSignal(label);
+    }
+
+
+    private confirm: () => void = () => {
+        const l = this.labelSignal()!;
+
+        for (const di of this.app.data.dashboard.items()) {
             if (!(di instanceof TasksDashItem))
                 continue;
             const qt = R.sample(di.query.text);
             di.query.text(qt.replace("#" + l.name,
-                "#" + editLabelName()));
+                "#" + this.editLabelName()));
         }
 
-        l.name = editLabelName();
-        l.style.backColor = new Color(editColor());
-        cleanup();
+        l.name = this.editLabelName();
+        l.style.backColor = new Color(this.editColor());
+        this.cleanup();
     }
 
 
-    function cancel(): void {
-        cleanup();
+    private cancel: () => void = () => {
+        this.cleanup();
     }
 
 
-    function cleanup(): void {
-        wv.hide();
-        labelSignal(undefined);
-        editLabelName("");
-        editColor("");
+    private cleanup: () => void = () => {
+        this.window.hide();
+        this.labelSignal(undefined);
+        this.editLabelName("");
+        this.editColor("");
     }
 
 
-    function del(): void {
+    private del: () => void = () => {
         R.freeze(() => {
-            const l = labelSignal()!;
-            for (const t of a.data.tasks()) {
+            const l = this.labelSignal()!;
+            for (const t of this.app.data.tasks()) {
                 t.removeLabel(l);
             }
-            for (const di of a.data.dashboard.items()) {
+            for (const di of this.app.data.dashboard.items()) {
                 if (!(di instanceof TasksDashItem))
                     continue;
                 const qt = R.sample(di.query.text);
                 di.query.text(qt.replace("#" + l.name, ""));
             }
-            a.data.labelDelete(l);
-            cleanup();
+            this.app.data.labelDelete(l);
+            this.cleanup();
         });
     }
 
 
-    function keyUp(e: KeyboardEvent): void {
+    private keyUp: (e: KeyboardEvent) => void = (e) => {
         if (e.key === "Enter") {
             confirm();
         } else if (e.key === "Escape") {
-            cancel();
+            this.cancel();
         }
     }
 
 
-    function showTaskList(): void {
-        const l = labelSignal()!;
-        const tdi = new TasksDashItem(a, a.data.fields.labelPrefix + l.name);
-        a.data.dashboard.unshift(tdi);
+    private showTaskList: () => void = () => {
+        const l = this.labelSignal()!;
+        const tdi = new TasksDashItem(this.app, this.app.data.fields.labelPrefix + l.name);
+        this.app.data.dashboard.unshift(tdi);
     }
-
-    
-    return { view: wv.view, begin };
-};
+}

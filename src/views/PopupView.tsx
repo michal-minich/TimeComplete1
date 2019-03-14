@@ -13,37 +13,37 @@ export default class PopupView implements IPopupView {
         private readonly app: IApp,
         content: HTMLElement) {
 
-        this.vw = new WindowView(app, content);
+        this.window = new WindowView(app, content);
     }
 
     private counter = 0;
-    private readonly vw: IWindowView;
+    private readonly window: IWindowView;
 
 
     get view(): HTMLElement {
-        return this.vw.view;
+        return this.window.view;
     }
 
 
-    hide(): void {
-        this.vw.hide();
+    hide :()=> void = () => {
+        this.window.hide();
     }
 
 
     showBelow(el: HTMLElement): void {
-        this.vw.showBelow(el);
+        this.window.showBelow(el);
         this.counter = 0;
         document.addEventListener("mousedown", this.hideMe);
     }
 
 
-    private hideMe(e: MouseEvent) {
-        if (parentDistance(e.target as HTMLElement, this.vw.view) !== -1)
+    private hideMe: (e: MouseEvent) => void = (e) => {
+        if (parentDistance(e.target as HTMLElement, this.window.view) !== -1)
             return;
         ++this.counter;
         if (this.counter <= 1)
             return;
-        this.vw.hide();
+        this.window.hide();
         document.removeEventListener("mousedown", this.hideMe);
     }
 }

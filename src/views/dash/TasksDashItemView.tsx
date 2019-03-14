@@ -3,13 +3,12 @@
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ITasksDashItem, ILabel, IDashItem, ITask } from "../../interfaces";
+import { IApp, ITasksDashItem, IDashItem, ITask, ITaskMenuView } from "../../interfaces";
 import { LabelsPopupView } from "./../popup/LabelsPopupView";
 import taskListView from "./TaskListView";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 import taskAddView from "./TaskAddView";
 import { getButton, R } from "../../common";
-import { TaskMenuView } from "../popup/TaskMenuView";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
@@ -44,7 +43,7 @@ export function tasksDashItemView(app: IApp,
     tdi: ITasksDashItem,
     lpv: LabelsPopupView,
     ettv: TaskTitleEditView,
-    tasksMenu: TaskMenuView) {
+    tasksMenu: ITaskMenuView) {
 
     let originalTitle = "";
     const showFilteredOut = R.data(false);

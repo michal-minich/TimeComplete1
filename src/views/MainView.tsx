@@ -2,14 +2,14 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, IColorStyle, IMainView, IWindowView } from "../interfaces";
+import { IApp, IColorStyle, IMainView } from "../interfaces";
 import labelsPopupView from "./popup/LabelsPopupView";
 import { removeTextSelections } from "../common";
-import labelEditView from "./popup/LabelEditView";
+import LabelEditView from "./popup/LabelEditView";
 import tabsView from "./TabsView";
 import ToolbarView from "./ToolbarView";
 import dashboardView from "./dash/DashboardView";
-import taskMenuView from "./popup/TaskMenuView";
+import TaskMenuView from "./popup/TaskMenuView";
 import NoteMenuView from "./popup/NoteMenuView";
 
 
@@ -36,9 +36,9 @@ export default class MainView implements IMainView {
 
     constructor(private readonly app: IApp) {
 
-        const tm = taskMenuView(app);
+        const tm = new TaskMenuView(app);
         const nm = new NoteMenuView(app);
-        const elv = labelEditView(app);
+        const elv = new LabelEditView(app);
         const lpv = labelsPopupView(app, app.data.labels);
         const toolbar = new ToolbarView(app, elv, lpv);
 

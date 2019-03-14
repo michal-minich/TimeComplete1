@@ -2,29 +2,47 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp } from "../../interfaces";
+import { IApp, ITaskMenuView, IPopupView } from "../../interfaces";
 import PopupView from "../PopupView";
 
 
-export type TaskMenuView = ReturnType<typeof taskMenuView>
+export default class TaskMenuView implements ITaskMenuView {
 
-export default function taskMenuView(app: IApp) {
+    constructor(private readonly app: IApp) {
 
-
-    function closeSelected() {
-        const n = app.data.dashboard.selected()!;
-        app.data.dashboard.remove(n);
+        this.popup = new PopupView(app, this.render());
     }
 
 
-    const view =
-        <ul className="more-menu menu">
-            <li onMouseDown={closeSelected}>Close</li>
-        </ul>;
+    private readonly popup: IPopupView;
 
 
-    const popup = new PopupView(app, view);
+    get view() {
+        return this.popup.view;
+    }
 
 
-    return { view: popup.view, showBelow: popup.showBelow };
+    hide(): void {
+        this.popup.hide();
+    }
+
+
+    showBelow(el: HTMLElement): void {
+        this.popup.showBelow(el);
+    }
+
+
+    closeSelected: () => void = () => {
+        const n = this.app.data.dashboard.selected()!;
+        this.app.data.dashboard.remove(n);
+    }
+
+
+    private render() {
+        const view =
+            <ul className="more-menu menu">
+                <li onMouseDown={this.closeSelected}>Close</li>
+            </ul>;
+        return view;
+    }
 }
