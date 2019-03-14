@@ -3,93 +3,116 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp } from "../interfaces";
+import { IApp, IToolbarView, IPopupView, INoteListView } from "../interfaces";
 import TasksDashItem from "../data/dash/TasksDashItem";
 import { LabelsPopupView } from "./popup/LabelsPopupView";
 import { LabelEditView } from "./popup/LabelEditView";
 import Note from "../data/domain/Note";
 import PopupView from "./PopupView";
-import noteListView from "./popup/NoteListView";
+import NoteListView from "./popup/NoteListView";
 import NoteDashItem from "../data/dash/NoteDashItem";
 import { R, getButton} from "../common";
 import { AppDataOps } from "../operations/AppDataOps";
 
 
-export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPopupView) {
+export default class ToolbarView implements IToolbarView {
 
-    const addMenu =
-        <ul className="add-menu menu">
-            <li onClick={addTaskList}>Add New Task List</li>
-            <li onClick={addNote}>Add New Note</li>
-        </ul>;
+    constructor(
+        readonly app: IApp,
+        readonly elv: LabelEditView,
+        readonly lpv: LabelsPopupView) {
 
-    const autoCols = R.data(true);
-
-    const moreMenu =
-        <ul className="more-menu menu">
-            <li className="columns-menu">
-                <span>Columns</span>
-                <input type="checkbox" id="auto-columns-count" fn={data(autoCols)}/>
-                <label htmlFor="auto-columns-count">Auto</label>
-                <fieldset disabled={autoCols()}>
-                    <button onMouseDown={() => --app.data.dashboard.columnsCount}>-</button>
-                    <span className="dash-columns-input">{() => app.data.dashboard.columnsCount}</span>
-                    <button onMouseDown={() => ++app.data.dashboard.columnsCount}>+</button>
-                </fieldset>
-            </li>
-            <li>
-                <input
-                    className="view-filter"
-                    type="search"
-                    placeholder="View Filter"
-                    fn={data(app.data.dashboard.query.text)}/>
-            </li>
-            <li onMouseDown={() => AppDataOps.exportData(app.localStore)}>Export Data</li>
-            <li onClick={() => AppDataOps.importData(app.localStore)}>Import Data</li>
-        </ul>;
-
-    const amv = new PopupView(app, addMenu);
-    const mmv = new PopupView(app, moreMenu);
-    const nlv = noteListView(app);
-
-
-    function addNote() {
-        const n = Note.createNew(app, "Note", "", 1);
-        app.data.noteAdd(n);
-        amv.hide();
-        app.data.dashboard.unshift(new NoteDashItem(app, n));
+        this.view = ToolbarView.render(this);
+        this.addMenuView = new PopupView(this.app, ToolbarView.renderAddMenu(this));
+        this.noteListView = new NoteListView(this.app);
+        this.moreMenuView = new PopupView(this.app, ToolbarView.renderMoreMenu(this));
     }
 
 
-    function addTaskList() {
-        const tdi = new TasksDashItem(app, "");
-        app.data.dashboard.unshift(tdi);
-        amv.hide();
+    private readonly autoCols = R.data(true);
+    readonly view: HTMLElement;
+    readonly addMenuView: IPopupView;
+    readonly noteListView: INoteListView;
+    readonly moreMenuView: IPopupView;
+
+
+    private static renderAddMenu(self: ToolbarView) {
+        const view =
+            <ul className="add-menu menu">
+                <li onClick={self.addTaskList}>Add New Task List</li>
+                <li onClick={self.addNote}>Add New Note</li>
+            </ul>;
+        return view;
     }
 
 
-    function showLabels(e: MouseEvent) {
-        lpv.show(getButton(e.target), undefined, (l, el) => elv.begin(l, el));
+    private static renderMoreMenu(self: ToolbarView) {
+        const view =
+            <ul className="more-menu menu">
+                <li className="columns-menu">
+                    <span>Columns</span>
+                    <input type="checkbox" id="auto-columns-count" fn={data(self.autoCols)}/>
+                    <label htmlFor="auto-columns-count">Auto</label>
+                    <fieldset disabled={self.autoCols()}>
+                        <button onMouseDown=
+                                {() => --self.app.data.dashboard.columnsCount}>-</button>
+                        <span className="dash-columns-input">{() => self.app.data.dashboard
+                            .columnsCount}</span>
+                        <button onMouseDown=
+                                {() => ++self.app.data.dashboard.columnsCount}>+</button>
+                    </fieldset>
+                </li>
+                <li>
+                    <input
+                        className="view-filter"
+                        type="search"
+                        placeholder="View Filter"
+                        fn={data(self.app.data.dashboard.query.text)}/>
+                </li>
+                <li onMouseDown={() => AppDataOps.exportData(self.app.localStore)}>Export Data</li>
+                <li onClick={() => AppDataOps.importData(self.app.localStore)}>Import Data</li>
+            </ul>;
+        return view;
     }
 
 
-    function showNoteListView(e: MouseEvent) {
-        nlv.showBelow(getButton(e.target));
+    private addNote() {
+        const n = Note.createNew(this.app, "Note", "", 1);
+        this.app.data.noteAdd(n);
+        this.addMenuView.hide();
+        this.app.data.dashboard.unshift(new NoteDashItem(this.app, n));
     }
 
 
-    function showAddMenu(e: MouseEvent) {
-        amv.showBelow(getButton(e.target));
+    private addTaskList() {
+        const tdi = new TasksDashItem(this.app, "");
+        this.app.data.dashboard.unshift(tdi);
+        this.addMenuView.hide();
     }
 
 
-    function showMoreMenu(e: MouseEvent) {
-        mmv.showBelow(getButton(e.target));
+    private showLabels(e: MouseEvent) {
+        this.lpv.show(getButton(e.target), undefined, (l, el) => this.elv.begin(l, el));
     }
 
 
-    function selectedTabColor() {
-        const tab = app.data.tabs()[app.data.fields.selectedTabIndex];
+    private showNoteListView(e: MouseEvent) {
+        this.noteListView.showBelow(getButton(e.target));
+    }
+
+
+    private showAddMenu(e: MouseEvent) {
+        this.addMenuView.showBelow(getButton(e.target));
+    }
+
+
+    private showMoreMenu(e: MouseEvent) {
+        this.moreMenuView.showBelow(getButton(e.target));
+    }
+
+
+    private selectedTabColor() {
+        const tab = this.app.data.tabs()[this.app.data.fields.selectedTabIndex];
         if (tab.style)
             return tab.style.backColor.value;
         else
@@ -97,28 +120,23 @@ export default function toolbarView(app: IApp, elv: LabelEditView, lpv: LabelsPo
     }
 
 
-    const view =
-        <div className="toolbar"
-             style={{ borderTopColor: selectedTabColor() }}>
-            <span className="menu-button button" onMouseDown={showLabels}>
-                Labels <span className="drop-down-triangle">&#x25BC;</span>
-            </span>
-            <span className="menu-button button" onMouseDown={showNoteListView}>
-                Notes <span className="drop-down-triangle">&#x25BC;</span>
-            </span>
-            <span className="menu-button button" onMouseDown={showAddMenu}>
-                Add <span className="drop-down-triangle">&#x25BC;</span>
-            </span>
-            <span className="menu-button button" onMouseDown={showMoreMenu}>
-                More <span className="drop-down-triangle">&#x25BC;</span>
-            </span>
-        </div>;
-
-
-    return {
-        view,
-        addMenuView: amv.view,
-        noteListView: nlv.view,
-        moreMenuView: mmv.view
-    };
+    private static render(self: ToolbarView): HTMLElement {
+        const view =
+            <div className="toolbar"
+                 style={{ borderTopColor: self.selectedTabColor() }}>
+                <span className="menu-button button" onMouseDown={self.showLabels}>
+                    Labels <span className="drop-down-triangle">&#x25BC;</span>
+                </span>
+                <span className="menu-button button" onMouseDown={self.showNoteListView}>
+                    Notes <span className="drop-down-triangle">&#x25BC;</span>
+                </span>
+                <span className="menu-button button" onMouseDown={self.showAddMenu}>
+                    Add <span className="drop-down-triangle">&#x25BC;</span>
+                </span>
+                <span className="menu-button button" onMouseDown={self.showMoreMenu}>
+                    More <span className="drop-down-triangle">&#x25BC;</span>
+                </span>
+            </div>;
+        return view;
+    }
 }

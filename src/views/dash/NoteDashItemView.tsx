@@ -2,10 +2,9 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, INoteDashItem } from "../../interfaces";
+import { IApp, INoteDashItem, INoteMenuView } from "../../interfaces";
 import data from "surplus-mixin-data";
 import { getButton } from "../../common";
-import { NoteMenuView } from "../popup/NoteMenuView";
 import { queryBorder } from "./TasksDashItemView";
 
 
@@ -17,7 +16,7 @@ let originalTitle = "";
 export function noteDashItemView(
     app: IApp,
     ndi: INoteDashItem,
-    noteMenu: NoteMenuView) {
+    noteMenu: INoteMenuView) {
 
 
     function showMenu(e: MouseEvent) {

@@ -320,12 +320,27 @@ export interface ISerializer {
 
 // Views ======================================================================
 
-
-export interface IWindowView {
+export interface IView {
     readonly view: HTMLElement;
+}
+
+export interface IWindowView extends IView {
     showBelow(el: HTMLElement): void;
     hide(): void;
 }
 
 export interface IPopupView extends IWindowView {
+}
+
+export interface INoteListView extends IPopupView {
+}
+
+export interface INoteMenuView extends IPopupView {
+}
+
+export interface IToolbarView extends IView {
+    readonly view: HTMLElement;
+    readonly addMenuView: IPopupView;
+    readonly noteListView: INoteListView;
+    readonly moreMenuView: IPopupView;
 }

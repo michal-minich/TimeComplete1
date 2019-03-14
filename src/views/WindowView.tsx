@@ -8,7 +8,7 @@ import { IApp, IWindowView } from "../interfaces";
 export default class WindowView implements IWindowView {
 
     constructor(
-        public readonly app: IApp,
+        private readonly app: IApp,
         content: HTMLElement) {
 
         this.view = this.render(content);

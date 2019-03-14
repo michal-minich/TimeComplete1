@@ -92,6 +92,23 @@ export function getButton(et: EventTarget | HTMLElement | null): HTMLElement {
 }
 
 
+export function parentDistance(
+    fromNode: Node,
+    toParent: Node): number {
+
+    let e: Node | null = fromNode;
+    let c = 0;
+    while (true) {
+        if (!e)
+            return -1;
+        if (e === toParent)
+            return c;
+        e = e.parentElement;
+        ++c;
+    }
+}
+
+
 export module R {
 
     export function onAny<T>(fn: () => T): () => T;

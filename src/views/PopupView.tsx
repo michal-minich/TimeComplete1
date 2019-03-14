@@ -4,6 +4,7 @@ import * as Surplus from "surplus";
 Surplus;
 import { IApp, IPopupView, IWindowView } from "../interfaces";
 import WindowView from "./windowView";
+import { parentDistance } from "../common";
 
 
 export default class PopupView implements IPopupView {
@@ -15,7 +16,7 @@ export default class PopupView implements IPopupView {
         this.vw = new WindowView(app, content);
     }
 
-    private x = 0;
+    private counter = 0;
     private readonly vw: IWindowView;
 
 
@@ -31,30 +32,18 @@ export default class PopupView implements IPopupView {
 
     showBelow(el: HTMLElement): void {
         this.vw.showBelow(el);
-        this.x = 0;
+        this.counter = 0;
         document.addEventListener("mousedown", this.hideMe);
     }
 
 
     private hideMe(e: MouseEvent) {
-        if (this.hasParent(e.target as HTMLElement, this.vw.view))
+        if (parentDistance(e.target as HTMLElement, this.vw.view) !== -1)
             return;
-        ++this.x;
-        if (this.x <= 1)
+        ++this.counter;
+        if (this.counter <= 1)
             return;
         this.vw.hide();
         document.removeEventListener("mousedown", this.hideMe);
-    }
-
-
-    private hasParent(el: HTMLElement, parent: HTMLElement): boolean {
-        let e: HTMLElement | null = el;
-        while (true) {
-            if (!e)
-                return false;
-            if (e === parent)
-                return true;
-            e = e.parentElement;
-        }
     }
 }

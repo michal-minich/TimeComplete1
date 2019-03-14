@@ -2,36 +2,53 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, INote } from "../../interfaces";
+import { IApp, INote, INoteListView, IPopupView } from "../../interfaces";
 
 import PopupView from "../PopupView";
 import NoteDashItem from "../../data/dash/NoteDashItem";
 
-export type PopupView = ReturnType<typeof noteListView>
 
+export default class NoteListView implements INoteListView {
 
-export default function noteListView(app: IApp) {
-
-
-    const view =
-        <div className="note-list">
-            {app.data.notes().map(noteView)}
-        </div>;
-
-
-    const popView = new PopupView(app, view);
-
-
-    function activateNote(n: INote) {
-        app.data.dashboard.unshift(new NoteDashItem(app, n));
-        popView.hide();
+    constructor(readonly app: IApp) {
+        const v = NoteListView.render(this);
+        this.popView = new PopupView(app, v);
     }
 
-    function noteView(n: INote) {
+
+    private popView: IPopupView;
+
+
+    private static render(self: NoteListView) {
+        const view =
+            <div className="note-list">
+                {self.app.data.notes().map(self.noteView)}
+            </div>;
+        return view;
+    }
+
+
+    get view(): HTMLElement {
+        return this.popView.view;
+    }
+
+
+    hide(): void {
+        this.popView.hide();
+    }
+
+
+    activateNote(n: INote) {
+        this.app.data.dashboard.unshift(new NoteDashItem(this.app, n));
+        this.popView.hide();
+    }
+
+
+    noteView(n: INote) {
 
         const v =
             <div className="note"
-                 onClick={() => activateNote(n)}>
+                 onClick={() => this.activateNote(n)}>
                 {(n.title + ": " + n.text).substring(0, 100)}
             </div>;
 
@@ -39,10 +56,7 @@ export default function noteListView(app: IApp) {
     }
 
 
-    function showBelow(el: HTMLElement): void {
-        popView.showBelow(el);
+    showBelow(el: HTMLElement): void {
+        this.popView.showBelow(el);
     }
-
-
-    return { view: popView.view, showBelow };
-};
+}

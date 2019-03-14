@@ -2,50 +2,75 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, INoteDashItem, IDashboard } from "../../interfaces";
+import {
+    IApp,
+    INoteDashItem,
+    IDashboard,
+    INoteMenuView,
+    IPopupView
+} from "../../interfaces";
 import PopupView from "../PopupView";
 import NoteDashItem from "../../data/dash/NoteDashItem";
 
 
-export type NoteMenuView = ReturnType<typeof noteMenuView>
+export default class NoteMenuView implements INoteMenuView {
 
-export default function noteMenuView(app: IApp) {
+    constructor(private readonly app: IApp) {
+
+        const v = NoteMenuView.render(this);
+        this.popup = new PopupView(this.app, v);
+    }
 
 
-    function closeSelected() {
-        const n = app.data.dashboard.selected()!;
-        app.data.dashboard.remove(n);
+    private readonly popup: IPopupView;
+
+
+    get view() {
+        return this.popup.view;
+    }
+
+
+    hide(): void {
+        this.popup.hide();
+    }
+
+
+    showBelow(el: HTMLElement): void {
+        this.popup.showBelow(el);
+    }
+
+
+    private closeSelected() {
+        const n = this.app.data.dashboard.selected()!;
+        this.app.data.dashboard.remove(n);
         // ReSharper disable VariableUsedInInnerScopeBeforeDeclared
-        popup.hide();
+        this.popup.hide();
         // ReSharper restore VariableUsedInInnerScopeBeforeDeclared
     }
 
 
-    function deleteNote() {
-        const ndi = app.data.dashboard.selected()! as INoteDashItem;
+    private deleteNote() {
+        const ndi = this.app.data.dashboard.selected()! as INoteDashItem;
         const n = ndi.note;
-        for (const tab of app.data.tabs()) {
+        for (const tab of this.app.data.tabs()) {
             const d = tab.content as IDashboard;
             const ndiToRemove = d.items()
                 .filter(ndi2 => ndi2 instanceof NoteDashItem && ndi2.note === n);
             for (const r of ndiToRemove)
                 d.remove(r);
         }
-        app.data.noteDelete(ndi.note);
+        this.app.data.noteDelete(ndi.note);
         // ReSharper disable once VariableUsedInInnerScopeBeforeDeclared
-        popup.hide();
+        this.popup.hide();
     }
 
 
-    const view =
-        <ul className="more-menu menu">
-            <li onMouseDown={closeSelected}>Close</li>
-            <li onMouseDown={deleteNote}>Delete</li>
-        </ul>;
-
-
-    const popup = new PopupView(app, view);
-
-
-    return { view: popup.view, showBelow: popup.showBelow };
+    private static render(self: NoteMenuView) {
+        const view =
+            <ul className="more-menu menu">
+                <li onMouseDown={self.closeSelected}>Close</li>
+                <li onMouseDown={self.deleteNote}>Delete</li>
+            </ul>;
+        return view;
+    }
 }

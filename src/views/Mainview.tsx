@@ -7,10 +7,10 @@ import labelsPopupView from "./popup/LabelsPopupView";
 import { removeTextSelections } from "../common";
 import labelEditView from "./popup/LabelEditView";
 import tabsView from "./TabsView";
-import toolbarView from "./ToolbarView";
+import ToolbarView from "./ToolbarView";
 import dashboardView from "./dash/DashboardView";
 import taskMenuView from "./popup/TaskMenuView";
-import noteMenuView from "./popup/NoteMenuView";
+import NoteMenuView from "./popup/NoteMenuView";
 
 
 export function colorInlineStyle(ls: IColorStyle | undefined) {
@@ -36,19 +36,19 @@ export default function mainView(app: IApp) {
 
 
     const tm = taskMenuView(app);
-    const nm = noteMenuView(app);
+    const nm = new NoteMenuView(app);
     const elv = labelEditView(app);
     const lpv = labelsPopupView(app, app.data.labels);
-    const toolbar = toolbarView(app, elv, lpv);
+    const toolbar = new ToolbarView(app, elv, lpv);
 
 
     const view =
         <div>
             {tabsView(app)}
             {toolbar.view}
-            {toolbar.addMenuView}
-            {toolbar.noteListView}
-            {toolbar.moreMenuView}
+            {toolbar.addMenuView.view}
+            {toolbar.noteListView.view}
+            {toolbar.moreMenuView.view}
             {lpv.view}
             {elv.view}
             {tm.view}
