@@ -10,7 +10,7 @@ import { parentDistance } from "../common";
 export default class PopupView implements IPopupView {
 
     constructor(
-        public readonly app: IApp,
+        private readonly app: IApp,
         content: HTMLElement) {
 
         this.vw = new WindowView(app, content);

@@ -10,7 +10,7 @@ import NoteDashItem from "../../data/dash/NoteDashItem";
 
 export default class NoteListView implements INoteListView {
 
-    constructor(readonly app: IApp) {
+    constructor(private readonly app: IApp) {
         const v = NoteListView.render(this);
         this.popView = new PopupView(app, v);
     }

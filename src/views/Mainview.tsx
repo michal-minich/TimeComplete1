@@ -2,7 +2,7 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, IColorStyle } from "../interfaces";
+import { IApp, IColorStyle, IMainView, IWindowView } from "../interfaces";
 import labelsPopupView from "./popup/LabelsPopupView";
 import { removeTextSelections } from "../common";
 import labelEditView from "./popup/LabelEditView";
@@ -32,29 +32,30 @@ window.addEventListener("mouseup",
     false);
 
 
-export default function mainView(app: IApp) {
+export default class MainView implements IMainView {
 
+    constructor(private readonly app: IApp) {
 
-    const tm = taskMenuView(app);
-    const nm = new NoteMenuView(app);
-    const elv = labelEditView(app);
-    const lpv = labelsPopupView(app, app.data.labels);
-    const toolbar = new ToolbarView(app, elv, lpv);
+        const tm = taskMenuView(app);
+        const nm = new NoteMenuView(app);
+        const elv = labelEditView(app);
+        const lpv = labelsPopupView(app, app.data.labels);
+        const toolbar = new ToolbarView(app, elv, lpv);
 
+        this.view =
+            <div>
+                {tabsView(app)}
+                {toolbar.view}
+                {toolbar.addMenuView.view}
+                {toolbar.noteListView.view}
+                {toolbar.moreMenuView.view}
+                {lpv.view}
+                {elv.view}
+                {tm.view}
+                {nm.view}
+                {dashboardView(app, lpv, tm, nm)}
+            </div>;
+    }
 
-    const view =
-        <div>
-            {tabsView(app)}
-            {toolbar.view}
-            {toolbar.addMenuView.view}
-            {toolbar.noteListView.view}
-            {toolbar.moreMenuView.view}
-            {lpv.view}
-            {elv.view}
-            {tm.view}
-            {nm.view}
-            {dashboardView(app, lpv, tm, nm)}
-        </div>;
-
-    return view;
+    readonly view: HTMLElement;
 }

@@ -18,11 +18,11 @@ import { AppDataOps } from "../operations/AppDataOps";
 export default class ToolbarView implements IToolbarView {
 
     constructor(
-        readonly app: IApp,
-        readonly elv: LabelEditView,
-        readonly lpv: LabelsPopupView) {
+        private readonly app: IApp,
+        private readonly elv: LabelEditView,
+        private readonly lpv: LabelsPopupView) {
 
-        this.view = ToolbarView.render(this);
+        this.view = this.render();
         this.addMenuView = new PopupView(this.app, ToolbarView.renderAddMenu(this));
         this.noteListView = new NoteListView(this.app);
         this.moreMenuView = new PopupView(this.app, ToolbarView.renderMoreMenu(this));
@@ -120,20 +120,20 @@ export default class ToolbarView implements IToolbarView {
     }
 
 
-    private static render(self: ToolbarView): HTMLElement {
+    private render: () => HTMLElement = () => {
         const view =
             <div className="toolbar"
-                 style={{ borderTopColor: self.selectedTabColor() }}>
-                <span className="menu-button button" onMouseDown={self.showLabels}>
+                 style={{ borderTopColor: this.selectedTabColor() }}>
+                <span className="menu-button button" onMouseDown={this.showLabels}>
                     Labels <span className="drop-down-triangle">&#x25BC;</span>
                 </span>
-                <span className="menu-button button" onMouseDown={self.showNoteListView}>
+                <span className="menu-button button" onMouseDown={this.showNoteListView}>
                     Notes <span className="drop-down-triangle">&#x25BC;</span>
                 </span>
-                <span className="menu-button button" onMouseDown={self.showAddMenu}>
+                <span className="menu-button button" onMouseDown={this.showAddMenu}>
                     Add <span className="drop-down-triangle">&#x25BC;</span>
                 </span>
-                <span className="menu-button button" onMouseDown={self.showMoreMenu}>
+                <span className="menu-button button" onMouseDown={this.showMoreMenu}>
                     More <span className="drop-down-triangle">&#x25BC;</span>
                 </span>
             </div>;

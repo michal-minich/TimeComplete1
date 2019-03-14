@@ -137,6 +137,7 @@ export interface IApp {
     readonly localStore: IDataStore;
     readonly sync: ISyncLog;
     readonly data: IData;
+    readonly mainView: IMainView;
 }
 
 export interface IData {
@@ -343,4 +344,8 @@ export interface IToolbarView extends IView {
     readonly addMenuView: IPopupView;
     readonly noteListView: INoteListView;
     readonly moreMenuView: IPopupView;
+}
+
+export interface IMainView extends IView {
+    //addWindowView(wv: IWindowView): void;
 }
