@@ -3,8 +3,14 @@
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ITasksDashItem, IDashItem, ITask, ITaskMenuView } from "../../interfaces";
-import { LabelsPopupView } from "./../popup/LabelsPopupView";
+import {
+    IApp,
+    ITasksDashItem,
+    IDashItem,
+    ITask,
+    ITaskMenuView,
+    ILabelsPopupView
+} from "../../interfaces";
 import taskListView from "./TaskListView";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 import taskAddView from "./TaskAddView";
@@ -41,7 +47,7 @@ export function queryBorder(app: IApp, di: IDashItem) {
 
 export function tasksDashItemView(app: IApp,
     tdi: ITasksDashItem,
-    lpv: LabelsPopupView,
+    lpv: ILabelsPopupView,
     ettv: TaskTitleEditView,
     tasksMenu: ITaskMenuView) {
 

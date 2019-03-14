@@ -3,9 +3,15 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, IToolbarView, IPopupView, INoteListView, ILabelEditView } from "../interfaces";
+import {
+    IApp,
+    IToolbarView,
+    IPopupView,
+    INoteListView,
+    ILabelEditView,
+    ILabelsPopupView,
+} from "../interfaces";
 import TasksDashItem from "../data/dash/TasksDashItem";
-import { LabelsPopupView } from "./popup/LabelsPopupView";
 import Note from "../data/domain/Note";
 import PopupView from "./PopupView";
 import NoteListView from "./popup/NoteListView";
@@ -19,7 +25,7 @@ export default class ToolbarView implements IToolbarView {
     constructor(
         private readonly app: IApp,
         private readonly elv: ILabelEditView,
-        private readonly lpv: LabelsPopupView) {
+        private readonly lpv: ILabelsPopupView) {
 
         this.view = this.render();
         this.addMenuView = new PopupView(this.app, this.renderAddMenu());

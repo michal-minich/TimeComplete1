@@ -2,10 +2,9 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, INoteMenuView, ITaskMenuView } from "../../interfaces";
+import { IApp, INoteMenuView, ITaskMenuView, ILabelsPopupView } from "../../interfaces";
 import { indexOfMin } from "../../common";
 import TasksDashItem from "../../data/dash/TasksDashItem";
-import { LabelsPopupView } from "../popup/LabelsPopupView";
 import { tasksDashItemView } from "./TasksDashItemView";
 import taskTitleEditView from "./TaskTitleEditView";
 import NoteDashItem from "../../data/dash/NoteDashItem";
@@ -14,7 +13,7 @@ import { noteDashItemView } from "./NoteDashItemView";
 
 export default function dashboardView(
     app: IApp,
-    lpv: LabelsPopupView,
+    lpv: ILabelsPopupView,
     tasksMenu: ITaskMenuView,
     noteMenu: INoteMenuView) {
 

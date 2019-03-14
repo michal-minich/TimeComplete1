@@ -356,3 +356,10 @@ export interface IToolbarView extends IView {
 export interface IMainView extends IView {
     //addWindowView(wv: IWindowView): void;
 }
+
+export interface ILabelsPopupView extends IView {
+    readonly show: (
+        over: HTMLElement,
+        associated: ArraySignal<ILabel> | undefined,
+        action: (label: ILabel, el: HTMLSpanElement) => void) => void;
+}

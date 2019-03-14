@@ -3,7 +3,7 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import { IApp, IColorStyle, IMainView } from "../interfaces";
-import labelsPopupView from "./popup/LabelsPopupView";
+import LabelsPopupView from "./popup/LabelsPopupView";
 import { removeTextSelections } from "../common";
 import LabelEditView from "./popup/LabelEditView";
 import tabsView from "./TabsView";
@@ -39,7 +39,7 @@ export default class MainView implements IMainView {
         const tm = new TaskMenuView(app);
         const nm = new NoteMenuView(app);
         const elv = new LabelEditView(app);
-        const lpv = labelsPopupView(app, app.data.labels);
+        const lpv = new LabelsPopupView(app, app.data.labels);
         const toolbar = new ToolbarView(app, elv, lpv);
 
         this.view =

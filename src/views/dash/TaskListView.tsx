@@ -2,16 +2,15 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, ITask, ILabel } from "../../interfaces";
+import { IApp, ITask, ILabel, ILabelsPopupView } from "../../interfaces";
 import { onMouseDown } from "../../common";
-import { LabelsPopupView } from "./../popup/LabelsPopupView";
 import DateTime from "../../data/value/DateTime";
 import { TaskTitleEditView } from "./TaskTitleEditView";
 
 
 export default function taskListView(app: IApp,
     tasks: ITask[],
-    lpv: LabelsPopupView,
+    lpv: ILabelsPopupView,
     ettv: TaskTitleEditView) {
 
 
