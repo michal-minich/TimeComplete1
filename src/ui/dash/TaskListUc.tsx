@@ -7,13 +7,28 @@ import {
     ITask,
     ILabel,
     ILabelsPopupUc,
-    ITaskTitleEditUc
+    ITaskTitleEditUc,
+    ITaskListUc
 } from "../../interfaces";
 import { onMouseDown } from "../../common";
 import DateTime from "../../data/value/DateTime";
 
 
-export default function taskListUc(app: IApp,
+export default class TaskListUc implements ITaskListUc {
+
+    constructor(app: IApp,
+        tasks: ITask[],
+        lpv: ILabelsPopupUc,
+        ettv: ITaskTitleEditUc) {
+
+        this.view = getControlledView(app, tasks, lpv, ettv);
+    }
+
+    readonly view: HTMLElement[];
+}
+
+
+function getControlledView(app: IApp,
     tasks: ITask[],
     lpv: ILabelsPopupUc,
     ettv: ITaskTitleEditUc) {
@@ -52,9 +67,9 @@ export default function taskListUc(app: IApp,
                         onChange={() => perform(t, doneChk!)}/>
                 </td>
                 <td ref={titleTd}
-                    title={"Created: " + t.createdOn.toLocaleDateTimeString() 
-                            + (t.completedOn ? "\nCompleted: " 
-                            + t.completedOn.toLocaleDateTimeString() : "")}
+                    title={"Created: " +
+                        t.createdOn.toLocaleDateTimeString() +
+                        (t.completedOn ? "\nCompleted: " + t.completedOn.toLocaleDateTimeString() : "")}
                     tabIndex={1}
                     onFocus={() => ettv.begin(t, titleTd!)}
                     className={t.completedOn !== undefined
@@ -82,4 +97,4 @@ export default function taskListUc(app: IApp,
     });
 
     return view;
-};
+}

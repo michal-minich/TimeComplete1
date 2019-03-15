@@ -15,16 +15,12 @@ let originalTitle = "";
 
 export default class NoteDashItemUc implements INoteDashItemUc {
 
-
-    constructor(
-        app: IApp,
-        ndi: INoteDashItem,
-        noteMenu: INoteMenuUc) {
+    constructor(app: IApp, ndi: INoteDashItem, noteMenu: INoteMenuUc) {
 
         this.view = getControlledView(app, ndi, noteMenu);
     }
 
-    public readonly view: HTMLElement;
+    readonly view: HTMLElement;
 }
 
 

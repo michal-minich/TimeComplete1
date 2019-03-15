@@ -357,7 +357,13 @@ export interface IDashboardUc extends IUc {
 }
 
 export interface INoteDashItemUc extends IUc {
-    
+}
+
+export interface ITaskAddUc extends IUc{
+}
+
+export interface ITaskListUc {
+    readonly view: HTMLElement[];
 }
 
 export interface ITabsUc extends IUc {

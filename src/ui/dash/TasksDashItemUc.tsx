@@ -12,8 +12,8 @@ import {
     ILabelsPopupUc,
     ITaskTitleEditUc
 } from "../../interfaces";
-import taskListUc from "./TaskListUc";
-import taskAddUc from "./TaskAddUc";
+import TaskListUc from "./TaskListUc";
+import TaskAddUc from "./TaskAddUc";
 import { getButton, R } from "../../common";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
@@ -108,7 +108,7 @@ export function tasksDashItemUc(app: IApp,
                     </td>
                 </tr>
                 <tbody className={showFilteredOut() ? "" : "hidden"}>
-                {taskListUc(app, tasks.out, lpv, ettv)}
+                {new TaskListUc(app, tasks.out, lpv, ettv).view}
                 </tbody>
             </table>;
 
@@ -135,11 +135,11 @@ export function tasksDashItemUc(app: IApp,
                 </span>
             </div>
             <div className="body">
-                {taskAddUc(app, tdi)}
+                {new TaskAddUc(app, tdi).view}
                 <table className="task-list lined-list">
                     <thead></thead>
                     <tbody>
-                    {taskListUc(app, resultTasks().inx, lpv, ettv)}
+                    {new TaskListUc(app, resultTasks().inx, lpv, ettv).view}
                     </tbody>
                     {taskList(resultTasks())}
                 </table>

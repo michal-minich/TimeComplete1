@@ -3,12 +3,23 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ILabel, ITasksDashItem, ITask } from "../../interfaces";
+import { IApp, ILabel, ITasksDashItem, ITask, ITaskAddUc } from "../../interfaces";
 import Task from "../../data/domain/Task";
 import Query from "../../data/Query";
 
 
-export default function taskAddUc(app: IApp, tdi: ITasksDashItem) {
+export default class TaskAddUc implements ITaskAddUc {
+
+    constructor(app: IApp, tdi: ITasksDashItem) {
+
+        this.view = getControlledView(app, tdi);
+    }
+
+    readonly view: HTMLElement;
+}
+
+
+function getControlledView(app: IApp, tdi: ITasksDashItem) {
 
 
     function confirm(queryText: string): void {
@@ -53,7 +64,7 @@ export default function taskAddUc(app: IApp, tdi: ITasksDashItem) {
         <input type="text"
                placeholder="add new task"
                className="new-task-input"
-               onKeyUp={(e: KeyboardEvent) => keyUp(e)}
+               onKeyUp={keyUp}
                fn={data(tdi.newTitle)}/>;
 
     return view;
