@@ -137,7 +137,7 @@ export interface IApp {
     readonly localStore: IDataStore;
     readonly sync: ISyncLog;
     readonly data: IData;
-    readonly mainView: IMainView;
+    readonly mainUc: IMainUc;
 }
 
 export interface IData {
@@ -319,55 +319,59 @@ export interface ISerializer {
 }
 
 
-// Views ======================================================================
+// User Controls ======================================================================
 
-export interface IView {
+export interface IUc {
     readonly view: HTMLElement;
 }
 
-export interface IWindowView extends IView {
+export interface IWindowUc extends IUc {
     showBelow(el: HTMLElement): void;
     hide(): void;
 }
 
-export interface IPopupView extends IWindowView {
+export interface IPopupUc extends IWindowUc {
 }
 
-export interface INoteListView extends IPopupView {
+export interface INoteListUc extends IPopupUc {
 }
 
-export interface INoteMenuView extends IPopupView {
+export interface INoteMenuUc extends IPopupUc {
 }
 
-export interface ITaskMenuView extends IPopupView {
+export interface ITaskMenuUc extends IPopupUc {
 }
 
-export interface ILabelEditView extends IView {
+export interface ILabelEditUc extends IUc {
     begin(label: ILabel, el: HTMLSpanElement): void;
 }
 
-export interface IToolbarView extends IView {
+export interface IToolbarUc extends IUc {
     readonly view: HTMLElement;
-    readonly addMenuView: IPopupView;
-    readonly noteListView: INoteListView;
-    readonly moreMenuView: IPopupView;
+    readonly addMenuUc: IPopupUc;
+    readonly noteListUc: INoteListUc;
+    readonly moreMenuUc: IPopupUc;
 }
 
-export interface IDashboardView extends IView {
+export interface IDashboardUc extends IUc {
 }
 
-export interface ITabsView extends IView {
+export interface INoteDashItemUc extends IUc {
+    
 }
 
-export interface ITaskTitleEditView extends IView {
+export interface ITabsUc extends IUc {
+}
+
+export interface ITaskTitleEditUc extends IUc {
     begin(t: ITask, titleTd: HTMLTableDataCellElement): void 
 }
 
-export interface IMainView extends IView {
-    //addWindowView(wv: IWindowView): void;
+export interface IMainUc extends IUc {
+    //addWindowUc(wv: IWindowUc): void;
 }
 
-export interface ILabelsPopupView extends IView {
+export interface ILabelsPopupUc extends IUc {
     readonly show: (
         over: HTMLElement,
         associated: ArraySignal<ILabel> | undefined,

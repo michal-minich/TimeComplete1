@@ -2,12 +2,12 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, ITab, ArraySignal, ITabsView } from "../interfaces";
+import { IApp, ITab, ArraySignal, ITabsUc} from "../interfaces";
 import { addTab } from "../data/domain/Tab";
-import { colorInlineStyle } from "./MainView";
+import { colorInlineStyle } from "./MainUc";
 
 
-export default class TabsView implements ITabsView {
+export default class TabsUc implements ITabsUc {
 
     constructor(private readonly app: IApp) {
     }
@@ -38,11 +38,11 @@ export default class TabsView implements ITabsView {
 
 
     private tabs: () => ArraySignal<HTMLSpanElement> = () => {
-        return this.app.data.tabs.map((tab, el, i) => this.tabView(tab, i));
+        return this.app.data.tabs.map((tab, el, i) => this.tabUc(tab, i));
     }
 
 
-    private tabView(tab: ITab, index: number): HTMLSpanElement {
+    private tabUc(tab: ITab, index: number): HTMLSpanElement {
         const isSel = index === this.app.data.fields.selectedTabIndex;
         const v =
             <span className={"tab" + (isSel ? " active-tab" : "")}

@@ -3,23 +3,23 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { colorInlineStyle } from "../MainView";
+import { colorInlineStyle } from "../MainUc";
 import ColorStyle from "../../data/value/ColorStyle";
 import Color from "../../data/value/Color";
-import { ILabel, IApp, ValueSignal, ILabelEditView, IWindowView } from "../../interfaces";
+import { ILabel, IApp, ValueSignal, ILabelEditUc, IWindowUc } from "../../interfaces";
 import { R } from "../../common";
-import WindowView from "./../windowView";
+import WindowUc from "./../windowUc";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
-export default class LabelEditView implements ILabelEditView {
+export default class LabelEditUc implements ILabelEditUc {
 
     constructor(private readonly app: IApp) {
-        this.window = new WindowView(app, this.render());
+        this.window = new WindowUc(app, this.render());
     }
 
 
-    private readonly window: IWindowView;
+    private readonly window: IWindowUc
     private readonly editLabelName = R.data("");
     private readonly editColor = R.data("");
     private readonly labelSignal: ValueSignal<ILabel | undefined> = R.data(undefined);

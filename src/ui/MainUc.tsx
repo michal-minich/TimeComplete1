@@ -2,15 +2,15 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, IColorStyle, IMainView } from "../interfaces";
-import LabelsPopupView from "./popup/LabelsPopupView";
+import { IApp, IColorStyle, IMainUc } from "../interfaces";
+import LabelsPopupUc from "./popup/LabelsPopupUc";
 import { removeTextSelections } from "../common";
-import LabelEditView from "./popup/LabelEditView";
-import TabsView from "./TabsView";
-import ToolbarView from "./ToolbarView";
-import DashboardView from "./dash/DashboardView";
-import TaskMenuView from "./popup/TaskMenuView";
-import NoteMenuView from "./popup/NoteMenuView";
+import LabelEditUc from "./popup/LabelEditUc";
+import TabsUc from "./TabsUc";
+import ToolbarUc from "./ToolbarUc";
+import DashboardUc from "./dash/DashboardUc";
+import TaskMenuUc from "./popup/TaskMenuUc";
+import NoteMenuUc from "./popup/NoteMenuUc";
 
 
 export function colorInlineStyle(ls: IColorStyle | undefined) {
@@ -35,28 +35,28 @@ window.addEventListener("mouseup",
     false);
 
 
-export default class MainView implements IMainView {
+export default class MainUc implements IMainUc {
 
     constructor(private readonly app: IApp) {
 
-        const tm = new TaskMenuView(app);
-        const nm = new NoteMenuView(app);
-        const elv = new LabelEditView(app);
-        const lpv = new LabelsPopupView(app, app.data.labels);
-        const toolbar = new ToolbarView(app, elv, lpv);
+        const tm = new TaskMenuUc(app);
+        const nm = new NoteMenuUc(app);
+        const elv = new LabelEditUc(app);
+        const lpv = new LabelsPopupUc(app, app.data.labels);
+        const toolbar = new ToolbarUc(app, elv, lpv);
 
         this.view =
             <div>
-                {new TabsView(app).view}
+                {new TabsUc(app).view}
                 {toolbar.view}
-                {toolbar.addMenuView.view}
-                {toolbar.noteListView.view}
-                {toolbar.moreMenuView.view}
+                {toolbar.addMenuUc.view}
+                {toolbar.noteListUc.view}
+                {toolbar.moreMenuUc.view}
                 {lpv.view}
                 {elv.view}
                 {tm.view}
                 {nm.view}
-                {new DashboardView(app, lpv, tm, nm).view}
+                {new DashboardUc(app, lpv, tm, nm).view}
             </div>;
     }
 

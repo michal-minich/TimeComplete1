@@ -6,23 +6,23 @@ import {
     IApp,
     INoteDashItem,
     IDashboard,
-    INoteMenuView,
-    IPopupView
+    INoteMenuUc,
+    IPopupUc
 } from "../../interfaces";
-import PopupView from "../PopupView";
+import PopupUc from "../PopupUc";
 import NoteDashItem from "../../data/dash/NoteDashItem";
 
 
-export default class NoteMenuView implements INoteMenuView {
+export default class NoteMenuUc implements INoteMenuUc {
 
     constructor(private readonly app: IApp) {
 
         const v = this.render();
-        this.popup = new PopupView(this.app, v);
+        this.popup = new PopupUc(this.app, v);
     }
 
 
-    private readonly popup: IPopupView;
+    private readonly popup: IPopupUc;
 
 
     get view() {

@@ -4,13 +4,13 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { R } from "../../common";
-import { ITask, IApp, ITaskTitleEditView } from "../../interfaces";
+import { ITask, IApp, ITaskTitleEditUc } from "../../interfaces";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
 
 
-export default class TaskTitleEditView implements ITaskTitleEditView {
+export default class TaskTitleEditUc implements ITaskTitleEditUc {
 
     constructor(private readonly app: IApp) {
     }

@@ -2,10 +2,10 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, IWindowView } from "../interfaces";
+import { IApp, IWindowUc } from "../interfaces";
 
 
-export default class WindowView implements IWindowView {
+export default class WindowUc implements IWindowUc {
 
     constructor(
         private readonly app: IApp,

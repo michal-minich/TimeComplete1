@@ -2,22 +2,22 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, IPopupView, IWindowView } from "../interfaces";
-import WindowView from "./windowView";
+import { IApp, IPopupUc, IWindowUc } from "../interfaces";
+import WindowUc from "./windowUc";
 import { parentDistance } from "../common";
 
 
-export default class PopupView implements IPopupView {
+export default class PopupUc implements IPopupUc {
 
     constructor(
         private readonly app: IApp,
         content: HTMLElement) {
 
-        this.window = new WindowView(app, content);
+        this.window = new WindowUc(app, content);
     }
 
     private counter = 0;
-    private readonly window: IWindowView;
+    private readonly window: IWindowUc;
 
 
     get view(): HTMLElement {

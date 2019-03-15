@@ -3,19 +3,18 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ILabel, ArraySignal, ILabelsPopupView } from "../../interfaces"
-import labelAddView, { labelAddViewState } from "./LabelAddView";
-import { colorInlineStyle } from "../MainView";
-import { onMouseDown } from "../../common";
+import { IApp, ILabel, ArraySignal, ILabelsPopupUc } from "../../interfaces"
+import labelAddUc, { labelAddUcState } from "./LabelAddUc";
+import { colorInlineStyle } from "../MainUc";
 import { R } from "../../common";
-import PopupView from "../PopupView";
+import PopupUc from "../PopupUc";
 
 
-// export type LabelsPopupView = ReturnType<typeof labelsPopupView>
+// export type LabelsPopupUc = ReturnType<typeof labelsPopupView>
 // ReSharper disable once InconsistentNaming
 
 
-export default class LabelsPopupView implements ILabelsPopupView {
+export default class LabelsPopupUc implements ILabelsPopupUc {
 
     constructor(
         private readonly app: IApp,
@@ -36,9 +35,9 @@ export default class LabelsPopupView implements ILabelsPopupView {
 
     private act!: (label: ILabel, el: HTMLSpanElement) => void;
     private readonly queryText = R.data("");
-    private readonly lav = labelAddView(this.app);
+    private readonly lav = labelAddUc(this.app);
     private associated2: ArraySignal<ILabel> | undefined;
-    private readonly popup = new PopupView(this.app, this.render());
+    private readonly popup = new PopupUc(this.app, this.render());
 
     get view() {
         return this.popup.view;
@@ -86,8 +85,8 @@ export default class LabelsPopupView implements ILabelsPopupView {
 
         this.associated2 = associated;
         this.act = action;
-        labelAddViewState.isForTask = associated !== undefined;
-        labelAddViewState.hideWindow = this.popup.hide;
+        labelAddUcState.isForTask = associated !== undefined;
+        labelAddUcState.hideWindow = this.popup.hide;
         this.popup.showBelow(over);
     }
 }

@@ -8,12 +8,12 @@ import {
     ITasksDashItem,
     IDashItem,
     ITask,
-    ITaskMenuView,
-    ILabelsPopupView,
-    ITaskTitleEditView
+    ITaskMenuUc,
+    ILabelsPopupUc,
+    ITaskTitleEditUc
 } from "../../interfaces";
-import taskListView from "./TaskListView";
-import taskAddView from "./TaskAddView";
+import taskListUc from "./TaskListUc";
+import taskAddUc from "./TaskAddUc";
 import { getButton, R } from "../../common";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
@@ -45,11 +45,11 @@ export function queryBorder(app: IApp, di: IDashItem) {
 }
 
 
-export function tasksDashItemView(app: IApp,
+export function tasksDashItemUc(app: IApp,
     tdi: ITasksDashItem,
-    lpv: ILabelsPopupView,
-    ettv: ITaskTitleEditView,
-    tasksMenu: ITaskMenuView) {
+    lpv: ILabelsPopupUc,
+    ettv: ITaskTitleEditUc,
+    tasksMenu: ITaskMenuUc) {
 
     let originalTitle = "";
     const showFilteredOut = R.data(false);
@@ -108,7 +108,7 @@ export function tasksDashItemView(app: IApp,
                     </td>
                 </tr>
                 <tbody className={showFilteredOut() ? "" : "hidden"}>
-                {taskListView(app, tasks.out, lpv, ettv)}
+                {taskListUc(app, tasks.out, lpv, ettv)}
                 </tbody>
             </table>;
 
@@ -135,11 +135,11 @@ export function tasksDashItemView(app: IApp,
                 </span>
             </div>
             <div className="body">
-                {taskAddView(app, tdi)}
+                {taskAddUc(app, tdi)}
                 <table className="task-list lined-list">
                     <thead></thead>
                     <tbody>
-                    {taskListView(app, resultTasks().inx, lpv, ettv)}
+                    {taskListUc(app, resultTasks().inx, lpv, ettv)}
                     </tbody>
                     {taskList(resultTasks())}
                 </table>

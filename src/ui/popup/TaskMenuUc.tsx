@@ -2,19 +2,19 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, ITaskMenuView, IPopupView } from "../../interfaces";
-import PopupView from "../PopupView";
+import { IApp, ITaskMenuUc, IPopupUc } from "../../interfaces";
+import PopupUc from "../PopupUc";
 
 
-export default class TaskMenuView implements ITaskMenuView {
+export default class TaskMenuUc implements ITaskMenuUc {
 
     constructor(private readonly app: IApp) {
 
-        this.popup = new PopupView(app, this.render());
+        this.popup = new PopupUc(app, this.render());
     }
 
 
-    private readonly popup: IPopupView;
+    private readonly popup: IPopupUc;
 
 
     get view() {

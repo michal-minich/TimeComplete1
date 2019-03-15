@@ -2,22 +2,22 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, INote, INoteListView, IPopupView } from "../../interfaces";
+import { IApp, INote, INoteListUc, IPopupUc } from "../../interfaces";
 
-import PopupView from "../PopupView";
+import PopupUc from "../PopupUc";
 import NoteDashItem from "../../data/dash/NoteDashItem";
 
 
-export default class NoteListView implements INoteListView {
+export default class NoteListUc implements INoteListUc {
 
     constructor(private readonly app: IApp) {
 
         const v = this.render();
-        this.popView = new PopupView(app, v);
+        this.popup = new PopupUc(app, v);
     }
 
 
-    private popView: IPopupView;
+    private popup: IPopupUc;
 
 
     private render() {
@@ -30,18 +30,18 @@ export default class NoteListView implements INoteListView {
 
 
     get view(): HTMLElement {
-        return this.popView.view;
+        return this.popup.view;
     }
 
 
     hide(): void {
-        this.popView.hide();
+        this.popup.hide();
     }
 
 
     private activateNote: (n: INote) => void = (n) => {
         this.app.data.dashboard.unshift(new NoteDashItem(this.app, n));
-        this.popView.hide();
+        this.popup.hide();
     }
 
 
@@ -56,6 +56,6 @@ export default class NoteListView implements INoteListView {
 
 
     showBelow(el: HTMLElement): void {
-        this.popView.showBelow(el);
+        this.popup.showBelow(el);
     }
 }

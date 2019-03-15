@@ -5,40 +5,40 @@ Surplus;
 import data from "surplus-mixin-data";
 import {
     IApp,
-    IToolbarView,
-    IPopupView,
-    INoteListView,
-    ILabelEditView,
-    ILabelsPopupView,
+    IToolbarUc,
+    IPopupUc,
+    INoteListUc,
+    ILabelEditUc,
+    ILabelsPopupUc,
 } from "../interfaces";
 import TasksDashItem from "../data/dash/TasksDashItem";
 import Note from "../data/domain/Note";
-import PopupView from "./PopupView";
-import NoteListView from "./popup/NoteListView";
+import PopupUc from "./PopupUc";
+import NoteListUc from "./popup/NoteListUc";
 import NoteDashItem from "../data/dash/NoteDashItem";
 import { R, getButton} from "../common";
 import { AppDataOps } from "../operations/AppDataOps";
 
 
-export default class ToolbarView implements IToolbarView {
+export default class ToolbarUc implements IToolbarUc {
 
     constructor(
         private readonly app: IApp,
-        private readonly elv: ILabelEditView,
-        private readonly lpv: ILabelsPopupView) {
+        private readonly elv: ILabelEditUc,
+        private readonly lpv: ILabelsPopupUc) {
 
         this.view = this.render();
-        this.addMenuView = new PopupView(this.app, this.renderAddMenu());
-        this.noteListView = new NoteListView(this.app);
-        this.moreMenuView = new PopupView(this.app, this.renderMoreMenu());
+        this.addMenuUc = new PopupUc(this.app, this.renderAddMenu());
+        this.noteListUc = new NoteListUc(this.app);
+        this.moreMenuUc = new PopupUc(this.app, this.renderMoreMenu());
     }
 
 
     private readonly autoCols = R.data(true);
     readonly view: HTMLElement;
-    readonly addMenuView: IPopupView;
-    readonly noteListView: INoteListView;
-    readonly moreMenuView: IPopupView;
+    readonly addMenuUc: IPopupUc;
+    readonly noteListUc: INoteListUc;
+    readonly moreMenuUc: IPopupUc;
 
 
     private renderAddMenu() {
@@ -71,7 +71,7 @@ export default class ToolbarView implements IToolbarView {
                     <input
                         className="view-filter"
                         type="search"
-                        placeholder="View Filter"
+                        placeholder="Uc Filter"
                         fn={data(this.app.data.dashboard.query.text)}/>
                 </li>
                 <li onMouseDown={() => AppDataOps.exportData(this.app.localStore)}>Export Data</li>
@@ -84,7 +84,7 @@ export default class ToolbarView implements IToolbarView {
     private addNote: () => void = () => {
         const n = Note.createNew(this.app, "Note", "", 1);
         this.app.data.noteAdd(n);
-        this.addMenuView.hide();
+        this.addMenuUc.hide();
         this.app.data.dashboard.unshift(new NoteDashItem(this.app, n));
     }
 
@@ -92,7 +92,7 @@ export default class ToolbarView implements IToolbarView {
     private addTaskList: () => void = () => {
         const tdi = new TasksDashItem(this.app, "");
         this.app.data.dashboard.unshift(tdi);
-        this.addMenuView.hide();
+        this.addMenuUc.hide();
     }
 
 
@@ -102,17 +102,17 @@ export default class ToolbarView implements IToolbarView {
 
 
     private showNoteListView: (e: MouseEvent) => void = (e) => {
-        this.noteListView.showBelow(getButton(e.target));
+        this.noteListUc.showBelow(getButton(e.target));
     }
 
 
     private showAddMenu: (e: MouseEvent) => void = (e) => {
-        this.addMenuView.showBelow(getButton(e.target));
+        this.addMenuUc.showBelow(getButton(e.target));
     }
 
 
     private showMoreMenu: (e: MouseEvent) => void = (e) => {
-        this.moreMenuView.showBelow(getButton(e.target));
+        this.moreMenuUc.showBelow(getButton(e.target));
     }
 
 

@@ -5,11 +5,11 @@
     IDataStore,
     ISyncLog,
     ISerializer,
-    IMainView
+    IMainUc
 } from "../interfaces";
 
 import Clock from "./io/Clock";
-import MainView from "../views/MainView";
+import MainUc from "../ui/MainUc";
 import Data from "./Data";
 import { R } from "../common";
 import SyncLog from "../components/SyncLog";
@@ -43,14 +43,14 @@ export default class App implements IApp {
     readonly localStore: IDataStore = new LocalStore();
     readonly sync: ISyncLog = new SyncLog(this);
     readonly data: IData = new Data(this);
-    readonly mainView: IMainView;
+    readonly mainUc: IMainUc;
 
     constructor() {
 
         AppDataOps.loadAppData(this);
         
-        this.mainView = new MainView(this);
+        this.mainUc = new MainUc(this);
 
-        document.body.appendChild(this.mainView.view);
+        document.body.appendChild(this.mainUc.view);
     }
 }

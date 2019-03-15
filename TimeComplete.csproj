@@ -7,27 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="src\views\dash\DashboardView.jsx" />
-    <None Remove="src\views\dash\NoteDashItemView.jsx" />
-    <None Remove="src\views\dash\TaskAddView.jsx" />
-    <None Remove="src\views\dash\TaskListView.jsx" />
-    <None Remove="src\views\dash\TasksDashItemView.jsx" />
-    <None Remove="src\views\dash\TaskTitleEditView.jsx" />
-    <None Remove="src\views\LabelAddView.jsx" />
-    <None Remove="src\views\LabelEditView.jsx" />
-    <None Remove="src\views\LabelsPopupView.jsx" />
-    <None Remove="src\views\MainView.jsx" />
-    <None Remove="src\views\NoteListView.jsx" />
-    <None Remove="src\views\PopupView.jsx" />
-    <None Remove="src\views\popup\LabelAddView.jsx" />
-    <None Remove="src\views\popup\LabelEditView.jsx" />
-    <None Remove="src\views\popup\LabelsPopupView.jsx" />
-    <None Remove="src\views\popup\NoteListView.jsx" />
-    <None Remove="src\views\popup\NoteMenuView.jsx" />
-    <None Remove="src\views\popup\TaskMenuView.jsx" />
-    <None Remove="src\views\TabsView.jsx" />
-    <None Remove="src\views\ToolbarView.jsx" />
-    <None Remove="src\views\windowView.jsx" />
+    <None Remove="src\ui\dash\DashboardUc.jsx" />
+    <None Remove="src\ui\dash\NoteDashItemUc.jsx" />
+    <None Remove="src\ui\dash\TaskAddUc.jsx" />
+    <None Remove="src\ui\dash\TaskListUc.jsx" />
+    <None Remove="src\ui\dash\TasksDashItemUc.jsx" />
+    <None Remove="src\ui\dash\TaskTitleEditUc.jsx" />
+    <None Remove="src\ui\LabelAddUc.jsx" />
+    <None Remove="src\ui\LabelEditUc.jsx" />
+    <None Remove="src\ui\LabelsPopupUc.jsx" />
+    <None Remove="src\ui\MainUc.jsx" />
+    <None Remove="src\ui\NoteListUc.jsx" />
+    <None Remove="src\ui\PopupUc.jsx" />
+    <None Remove="src\ui\popup\LabelAddUc.jsx" />
+    <None Remove="src\ui\popup\LabelEditUc.jsx" />
+    <None Remove="src\ui\popup\LabelsPopupUc.jsx" />
+    <None Remove="src\ui\popup\NoteListUc.jsx" />
+    <None Remove="src\ui\popup\NoteMenuUc.jsx" />
+    <None Remove="src\ui\popup\TaskMenuUc.jsx" />
+    <None Remove="src\ui\TabsUc.jsx" />
+    <None Remove="src\ui\ToolbarUc.jsx" />
+    <None Remove="src\ui\windowUc.jsx" />
   </ItemGroup>
 
   <ItemGroup>

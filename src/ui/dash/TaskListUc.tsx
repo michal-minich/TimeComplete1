@@ -6,17 +6,17 @@ import {
     IApp,
     ITask,
     ILabel,
-    ILabelsPopupView,
-    ITaskTitleEditView
+    ILabelsPopupUc,
+    ITaskTitleEditUc
 } from "../../interfaces";
 import { onMouseDown } from "../../common";
 import DateTime from "../../data/value/DateTime";
 
 
-export default function taskListView(app: IApp,
+export default function taskListUc(app: IApp,
     tasks: ITask[],
-    lpv: ILabelsPopupView,
-    ettv: ITaskTitleEditView) {
+    lpv: ILabelsPopupUc,
+    ettv: ITaskTitleEditUc) {
 
 
     function perform(task: ITask, isDone: HTMLInputElement): any {

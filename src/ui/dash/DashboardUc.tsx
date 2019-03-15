@@ -4,29 +4,29 @@ import * as Surplus from "surplus";
 Surplus;
 import {
     IApp,
-    INoteMenuView,
-    ITaskMenuView,
-    ILabelsPopupView,
-    IDashboardView
+    INoteMenuUc,
+    ITaskMenuUc,
+    ILabelsPopupUc,
+    IDashboardUc
 } from "../../interfaces";
 import { indexOfMin } from "../../common";
 import TasksDashItem from "../../data/dash/TasksDashItem";
-import { tasksDashItemView } from "./TasksDashItemView";
-import TaskTitleEditView from "./TaskTitleEditView";
+import { tasksDashItemUc } from "./TasksDashItemUc";
+import TaskTitleEditUc from "./TaskTitleEditUc";
 import NoteDashItem from "../../data/dash/NoteDashItem";
-import { noteDashItemView } from "./NoteDashItemView";
+import NoteDashItemUc from "./NoteDashItemUc";
 
 
-export default class DashboardView implements IDashboardView {
+export default class DashboardUc implements IDashboardUc{
 
     constructor(
         private readonly app: IApp,
-        private readonly lpv: ILabelsPopupView,
-        private readonly tasksMenu: ITaskMenuView,
-        private readonly noteMenu: INoteMenuView) {
+        private readonly lpv: ILabelsPopupUc,
+        private readonly tasksMenu: ITaskMenuUc,
+        private readonly noteMenu: INoteMenuUc) {
     }
 
-    private titleEditView = new TaskTitleEditView(this.app);
+    private titleEditUc = new TaskTitleEditUc(this.app);
 
 
     private items = () => {
@@ -44,14 +44,14 @@ export default class DashboardView implements IDashboardView {
 
             if (di instanceof TasksDashItem) {
                 const col = indexOfMin(tdsHeight);
-                const v = tasksDashItemView(
-                    this.app, di, this.lpv, this.titleEditView, this.tasksMenu);
+                const v = tasksDashItemUc(
+                    this.app, di, this.lpv, this.titleEditUc, this.tasksMenu);
                 tds[col].appendChild(v);
                 tdsHeight[col] += di.estimatedHeight;
 
             } else if (di instanceof NoteDashItem) {
                 const col = indexOfMin(tdsHeight);
-                const v = noteDashItemView(this.app, di, this.noteMenu);
+                const v = new NoteDashItemUc(this.app, di, this.noteMenu).view;
                 tds[col].appendChild(v);
                 tdsHeight[col] += di.estimatedHeight;
 
@@ -71,7 +71,7 @@ export default class DashboardView implements IDashboardView {
     public view =
         <div className="view-area"
              onMouseDown={this.deselect}>
-            {this.titleEditView.view}
+            {this.titleEditUc.view}
             <table className="task-list-activities">
                 <tr>{this.items}</tr>
             </table>

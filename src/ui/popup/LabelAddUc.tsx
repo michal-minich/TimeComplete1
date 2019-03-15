@@ -11,13 +11,13 @@ import { IApp } from "../../interfaces";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
-export var labelAddViewState: {
+export var labelAddUcState: {
     isForTask: boolean;
     hideWindow: () => void;
 } = { isForTask: false, hideWindow: () => {} };
 
 
-export default function labelAddView(app: IApp) {
+export default function labelAddUc(app: IApp) {
 
     const newName = R.data("");
 
@@ -39,13 +39,13 @@ export default function labelAddView(app: IApp) {
             new LabelStyle(app, new Color("gray"), new Color("white")));
         app.data.labelAdd(l);
         newName("");
-        if (labelAddViewState.isForTask) {
+        if (labelAddUcState.isForTask) {
             const t = app.data.selectedTask;
             if (t)
                 t.addLabel(l);
         }
         addTaskList(app.data.fields.labelPrefix + labelName);
-        labelAddViewState.hideWindow();
+        labelAddUcState.hideWindow();
     }
 
 

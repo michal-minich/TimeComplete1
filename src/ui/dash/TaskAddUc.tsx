@@ -8,7 +8,7 @@ import Task from "../../data/domain/Task";
 import Query from "../../data/Query";
 
 
-export default function taskAddView(app: IApp, tdi: ITasksDashItem) {
+export default function taskAddUc(app: IApp, tdi: ITasksDashItem) {
 
 
     function confirm(queryText: string): void {
