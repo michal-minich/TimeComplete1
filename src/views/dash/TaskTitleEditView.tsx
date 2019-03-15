@@ -4,25 +4,25 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { R } from "../../common";
-import { ITask, IApp } from "../../interfaces";
+import { ITask, IApp, ITaskTitleEditView } from "../../interfaces";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
 
 
-export type TaskTitleEditView = ReturnType<typeof taskTitleEditView>
+export default class TaskTitleEditView implements ITaskTitleEditView {
+
+    constructor(private readonly app: IApp) {
+    }
+
+    private newName = R.data("");
+    private task!: ITask;
 
 
-export default function taskTitleEditView(app: IApp) {
-
-    const newName = R.data("");
-    let task!: ITask;
-
-
-    function begin(t: ITask, titleTd: HTMLTableDataCellElement): void {
-        task = t;
-        app.data.selectedTask = t;
-        newName(t.title);
+    public begin(t: ITask, titleTd: HTMLTableDataCellElement): void {
+        this.task = t;
+        this.app.data.selectedTask = t;
+        this.newName(t.title);
         const r = titleTd.getBoundingClientRect();
         const p = titleTd.parentElement!.parentElement!
             .parentElement!.parentElement!.parentElement!.parentElement!;
@@ -38,44 +38,43 @@ export default function taskTitleEditView(app: IApp) {
     }
 
 
-    function confirm(): void {
-        if (newName().trim() === "") {
-            cancel();
+    private confirm: () => void = () => {
+        if (this.newName().trim() === "") {
+            this.cancel();
         } else {
-            task.title = newName();
-            cleanup();
+            this.task.title = this.newName();
+            this.cleanup();
         }
     }
 
 
-    function cancel(): void {
-        cleanup();
+    private cancel(): void {
+        this.cleanup();
     }
 
 
-    function cleanup(): void {
+    private cleanup(): void {
         taskEditTextBox.style.visibility = "hidden";
-        newName("");
+        this.newName("");
     }
 
 
-    function keyUp(e: KeyboardEvent): void {
+    private keyUp : (e: KeyboardEvent) => void = (e) => {
         if (e.key === "Enter") {
             confirm();
             e.preventDefault();
         } else if (e.key === "Escape") {
-            cancel();
+            this.cancel();
         }
     }
 
-    const view =
+
+    public readonly view =
         <textarea
             ref={taskEditTextBox}
-            fn={data(newName)}
-            onKeyUp={(e: KeyboardEvent) => keyUp(e)}
+            fn={data(this.newName)}
+            onKeyUp={(e: KeyboardEvent) => this.keyUp(e)}
             onBlur={() => confirm()}
             className="task-text-edit-box selected-task">
         </textarea>;
-
-    return { view, begin };
 }

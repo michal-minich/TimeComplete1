@@ -233,6 +233,7 @@ export default class Serializer implements ISerializer {
     getDashboard(o: any): IDashboard {
         const d = new Dashboard(this.app, o.query.text);
         d.items = this.fromArray<IDashItem>(o.items, "DashItem");
+        d.columnsCount = o.columnsCount;
         d.selected(o.selected);
         return d;
     }

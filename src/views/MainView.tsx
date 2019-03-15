@@ -6,16 +6,19 @@ import { IApp, IColorStyle, IMainView } from "../interfaces";
 import LabelsPopupView from "./popup/LabelsPopupView";
 import { removeTextSelections } from "../common";
 import LabelEditView from "./popup/LabelEditView";
-import tabsView from "./TabsView";
+import TabsView from "./TabsView";
 import ToolbarView from "./ToolbarView";
-import dashboardView from "./dash/DashboardView";
+import DashboardView from "./dash/DashboardView";
 import TaskMenuView from "./popup/TaskMenuView";
 import NoteMenuView from "./popup/NoteMenuView";
 
 
 export function colorInlineStyle(ls: IColorStyle | undefined) {
     if (ls)
-        return { backgroundColor: ls.backColor.value, color: ls.textColor.value };
+        return {
+            backgroundColor: ls.backColor.value,
+            color: ls.textColor.value
+        };
     else
         return { backgroundColor: "gray", color: "white" };
 }
@@ -44,7 +47,7 @@ export default class MainView implements IMainView {
 
         this.view =
             <div>
-                {tabsView(app)}
+                {new TabsView(app).view}
                 {toolbar.view}
                 {toolbar.addMenuView.view}
                 {toolbar.noteListView.view}
@@ -53,7 +56,7 @@ export default class MainView implements IMainView {
                 {elv.view}
                 {tm.view}
                 {nm.view}
-                {dashboardView(app, lpv, tm, nm)}
+                {new DashboardView(app, lpv, tm, nm).view}
             </div>;
     }
 

@@ -353,6 +353,16 @@ export interface IToolbarView extends IView {
     readonly moreMenuView: IPopupView;
 }
 
+export interface IDashboardView extends IView {
+}
+
+export interface ITabsView extends IView {
+}
+
+export interface ITaskTitleEditView extends IView {
+    begin(t: ITask, titleTd: HTMLTableDataCellElement): void 
+}
+
 export interface IMainView extends IView {
     //addWindowView(wv: IWindowView): void;
 }

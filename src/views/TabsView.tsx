@@ -2,50 +2,55 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, ITab, ArraySignal } from "../interfaces";
+import { IApp, ITab, ArraySignal, ITabsView } from "../interfaces";
 import { addTab } from "../data/domain/Tab";
 import { colorInlineStyle } from "./MainView";
 
 
-export default function tabsView(app: IApp) {
+export default class TabsView implements ITabsView {
 
-
-    function add() { addTab(app) }
-
-
-    function activate(e: MouseEvent, index: number): void {
-        if ((e.target as HTMLElement).classList.contains("close"))
-            return;
-        app.data.fields.selectedTabIndex = index;
+    constructor(private readonly app: IApp) {
     }
 
 
-    function close(index: number): void {
-        const selIx = app.data.fields.selectedTabIndex;
-        if (selIx > index || selIx === (app.data.tabs().length - 1))
-            app.data.fields.selectedTabIndex = selIx - 1;
-        const t = app.data.tabs()[index];
+    private add: () => void = () => {
+        addTab(this.app);
+    }
+
+
+    private activate(e: MouseEvent, index: number): void {
+        if ((e.target as HTMLElement).classList.contains("close"))
+            return;
+        this.app.data.fields.selectedTabIndex = index;
+    }
+
+
+    private close: (index: number) => void = (index) => {
+        const selIx = this.app.data.fields.selectedTabIndex;
+        if (selIx > index || selIx === (this.app.data.tabs().length - 1))
+            this.app.data.fields.selectedTabIndex = selIx - 1;
+        const t = this.app.data.tabs()[index];
         if (!confirm("Close tab '" + t.title + "'?")) {
             return;
         }
-        app.data.tabDelete(t);
+        this.app.data.tabDelete(t);
     }
 
 
-    function tabs(): ArraySignal<HTMLSpanElement> {
-        return app.data.tabs.map((tab, el, i) => tabView(tab, i));
+    private tabs: () => ArraySignal<HTMLSpanElement> = () => {
+        return this.app.data.tabs.map((tab, el, i) => this.tabView(tab, i));
     }
 
 
-    function tabView(tab: ITab, index: number): HTMLSpanElement {
-        const isSel = index === app.data.fields.selectedTabIndex;
+    private tabView(tab: ITab, index: number): HTMLSpanElement {
+        const isSel = index === this.app.data.fields.selectedTabIndex;
         const v =
             <span className={"tab" + (isSel ? " active-tab" : "")}
                   style={isSel ? colorInlineStyle(tab.style) : {}}
-                  onMouseDown={(e: MouseEvent) => activate(e, index)}>
+                  onMouseDown={(e: MouseEvent) => this.activate(e, index)}>
                 {tab.title}
                 <span className="close"
-                      onClick={() => close(index)}>
+                      onClick={() => this.close(index)}>
                     &#10006;
                 </span>
             </span>;
@@ -53,14 +58,12 @@ export default function tabsView(app: IApp) {
     }
 
 
-    const view =
+    readonly view =
         <div className="tab-bar">
             <img className="logo" src="favicon.png" alt="Time Complete"/>
-            {tabs()()}
-            <span onMouseDown={add} className="tab-plus">
+            {this.tabs()()}
+            <span onMouseDown={this.add} className="tab-plus">
                 <span>+</span>
             </span>
         </div>;
-
-    return view;
 }

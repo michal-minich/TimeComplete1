@@ -9,10 +9,10 @@ import {
     IDashItem,
     ITask,
     ITaskMenuView,
-    ILabelsPopupView
+    ILabelsPopupView,
+    ITaskTitleEditView
 } from "../../interfaces";
 import taskListView from "./TaskListView";
-import { TaskTitleEditView } from "./TaskTitleEditView";
 import taskAddView from "./TaskAddView";
 import { getButton, R } from "../../common";
 import TasksDashItem from "../../data/dash/TasksDashItem";
@@ -48,7 +48,7 @@ export function queryBorder(app: IApp, di: IDashItem) {
 export function tasksDashItemView(app: IApp,
     tdi: ITasksDashItem,
     lpv: ILabelsPopupView,
-    ettv: TaskTitleEditView,
+    ettv: ITaskTitleEditView,
     tasksMenu: ITaskMenuView) {
 
     let originalTitle = "";
