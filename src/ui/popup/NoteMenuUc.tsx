@@ -11,6 +11,7 @@ import {
 } from "../../interfaces";
 import PopupUc from "../PopupUc";
 import NoteDashItem from "../../data/dash/NoteDashItem";
+import Note from "../../data/domain/Note";
 
 
 export default class NoteMenuUc implements INoteMenuUc {
@@ -43,16 +44,24 @@ export default class NoteMenuUc implements INoteMenuUc {
 
 function getControlledView(app: IApp, hide: () => void) {
 
-    function closeSelected(): void {
-        const n = app.data.dashboard.selected()!;
-        app.data.dashboard.remove(n);
-        // ReSharper disable VariableUsedInInnerScopeBeforeDeclared
+    function duplicate(): void {
         hide();
-        // ReSharper restore VariableUsedInInnerScopeBeforeDeclared
+        const n = app.data.dashboard.selected()! as INoteDashItem;
+        const n2 = Note.createNew(app, n.note.title, n.note.text);
+        app.data.noteAdd(n2);
+        app.data.dashboard.unshift(new NoteDashItem(app, n2));
     };
 
 
-    function deleteNote(): void {
+    function close(): void {
+        hide();
+        const n = app.data.dashboard.selected()!;
+        app.data.dashboard.remove(n);
+    };
+
+
+    function del(): void {
+        hide();
         const ndi = app.data.dashboard.selected()! as INoteDashItem;
         const n = ndi.note;
         for (const tab of app.data.tabs()) {
@@ -63,15 +72,14 @@ function getControlledView(app: IApp, hide: () => void) {
                 d.remove(r);
         }
         app.data.noteDelete(ndi.note);
-        // ReSharper disable once VariableUsedInInnerScopeBeforeDeclared
-        hide();
     };
 
 
     const view =
         <ul className="more-menu menu">
-            <li onMouseDown={closeSelected}>Close</li>
-            <li onMouseDown={deleteNote}>Delete</li>
+            <li onMouseDown={duplicate}>Duplicate</li>
+            <li onMouseDown={close}>Close</li>
+            <li onMouseDown={del}>Delete</li>
         </ul>;
     return view;
 

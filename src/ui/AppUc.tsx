@@ -50,6 +50,7 @@ function getControlledView(app: IApp): HTMLElement {
             {toolbar.addMenuUc.view}
             {toolbar.noteListUc.view}
             {toolbar.moreMenuUc.view}
+            {toolbar.taskListsMenuUc.view}
             {lpv.view}
             {elv.view}
             {tm.view}

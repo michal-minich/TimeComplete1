@@ -6,6 +6,7 @@ import { IApp, INote, INoteListUc, IPopupUc } from "../../interfaces";
 
 import PopupUc from "../PopupUc";
 import NoteDashItem from "../../data/dash/NoteDashItem";
+import Note from "../../data/domain/Note";
 
 
 export default class NoteListUc implements INoteListUc {
@@ -54,10 +55,20 @@ function getControlledView(app: IApp, hide: () => void) {
     }
 
 
-    const view =
-        <div className="note-list">
-            {app.data.notes().map(noteView)}
-        </div>;
-    return view;
+    function addNote(): void {
+        const n = Note.createNew(app, "Note", "");
+        app.data.noteAdd(n);
+        app.data.dashboard.unshift(new NoteDashItem(app, n));
+    }
 
+
+    const view =
+        <ul className="note-menu menu">
+            <li onClick={addNote}>Add New Note</li>
+            <div className="note-list">
+                {app.data.notes().map(noteView)}
+            </div>
+        </ul>;
+
+    return view;
 }

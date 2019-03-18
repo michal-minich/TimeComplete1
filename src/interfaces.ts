@@ -358,6 +358,7 @@ export interface IToolbarUc extends IUc {
     readonly addMenuUc: IPopupUc;
     readonly noteListUc: INoteListUc;
     readonly moreMenuUc: IPopupUc;
+    readonly taskListsMenuUc: IPopupUc;
 }
 
 export interface IDashboardUc extends IUc {

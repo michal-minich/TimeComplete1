@@ -97,6 +97,10 @@ function getControllerView(app: IApp) {
     }
 
 
+    function duplicate(): void {
+    }
+
+
     function del(): void {
         R.freeze(() => {
             const l = labelSignal()!;
@@ -132,29 +136,37 @@ function getControllerView(app: IApp) {
 
 
     const view =
-        <div className="edit-label">
-            <span
-                className="label"
-                style={colorInlineStyle(new ColorStyle(
-                    app,
-                    new Color(editColor()),
-                    new Color("white")))}>
-                {editLabelName}
-            </span>
-            <br/>
-            <input type="text"
-                   fn={data(editLabelName)}
-                   onKeyUp={keyUp}/>
-            <br/>
-            <input type="text"
-                   fn={data(editColor)}
-                   onKeyUp={keyUp}/>
-            <br/>
-            <button onClick={confirm}>Ok</button>
-            <button onClick={cancel}>Cancel</button>
-            <button onClick={del}>Delete</button>
-            <button onClick={showTaskList}>Show Task List</button>
-        </div>;
+        <ul className="add-menu menu">
+            <li onClick={duplicate}>Duplicate</li>
+            <li onClick={del}>Delete</li>
+            <li onClick={showTaskList}>Add as new Task List to Dashboard</li>
+            <li>
+                <div className="edit-label">
+                    <span
+                        className="label"
+                        style={colorInlineStyle(new ColorStyle(
+                            app,
+                            new Color(editColor()),
+                            new Color("white")))}>
+                        {editLabelName}
+                    </span>
+                    <br />
+                    <br />
+                    <div>
+                        <input type="text"
+                               fn={data(editLabelName)}
+                               onKeyUp={keyUp}/>
+                    </div>
+                    <div>
+                        <input type="text"
+                               fn={data(editColor)}
+                               onKeyUp={keyUp}/>
+                    </div>
+                    <button onClick={confirm}>Ok</button>
+                    <button onClick={cancel}>Cancel</button>
+                </div>
+            </li>
+        </ul>;
 
     return { setWindow, begin, view };
 }
