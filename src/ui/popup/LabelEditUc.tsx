@@ -3,130 +3,158 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { colorInlineStyle } from "../MainUc";
 import ColorStyle from "../../data/value/ColorStyle";
 import Color from "../../data/value/Color";
-import { ILabel, IApp, ValueSignal, ILabelEditUc, IWindowUc } from "../../interfaces";
-import { R } from "../../common";
+import {
+        ILabel,
+        IApp,
+        ValueSignal,
+        ILabelEditUc,
+        IWindowUc
+    }
+    from "../../interfaces";
+import { colorInlineStyle, R } from "../../common";
 import WindowUc from "./../windowUc";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
 export default class LabelEditUc implements ILabelEditUc {
 
-    constructor(private readonly app: IApp) {
-        this.window = new WindowUc(app, this.render());
+    constructor(app: IApp) {
+
+        this.cv = getControllerView(app);
+        this.win = new WindowUc(app, this.cv.view);
+        this.cv.setWindow(this.win);
     }
 
 
-    private readonly window: IWindowUc
-    private readonly editLabelName = R.data("");
-    private readonly editColor = R.data("");
-    private readonly labelSignal: ValueSignal<ILabel | undefined> = R.data(undefined);
+    private readonly win: IWindowUc;
+    private readonly cv: {
+        setWindow: (w: IWindowUc) => void;
+        begin: (label: ILabel, el: HTMLSpanElement) => void,
+        view: HTMLElement;
+    };
 
 
-    private render() {
-        const view =
-            <div className="edit-label">
-                <span
-                    className="label"
-                    style={colorInlineStyle(new ColorStyle(
-                        this.app,
-                        new Color(this.editColor()),
-                        new Color("white")))}>
-                    {this.editLabelName}
-                </span>
-                <br/>
-                <input type="text"
-                       fn={data(this.editLabelName)}
-                       onKeyUp={this.keyUp}/>
-                <br/>
-                <input type="text"
-                       fn={data(this.editColor)}
-                       onKeyUp={this.keyUp}/>
-                <br/>
-                <button onClick={this.confirm}>Ok</button>
-                <button onClick={this.cancel}>Cancel</button>
-                <button onClick={this.del}>Delete</button>
-                <button onClick={this.showTaskList}>Show Task List</button>
-            </div>;
-        return view;
+    begin(label: ILabel, el: HTMLSpanElement): void {
+        this.win.showBelow(el);
+        this.cv.begin(label, el);
     }
 
 
     get view() {
-        return this.window.view;
+        return this.win.view;
+    }
+}
+
+
+function getControllerView(app: IApp) {
+
+    let win: IWindowUc;
+    const editLabelName = R.data("");
+    const editColor = R.data("");
+    const labelSignal: ValueSignal<ILabel | undefined> = R.data(undefined);
+
+
+    function begin(label: ILabel, el: HTMLSpanElement): void {
+        editLabelName(label.name);
+        editColor(label.style.backColor.value);
+        labelSignal(label);
     }
 
 
-    begin(label: ILabel, el: HTMLSpanElement): void {
-        this.window.showBelow(el);
-        this.editLabelName(label.name);
-        this.editColor(label.style.backColor.value);
-        this.labelSignal(label);
+    function setWindow(w: IWindowUc) {
+        win = w;
     }
 
+    function confirm(): void {
+        const l = labelSignal()!;
 
-    private confirm: () => void = () => {
-        const l = this.labelSignal()!;
-
-        for (const di of this.app.data.dashboard.items()) {
+        for (const di of app.data.dashboard.items()) {
             if (!(di instanceof TasksDashItem))
                 continue;
             const qt = R.sample(di.query.text);
             di.query.text(qt.replace("#" + l.name,
-                "#" + this.editLabelName()));
+                "#" + editLabelName()));
         }
 
-        l.name = this.editLabelName();
-        l.style.backColor = new Color(this.editColor());
-        this.cleanup();
+        l.name = editLabelName();
+        l.style.backColor = new Color(editColor());
+        cleanup();
     }
 
 
-    private cancel: () => void = () => {
-        this.cleanup();
+    function cancel(): void {
+        cleanup();
     }
 
 
-    private cleanup: () => void = () => {
-        this.window.hide();
-        this.labelSignal(undefined);
-        this.editLabelName("");
-        this.editColor("");
+    function cleanup(): void {
+        win.hide();
+        labelSignal(undefined);
+        editLabelName("");
+        editColor("");
     }
 
 
-    private del: () => void = () => {
+    function del(): void {
         R.freeze(() => {
-            const l = this.labelSignal()!;
-            for (const t of this.app.data.tasks()) {
+            const l = labelSignal()!;
+            for (const t of app.data.tasks()) {
                 t.removeLabel(l);
             }
-            for (const di of this.app.data.dashboard.items()) {
+            for (const di of app.data.dashboard.items()) {
                 if (!(di instanceof TasksDashItem))
                     continue;
                 const qt = R.sample(di.query.text);
                 di.query.text(qt.replace("#" + l.name, ""));
             }
-            this.app.data.labelDelete(l);
-            this.cleanup();
+            app.data.labelDelete(l);
+            cleanup();
         });
     }
 
 
-    private keyUp: (e: KeyboardEvent) => void = (e) => {
+    function keyUp(e: KeyboardEvent): void {
         if (e.key === "Enter") {
             confirm();
         } else if (e.key === "Escape") {
-            this.cancel();
+            cancel();
         }
     }
 
 
-    private showTaskList: () => void = () => {
-        const l = this.labelSignal()!;
-        const tdi = new TasksDashItem(this.app, this.app.data.fields.labelPrefix + l.name);
-        this.app.data.dashboard.unshift(tdi);
+    function showTaskList(): void {
+        const l = labelSignal()!;
+        const tdi = new TasksDashItem(app, app.data.fields.labelPrefix + l.name);
+        app.data.dashboard.unshift(tdi);
     }
+
+
+    const view =
+        <div className="edit-label">
+            <span
+                className="label"
+                style={colorInlineStyle(new ColorStyle(
+                    app,
+                    new Color(editColor()),
+                    new Color("white")))}>
+                {editLabelName}
+            </span>
+            <br/>
+            <input type="text"
+                   fn={data(editLabelName)}
+                   onKeyUp={keyUp}/>
+            <br/>
+            <input type="text"
+                   fn={data(editColor)}
+                   onKeyUp={keyUp}/>
+            <br/>
+            <button onClick={confirm}>Ok</button>
+            <button onClick={cancel}>Cancel</button>
+            <button onClick={del}>Delete</button>
+            <button onClick={showTaskList}>Show Task List</button>
+        </div>;
+
+    return { setWindow, begin, view };
 }

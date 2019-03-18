@@ -31,7 +31,7 @@ export default class TaskListUc implements ITaskListUc {
 function getControlledView(app: IApp,
     tasks: ITask[],
     lpv: ILabelsPopupUc,
-    ettv: ITaskTitleEditUc) {
+    ettv: ITaskTitleEditUc): HTMLElement[] {
 
 
     function perform(task: ITask, isDone: HTMLInputElement): any {
@@ -69,7 +69,10 @@ function getControlledView(app: IApp,
                 <td ref={titleTd}
                     title={"Created: " +
                         t.createdOn.toLocaleDateTimeString() +
-                        (t.completedOn ? "\nCompleted: " + t.completedOn.toLocaleDateTimeString() : "")}
+                        (t.completedOn
+                            ? "\nCompleted: " +
+                            t.completedOn.toLocaleDateTimeString()
+                            : "")}
                     tabIndex={1}
                     onFocus={() => ettv.begin(t, titleTd!)}
                     className={t.completedOn !== undefined

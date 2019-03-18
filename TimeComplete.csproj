@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="src\ui\AppUc.jsx" />
     <None Remove="src\ui\dash\DashboardUc.jsx" />
     <None Remove="src\ui\dash\NoteDashItemUc.jsx" />
     <None Remove="src\ui\dash\TaskAddUc.jsx" />

@@ -25,11 +25,17 @@ export default class Label implements ILabel {
 
 
     static createNew(app: IApp, name: string, style: IColorStyle): ILabel {
-        const l = new Label(app, name, style, 1, app.data.getNextId(), app.clock.now());
+        const l = new Label(
+            app,
+            name,
+            style,
+            1,
+            app.data.getNextId(),
+            app.clock.now());
         return l;
     }
 
-    
+
     private readonly nameSignal: ValueSignal<string>;
 
 

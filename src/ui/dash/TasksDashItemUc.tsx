@@ -6,50 +6,39 @@ import data from "surplus-mixin-data";
 import {
     IApp,
     ITasksDashItem,
-    IDashItem,
     ITask,
     ITaskMenuUc,
     ILabelsPopupUc,
-    ITaskTitleEditUc
+    ITaskTitleEditUc,
+    ITasksDashItemUc
 } from "../../interfaces";
 import TaskListUc from "./TaskListUc";
 import TaskAddUc from "./TaskAddUc";
-import { getButton, R } from "../../common";
-import TasksDashItem from "../../data/dash/TasksDashItem";
+import { getButton, queryBackground, queryBorder, R } from "../../common";
 
 
 export let queryTextBox: HTMLInputElement;
 
 
-function queryColor(di: IDashItem): string {
-    if (di instanceof TasksDashItem) {
-        const l = di.query.matcher.firstLabel;
-        if (l)
-            return l.style.backColor.value;
+export default class TasksDashItemUc implements ITasksDashItemUc {
+    constructor(app: IApp,
+        tdi: ITasksDashItem,
+        lpv: ILabelsPopupUc,
+        ettv: ITaskTitleEditUc,
+        tasksMenu: ITaskMenuUc) {
+
+        this.view = getControlledView(app, tdi, lpv, ettv, tasksMenu);
     }
-    return "rgb(101, 101, 101)";
+
+    readonly view: HTMLElement;
 }
 
 
-export function queryBackground(di: IDashItem) {
-    return { backgroundColor: queryColor(di) };
-}
-
-
-export function queryBorder(app: IApp, di: IDashItem) {
-    if (app.data.dashboard.selected() === di) {
-        return { borderColor: queryColor(di) };
-    } else {
-        return { borderColor: "rgb(230, 230, 230)" };
-    }
-}
-
-
-export function tasksDashItemUc(app: IApp,
+function getControlledView(app: IApp,
     tdi: ITasksDashItem,
     lpv: ILabelsPopupUc,
     ettv: ITaskTitleEditUc,
-    tasksMenu: ITaskMenuUc) {
+    tasksMenu: ITaskMenuUc): HTMLElement {
 
     let originalTitle = "";
     const showFilteredOut = R.data(false);
@@ -86,7 +75,8 @@ export function tasksDashItemUc(app: IApp,
         if (tasks.out.length === 0)
             return [];
 
-        const done = tasks.out.filter(t => t.completedOn !== undefined).length;
+        const done = tasks.out.
+            filter(t => t.completedOn !== undefined).length;
         const filteredOut = tasks.out.length - done;
 
         let text = "";
@@ -95,7 +85,8 @@ export function tasksDashItemUc(app: IApp,
             text = done + " done";
 
         if (filteredOut !== 0)
-            text += (done === 0 ? "" : " and ") + filteredOut + " filtered out";
+            text += (done === 0 ? "" : " and ") + filteredOut
+                + " filtered out";
 
         const v =
             <table>
@@ -113,38 +104,7 @@ export function tasksDashItemUc(app: IApp,
             </table>;
 
         return Array.from(v.childNodes) as HTMLElement[];
-    };
-
-
-    const view =
-        <div onMouseDown={(e: MouseEvent) => selectSelf(e)}
-             style={queryBorder(app, tdi)}
-             className={"dash-item tasks-dash " +
-                 (app.data.dashboard.selected() === tdi ? "selected-dash-item" : "")}>
-            <div className="header" style={queryBackground(tdi)}>
-                <input
-                    spellCheck={false}
-                    type="text"
-                    ref={queryTextBox}
-                    onFocus={() => begin()}
-                    onKeyUp={(e: KeyboardEvent) => keyUp(e)}
-                    fn={data(tdi.query.text)}
-                    style={queryBackground(tdi)}/>
-                <span className="burger-button button" onMouseDown={showMenu}>
-                    <span className="drop-down-burger">&#x2261;</span>
-                </span>
-            </div>
-            <div className="body">
-                {new TaskAddUc(app, tdi).view}
-                <table className="task-list lined-list">
-                    <thead></thead>
-                    <tbody>
-                    {new TaskListUc(app, resultTasks().inx, lpv, ettv).view}
-                    </tbody>
-                    {taskList(resultTasks())}
-                </table>
-            </div>
-        </div>;
+    }
 
 
     function begin(): void {
@@ -170,6 +130,37 @@ export function tasksDashItemUc(app: IApp,
             rollback();
     }
 
-    
+
+    const view =
+        <div onMouseDown={selectSelf}
+             style={queryBorder(app, tdi)}
+             className={"dash-item tasks-dash " +
+                 (app.data.dashboard.selected() === tdi ? "selected-dash-item" : "")}>
+            <div className="header" style={queryBackground(tdi)}>
+                <input
+                    spellCheck={false}
+                    type="text"
+                    ref={queryTextBox}
+                    onFocus={begin}
+                    onKeyUp={keyUp}
+                    fn={data(tdi.query.text)}
+                    style={queryBackground(tdi)}/>
+                <span className="burger-button button" onMouseDown={showMenu}>
+                    <span className="drop-down-burger">&#x2261;</span>
+                </span>
+            </div>
+            <div className="body">
+                {new TaskAddUc(app, tdi).view}
+                <table className="task-list lined-list">
+                    <thead></thead>
+                    <tbody>
+                    {new TaskListUc(app, resultTasks().inx, lpv, ettv).view}
+                    </tbody>
+                    {taskList(resultTasks())}
+                </table>
+            </div>
+        </div>;
+
+
     return view;
 }

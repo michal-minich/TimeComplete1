@@ -4,7 +4,8 @@
     ILabel,
     IApp,
     ValueSignal,
-    WritableArraySignal
+    WritableArraySignal,
+    IDateTime as IDateTime1
 } from "../../interfaces";
 import { R } from "../../common";
 
@@ -15,22 +16,34 @@ export default class Task implements ITask {
         private readonly app: IApp,
         title: string,
         public version: number,
-        associatedLabels?: WritableArraySignal<ILabel>,
-        completedOn?: IDateTime,
-        id?: number,
-        createdOn?: IDateTime) {
+        associatedLabels: WritableArraySignal<ILabel> | undefined,
+        completedOn: IDateTime | undefined,
+        id: number,
+        createdOn: IDateTime) {
 
         this.titleSignal = R.data(title);
         this.associatedLabels = associatedLabels ? associatedLabels : R.array([]);
         this.completedOnSignal = R.data(completedOn);
+        this.id = id;
+        this.createdOn = createdOn;
+    }
 
-        if (id) {
-            this.id = id;
-            this.createdOn = createdOn!;
-        } else {
-            this.id = this.app.data.getNextId();
-            this.createdOn = this.app.clock.now();
-        }
+
+    static createNew(
+        app: IApp,
+        title: string,
+        associatedLabels?: WritableArraySignal<ILabel>,
+        completedOn?: IDateTime1): ITask {
+
+        const n = new Task(
+            app,
+            title,
+            1,
+            associatedLabels,
+            completedOn,
+            app.data.getNextId(),
+            app.clock.now());
+        return n;
     }
 
 

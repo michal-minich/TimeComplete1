@@ -2,10 +2,14 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import { IApp, INoteDashItem, INoteMenuUc, INoteDashItemUc } from "../../interfaces";
+import {
+    IApp,
+    INoteDashItem,
+    INoteMenuUc,
+    INoteDashItemUc
+} from "../../interfaces";
 import data from "surplus-mixin-data";
-import { getButton } from "../../common";
-import { queryBorder } from "./TasksDashItemUc";
+import { getButton, queryBorder } from "../../common";
 
 
 export let queryTextBox: HTMLInputElement;
@@ -24,7 +28,10 @@ export default class NoteDashItemUc implements INoteDashItemUc {
 }
 
 
-function getControlledView(app: IApp, ndi: INoteDashItem, noteMenu: INoteMenuUc) {
+function getControlledView(
+    app: IApp,
+    ndi: INoteDashItem,
+    noteMenu: INoteMenuUc): HTMLElement {
 
     function showMenu(e: MouseEvent): void {
         noteMenu.showBelow(getButton(e.target));
@@ -66,7 +73,9 @@ function getControlledView(app: IApp, ndi: INoteDashItem, noteMenu: INoteMenuUc)
             onMouseDown={selectSelf}
             style={queryBorder(app, ndi)}
             className={"dash-item note-dash " +
-                (app.data.dashboard.selected() === ndi ? "selected-dash-item" : "")}>
+                (app.data.dashboard.selected() === ndi
+                    ? "selected-dash-item"
+                    : "")}>
             <div className="header">
                 <input
                     spellCheck={false}

@@ -7,24 +7,12 @@ import { IApp, IWindowUc } from "../interfaces";
 
 export default class WindowUc implements IWindowUc {
 
-    constructor(
-        private readonly app: IApp,
-        content: HTMLElement) {
+    constructor(app: IApp, content: HTMLElement) {
 
-        this.view = this.render(content);
+        this.view = getControlledView(app, content);
     }
-
 
     readonly view: HTMLElement;
-
-
-    private render(content: HTMLElement): HTMLElement {
-        const view =
-            <div className="window hidden">
-                {content}
-            </div>;
-        return view;
-    }
 
 
     showBelow(el: HTMLElement): void {
@@ -38,4 +26,15 @@ export default class WindowUc implements IWindowUc {
     hide() {
         this.view.classList.add("hidden");
     }
+}
+
+
+function getControlledView(app: IApp, content: HTMLElement): HTMLElement {
+
+    const view =
+        <div className="window hidden">
+            {content}
+        </div>;
+
+    return view;
 }

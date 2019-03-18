@@ -26,8 +26,14 @@ export default class Note implements INote {
     }
 
 
-    static createNew(app: IApp, title: string, text: string, version: number): INote {
-        const n = new Note(app, title, text, version, app.data.getNextId(), app.clock.now());
+    static createNew(app: IApp, title: string, text: string): INote {
+        const n = new Note(
+            app,
+            title,
+            text,
+            1,
+            app.data.getNextId(),
+            app.clock.now());
         return n;
     }
 

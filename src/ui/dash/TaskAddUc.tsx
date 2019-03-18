@@ -19,7 +19,7 @@ export default class TaskAddUc implements ITaskAddUc {
 }
 
 
-function getControlledView(app: IApp, tdi: ITasksDashItem) {
+function getControlledView(app: IApp, tdi: ITasksDashItem): HTMLElement {
 
 
     function confirm(queryText: string): void {
@@ -33,7 +33,7 @@ function getControlledView(app: IApp, tdi: ITasksDashItem) {
             title = title.replace("#" + l.name, "");
         }
         title = title.trim().replace("  ", " ");
-        const t = new Task(app, title, 1);
+        const t = Task.createNew(app, title);
         associateLabels(t, sq.matcher.existingLabels);
         associateLabels(t, tq.matcher.existingLabels);
         app.data.taskAdd(t);

@@ -7,16 +7,58 @@ import {
         WritableArraySignal,
         INoteDashItem,
         ITasksDashItem,
+        IColorStyle,
+        IDashItem,
+        IApp,
     } from
     "./interfaces";
+import TasksDashItem from "./data/dash/TasksDashItem";
 
 
-export function findById<T extends IDomainObject>(items: ArraySignal<T>, id: number): T {
+export function findById<T extends IDomainObject>(
+    items: ArraySignal<T>, id: number): T {
     const item = items.find(i => i.id === id)();
     if (item === undefined)
         throw "Item with key '" + id + "' is not present.";
     return item;
 }
+
+
+export function colorInlineStyle(ls: IColorStyle | undefined) {
+    if (ls)
+        return {
+            backgroundColor: ls.backColor.value,
+            color: ls.textColor.value
+        };
+    else
+        return { backgroundColor: "gray", color: "white" };
+}
+
+
+function queryColor(di: IDashItem): string {
+    if (di instanceof TasksDashItem) {
+        const l = di.query.matcher.firstLabel;
+        if (l)
+            return l.style.backColor.value;
+    }
+    return "rgb(101, 101, 101)";
+}
+
+
+export function queryBackground(di: IDashItem) {
+    return { backgroundColor: queryColor(di) };
+}
+
+
+export function queryBorder(app: IApp, di: IDashItem) {
+    if (app.data.dashboard.selected() === di) {
+        return { borderColor: queryColor(di) };
+    } else {
+        return { borderColor: "rgb(230, 230, 230)" };
+    }
+}
+
+
 
 
 export function removeTextSelections() {
@@ -145,9 +187,9 @@ export module R {
     }
 
     export function on<T>(ev: () => any, fn: () => T): () => T;
-    export function on<T>(ev: () => any, fn: (v: T) => T, seed: T, onchanges?: boolean): () => T;
-    export function on<T>(ev: () => any, fn?: any, seed?: T, onchanges?: boolean): T {
-        return (S.on as any)(ev, fn, seed, onchanges);
+    export function on<T>(ev: () => any, fn: (v: T) => T, seed: T, onChanges?: boolean): () => T;
+    export function on<T>(ev: () => any, fn?: any, seed?: T, onChanges?: boolean): T {
+        return (S.on as any)(ev, fn, seed, onChanges);
     }
 
 

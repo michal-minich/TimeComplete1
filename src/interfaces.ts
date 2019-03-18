@@ -9,7 +9,14 @@ export type SimpleType = string | number | boolean;
 export type Indexer<T> = { [key: string]: T };
 
 export type JsonValueType =
-    string | number | boolean | object | string[] | number[] | boolean[] | object[];
+    | string
+    | number
+    | boolean
+    | object
+    | string[]
+    | number[]
+    | boolean[]
+    | object[];
 
 export type ArraySignal<T> = SArray<T>;
 
@@ -137,7 +144,7 @@ export interface IApp {
     readonly localStore: IDataStore;
     readonly sync: ISyncLog;
     readonly data: IData;
-    readonly mainUc: IMainUc;
+    readonly ui: IAppUc;
 }
 
 export interface IData {
@@ -356,6 +363,9 @@ export interface IToolbarUc extends IUc {
 export interface IDashboardUc extends IUc {
 }
 
+export interface ITasksDashItemUc extends IUc {
+}
+
 export interface INoteDashItemUc extends IUc {
 }
 
@@ -369,11 +379,14 @@ export interface ITaskListUc {
 export interface ITabsUc extends IUc {
 }
 
+export interface ILabelAddUc extends IUc {
+}
+
 export interface ITaskTitleEditUc extends IUc {
     begin(t: ITask, titleTd: HTMLTableDataCellElement): void 
 }
 
-export interface IMainUc extends IUc {
+export interface IAppUc extends IUc {
     //addWindowUc(wv: IWindowUc): void;
 }
 

@@ -9,9 +9,7 @@ import { parentDistance } from "../common";
 
 export default class PopupUc implements IPopupUc {
 
-    constructor(
-        private readonly app: IApp,
-        content: HTMLElement) {
+    constructor(app: IApp, content: HTMLElement) {
 
         this.window = new WindowUc(app, content);
     }
@@ -25,9 +23,9 @@ export default class PopupUc implements IPopupUc {
     }
 
 
-    hide :()=> void = () => {
+    hide: () => void = () => {
         this.window.hide();
-    }
+    };
 
 
     showBelow(el: HTMLElement): void {
@@ -45,5 +43,5 @@ export default class PopupUc implements IPopupUc {
             return;
         this.window.hide();
         document.removeEventListener("mousedown", this.hideMe);
-    }
+    };
 }

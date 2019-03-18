@@ -7,7 +7,7 @@ import LabelStyle from "../../data/value/ColorStyle";
 import Color from "../../data/value/Color";
 import { R } from "../../common";
 import Label from "../../data/domain/Label";
-import { IApp } from "../../interfaces";
+import { IApp, ILabelAddUc } from "../../interfaces";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 
 
@@ -17,16 +17,20 @@ export var labelAddUcState: {
 } = { isForTask: false, hideWindow: () => {} };
 
 
-export default function labelAddUc(app: IApp) {
+export default class LabelAddUc implements ILabelAddUc {
+
+    constructor(app: IApp) {
+
+        this.view = getControlledView(app);
+    }
+
+    readonly view: HTMLElement;
+}
+
+
+function getControlledView(app: IApp): HTMLElement {
 
     const newName = R.data("");
-
-
-    const view = <input type="text"
-                        placeholder="new label"
-                        className="new-label-input label"
-                        fn={data(newName)}
-                        onKeyUp={keyUp}/>;
 
 
     function confirm(): void {
@@ -68,5 +72,11 @@ export default function labelAddUc(app: IApp) {
     }
 
 
-    return { view };
-};
+    const view = <input type="text"
+                        placeholder="new label"
+                        className="new-label-input label"
+                        fn={data(newName)}
+                        onKeyUp={keyUp}/>;
+
+    return view;
+}

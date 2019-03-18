@@ -1,4 +1,5 @@
-﻿import { IColorStyle, IColor, TextColorUsage, ValueSignal, IApp, IDomainObject } from "../../interfaces";
+﻿import { IColorStyle, IColor, TextColorUsage, ValueSignal, IApp, IDomainObject } from
+    "../../interfaces";
 import { R } from "../../common";
 import Color from "./Color";
 
@@ -48,17 +49,24 @@ export default class ColorStyle implements IColorStyle {
     }
 
 
-    get customTextColor(): IColor { return this.customTextColorSignal(); }
+    get customTextColor(): IColor {
+        return this.customTextColorSignal();
+    }
 
     set customTextColor(value: IColor) {
         if (this.customTextColorSignal().value === value.value)
             return;
         this.customTextColorSignal(value);
-        this.app.sync.pushField("style.customTextColor", this.owner, value.value);
+        this.app.sync.pushField(
+            "style.customTextColor",
+            this.owner,
+            value.value);
     }
 
 
-    get textColorInUse(): TextColorUsage { return this.textColorInUseSignal(); }
+    get textColorInUse(): TextColorUsage {
+        return this.textColorInUseSignal();
+    }
 
     set textColorInUse(value: TextColorUsage) {
         if (this.textColorInUseSignal() === value)

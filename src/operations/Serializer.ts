@@ -23,7 +23,8 @@ import {
     findById,
     isValueSignal,
     isDomainObject,
-    isArraySignal
+    isArraySignal,
+    C
 } from "../common";
 import DataFields from "../data/DataFields";
 import Tab from "../data/domain/Tab";
@@ -170,7 +171,7 @@ export default class Serializer implements ISerializer {
                 o.customStyle ? this.getColorStyle(o.customStyle, o.id) : undefined,
                 o.version,
                 o.id,
-                o.createdOn ? this.fromPlainObject<IDateTime>(o.createdOn, "DateTime") : undefined);
+                this.fromPlainObject<IDateTime>(o.createdOn, "DateTime"));
             tab.content = this.getDashboard(o.content);
             return tab as any as T;
         }
@@ -245,6 +246,7 @@ export default class Serializer implements ISerializer {
             this.fromPlainObject<IColor>(o.backColor, "Color"),
             this.fromPlainObject<IColor>(o.customTextColor, "Color"),
             o.textColorInUse as TextColorUsage);
+        C.assume(owner !== undefined);
         cs.owner = owner;
         return cs;
     }

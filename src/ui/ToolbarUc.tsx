@@ -82,7 +82,7 @@ export default class ToolbarUc implements IToolbarUc {
 
 
     private addNote: () => void = () => {
-        const n = Note.createNew(this.app, "Note", "", 1);
+        const n = Note.createNew(this.app, "Note", "");
         this.app.data.noteAdd(n);
         this.addMenuUc.hide();
         this.app.data.dashboard.unshift(new NoteDashItem(this.app, n));

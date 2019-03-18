@@ -4,7 +4,7 @@ import * as Surplus from "surplus";
 Surplus;
 import data from "surplus-mixin-data";
 import { R } from "../../common";
-import { ITask, IApp, ITaskTitleEditUc } from "../../interfaces";
+import { ITask, IApp, ITaskTitleEditUc, ValueSignal } from "../../interfaces";
 
 
 export let taskEditTextBox: HTMLTextAreaElement;
@@ -12,14 +12,20 @@ export let taskEditTextBox: HTMLTextAreaElement;
 
 export default class TaskTitleEditUc implements ITaskTitleEditUc {
 
-    constructor(private readonly app: IApp) {
-    }
 
     private newName = R.data("");
     private task!: ITask;
 
 
-    public begin(t: ITask, titleTd: HTMLTableDataCellElement): void {
+    constructor(private readonly app: IApp) {
+
+        this.view = getControlledView(this.newName, this.task);
+    }
+
+    view: HTMLElement;
+
+
+    begin(t: ITask, titleTd: HTMLTableDataCellElement): void {
         this.task = t;
         this.app.data.selectedTask = t;
         this.newName(t.title);
@@ -37,44 +43,52 @@ export default class TaskTitleEditUc implements ITaskTitleEditUc {
         setTimeout(() => taskEditTextBox.focus(), 0);
     }
 
+}
 
-    private confirm: () => void = () => {
-        if (this.newName().trim() === "") {
-            this.cancel();
+
+function getControlledView(
+    newName: ValueSignal<string>,
+    task: ITask): HTMLElement {
+
+    function confirm(): void {
+        if (newName().trim() === "") {
+            cancel();
         } else {
-            this.task.title = this.newName();
-            this.cleanup();
+            task.title = newName();
+            cleanup();
         }
     }
 
 
-    private cancel(): void {
-        this.cleanup();
+    function cancel(): void {
+        cleanup();
     }
 
 
-    private cleanup(): void {
+    function cleanup(): void {
         taskEditTextBox.style.visibility = "hidden";
-        this.newName("");
+        newName("");
     }
 
 
-    private keyUp : (e: KeyboardEvent) => void = (e) => {
+    function keyUp(e: KeyboardEvent): void {
         if (e.key === "Enter") {
             confirm();
             e.preventDefault();
         } else if (e.key === "Escape") {
-            this.cancel();
+            cancel();
         }
     }
 
 
-    public readonly view =
+    const view =
         <textarea
             ref={taskEditTextBox}
-            fn={data(this.newName)}
-            onKeyUp={(e: KeyboardEvent) => this.keyUp(e)}
+            fn={data(newName)}
+            onKeyUp={(e: KeyboardEvent) => keyUp(e)}
             onBlur={() => confirm()}
             className="task-text-edit-box selected-task">
         </textarea>;
+
+    return view;
 }

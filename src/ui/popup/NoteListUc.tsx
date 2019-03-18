@@ -10,52 +10,54 @@ import NoteDashItem from "../../data/dash/NoteDashItem";
 
 export default class NoteListUc implements INoteListUc {
 
-    constructor(private readonly app: IApp) {
+    constructor(app: IApp) {
 
-        const v = this.render();
+        const v = getControlledView(app, this.hide);
         this.popup = new PopupUc(app, v);
     }
 
 
-    private popup: IPopupUc;
+    readonly popup: IPopupUc;
 
 
-    private render() {
-        const view =
-            <div className="note-list">
-                {this.app.data.notes().map(this.noteView)}
-            </div>;
-        return view;
-    }
-
-
-    get view(): HTMLElement {
+    get view() {
         return this.popup.view;
     }
 
 
-    hide(): void {
+    readonly hide: () => void = () => {
         this.popup.hide();
+    };
+
+
+    showBelow(el: HTMLElement): void {
+        this.popup.showBelow(el);
+    }
+}
+
+
+function getControlledView(app: IApp, hide: () => void) {
+
+    function activateNote(n: INote): void {
+        app.data.dashboard.unshift(new NoteDashItem(app, n));
+        hide();
     }
 
 
-    private activateNote: (n: INote) => void = (n) => {
-        this.app.data.dashboard.unshift(new NoteDashItem(this.app, n));
-        this.popup.hide();
-    }
-
-
-    private noteView: (n: INote) => HTMLElement = (n) => {
+    function noteView(n: INote): HTMLElement {
         const v =
             <div className="note"
-                 onClick={() => this.activateNote(n)}>
+                 onClick={() => activateNote(n)}>
                 {(n.title + ": " + n.text).substring(0, 100)}
             </div>;
         return v;
     }
 
 
-    showBelow(el: HTMLElement): void {
-        this.popup.showBelow(el);
-    }
+    const view =
+        <div className="note-list">
+            {app.data.notes().map(noteView)}
+        </div>;
+    return view;
+
 }

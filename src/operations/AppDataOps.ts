@@ -8,11 +8,15 @@ import {
         ITab,
         IApp,
         IDataStore,
+        TextColorUsage,
     } from
     "../interfaces";
 import DataFields from "../data/DataFields";
-import { addTab } from "../data/domain/Tab";
 import Data from "../components/Data";
+import Tab from "../data/domain/Tab";
+import ColorStyle from "../data/value/ColorStyle";
+import Color from "../data/value/Color";
+import Dashboard from "../data/dash/Dashboard";
 
 
 export module AppDataOps {
@@ -152,5 +156,20 @@ export module AppDataOps {
 
         const sv = app.serializer.toPlainObject(value);
         app.localStore.save(key, sv);
+    }
+
+
+    export function addTab(app: IApp): void {
+        const tab = Tab.createNew(app,
+            "tab " + (app.data.tabs().length + 1),
+            new ColorStyle(
+                app,
+                new Color("gray"),
+                new Color("white"),
+                TextColorUsage.BlackOrWhite)
+        );
+        tab.content = new Dashboard(app, "");
+        app.data.tabAdd(tab);
+        app.data.fields.selectedTabIndex = app.data.tabs().length - 1;
     }
 }

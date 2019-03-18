@@ -15,10 +15,10 @@ import NoteDashItem from "../../data/dash/NoteDashItem";
 
 export default class NoteMenuUc implements INoteMenuUc {
 
-    constructor(private readonly app: IApp) {
+    constructor(app: IApp) {
 
-        const v = this.render();
-        this.popup = new PopupUc(this.app, v);
+        const v = getControlledView(app, this.hide);
+        this.popup = new PopupUc(app, v);
     }
 
 
@@ -30,47 +30,49 @@ export default class NoteMenuUc implements INoteMenuUc {
     }
 
 
-    hide(): void {
+    readonly hide: () => void = () => {
         this.popup.hide();
-    }
+    };
 
 
     showBelow(el: HTMLElement): void {
         this.popup.showBelow(el);
     }
+}
 
 
-    private closeSelected: () => void = () => {
-        const n = this.app.data.dashboard.selected()!;
-        this.app.data.dashboard.remove(n);
+function getControlledView(app: IApp, hide: () => void) {
+
+    function closeSelected(): void {
+        const n = app.data.dashboard.selected()!;
+        app.data.dashboard.remove(n);
         // ReSharper disable VariableUsedInInnerScopeBeforeDeclared
-        this.popup.hide();
+        hide();
         // ReSharper restore VariableUsedInInnerScopeBeforeDeclared
-    }
+    };
 
 
-    private deleteNote: () => void = () => {
-        const ndi = this.app.data.dashboard.selected()! as INoteDashItem;
+    function deleteNote(): void {
+        const ndi = app.data.dashboard.selected()! as INoteDashItem;
         const n = ndi.note;
-        for (const tab of this.app.data.tabs()) {
+        for (const tab of app.data.tabs()) {
             const d = tab.content as IDashboard;
             const ndiToRemove = d.items()
                 .filter(ndi2 => ndi2 instanceof NoteDashItem && ndi2.note === n);
             for (const r of ndiToRemove)
                 d.remove(r);
         }
-        this.app.data.noteDelete(ndi.note);
+        app.data.noteDelete(ndi.note);
         // ReSharper disable once VariableUsedInInnerScopeBeforeDeclared
-        this.popup.hide();
-    }
+        hide();
+    };
 
 
-    private render() {
-        const view =
-            <ul className="more-menu menu">
-                <li onMouseDown={this.closeSelected}>Close</li>
-                <li onMouseDown={this.deleteNote}>Delete</li>
-            </ul>;
-        return view;
-    }
+    const view =
+        <ul className="more-menu menu">
+            <li onMouseDown={closeSelected}>Close</li>
+            <li onMouseDown={deleteNote}>Delete</li>
+        </ul>;
+    return view;
+
 }

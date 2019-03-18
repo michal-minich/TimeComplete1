@@ -11,7 +11,7 @@ import {
 } from "../../interfaces";
 import { indexOfMin } from "../../common";
 import TasksDashItem from "../../data/dash/TasksDashItem";
-import { tasksDashItemUc } from "./TasksDashItemUc";
+import TasksDashItemUc from "./TasksDashItemUc";
 import TaskTitleEditUc from "./TaskTitleEditUc";
 import NoteDashItem from "../../data/dash/NoteDashItem";
 import NoteDashItemUc from "./NoteDashItemUc";
@@ -36,7 +36,7 @@ function getControlledView(
     app: IApp,
     lpv: ILabelsPopupUc,
     tasksMenu: ITaskMenuUc,
-    noteMenu: INoteMenuUc) {
+    noteMenu: INoteMenuUc): HTMLElement {
 
     const titleEditUc = new TaskTitleEditUc(app);
 
@@ -56,14 +56,19 @@ function getControlledView(
 
             if (di instanceof TasksDashItem) {
                 const col = indexOfMin(tdsHeight);
-                const v = tasksDashItemUc(app, di, lpv, titleEditUc, tasksMenu);
-                tds[col].appendChild(v);
+                const tdi = new TasksDashItemUc(
+                    app,
+                    di,
+                    lpv,
+                    titleEditUc,
+                    tasksMenu);
+                tds[col].appendChild(tdi.view);
                 tdsHeight[col] += di.estimatedHeight;
 
             } else if (di instanceof NoteDashItem) {
                 const col = indexOfMin(tdsHeight);
-                const v = new NoteDashItemUc(app, di, noteMenu).view;
-                tds[col].appendChild(v);
+                const ndi = new NoteDashItemUc(app, di, noteMenu);
+                tds[col].appendChild(ndi.view);
                 tdsHeight[col] += di.estimatedHeight;
 
             } else {
