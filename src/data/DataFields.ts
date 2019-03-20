@@ -6,7 +6,7 @@ export default class DataFields implements IDataFields {
 
 
     private labelPrefixSignal = R.data("#");
-    private negationOperatorSignal = R.data("!");
+    private negationOperatorSignal = R.data("-");
     private selectedTabIndexSignal = R.data(0);
     private selectedDashItemIndexSignal = R.data(0);
     private selectedTaskIdSignal = R.data(0);

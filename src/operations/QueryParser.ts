@@ -1,4 +1,4 @@
-﻿import { IQueryElement, IApp } from "../interfaces";
+﻿import { IQueryElement, IApp, IDataFields } from "../interfaces";
 
 
 export class QueryText implements IQueryElement {
@@ -29,7 +29,7 @@ export module QueryParser {
 
     export function parse(app: IApp, queryTextText: string): IQueryElement[] {
         const queryItems: IQueryElement[] = [];
-        const iterator = getTokenIterator(queryTextText, 0);
+        const iterator = getTokenIterator(app.data.fields, queryTextText, 0);
         let tok: string | undefined;
         while ((tok = iterator()) !== undefined) {
             const pt = parseOneTok(app, tok, iterator);
@@ -67,7 +67,7 @@ export module QueryParser {
     }
 
 
-    function getTokenIterator(qt: string, pos: number): () => string | undefined {
+    function getTokenIterator(fields: IDataFields, qt: string, pos: number): () => string | undefined {
 
         const currentCode = (): number => { return qt[pos].charCodeAt(0); };
 
@@ -75,12 +75,12 @@ export module QueryParser {
 
         return (): string | undefined => {
             // ReSharper disable InconsistentNaming
-            const ord_0 = "0".charCodeAt(0);
-            const ord_9 = "9".charCodeAt(0);
-            const ord_hash = "#".charCodeAt(0);
-            const ord_dash = "-".charCodeAt(0);
+            //const ord_0 = "0".charCodeAt(0);
+            //const ord_9 = "9".charCodeAt(0);
+            //const ord_hash = fields.labelPrefix.charCodeAt(0);
+            //const ord_dash = "-".charCodeAt(0);
             const ord_space = " ".charCodeAt(0);
-            const ord_ex = "!".charCodeAt(0);
+            const ord_not = fields.negationOperator.charCodeAt(0);
             // ReSharper restore InconsistentNaming
             while (hasWork()) {
                 let ordCh = currentCode();
@@ -93,7 +93,7 @@ export module QueryParser {
                     ordCh = currentCode();
                     if (ordCh === ord_space)
                         break;
-                    else if (ordCh === ord_ex) {
+                    else if (ordCh === ord_not) {
                         ++pos;
                         break;
                     }
