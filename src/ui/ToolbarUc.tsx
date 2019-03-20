@@ -7,18 +7,18 @@ import {
     IApp,
     IToolbarUc,
     IPopupUc,
-    INoteListUc,
+    ITaskMenuListUc,
     ILabelEditUc,
     ILabelsPopupUc,
     ITasksDashItem,
 } from "../interfaces";
 import TasksDashItem from "../data/dash/TasksDashItem";
-import Note from "../data/domain/Note";
 import PopupUc from "./PopupUc";
-import NoteListUc from "./popup/NoteListUc";
-import NoteDashItem from "../data/dash/NoteDashItem";
+import TaskMenuListUc from "./popup/TaskMenuListUc";
+import TaskDashItem from "../data/dash/TaskDashItem";
 import { R, getButton } from "../common";
 import { AppDataOps } from "../operations/AppDataOps";
+import Task from "../data/domain/Task";
 
 
 export default class ToolbarUc implements IToolbarUc {
@@ -30,7 +30,7 @@ export default class ToolbarUc implements IToolbarUc {
 
         this.view = this.render();
         this.addMenuUc = new PopupUc(this.app, this.renderAddMenu());
-        this.noteListUc = new NoteListUc(this.app);
+        this.taskMenuListUc = new TaskMenuListUc(this.app);
         this.moreMenuUc = new PopupUc(this.app, this.renderMoreMenu());
         this.taskListsMenuUc = new PopupUc(this.app, this.taskListsMenu);
     }
@@ -39,7 +39,7 @@ export default class ToolbarUc implements IToolbarUc {
     private readonly autoCols = R.data(true);
     readonly view: HTMLElement;
     readonly addMenuUc: IPopupUc;
-    readonly noteListUc: INoteListUc;
+    readonly taskMenuListUc: ITaskMenuListUc;
     readonly moreMenuUc: IPopupUc;
     readonly taskListsMenuUc: IPopupUc;
 
@@ -48,7 +48,7 @@ export default class ToolbarUc implements IToolbarUc {
         const view =
             <ul className="add-menu menu">
                 <li onClick={this.addTaskList}>Add New Task List</li>
-                <li onClick={this.addNote}>Add New Note</li>
+                <li onClick={this.addTask}>Add New Task</li>
             </ul>;
         return view;
     }
@@ -87,11 +87,11 @@ export default class ToolbarUc implements IToolbarUc {
     }
 
 
-    private addNote: () => void = () => {
-        const n = Note.createNew(this.app, "Note", "");
-        this.app.data.noteAdd(n);
+    private addTask: () => void = () => {
+        const n = Task.createNew(this.app, "", "");
+        this.app.data.taskAdd(n);
         this.addMenuUc.hide();
-        this.app.data.dashboard.unshift(new NoteDashItem(this.app, n));
+        this.app.data.dashboard.unshift(new TaskDashItem(this.app, n));
     };
 
 
@@ -107,8 +107,8 @@ export default class ToolbarUc implements IToolbarUc {
     };
 
 
-    private showNoteListView: (e: MouseEvent) => void = (e) => {
-        this.noteListUc.showBelow(getButton(e.target));
+    private showTaskListView: (e: MouseEvent) => void = (e) => {
+        this.taskMenuListUc.showBelow(getButton(e.target));
     };
 
 
@@ -157,8 +157,8 @@ export default class ToolbarUc implements IToolbarUc {
                 <span className="menu-button button" onMouseDown={this.showTaskListsMenu}>
                     Task Lists <span className="drop-down-triangle">&#x25BC;</span>
                 </span>
-                <span className="menu-button button" onMouseDown={this.showNoteListView}>
-                    Notes <span className="drop-down-triangle">&#x25BC;</span>
+                <span className="menu-button button" onMouseDown={this.showTaskListView}>
+                    Tasks <span className="drop-down-triangle">&#x25BC;</span>
                 </span>
                 <span className="menu-button button" onMouseDown={this.showAddMenu}>
                     Add <span className="drop-down-triangle">&#x25BC;</span>

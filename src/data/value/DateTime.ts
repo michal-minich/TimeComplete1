@@ -4,7 +4,7 @@
 export default class DateTime implements IDateTime {
 
 
-    private readonly jsDate : Date;
+    private readonly jsDate: Date;
 
 
     constructor(readonly value: number) {

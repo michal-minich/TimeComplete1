@@ -75,8 +75,7 @@ function getControlledView(app: IApp,
         if (tasks.out.length === 0)
             return [];
 
-        const done = tasks.out.
-            filter(t => t.completedOn !== undefined).length;
+        const done = tasks.out.filter(t => t.completedOn !== undefined).length;
         const filteredOut = tasks.out.length - done;
 
         let text = "";
@@ -85,8 +84,7 @@ function getControlledView(app: IApp,
             text = done + " done";
 
         if (filteredOut !== 0)
-            text += (done === 0 ? "" : " and ") + filteredOut
-                + " filtered out";
+            text += (done === 0 ? "" : " and ") + filteredOut + " filtered out";
 
         const v =
             <table>

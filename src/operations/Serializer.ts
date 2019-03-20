@@ -30,9 +30,7 @@ import DataFields from "../data/DataFields";
 import Tab from "../data/domain/Tab";
 import Dashboard from "../data/dash/Dashboard";
 import TasksDashItem from "../data/dash/TasksDashItem";
-import Note from "../data/domain/Note";
-import NoteDashItem from "../data/dash/NoteDashItem";
-
+import TaskDashItem from "../data/dash/TaskDashItem";
 
 
 export default class Serializer implements ISerializer {
@@ -41,7 +39,7 @@ export default class Serializer implements ISerializer {
     constructor(private readonly app: IApp) {}
 
 
-    static usedIds : Array<number> = [];
+    static usedIds: Array<number> = [];
 
 
     serialize<T extends object>(value: T): string {
@@ -154,6 +152,7 @@ export default class Serializer implements ISerializer {
             const t = new Task(
                 this.app,
                 o.title,
+                o.text,
                 o.version,
                 this.getAssociatedLabels(o),
                 co,
@@ -175,18 +174,11 @@ export default class Serializer implements ISerializer {
             tab.content = this.getDashboard(o.content);
             return tab as any as T;
         }
-        case "Note":
-        {
-            Serializer.usedIds.push(o.id as number);
-            const n = new Note(this.app, o.title || "Note", o.text, o.version, o.id, o.createdOn);
-            n.labelsFromUser = this.getAssociatedLabels(o);
-            return n as any as T;
-        }
         case "DashItem":
         {
-            if (typeof o.note === "number") {
-                const n = findById(this.app.data.notes, o.note);
-                const nti = new NoteDashItem(this.app, n, o.width, o.height);
+            if (typeof o.task === "number") {
+                const n = findById(this.app.data.tasks, o.task);
+                const nti = new TaskDashItem(this.app, n, o.width, o.height);
                 return nti as any as T;
             } else if (typeof o.newTitle === "string") {
                 const tdi = new TasksDashItem(this.app, o.query.text);
@@ -221,9 +213,9 @@ export default class Serializer implements ISerializer {
 
 
     getAssociatedLabels(o: any): WritableArraySignal<ILabel> {
-        if (o.associatedLabels) {
+        if (o.labelsFromUser) {
             return this.fromRefArray<ILabel>(
-                o.associatedLabels as number[],
+                o.labelsFromUser as number[],
                 this.app.data.labels);
         } else {
             return R.array([]);

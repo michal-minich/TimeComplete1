@@ -3,7 +3,6 @@
         ITask,
         ArraySignal,
         ILabel,
-        INote,
         IDataFields,
         IApp,
         ITab,
@@ -18,7 +17,6 @@ export default class Data implements IData {
 
     tasks!: ArraySignal<ITask>;
     labels!: ArraySignal<ILabel>;
-    notes!: ArraySignal<INote>;
     tabs!: ArraySignal<ITab>;
     fields!: IDataFields;
 
@@ -32,7 +30,8 @@ export default class Data implements IData {
     }
 
 
-    private _selectedTask : ITask | undefined;
+    private _selectedTask: ITask | undefined;
+
     get selectedTask(): ITask | undefined {
         return this._selectedTask;
     }
@@ -47,7 +46,7 @@ export default class Data implements IData {
     getNextId(): number {
         return ++this.app.data.fields.lastId;
     }
-    
+
 
     taskAdd(t: ITask): void {
         (this.tasks as WritableArraySignal<ITask>).unshift(t);
@@ -70,18 +69,6 @@ export default class Data implements IData {
     labelDelete(l: ILabel): void {
         (this.labels as WritableArraySignal<ILabel>).remove(l);
         this.app.sync.pushDelete(l);
-    }
-
-
-    noteAdd(n: INote): void {
-        (this.notes as WritableArraySignal<INote>).unshift(n);
-        this.app.sync.pushNoteCreate(n);
-    }
-
-
-    noteDelete(n: INote): void {
-        (this.notes as WritableArraySignal<INote>).remove(n);
-        this.app.sync.pushDelete(n);
     }
 
 

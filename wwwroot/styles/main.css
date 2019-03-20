@@ -435,22 +435,22 @@ ul.menu {
     box-shadow: 1px 1px 3px 0 rgba(50, 50, 50, 0.3);
 }
 
-.note-list {
+.task-list {
     padding: 0px 3px;
 }
 
-.note {
+.task {
     background-color: white;
     border: 1px solid gray;
     margin: 4px 0;
     padding: 2px 4px;
 }
 
-.note:hover {
+.task:hover {
     background-color: rgb(235, 235, 235);
 }
 
-.note-dash textarea {
+.task-dash textarea {
     max-width: 444px;
     min-width: 206px;
     border: none;

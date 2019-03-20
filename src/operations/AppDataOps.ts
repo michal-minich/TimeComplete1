@@ -3,7 +3,6 @@ import {
         ITask,
         WritableArraySignal,
         ILabel,
-        INote,
         IDataFields,
         ITab,
         IApp,
@@ -31,7 +30,6 @@ export module AppDataOps {
             d.fields = loadObj<IDataFields>(app, "fields", "DataFields", () => new DataFields());
             d.labels = loadArray<ILabel>(app, "labels", "Label");
             d.tasks = loadArray<ITask>(app, "tasks", "Task");
-            d.notes = loadArray<INote>(app, "notes", "Note");
             d.tabs = loadArray<ITab>(app, "tabs", "Tab");
 
         } catch (ex) {
@@ -39,7 +37,6 @@ export module AppDataOps {
             d.fields = new DataFields();
             d.labels = R.array();
             d.tasks = R.array();
-            d.notes = R.array();
             d.tabs = R.array();
 
             console.log(ex);
@@ -59,7 +56,6 @@ export module AppDataOps {
         const data = {
             labels: s.load("labels"),
             tasks: s.load("tasks"),
-            notes: s.load("notes"),
             tabs: s.load("tabs"),
             fields: s.load("fields")
         };
@@ -80,7 +76,7 @@ export module AppDataOps {
                         const o = JSON.parse(json) as any;
                         s.save("labels", o.labels);
                         s.save("tasks", o.tasks);
-                        s.save("notes", o.notes);
+                        s.save("tasks", o.tasks);
                         s.save("tabs", o.tabs);
                         s.save("fields", o.fields);
                     });
@@ -102,7 +98,8 @@ export module AppDataOps {
     }
 
 
-    function loadArray<T extends object>(app: IApp, key: string, type: string): WritableArraySignal<T> {
+    function loadArray<T extends object>(app: IApp, key: string, type: string):
+        WritableArraySignal<T> {
         const arr = app.localStore.loadOrUndefined(key);
         return arr === undefined
             ? R.array()
@@ -130,11 +127,6 @@ export module AppDataOps {
         R.onAny(() => {
             const tasks = d.tasks();
             saveWithSerialize(app, "tasks", tasks);
-        });
-
-        R.onAny(() => {
-            const notes = d.notes();
-            saveWithSerialize(app, "notes", notes);
         });
 
         R.onAny(() => {

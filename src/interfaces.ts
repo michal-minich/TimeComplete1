@@ -32,7 +32,7 @@ export interface IReadonlyValueSignal<T> {
 // Data =======================================================================
 
 
-export type DomainObjectType = "label" | "note" | "tab" | "task";
+export type DomainObjectType = "label" | "tab" | "task";
 
 export interface IColor {
     readonly value: string;
@@ -76,21 +76,17 @@ export const enum TextColorUsage {
 
 export interface ITask extends IDomainObject, IHasAssociatedLabels {
     title: string;
+    text: string;
     completedOn: IDateTime | undefined;
     completedOnSignal: ValueSignal<IDateTime | undefined>;
     readonly associatedLabels: ArraySignal<ILabel>;
     addLabel(l: ILabel): void;
     removeLabel(l: ILabel): void;
-}
-
-export interface INote extends IDomainObject, IHasAssociatedLabels {
-    text: string;
-    textSignal: ValueSignal<string>;
-    title: string;
-    titleSignal: ValueSignal<string>;
-    readonly associatedLabels: ArraySignal<ILabel>;
     readonly labelsFromText: ArraySignal<ILabel>;
     readonly labelsFromUser: WritableArraySignal<ILabel>;
+
+    textSignal: ValueSignal<string>;
+    titleSignal: ValueSignal<string>;
 }
 
 export interface ITab extends IDomainObject {
@@ -105,8 +101,8 @@ export interface ITasksDashItem extends IDashItem {
     readonly query: IQuery;
 }
 
-export interface INoteDashItem extends IDashItem {
-    readonly note: INote;
+export interface ITaskDashItem extends IDashItem {
+    readonly task: ITask;
     readonly width: number;
     readonly height: number;
 }
@@ -155,7 +151,6 @@ export interface IData {
 
     readonly tasks: ArraySignal<ITask>;
     readonly labels: ArraySignal<ILabel>;
-    readonly notes: ArraySignal<INote>;
     readonly tabs: ArraySignal<ITab>;
     readonly fields: IDataFields;
 
@@ -169,9 +164,6 @@ export interface IData {
     labelAdd(l: ILabel): void;
     labelDelete(l: ILabel): void;
 
-    noteAdd(n: INote): void;
-    noteDelete(n: INote): void;
-
     tabAdd(t: ITab): void;
     tabDelete(t: ITab): void;
 }
@@ -182,7 +174,6 @@ export interface ISyncLog {
     pushDelete(o: IDomainObject): void;
     pushLabelCreate(l: ILabel): void;
     pushTaskCreate(t: ITask): void;
-    pushNoteCreate(n: INote): void;
     pushTabCreate(t: ITab): void;
 }
 
@@ -208,13 +199,10 @@ export type SyncChangeType =
 
     // task 
     | "task.title"
+    | "task.text"
     | "task.completedOn"
-    | "task.associatedLabels.add"
-    | "task.associatedLabels.remove"
-
-    // note 
-    | "note.text"
-    | "note.title"
+    | "task.labelsFromUser.add"
+    | "task.labelsFromUser.remove"
 
     // tab 
     | "tab.title"
@@ -234,9 +222,9 @@ export type SyncChangeType =
     | "fields.lastId"
 
     // dash 
-    | "dash.note.note"
-    | "dash.note.width"
-    | "dash.note.height"
+    | "dash.task.task"
+    | "dash.task.width"
+    | "dash.task.height"
     | "dash.tasks.filter";
 
 
@@ -253,10 +241,6 @@ export interface ILabelCreateEvent extends IDomainObjectCreateEvent {
 
 export interface ITaskCreateEvent extends IDomainObjectCreateEvent {
     title: string;
-}
-
-export interface INoteCreateEvent extends IDomainObjectCreateEvent {
-    text: string;
 }
 
 export interface ITabCreateEvent extends IDomainObjectCreateEvent {
@@ -344,10 +328,10 @@ export interface IWindowUc extends IUc {
 export interface IPopupUc extends IWindowUc {
 }
 
-export interface INoteListUc extends IPopupUc {
+export interface ITaskMenuListUc extends IPopupUc {
 }
 
-export interface INoteMenuUc extends IPopupUc {
+export interface ITaskNoteMenuUc extends IPopupUc {
 }
 
 export interface ITaskMenuUc extends IUc {
@@ -362,7 +346,7 @@ export interface ILabelEditUc extends IUc {
 export interface IToolbarUc extends IUc {
     readonly view: HTMLElement;
     readonly addMenuUc: IPopupUc;
-    readonly noteListUc: INoteListUc;
+    readonly taskMenuListUc: ITaskMenuListUc;
     readonly moreMenuUc: IPopupUc;
     readonly taskListsMenuUc: IPopupUc;
 }
@@ -373,7 +357,7 @@ export interface IDashboardUc extends IUc {
 export interface ITasksDashItemUc extends IUc {
 }
 
-export interface INoteDashItemUc extends IUc {
+export interface ITaskDashItemUc extends IUc {
 }
 
 export interface ITaskAddUc extends IUc {

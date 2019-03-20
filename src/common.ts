@@ -5,7 +5,7 @@ import {
         ArraySignal,
         ValueSignal,
         WritableArraySignal,
-        INoteDashItem,
+        ITaskDashItemUc,
         ITasksDashItem,
         IColorStyle,
         IDashItem,
@@ -16,7 +16,8 @@ import TasksDashItem from "./data/dash/TasksDashItem";
 
 
 export function findById<T extends IDomainObject>(
-    items: ArraySignal<T>, id: number): T {
+    items: ArraySignal<T>,
+    id: number): T {
     const item = items.find(i => i.id === id)();
     if (item === undefined)
         throw "Item with key '" + id + "' is not present.";
@@ -57,8 +58,6 @@ export function queryBorder(app: IApp, di: IDashItem) {
         return { borderColor: "rgb(230, 230, 230)" };
     }
 }
-
-
 
 
 export function removeTextSelections() {
@@ -105,8 +104,8 @@ export function isValueSignal(v: any): v is ValueSignal<any> {
 }
 
 
-export function isNoteDashItem(v: any): v is INoteDashItem {
-    return v.noteId && typeof v.noteId === "number";
+export function isTaskDashItem(v: any): v is ITaskDashItemUc {
+    return v.taskId && typeof v.taskId === "number";
 }
 
 

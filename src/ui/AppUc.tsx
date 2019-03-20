@@ -10,7 +10,7 @@ import TabsUc from "./TabsUc";
 import ToolbarUc from "./ToolbarUc";
 import DashboardUc from "./dash/DashboardUc";
 import TaskMenuUc from "./popup/TaskMenuUc";
-import NoteMenuUc from "./popup/NoteMenuUc";
+import TaskNoteMenuUc from "./popup/TaskNoteMenuUc";
 
 
 window.addEventListener("mouseup",
@@ -38,7 +38,7 @@ export default class AppUc implements IAppUc {
 function getControlledView(app: IApp): HTMLElement {
 
     const tm = new TaskMenuUc(app);
-    const nm = new NoteMenuUc(app);
+    const nm = new TaskNoteMenuUc(app);
     const elv = new LabelEditUc(app);
     const lpv = new LabelsPopupUc(app, app.data.labels);
     const toolbar = new ToolbarUc(app, elv, lpv);
@@ -48,7 +48,7 @@ function getControlledView(app: IApp): HTMLElement {
             {new TabsUc(app).view}
             {toolbar.view}
             {toolbar.addMenuUc.view}
-            {toolbar.noteListUc.view}
+            {toolbar.taskMenuListUc.view}
             {toolbar.moreMenuUc.view}
             {toolbar.taskListsMenuUc.view}
             {lpv.view}

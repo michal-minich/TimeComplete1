@@ -4,9 +4,9 @@ import * as Surplus from "surplus";
 Surplus;
 import {
     IApp,
-    INoteDashItem,
-    INoteMenuUc,
-    INoteDashItemUc
+    ITaskDashItem,
+    ITaskDashItemUc,
+    ITaskNoteMenuUc,
 } from "../../interfaces";
 import data from "surplus-mixin-data";
 import { getButton, queryBorder } from "../../common";
@@ -17,11 +17,11 @@ export let queryTextBox: HTMLInputElement;
 let originalTitle = "";
 
 
-export default class NoteDashItemUc implements INoteDashItemUc {
+export default class TaskDashItemUc implements ITaskDashItemUc {
 
-    constructor(app: IApp, ndi: INoteDashItem, noteMenu: INoteMenuUc) {
+    constructor(app: IApp, ndi: ITaskDashItem, taskMenu: ITaskNoteMenuUc) {
 
-        this.view = getControlledView(app, ndi, noteMenu);
+        this.view = getControlledView(app, ndi, taskMenu);
     }
 
     readonly view: HTMLElement;
@@ -30,11 +30,11 @@ export default class NoteDashItemUc implements INoteDashItemUc {
 
 function getControlledView(
     app: IApp,
-    ndi: INoteDashItem,
-    noteMenu: INoteMenuUc): HTMLElement {
+    ndi: ITaskDashItem,
+    taskMenu: ITaskNoteMenuUc): HTMLElement {
 
     function showMenu(e: MouseEvent): void {
-        noteMenu.showBelow(getButton(e.target));
+        taskMenu.showBelow(getButton(e.target));
     }
 
 
@@ -45,18 +45,18 @@ function getControlledView(
 
 
     function begin(): void {
-        originalTitle = ndi.note.titleSignal();
+        originalTitle = ndi.task.titleSignal();
         app.data.selectedTask = undefined;
     }
 
 
     function rollback(): void {
         if (originalTitle === "__NEXT_EMPTY__") {
-            originalTitle = ndi.note.titleSignal();
-            ndi.note.titleSignal("");
+            originalTitle = ndi.task.titleSignal();
+            ndi.task.titleSignal("");
 
         } else {
-            ndi.note.titleSignal(originalTitle);
+            ndi.task.titleSignal(originalTitle);
             originalTitle = "__NEXT_EMPTY__";
         }
     }
@@ -72,7 +72,7 @@ function getControlledView(
         <div
             onMouseDown={selectSelf}
             style={queryBorder(app, ndi)}
-            className={"dash-item note-dash " +
+            className={"dash-item task-dash " +
                 (app.data.dashboard.selected() === ndi
                     ? "selected-dash-item"
                     : "")}>
@@ -83,7 +83,7 @@ function getControlledView(
                     ref={queryTextBox}
                     onFocus={begin}
                     onKeyUp={keyUp}
-                    fn={data(ndi.note.titleSignal)}/>
+                    fn={data(ndi.task.titleSignal)}/>
                 <span className="burger-button button" onMouseDown={showMenu}>
                     <span className="drop-down-burger">&#x2261;</span>
                 </span>
@@ -91,7 +91,7 @@ function getControlledView(
 
             <textarea
                 style={{ width: ndi.width + "px", height: ndi.height + "px" }}
-                fn={data(ndi.note.textSignal)}>
+                fn={data(ndi.task.textSignal)}>
             </textarea>
         </div>;
 

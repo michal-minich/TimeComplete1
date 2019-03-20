@@ -6,12 +6,10 @@
         ITask,
         ILabel,
         ILabelCreateEvent,
-        INote,
         ITab,
         ITaskCreateEvent,
         IDomainObject,
         IDeleteEvent,
-        INoteCreateEvent,
         ITabCreateEvent,
         IColorStyle,
         IColorStyleChangeEvent,
@@ -77,16 +75,6 @@ export default class SyncLog implements ISyncLog {
         const d: ITaskCreateEvent = {
             ...this.getObject(t),
             title: t.title
-        };
-        this.push("object.create", d);
-    }
-
-
-    pushNoteCreate(n: INote): void {
-        C.assume(n.version === 1);
-        const d: INoteCreateEvent = {
-            ...this.getObject(n),
-            text: n.text
         };
         this.push("object.create", d);
     }

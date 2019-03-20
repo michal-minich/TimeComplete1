@@ -9,8 +9,8 @@
   <ItemGroup>
     <None Remove="src\ui\AppUc.jsx" />
     <None Remove="src\ui\dash\DashboardUc.jsx" />
-    <None Remove="src\ui\dash\NoteDashItemUc.jsx" />
     <None Remove="src\ui\dash\TaskAddUc.jsx" />
+    <None Remove="src\ui\dash\TaskDashItemUc.jsx" />
     <None Remove="src\ui\dash\TaskListUc.jsx" />
     <None Remove="src\ui\dash\TasksDashItemUc.jsx" />
     <None Remove="src\ui\dash\TaskTitleEditUc.jsx" />
@@ -23,12 +23,12 @@
     <None Remove="src\ui\popup\LabelAddUc.jsx" />
     <None Remove="src\ui\popup\LabelEditUc.jsx" />
     <None Remove="src\ui\popup\LabelsPopupUc.jsx" />
-    <None Remove="src\ui\popup\NoteListUc.jsx" />
-    <None Remove="src\ui\popup\NoteMenuUc.jsx" />
+    <None Remove="src\ui\popup\TaskMenuListUc.jsx" />
     <None Remove="src\ui\popup\TaskMenuUc.jsx" />
+    <None Remove="src\ui\popup\TaskNoteMenuUc.jsx" />
     <None Remove="src\ui\TabsUc.jsx" />
     <None Remove="src\ui\ToolbarUc.jsx" />
-    <None Remove="src\ui\windowUc.jsx" />
+    <None Remove="src\ui\WindowUc.jsx" />
   </ItemGroup>
 
   <ItemGroup>

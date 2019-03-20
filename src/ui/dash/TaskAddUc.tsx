@@ -33,7 +33,7 @@ function getControlledView(app: IApp, tdi: ITasksDashItem): HTMLElement {
             title = title.replace("#" + l.name, "");
         }
         title = title.trim().replace("  ", " ");
-        const t = Task.createNew(app, title);
+        const t = Task.createNew(app, title, "");
         associateLabels(t, sq.matcher.existingLabels);
         associateLabels(t, tq.matcher.existingLabels);
         app.data.taskAdd(t);

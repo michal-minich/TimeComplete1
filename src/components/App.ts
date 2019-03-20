@@ -48,7 +48,7 @@ export default class App implements IApp {
     constructor() {
 
         AppDataOps.loadAppData(this);
-        
+
         this.ui = new AppUc(this);
 
         document.body.appendChild(this.ui.view);

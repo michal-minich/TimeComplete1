@@ -4,17 +4,17 @@ import * as Surplus from "surplus";
 Surplus;
 import {
     IApp,
-    INoteMenuUc,
     ITaskMenuUc,
     ILabelsPopupUc,
-    IDashboardUc
+    IDashboardUc,
+    ITaskNoteMenuUc
 } from "../../interfaces";
 import { indexOfMin } from "../../common";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 import TasksDashItemUc from "./TasksDashItemUc";
 import TaskTitleEditUc from "./TaskTitleEditUc";
-import NoteDashItem from "../../data/dash/NoteDashItem";
-import NoteDashItemUc from "./NoteDashItemUc";
+import TaskDashItem from "../../data/dash/TaskDashItem";
+import TaskDashItemUc from "./TaskDashItemUc";
 
 
 export default class DashboardUc implements IDashboardUc {
@@ -23,9 +23,9 @@ export default class DashboardUc implements IDashboardUc {
         app: IApp,
         lpv: ILabelsPopupUc,
         tasksMenu: ITaskMenuUc,
-        noteMenu: INoteMenuUc) {
+        taskMenu: ITaskNoteMenuUc) {
 
-        this.view = getControlledView(app, lpv, tasksMenu, noteMenu);
+        this.view = getControlledView(app, lpv, tasksMenu, taskMenu);
     }
 
     readonly view: HTMLElement;
@@ -36,7 +36,7 @@ function getControlledView(
     app: IApp,
     lpv: ILabelsPopupUc,
     tasksMenu: ITaskMenuUc,
-    noteMenu: INoteMenuUc): HTMLElement {
+    taskMenu: ITaskNoteMenuUc): HTMLElement {
 
     const titleEditUc = new TaskTitleEditUc(app);
 
@@ -52,7 +52,8 @@ function getControlledView(
             tdsHeight.push(0);
         }
 
-        for (const di of app.data.dashboard.items()) {
+        const dashItems = app.data.dashboard.items();
+        for (const di of dashItems) {
 
             if (di instanceof TasksDashItem) {
                 const col = indexOfMin(tdsHeight);
@@ -65,9 +66,9 @@ function getControlledView(
                 tds[col].appendChild(tdi.view);
                 tdsHeight[col] += di.estimatedHeight;
 
-            } else if (di instanceof NoteDashItem) {
+            } else if (di instanceof TaskDashItem) {
                 const col = indexOfMin(tdsHeight);
-                const ndi = new NoteDashItemUc(app, di, noteMenu);
+                const ndi = new TaskDashItemUc(app, di, taskMenu);
                 tds[col].appendChild(ndi.view);
                 tdsHeight[col] += di.estimatedHeight;
 

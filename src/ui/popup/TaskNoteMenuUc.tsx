@@ -4,17 +4,17 @@ import * as Surplus from "surplus";
 Surplus;
 import {
     IApp,
-    INoteDashItem,
     IDashboard,
-    INoteMenuUc,
-    IPopupUc
+    ITaskNoteMenuUc,
+    IPopupUc,
+    ITaskDashItem
 } from "../../interfaces";
 import PopupUc from "../PopupUc";
-import NoteDashItem from "../../data/dash/NoteDashItem";
-import Note from "../../data/domain/Note";
+import TaskDashItem from "../../data/dash/TaskDashItem";
+import Task from "../../data/domain/Task";
 
 
-export default class NoteMenuUc implements INoteMenuUc {
+export default class TaskNoteMenuUc implements ITaskNoteMenuUc {
 
     constructor(app: IApp) {
 
@@ -46,10 +46,10 @@ function getControlledView(app: IApp, hide: () => void) {
 
     function duplicate(): void {
         hide();
-        const n = app.data.dashboard.selected()! as INoteDashItem;
-        const n2 = Note.createNew(app, n.note.title, n.note.text);
-        app.data.noteAdd(n2);
-        app.data.dashboard.unshift(new NoteDashItem(app, n2));
+        const n = app.data.dashboard.selected()! as ITaskDashItem;
+        const n2 = Task.createNew(app, n.task.title, n.task.text);
+        app.data.taskAdd(n2);
+        app.data.dashboard.unshift(new TaskDashItem(app, n2));
     };
 
 
@@ -62,16 +62,16 @@ function getControlledView(app: IApp, hide: () => void) {
 
     function del(): void {
         hide();
-        const ndi = app.data.dashboard.selected()! as INoteDashItem;
-        const n = ndi.note;
+        const ndi = app.data.dashboard.selected()! as ITaskDashItem;
+        const n = ndi.task;
         for (const tab of app.data.tabs()) {
             const d = tab.content as IDashboard;
             const ndiToRemove = d.items()
-                .filter(ndi2 => ndi2 instanceof NoteDashItem && ndi2.note === n);
+                .filter(ndi2 => ndi2 instanceof TaskDashItem && ndi2.task === n);
             for (const r of ndiToRemove)
                 d.remove(r);
         }
-        app.data.noteDelete(ndi.note);
+        app.data.taskDelete(ndi.task);
     };
 
 

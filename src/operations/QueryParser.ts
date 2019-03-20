@@ -67,7 +67,8 @@ export module QueryParser {
     }
 
 
-    function getTokenIterator(fields: IDataFields, qt: string, pos: number): () => string | undefined {
+    function getTokenIterator(fields: IDataFields, qt: string, pos: number): () =>
+        string | undefined {
 
         const currentCode = (): number => { return qt[pos].charCodeAt(0); };
 
