@@ -168,7 +168,7 @@ export module AppDataOps {
                 new Color("white"),
                 TextColorUsage.BlackOrWhite)
         );
-        tab.content = new Dashboard(app, "");
+        tab.content = new Dashboard(app, app.data.fields.labelPrefix + "All");
         app.data.tabAdd(tab);
         app.data.fields.selectedTabIndex = app.data.tabs().length - 1;
     }

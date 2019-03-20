@@ -44,7 +44,7 @@ function getControlledView(app: IApp,
     const showFilteredOut = R.data(false);
 
     function showMenu(e: MouseEvent) {
-        tasksMenu.showBelow(getButton(e.target));
+        tasksMenu.showBelow(getButton(e.target), resultTasks().inx);
     }
 
 

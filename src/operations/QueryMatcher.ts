@@ -70,7 +70,7 @@ export default class QueryMatcher implements IQueryMatcher {
 
     taskMatches(t: ITask): boolean {
         if (this.queryItems.length === 0)
-            return true;
+            return false;
         for (const qi of this.queryItems) {
             const m = this.matchOne(qi, t);
             if (!m)
@@ -93,6 +93,8 @@ export default class QueryMatcher implements IQueryMatcher {
                 return R.sample(t.completedOnSignal) === undefined;
             } else if (qi.value === "Done") {
                 return R.sample(t.completedOnSignal) !== undefined;
+            } else if (qi.value === "All") {
+                return true;
             } else {
                 for (const al of t.associatedLabels()) {
                     if (al.name.indexOf(qi.value) !== -1) {

@@ -40,7 +40,7 @@ export interface IColor {
 
 export interface IDateTime {
     readonly value: number;
-    toLocaleDateTimeString() : string;
+    toLocaleDateTimeString(): string;
 }
 
 export interface IHasAssociatedLabels {
@@ -152,7 +152,7 @@ export interface IApp {
 }
 
 export interface IData {
-    
+
     readonly tasks: ArraySignal<ITask>;
     readonly labels: ArraySignal<ILabel>;
     readonly notes: ArraySignal<INote>;
@@ -350,7 +350,8 @@ export interface INoteListUc extends IPopupUc {
 export interface INoteMenuUc extends IPopupUc {
 }
 
-export interface ITaskMenuUc extends IPopupUc {
+export interface ITaskMenuUc extends IUc {
+    showBelow(el: HTMLElement, tasks: ITask[]): void;
 }
 
 export interface ILabelEditUc extends IUc {
@@ -375,7 +376,7 @@ export interface ITasksDashItemUc extends IUc {
 export interface INoteDashItemUc extends IUc {
 }
 
-export interface ITaskAddUc extends IUc{
+export interface ITaskAddUc extends IUc {
 }
 
 export interface ITaskListUc {
@@ -389,7 +390,7 @@ export interface ILabelAddUc extends IUc {
 }
 
 export interface ITaskTitleEditUc extends IUc {
-    begin(t: ITask, titleTd: HTMLTableDataCellElement): void 
+    begin(t: ITask, titleTd: HTMLTableDataCellElement): void
 }
 
 export interface IAppUc extends IUc {
