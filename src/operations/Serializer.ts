@@ -179,7 +179,7 @@ export default class Serializer implements ISerializer {
         {
             Serializer.usedIds.push(o.id as number);
             const n = new Note(this.app, o.title || "Note", o.text, o.version, o.id, o.createdOn);
-            n.associatedLabels = this.getAssociatedLabels(o);
+            n.labelsFromUser = this.getAssociatedLabels(o);
             return n as any as T;
         }
         case "DashItem":

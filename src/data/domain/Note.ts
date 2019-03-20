@@ -22,7 +22,7 @@ export default class Note implements INote {
 
         this.titleSignal = R.data(title);
         this.textSignal = R.data(text);
-        this.associatedLabels = R.array([]);
+        this.labelsFromUser = R.array([]);
     }
 
 
@@ -39,7 +39,7 @@ export default class Note implements INote {
 
 
     readonly type = "note";
-    associatedLabels: WritableArraySignal<ILabel>;
+    labelsFromUser: WritableArraySignal<ILabel>;
     readonly textSignal: ValueSignal<string>;
     readonly titleSignal: ValueSignal<string>;
 
@@ -49,8 +49,8 @@ export default class Note implements INote {
     }
 
 
-    get allLabels(): ArraySignal<ILabel> {
-        return this.labelsFromText.concat(this.associatedLabels);
+    get associatedLabels(): ArraySignal<ILabel> {
+        return this.labelsFromText.concat(this.labelsFromUser);
     }
 
 

@@ -53,6 +53,7 @@ function getControlledView(app: IApp): HTMLElement {
             {toolbar.taskListsMenuUc.view}
             {lpv.view}
             {elv.view}
+            {elv.editView}
             {tm.view}
             {nm.view}
             {new DashboardUc(app, lpv, tm, nm).view}

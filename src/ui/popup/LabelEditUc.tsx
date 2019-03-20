@@ -10,12 +10,14 @@ import {
         IApp,
         ValueSignal,
         ILabelEditUc,
-        IWindowUc
+        IWindowUc,
+        IPopupUc
     }
     from "../../interfaces";
 import { colorInlineStyle, R } from "../../common";
 import WindowUc from "./../windowUc";
 import TasksDashItem from "../../data/dash/TasksDashItem";
+import PopupUc from "../PopupUc";
 
 
 export default class LabelEditUc implements ILabelEditUc {
@@ -23,16 +25,19 @@ export default class LabelEditUc implements ILabelEditUc {
     constructor(app: IApp) {
 
         this.cv = getControllerView(app);
-        this.win = new WindowUc(app, this.cv.view);
-        this.cv.setWindow(this.win);
+        this.win = new PopupUc(app, this.cv.view);
+        this.editWin = new WindowUc(app, this.cv.editView);
+        this.cv.setWindow(this.win, this.editWin);
     }
 
 
-    private readonly win: IWindowUc;
+    private readonly win: IPopupUc;
+    private readonly editWin: IWindowUc;
     private readonly cv: {
-        setWindow: (w: IWindowUc) => void;
+        setWindow: (w: IWindowUc, ew: IWindowUc) => void;
         begin: (label: ILabel, el: HTMLSpanElement) => void,
         view: HTMLElement;
+        editView: HTMLElement;
     };
 
 
@@ -45,12 +50,18 @@ export default class LabelEditUc implements ILabelEditUc {
     get view() {
         return this.win.view;
     }
+
+
+    get editView() {
+        return this.editWin.view;
+    }
 }
 
 
 function getControllerView(app: IApp) {
 
     let win: IWindowUc;
+    let editWin: IWindowUc;
     const editLabelName = R.data("");
     const editColor = R.data("");
     const labelSignal: ValueSignal<ILabel | undefined> = R.data(undefined);
@@ -63,8 +74,9 @@ function getControllerView(app: IApp) {
     }
 
 
-    function setWindow(w: IWindowUc) {
+    function setWindow(w: IWindowUc, ew: IWindowUc) {
         win = w;
+        editWin = ew;
     }
 
     function confirm(): void {
@@ -90,7 +102,7 @@ function getControllerView(app: IApp) {
 
 
     function cleanup(): void {
-        win.hide();
+        editWin.hide();
         labelSignal(undefined);
         editLabelName("");
         editColor("");
@@ -98,10 +110,12 @@ function getControllerView(app: IApp) {
 
 
     function duplicate(): void {
+        win.hide();
     }
 
 
     function del(): void {
+        win.hide();
         R.freeze(() => {
             const l = labelSignal()!;
             for (const t of app.data.tasks()) {
@@ -129,44 +143,53 @@ function getControllerView(app: IApp) {
 
 
     function showTaskList(): void {
+        win.hide();
         const l = labelSignal()!;
         const tdi = new TasksDashItem(app, app.data.fields.labelPrefix + l.name);
         app.data.dashboard.unshift(tdi);
     }
 
 
+    function edit(e: MouseEvent) {
+        win.hide();
+        editWin.showBelow(e.target as HTMLElement);
+    }
+
+
     const view =
         <ul className="add-menu menu">
+            <li onClick={showTaskList}>Show Tasks</li>
             <li onClick={duplicate}>Duplicate</li>
+            <li onClick={edit}>Edit</li>
             <li onClick={del}>Delete</li>
-            <li onClick={showTaskList}>Add as new Task List to Dashboard</li>
-            <li>
-                <div className="edit-label">
-                    <span
-                        className="label"
-                        style={colorInlineStyle(new ColorStyle(
-                            app,
-                            new Color(editColor()),
-                            new Color("white")))}>
-                        {editLabelName}
-                    </span>
-                    <br />
-                    <br />
-                    <div>
-                        <input type="text"
-                               fn={data(editLabelName)}
-                               onKeyUp={keyUp}/>
-                    </div>
-                    <div>
-                        <input type="text"
-                               fn={data(editColor)}
-                               onKeyUp={keyUp}/>
-                    </div>
-                    <button onClick={confirm}>Ok</button>
-                    <button onClick={cancel}>Cancel</button>
-                </div>
-            </li>
         </ul>;
 
-    return { setWindow, begin, view };
+
+    const editView =
+        <div className="edit-label">
+            <span
+                className="label"
+                style={colorInlineStyle(new ColorStyle(
+                    app,
+                    new Color(editColor()),
+                    new Color("white")))}>
+                {editLabelName}
+            </span>
+            <br/>
+            <br/>
+            <div>
+                <input type="text"
+                       fn={data(editLabelName)}
+                       onKeyUp={keyUp}/>
+            </div>
+            <div>
+                <input type="text"
+                       fn={data(editColor)}
+                       onKeyUp={keyUp}/>
+            </div>
+            <button onClick={confirm}>Ok</button>
+            <button onClick={cancel}>Cancel</button>
+        </div>;
+
+    return { setWindow, begin, view, editView };
 }

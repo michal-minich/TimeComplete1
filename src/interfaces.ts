@@ -43,6 +43,10 @@ export interface IDateTime {
     toLocaleDateTimeString() : string;
 }
 
+export interface IHasAssociatedLabels {
+    associatedLabels: ArraySignal<ILabel>;
+}
+
 export interface IDomainObject {
     readonly type: DomainObjectType;
     readonly id: number;
@@ -70,7 +74,7 @@ export const enum TextColorUsage {
     Custom
 }
 
-export interface ITask extends IDomainObject {
+export interface ITask extends IDomainObject, IHasAssociatedLabels {
     title: string;
     completedOn: IDateTime | undefined;
     completedOnSignal: ValueSignal<IDateTime | undefined>;
@@ -79,14 +83,14 @@ export interface ITask extends IDomainObject {
     removeLabel(l: ILabel): void;
 }
 
-export interface INote extends IDomainObject {
+export interface INote extends IDomainObject, IHasAssociatedLabels {
     text: string;
     textSignal: ValueSignal<string>;
     title: string;
     titleSignal: ValueSignal<string>;
-    readonly associatedLabels: WritableArraySignal<ILabel>;
+    readonly associatedLabels: ArraySignal<ILabel>;
     readonly labelsFromText: ArraySignal<ILabel>;
-    readonly allLabels: ArraySignal<ILabel>;
+    readonly labelsFromUser: WritableArraySignal<ILabel>;
 }
 
 export interface ITab extends IDomainObject {
@@ -351,6 +355,7 @@ export interface ITaskMenuUc extends IPopupUc {
 
 export interface ILabelEditUc extends IUc {
     begin(label: ILabel, el: HTMLSpanElement): void;
+    readonly editView: HTMLElement;
 }
 
 export interface IToolbarUc extends IUc {

@@ -10,15 +10,15 @@ import {
     INoteListUc,
     ILabelEditUc,
     ILabelsPopupUc,
+    ITasksDashItem,
 } from "../interfaces";
 import TasksDashItem from "../data/dash/TasksDashItem";
 import Note from "../data/domain/Note";
 import PopupUc from "./PopupUc";
 import NoteListUc from "./popup/NoteListUc";
 import NoteDashItem from "../data/dash/NoteDashItem";
-import { R, getButton} from "../common";
+import { R, getButton } from "../common";
 import { AppDataOps } from "../operations/AppDataOps";
-import Task from "../data/domain/Task";
 
 
 export default class ToolbarUc implements IToolbarUc {
@@ -62,12 +62,15 @@ export default class ToolbarUc implements IToolbarUc {
                     <input type="checkbox" id="auto-columns-count" fn={data(this.autoCols)}/>
                     <label htmlFor="auto-columns-count">Auto</label>
                     <fieldset disabled={this.autoCols()}>
-                        <button onMouseDown=
-                                {() => --this.app.data.dashboard.columnsCount}>-</button>
-                        <span className="dash-columns-input">{() => this.app.data.dashboard
-                            .columnsCount}</span>
-                        <button onMouseDown=
-                                {() => ++this.app.data.dashboard.columnsCount}>+</button>
+                        <button onMouseDown={
+                            () => --this.app.data.dashboard.columnsCount
+                        }>-</button>
+                        <span className="dash-columns-input">{
+                            () => this.app.data.dashboard.columnsCount
+                        }</span>
+                        <button onMouseDown={
+                            () => ++this.app.data.dashboard.columnsCount
+                        }>+</button>
                     </fieldset>
                 </li>
                 <li>
@@ -89,39 +92,39 @@ export default class ToolbarUc implements IToolbarUc {
         this.app.data.noteAdd(n);
         this.addMenuUc.hide();
         this.app.data.dashboard.unshift(new NoteDashItem(this.app, n));
-    }
+    };
 
 
     private addTaskList: () => void = () => {
         const tdi = new TasksDashItem(this.app, "");
         this.app.data.dashboard.unshift(tdi);
         this.addMenuUc.hide();
-    }
+    };
 
 
     private showLabels: (e: MouseEvent) => void = (e) => {
         this.lpv.show(getButton(e.target), undefined, (l, el) => this.elv.begin(l, el));
-    }
+    };
 
 
     private showNoteListView: (e: MouseEvent) => void = (e) => {
         this.noteListUc.showBelow(getButton(e.target));
-    }
+    };
 
 
     private showAddMenu: (e: MouseEvent) => void = (e) => {
         this.addMenuUc.showBelow(getButton(e.target));
-    }
+    };
 
 
     private showMoreMenu: (e: MouseEvent) => void = (e) => {
         this.moreMenuUc.showBelow(getButton(e.target));
-    }
+    };
 
 
     private showTaskListsMenu: (e: MouseEvent) => void = (e) => {
         this.taskListsMenuUc.showBelow(getButton(e.target));
-    }
+    };
 
 
     private selectedTabColor = () => {
@@ -130,12 +133,17 @@ export default class ToolbarUc implements IToolbarUc {
             return tab.style.backColor.value;
         else
             return "gray";
-    }
+    };
 
 
     private readonly taskListsMenu =
         <ul className="task-lists-menu menu">
             <li onClick={this.addTaskList}>Add New Task List</li>
+            {this.app.data.dashboard.items()
+                .filter(i => i instanceof TasksDashItem)
+                .map(tdi =>
+                    <li>{(tdi as ITasksDashItem).query.text}</li>)
+            }
         </ul>;
 
 
