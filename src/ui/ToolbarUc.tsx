@@ -31,7 +31,7 @@ export default class ToolbarUc implements IToolbarUc {
         this.moreMenuUc = new PopupUc(this.app, getControlledView_MoreMenu(app, this));
     }
 
-    readonly autoCols = R.data(true);
+    readonly autoCols = R.data(false);
     readonly view: HTMLElement;
     readonly taskMenuListUc: IPopupUc;
     readonly moreMenuUc: IPopupUc;
@@ -151,32 +151,55 @@ function getControlledView_DashboardMenu(app: IApp, owner: ToolbarUc) {
 
 function getControlledView_MoreMenu(app: IApp, owner: ToolbarUc) {
 
+
+    function incCol() {
+        const d = app.data.dashboard;
+        if (+d.columnsCount - 24 === 0)
+            return;
+        ++d.columnsCount;
+    }
+
+
+    function decCol() {
+        const d = app.data.dashboard;
+        if (d.columnsCount === 1)
+            return;
+        --d.columnsCount;
+    }
+
+
+    function exp() {
+        AppDataOps.exportData(app.localStore);
+    }
+
+
+    function imp() {
+        AppDataOps.importData(app.localStore);
+    }
+
+
     const view =
         <ul className="more-menu menu">
             <li className="columns-menu">
                 <span>Columns</span>
-                <input type="checkbox"
+                <input className="hidden"
+                       type="checkbox"
                        id="auto-columns-count"
                        fn={data(owner.autoCols)}/>
-                <label htmlFor="auto-columns-count">Auto</label>
+                <label className="hidden"
+                       htmlFor="auto-columns-count">
+                    Auto
+                </label>
                 <fieldset disabled={owner.autoCols()}>
-                    <button onMouseDown={
-                        () => --app.data.dashboard.columnsCount
-                    }>-</button>
-                    <span className="dash-columns-input">{
-                        () => app.data.dashboard.columnsCount
-                    }</span>
-                    <button onMouseDown={
-                        () => ++app.data.dashboard.columnsCount
-                    }>+</button>
+                    <button onMouseDown={decCol}>-</button>
+                    <span className="dash-columns-input">
+                        {() => app.data.dashboard.columnsCount}
+                    </span>
+                    <button onMouseDown={incCol}>+</button>
                 </fieldset>
             </li>
-            <li onMouseDown={() => AppDataOps.exportData(app.localStore)}>
-                Export Data
-            </li>
-            <li onClick={() => AppDataOps.importData(app.localStore)}>
-                Import Data
-            </li>
+            <li onMouseDown={exp}>Export Data</li>
+            <li onClick={imp}>Import Data</li>
         </ul>;
     return view;
 
