@@ -2,7 +2,6 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import data from "surplus-mixin-data";
 import {
     IApp,
     IToolbarUc,
@@ -10,11 +9,12 @@ import {
     ILabelEditUc,
     ILabelsPopupUc,
     IDashItem,
+    IDashboardMenuUc,
 } from "../interfaces";
 import TasksDashItem from "../data/dash/TasksDashItem";
 import PopupUc from "./PopupUc";
 import TaskDashItem from "../data/dash/TaskDashItem";
-import { R, getButton } from "../common";
+import { getButton } from "../common";
 import { AppDataOps } from "../operations/AppDataOps";
 import Task from "../data/domain/Task";
 
@@ -24,36 +24,25 @@ export default class ToolbarUc implements IToolbarUc {
     constructor(
         private readonly app: IApp,
         readonly elv: ILabelEditUc,
-        readonly lpv: ILabelsPopupUc) {
+        readonly lpv: ILabelsPopupUc,
+        readonly dashboardMenu: IDashboardMenuUc) {
 
         this.view = getControlledView(app, this);
-        this.taskMenuListUc = new PopupUc(this.app, getControlledView_DashboardMenu(app, this));
-        this.moreMenuUc = new PopupUc(this.app, getControlledView_MoreMenu(app, this));
+        this.taskMenuUc = new PopupUc(this.app, getControlledViewTasksMenu(app, this));
+        this.moreMenuUc = new PopupUc(this.app, getControlledViewMoreMenu(app));
     }
 
-    readonly autoCols = R.data(false);
+
     readonly view: HTMLElement;
-    readonly taskMenuListUc: IPopupUc;
+    readonly taskMenuUc: IPopupUc;
     readonly moreMenuUc: IPopupUc;
-
-
-}
-
-
-function getDiText(di: IDashItem) {
-    if (di instanceof TasksDashItem)
-        return di.query.text;
-    if (di instanceof TaskDashItem)
-        return di.task.title;
-    else
-        throw undefined;
 }
 
 
 function getControlledView(app: IApp, owner: ToolbarUc) {
 
 
-    function showLabels(e: MouseEvent): void {
+    function showLabelsMenu(e: MouseEvent): void {
         owner.lpv.show(
             getButton(e.target),
             undefined,
@@ -61,8 +50,13 @@ function getControlledView(app: IApp, owner: ToolbarUc) {
     }
 
 
-    function showTaskListView(e: MouseEvent): void {
-        owner.taskMenuListUc.showBelow(getButton(e.target));
+    function showTasksMenu(e: MouseEvent): void {
+        owner.taskMenuUc.showBelow(getButton(e.target));
+    }
+
+
+    function showDashboardMenu(e: MouseEvent): void {
+        owner.dashboardMenu.showBelow(getButton(e.target));
     }
 
 
@@ -84,12 +78,16 @@ function getControlledView(app: IApp, owner: ToolbarUc) {
         <div className="toolbar"
              style={{ borderTopColor: selectedTabColor() }}>
             <span className="menu-button button"
-                  onMouseDown={showLabels}>
+                  onMouseDown={showLabelsMenu}>
                 Labels <span className="drop-down-triangle">&#x25BC;</span>
             </span>
             <span className="menu-button button"
-                  onMouseDown={showTaskListView}>
+                  onMouseDown={showTasksMenu}>
                 Tasks <span className="drop-down-triangle">&#x25BC;</span>
+            </span>
+            <span className="menu-button button"
+                  onMouseDown={showDashboardMenu}>
+                Dashboard <span className="drop-down-triangle">&#x25BC;</span>
             </span>
             <span className="menu-button button"
                   onMouseDown={showMoreMenu}>
@@ -100,26 +98,26 @@ function getControlledView(app: IApp, owner: ToolbarUc) {
 }
 
 
-function getControlledView_DashboardMenu(app: IApp, owner: ToolbarUc) {
+function getControlledViewTasksMenu(app: IApp, owner: ToolbarUc) {
 
 
     function addTask(): void {
         const n = Task.createNew(app, "", "");
         app.data.taskAdd(n);
-        owner.taskMenuListUc.hide();
+        owner.taskMenuUc.hide();
         app.data.dashboard.unshift(new TaskDashItem(app, n));
-    };
+    }
 
 
     function addTaskList(): void {
         const tdi = new TasksDashItem(app, "");
         app.data.dashboard.unshift(tdi);
-        owner.taskMenuListUc.hide();
-    };
+        owner.taskMenuUc.hide();
+    }
 
 
     function showDashItem(di: IDashItem) {
-        owner.taskMenuListUc.hide();
+        owner.taskMenuUc.hide();
         di.visible = true;
     }
 
@@ -135,37 +133,23 @@ function getControlledView_DashboardMenu(app: IApp, owner: ToolbarUc) {
                         {getDiText(di)}
                     </li>)
             }
-            <li className="menu-sep"></li>
-            <li>
-                <input
-                    className="view-filter"
-                    type="search"
-                    placeholder="Dashboard Filter"
-                    fn={data(app.data.dashboard.query.text)}/>
-            </li>
         </ul>;
     return view;
 
 }
 
 
-function getControlledView_MoreMenu(app: IApp, owner: ToolbarUc) {
+function getDiText(di: IDashItem) {
+    if (di instanceof TasksDashItem)
+        return di.query.text;
+    if (di instanceof TaskDashItem)
+        return di.task.title;
+    else
+        throw undefined;
+}
 
 
-    function incCol() {
-        const d = app.data.dashboard;
-        if (+d.columnsCount - 24 === 0)
-            return;
-        ++d.columnsCount;
-    }
-
-
-    function decCol() {
-        const d = app.data.dashboard;
-        if (d.columnsCount === 1)
-            return;
-        --d.columnsCount;
-    }
+function getControlledViewMoreMenu(app: IApp) {
 
 
     function exp() {
@@ -180,24 +164,6 @@ function getControlledView_MoreMenu(app: IApp, owner: ToolbarUc) {
 
     const view =
         <ul className="more-menu menu">
-            <li className="columns-menu">
-                <span>Columns</span>
-                <input className="hidden"
-                       type="checkbox"
-                       id="auto-columns-count"
-                       fn={data(owner.autoCols)}/>
-                <label className="hidden"
-                       htmlFor="auto-columns-count">
-                    Auto
-                </label>
-                <fieldset disabled={owner.autoCols()}>
-                    <button onMouseDown={decCol}>-</button>
-                    <span className="dash-columns-input">
-                        {() => app.data.dashboard.columnsCount}
-                    </span>
-                    <button onMouseDown={incCol}>+</button>
-                </fieldset>
-            </li>
             <li onMouseDown={exp}>Export Data</li>
             <li onClick={imp}>Import Data</li>
         </ul>;

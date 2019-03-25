@@ -333,7 +333,7 @@ export interface IWindowUc extends IUc {
 export interface IPopupUc extends IWindowUc {
 }
 
-export interface ITaskMenuListUc extends IPopupUc {
+export interface IDashboardMenuUc extends IPopupUc {
 }
 
 export interface ITaskNoteMenuUc extends IPopupUc {
@@ -350,7 +350,7 @@ export interface ILabelEditUc extends IUc {
 
 export interface IToolbarUc extends IUc {
     readonly view: HTMLElement;
-    readonly taskMenuListUc: ITaskMenuListUc;
+    readonly taskMenuUc: IDashboardMenuUc;
     readonly moreMenuUc: IPopupUc;
 }
 
