@@ -34,13 +34,13 @@ function getControlledView(app: IApp) {
 
 
     function close(index: number): void {
-        const selIx = app.data.fields.selectedTabIndex;
-        if (selIx > index || selIx === (app.data.tabs().length - 1))
-            app.data.fields.selectedTabIndex = selIx - 1;
         const t = app.data.tabs()[index];
         if (!confirm("Close tab '" + t.title + "'?")) {
             return;
         }
+        const selIx = app.data.fields.selectedTabIndex;
+        if (selIx > index || selIx === (app.data.tabs().length - 1))
+            app.data.fields.selectedTabIndex = selIx - 1;
         app.data.tabDelete(t);
     }
 
