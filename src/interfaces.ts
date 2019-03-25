@@ -321,7 +321,7 @@ export interface IUc {
     readonly view: HTMLElement;
 }
 
-export interface IHasWindowsUc {
+export interface IHasWindowViews {
     readonly windowViews: HTMLElement[];
 }
 

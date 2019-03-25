@@ -120,7 +120,12 @@ export function isArraySignal(v: NonNullable<object>): v is WritableArraySignal<
 
 
 export function isDomainObject(v: NonNullable<object>): v is IDomainObject {
-    return typeof (v as any).id === "number" && typeof (v as any).createdOn.value === "number";
+    return typeof (v as any).id === "number" && typeof (v as any).createdOn.value === "string";
+}
+
+
+export function hasWindowViews(v: NonNullable<object>): v is IDomainObject {
+    return typeof (v as any).windowViews === "object";
 }
 
 

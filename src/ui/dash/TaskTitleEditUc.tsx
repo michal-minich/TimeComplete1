@@ -14,12 +14,12 @@ export default class TaskTitleEditUc implements ITaskTitleEditUc {
 
 
     private newName = R.data("");
-    private task!: ITask;
+    task!: ITask;
 
 
     constructor(private readonly app: IApp) {
 
-        this.view = getControlledView(this.newName, this.task);
+        this.view = getControlledView(this.newName, this);
     }
 
     view: HTMLElement;
@@ -48,13 +48,14 @@ export default class TaskTitleEditUc implements ITaskTitleEditUc {
 
 function getControlledView(
     newName: ValueSignal<string>,
-    task: ITask): HTMLElement {
+    owner: TaskTitleEditUc): HTMLElement {
+
 
     function confirm(): void {
         if (newName().trim() === "") {
             cancel();
         } else {
-            task.title = newName();
+            owner.task.title = newName();
             cleanup();
         }
     }

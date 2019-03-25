@@ -60,7 +60,7 @@ export default class Task implements ITask {
     readonly textSignal: ValueSignal<string>;
 
 
-    readonly type = "task";
+    readonly type: "task" = "task";
     id: number;
     createdOn: IDateTime;
 

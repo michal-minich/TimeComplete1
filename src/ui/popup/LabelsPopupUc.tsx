@@ -13,11 +13,11 @@ export default class LabelsPopupUc implements ILabelsPopupUc {
 
     constructor(
         private readonly app: IApp,
-        private readonly labels: ArraySignal<ILabel>) {
+        readonly labels: ArraySignal<ILabel>) {
     }
 
 
-    private labelStyle = (l: ILabel) => {
+    labelStyle = (l: ILabel) => {
         const s = colorInlineStyle(l.style);
         //console.log(this.associated2);
         //console.log(l.name);
@@ -28,48 +28,16 @@ export default class LabelsPopupUc implements ILabelsPopupUc {
     };
 
 
-    private act!: (label: ILabel, el: HTMLSpanElement) => void;
-    private readonly queryText = R.data("");
-    private readonly lav = new LabelAddUc(this.app);
+    act!: (label: ILabel, el: HTMLSpanElement) => void;
+    readonly queryText = R.data("");
+    readonly lav = new LabelAddUc(this.app);
     private associated2: ArraySignal<ILabel> | undefined;
-    private readonly popup = new PopupUc(this.app, this.render());
+    private readonly popup = new PopupUc(this.app, getControlledView(this.app, this));
 
 
     get view() {
         return this.popup.view;
     }
-
-
-    private render() {
-        const v =
-            <div className="labels-popup-view">
-                <input type="search"
-                       className="hidden"
-                       placeholder="Search"
-                       fn={data(this.queryText)}/>
-                <div className="label-list-inner">
-                    {this.lav.view}
-                    {this.labels().map(l =>
-                        <span
-                            className="label"
-                            onMouseDown={(e: MouseEvent) =>
-                                this.activate(l, e.target as HTMLSpanElement)}
-                            style={this.labelStyle(l)}>
-                            {l.name}
-                        </span>
-                    )}
-                </div>
-            </div>;
-        return v;
-    }
-
-
-    private activate: (
-        label: ILabel,
-        el: HTMLSpanElement) => any = (label, el) => {
-
-        this.act(label, el);
-    };
 
 
     show(
@@ -83,4 +51,34 @@ export default class LabelsPopupUc implements ILabelsPopupUc {
         labelAddUcState.hideWindow = this.popup.hide;
         this.popup.showBelow(over);
     }
+}
+
+
+function getControlledView(app: IApp, owner: LabelsPopupUc) {
+
+
+    function activate(label: ILabel, el: HTMLSpanElement): void {
+        owner.act(label, el);
+    };
+
+
+    const view =
+        <div className="labels-popup-view">
+            <input type="search"
+                   className="hidden"
+                   placeholder="Search"
+                   fn={data(owner.queryText)}/>
+            <div className="label-list-inner">
+                {owner.lav.view}
+                {owner.labels().map(l =>
+                    <span
+                        className="label"
+                        onMouseDown={(e: MouseEvent) => activate(l, e.target as HTMLSpanElement)}
+                        style={owner.labelStyle(l)}>
+                        {l.name}
+                    </span>
+                )}
+            </div>
+        </div>;
+    return view;
 }
