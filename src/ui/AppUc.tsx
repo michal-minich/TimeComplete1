@@ -37,11 +37,11 @@ export default class AppUc implements IAppUc {
 
 function getControlledView(app: IApp): HTMLElement {
 
-    const tm = new TaskMenuUc(app);
     const nm = new TaskNoteMenuUc(app);
     const elv = new LabelEditUc(app);
     const lpv = new LabelsPopupUc(app, app.data.labels);
     const toolbar = new ToolbarUc(app, elv, lpv);
+    const tm = new TaskMenuUc(app);
 
     const view =
         <div>

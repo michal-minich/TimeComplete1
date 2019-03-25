@@ -21,42 +21,29 @@ export let queryTextBox: HTMLInputElement;
 
 
 export default class TasksDashItemUc implements ITasksDashItemUc {
-    constructor(app: IApp,
-        tdi: ITasksDashItem,
+
+    constructor(
+        private readonly app: IApp,
+        private readonly tdi: ITasksDashItem,
         lpv: ILabelsPopupUc,
         ettv: ITaskTitleEditUc,
         tasksMenu: ITaskMenuUc) {
 
-        this.view = getControlledView(app, tdi, lpv, ettv, tasksMenu);
+        this.view = getControlledView(app, tdi, lpv, ettv, tasksMenu, this);
     }
+
 
     readonly view: HTMLElement;
-}
 
 
-function getControlledView(app: IApp,
-    tdi: ITasksDashItem,
-    lpv: ILabelsPopupUc,
-    ettv: ITaskTitleEditUc,
-    tasksMenu: ITaskMenuUc): HTMLElement {
-
-    let originalTitle = "";
-    const showFilteredOut = R.data(false);
-
-    function showMenu(e: MouseEvent) {
-        tasksMenu.showBelow(getButton(e.target), resultTasks().inx);
+    get tasks(): ITask[] {
+        return this.resultTasks().inx;
     }
 
 
-    function selectSelf(e: MouseEvent) {
-        app.data.dashboard.selected(tdi);
-        e.cancelBubble = true;
-    }
-
-
-    function resultTasks() {
-        const vt = app.data.dashboard.query.matcher.resultTasks();
-        const rt = tdi.query.matcher.resultTasks();
+    resultTasks() {
+        const vt = this.app.data.dashboard.query.matcher.resultTasks();
+        const rt = this.tdi.query.matcher.resultTasks();
         const inx: ITask[] = [];
         const out: ITask[] = [];
         for (const t of rt) {
@@ -67,6 +54,28 @@ function getControlledView(app: IApp,
             }
         }
         return { inx, out };
+    }
+}
+
+
+function getControlledView(app: IApp,
+    tdi: ITasksDashItem,
+    lpv: ILabelsPopupUc,
+    ettv: ITaskTitleEditUc,
+    tasksMenu: ITaskMenuUc,
+    ownwer: TasksDashItemUc): HTMLElement {
+
+    let originalTitle = "";
+    const showFilteredOut = R.data(false);
+
+    function showMenu(e: MouseEvent) {
+        tasksMenu.showBelow(getButton(e.target), ownwer.resultTasks().inx);
+    }
+
+
+    function selectSelf(e: MouseEvent) {
+        app.data.dashboard.selected(tdi);
+        e.cancelBubble = true;
     }
 
 
@@ -152,9 +161,9 @@ function getControlledView(app: IApp,
                 <table className="task-list lined-list">
                     <thead></thead>
                     <tbody>
-                    {new TaskListUc(app, resultTasks().inx, lpv, ettv).view}
+                    {new TaskListUc(app, ownwer.resultTasks().inx, lpv, ettv).view}
                     </tbody>
-                    {taskList(resultTasks())}
+                    {taskList(ownwer.resultTasks())}
                 </table>
             </div>
         </div>;

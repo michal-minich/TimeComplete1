@@ -2,14 +2,7 @@ import * as Surplus from "surplus";
 // ReSharper disable once WrongExpressionStatement
 // noinspection BadExpressionStatementJS
 Surplus;
-import {
-    IApp,
-    ITaskMenuUc,
-    IPopupUc,
-    ITasksDashItem,
-    ITask,
-    ValueSignal
-} from "../../interfaces";
+import { IApp, ITaskMenuUc, IPopupUc, ITasksDashItem, ITask } from "../../interfaces";
 import PopupUc from "../PopupUc";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 import { R } from "../../common";
@@ -17,17 +10,17 @@ import { R } from "../../common";
 
 export default class TaskMenuUc implements ITaskMenuUc {
 
-    constructor(app: IApp) {
+    constructor(private readonly app: IApp) {
 
-        this.doneCount = R.data(0);
-        this.todoCount = R.data(0);
-        this.popup = new PopupUc(app, getControlledView(app, this));
+        this.popup = new PopupUc(app, this.render());
     }
 
 
-    readonly doneCount: ValueSignal<number>;
-    readonly todoCount: ValueSignal<number>;
-    readonly popup: IPopupUc;
+    doneCount = R.data(0);
+    todoCount = R.data(0);
+
+    private readonly popup: IPopupUc;
+    private tasks!: ITask[];
 
 
     get view() {
@@ -35,63 +28,81 @@ export default class TaskMenuUc implements ITaskMenuUc {
     }
 
 
+    hide(): void {
+        this.popup.hide();
+    }
+
+
     showBelow(el: HTMLElement, tasks: ITask[]): void {
+        this.tasks = tasks;
         const done = tasks.filter(t => t.completedOn !== undefined).length;
         this.doneCount(done);
         this.todoCount(tasks.length - done);
         this.popup.showBelow(el);
     }
-}
 
 
-function getControlledView(app: IApp, owner: TaskMenuUc) {
-
-
-    function hide2(): void {
-        owner.popup.hide();
-    }
-
-
-    function completeAll(): void {
-        owner.popup.hide();
-    }
-
-
-    function uncompleteAll(): void {
-        owner.popup.hide();
-    }
-
-
-    function del(): void {
-        owner.popup.hide();
-        const n = app.data.dashboard.selected()!;
-        app.data.dashboard.remove(n);
+    private hide2: () => void = () => {
+        this.hide();
+        const tdi = this.app.data.dashboard.selected()! as ITasksDashItem;
+        tdi.visible = false;
     };
 
 
-    function duplicate(): void {
-        owner.popup.hide();
-        const tl = app.data.dashboard.selected()! as ITasksDashItem;
-        const tl2 = new TasksDashItem(app, tl.query.text());
-        app.data.dashboard.unshift(tl2);
+    private completeAll: () => void = () => {
+        this.hide();
+        if (!confirm("Mark all Done?")) {
+            return;
+        }
+        for (const t of this.tasks) {
+            t.completedOn = this.app.clock.now();
+        }
     };
 
 
-    const view =
-        <ul className="more-menu menu">
-            <li onMouseDown={duplicate}>Duplicate</li>
-            <li className={owner.todoCount() === 0 ? "hidden" : ""}
-                onMouseDown={completeAll}>
-                Mark All Done <span className="gray">({owner.todoCount()})</span>
-            </li>
-            <li className={owner.doneCount() === 0 ? "hidden" : ""}
-                onMouseDown={uncompleteAll}>
-                Mark All Todo <span className="gray">({owner.doneCount()})</span>
-            </li>
-            <li onMouseDown={hide2}>Hide</li>
-            <li onMouseDown={del}>Delete</li>
-        </ul>;
+    private uncompleteAll: () => void = () => {
+        this.hide();
+        if (!confirm("Mark all Todo?")) {
+            return;
+        }
+        for (const t of this.tasks) {
+            t.completedOn = undefined;
+        }
+    };
 
-    return view;
 
+    private delete: () => void = () => {
+        this.hide();
+        const n = this.app.data.dashboard.selected()!;
+        this.app.data.dashboard.remove(n);
+    };
+
+
+    private duplicate: () => void = () => {
+        this.hide();
+        const tdi = this.app.data.dashboard.selected()! as ITasksDashItem;
+        const tdi2 = new TasksDashItem(this.app, tdi.query.text());
+        this.app.data.dashboard.unshift(tdi2);
+    };
+
+
+    private render() {
+
+        const view =
+            <ul className="more-menu menu">
+                <li onMouseDown={this.duplicate}>Duplicate</li>
+                <li className={this.todoCount() === 0 ? "hidden" : ""}
+                    onMouseDown={this.completeAll}>
+                    Mark All Done <span className="gray">({this.todoCount()})</span>
+                </li>
+                <li className={this.doneCount() === 0 ? "hidden" : ""}
+                    onMouseDown={this.uncompleteAll}>
+                    Mark All Todo <span className="gray">({this.doneCount()})</span>
+                </li>
+                <li onMouseDown={this.hide2}>Hide</li>
+                <li onMouseDown={this.delete}>Delete</li>
+            </ul>;
+
+        return view;
+    }
 }

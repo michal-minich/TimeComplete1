@@ -358,6 +358,7 @@ export interface IDashboardUc extends IUc {
 }
 
 export interface ITasksDashItemUc extends IUc {
+    readonly tasks: ITask[];
 }
 
 export interface ITaskDashItemUc extends IUc {

@@ -118,6 +118,11 @@ function getControlledView_DashboardMenu(app: IApp, owner: ToolbarUc) {
     };
 
 
+    function showDashItem(di: IDashItem) {
+        owner.taskMenuListUc.hide();
+        di.visible = true;
+    }
+
     const view =
         <ul className="add-menu menu">
             <li onClick={addTaskList}>Add New Task List</li>
@@ -126,7 +131,7 @@ function getControlledView_DashboardMenu(app: IApp, owner: ToolbarUc) {
             {app.data.dashboard.items()
                 .filter(i => !i.visible)
                 .map(di =>
-                    <li onClick={() => di.visible = true}>
+                    <li onClick={() => showDashItem(di)}>
                         {getDiText(di)}
                     </li>)
             }
