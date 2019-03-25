@@ -18,6 +18,7 @@ import { colorInlineStyle, R } from "../../common";
 import WindowUc from "./../windowUc";
 import TasksDashItem from "../../data/dash/TasksDashItem";
 import PopupUc from "../PopupUc";
+import Label from "../../data/domain/Label";
 
 
 export default class LabelEditUc implements ILabelEditUc {
@@ -111,6 +112,21 @@ function getControllerView(app: IApp) {
 
     function duplicate(): void {
         win.hide();
+        const l = labelSignal()!;
+        const l2 = Label.createNew(
+            app,
+            l.name,
+            new ColorStyle(
+                app,
+                l.style.backColor,
+                l.style.customTextColor,
+                l.style.textColorInUse));
+        app.data.labelAdd(l2);
+        for (const t of app.data.tasks()) {
+            if (!(t.associatedLabels().find(al => al.id === l.id)))
+                continue;
+            t.addLabel(l2);
+        }
     }
 
 
