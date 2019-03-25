@@ -7,7 +7,8 @@ import {
     IDashboard,
     ITaskNoteMenuUc,
     IPopupUc,
-    ITaskDashItem
+    ITaskDashItem,
+    ITask
 } from "../../interfaces";
 import PopupUc from "../PopupUc";
 import TaskDashItem from "../../data/dash/TaskDashItem";
@@ -53,6 +54,15 @@ function getControlledView(app: IApp, hide: () => void) {
     };
 
 
+    function hideDashItem(): void {
+        hide();
+        const tdi = app.data.dashboard.selected()! as ITaskDashItem;
+        const t = tdi.task;
+        tdi.visible = false;
+        //removeTdiByTask(app.data.dashboard, t);
+    };
+
+    
     function close(): void {
         hide();
         const n = app.data.dashboard.selected()!;
@@ -62,24 +72,29 @@ function getControlledView(app: IApp, hide: () => void) {
 
     function del(): void {
         hide();
-        const ndi = app.data.dashboard.selected()! as ITaskDashItem;
-        const n = ndi.task;
+        const tdi = app.data.dashboard.selected()! as ITaskDashItem;
+        const t = tdi.task;
         for (const tab of app.data.tabs()) {
             const d = tab.content as IDashboard;
-            const ndiToRemove = d.items()
-                .filter(ndi2 => ndi2 instanceof TaskDashItem && ndi2.task === n);
-            for (const r of ndiToRemove)
-                d.remove(r);
+            removeTdiByTask(d, t);
         }
-        app.data.taskDelete(ndi.task);
+        app.data.taskDelete(t);
     };
+
+
+    function removeTdiByTask(d: IDashboard, t: ITask) {
+        const ndiToRemove = d.items()
+            .filter(ndi2 => ndi2 instanceof TaskDashItem && ndi2.task === t);
+        for (const r of ndiToRemove)
+            d.remove(r);
+    }
 
 
     const view =
         <ul className="more-menu menu">
             <li onMouseDown={duplicate}>Duplicate</li>
+            <li onMouseDown={hideDashItem}>Hide</li>
             <li onMouseDown={close}>Close</li>
-            <li onMouseDown={del}>Delete</li>
         </ul>;
     return view;
 

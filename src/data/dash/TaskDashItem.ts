@@ -1,4 +1,5 @@
-﻿import { IApp, ITaskDashItem, ITask } from "../../interfaces";
+﻿import { IApp, ITaskDashItem, ITask, ValueSignal } from "../../interfaces";
+import { R } from "../../common";
 
 
 export default class TaskDashItem implements ITaskDashItem {
@@ -6,6 +7,13 @@ export default class TaskDashItem implements ITaskDashItem {
     readonly task: ITask;
     readonly width: number;
     readonly height: number;
+
+
+    private readonly visibleSignal: ValueSignal<boolean>;
+
+    get visible(): boolean { return this.visibleSignal(); }
+
+    set visible(value: boolean) { this.visibleSignal(value); }
 
 
     constructor(
@@ -21,6 +29,7 @@ export default class TaskDashItem implements ITaskDashItem {
             this.width = 300;
             this.height = 200;
         }
+        this.visibleSignal = R.data(true);
     }
 
     get estimatedHeight(): number {

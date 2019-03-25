@@ -54,7 +54,8 @@ function getControlledView(
 
         const dashItems = app.data.dashboard.items();
         for (const di of dashItems) {
-
+            if (!di.visible)
+                continue;
             if (di instanceof TasksDashItem) {
                 const col = indexOfMin(tdsHeight);
                 const tdi = new TasksDashItemUc(

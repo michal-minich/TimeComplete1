@@ -132,6 +132,7 @@ export interface IDashboard {
 
 export interface IDashItem {
     readonly estimatedHeight: number;
+    visible: boolean;
 }
 
 
@@ -320,6 +321,10 @@ export interface IUc {
     readonly view: HTMLElement;
 }
 
+export interface IHasWindowsUc {
+    readonly windowViews: HTMLElement[];
+}
+
 export interface IWindowUc extends IUc {
     showBelow(el: HTMLElement): void;
     hide(): void;
@@ -345,10 +350,8 @@ export interface ILabelEditUc extends IUc {
 
 export interface IToolbarUc extends IUc {
     readonly view: HTMLElement;
-    readonly addMenuUc: IPopupUc;
     readonly taskMenuListUc: ITaskMenuListUc;
     readonly moreMenuUc: IPopupUc;
-    readonly taskListsMenuUc: IPopupUc;
 }
 
 export interface IDashboardUc extends IUc {

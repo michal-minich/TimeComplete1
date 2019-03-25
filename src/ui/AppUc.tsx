@@ -47,10 +47,8 @@ function getControlledView(app: IApp): HTMLElement {
         <div>
             {new TabsUc(app).view}
             {toolbar.view}
-            {toolbar.addMenuUc.view}
             {toolbar.taskMenuListUc.view}
             {toolbar.moreMenuUc.view}
-            {toolbar.taskListsMenuUc.view}
             {lpv.view}
             {elv.view}
             {elv.editView}

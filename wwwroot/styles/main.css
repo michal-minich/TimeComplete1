@@ -296,6 +296,11 @@ body {
     padding-bottom: 4px;
 }
 
+.menu-sep {
+    border-bottom: 1px solid gray;
+    padding-bottom: 5px;
+}
+
 ul.menu {
     margin: 0;
     padding-left: 0px;
