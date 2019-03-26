@@ -34,14 +34,7 @@ function getControlledView(app: IApp) {
 
 
     function close(index: number): void {
-        const t = app.data.tabs()[index];
-        if (!confirm("Close tab '" + t.title + "'?")) {
-            return;
-        }
-        const selIx = app.data.fields.selectedTabIndex;
-        if (selIx > index || selIx === (app.data.tabs().length - 1))
-            app.data.fields.selectedTabIndex = selIx - 1;
-        app.data.tabDelete(t);
+        // moved to dash
     }
 
 
@@ -57,7 +50,7 @@ function getControlledView(app: IApp) {
                   style={isSel ? colorInlineStyle(tab.style) : {}}
                   onMouseDown={(e: MouseEvent) => activate(e, index)}>
                 {tab.title}
-                <span className="close"
+                <span className="hidden close"
                       onClick={() => close(index)}>
                     &#10006;
                 </span>
@@ -71,7 +64,7 @@ function getControlledView(app: IApp) {
             <img className="logo" src="favicon.png" alt="Time Complete"/>
             {tabs()()}
             <span onMouseDown={add} className="tab-plus">
-                <span>+</span>
+                <span title="Add New Dashboard">+</span>
             </span>
         </div>;
 

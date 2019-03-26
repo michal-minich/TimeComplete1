@@ -86,8 +86,8 @@ function getControlledView(
         <textarea
             ref={taskEditTextBox}
             fn={data(newName)}
-            onKeyUp={(e: KeyboardEvent) => keyUp(e)}
-            onBlur={() => confirm()}
+            onKeyUp={keyUp}
+            onBlur={confirm}
             className="task-text-edit-box selected-task">
         </textarea>;
 

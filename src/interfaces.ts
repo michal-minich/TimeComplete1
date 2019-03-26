@@ -85,8 +85,8 @@ export interface ITask extends IDomainObject, IHasAssociatedLabels {
     readonly labelsFromText: ArraySignal<ILabel>;
     readonly labelsFromUser: WritableArraySignal<ILabel>;
 
-    textSignal: ValueSignal<string>;
-    titleSignal: ValueSignal<string>;
+    readonly textSignal: ValueSignal<string>;
+    readonly titleSignal: ValueSignal<string>;
 }
 
 export interface ITab extends IDomainObject {
@@ -156,6 +156,7 @@ export interface IData {
     readonly fields: IDataFields;
 
     readonly dashboard: IDashboard;
+    readonly selectedTab: ITab;
     selectedTask: ITask | undefined;
     getNextId(): number;
 

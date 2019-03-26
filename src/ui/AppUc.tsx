@@ -38,16 +38,18 @@ export default class AppUc implements IAppUc {
 
 function getControlledView(app: IApp): HTMLElement {
 
+    const tabs = new TabsUc(app);
     const dm = new DashboardMenuUc(app);
     const nm = new TaskNoteMenuUc(app);
     const elv = new LabelEditUc(app);
     const lpv = new LabelsPopupUc(app, app.data.labels);
     const toolbar = new ToolbarUc(app, elv, lpv, dm);
     const tm = new TaskMenuUc(app);
+    const dash = new DashboardUc(app, lpv, tm, nm);
 
-    const view =
+    return (
         <div>
-            {new TabsUc(app).view}
+            {tabs.view}
             {toolbar.view}
             {toolbar.taskMenuUc.view}
             {dm.view}
@@ -57,8 +59,6 @@ function getControlledView(app: IApp): HTMLElement {
             {elv.editView}
             {tm.view}
             {nm.view}
-            {new DashboardUc(app, lpv, tm, nm).view}
-        </div>;
-
-    return view;
+            {dash.view}
+        </div>);
 }

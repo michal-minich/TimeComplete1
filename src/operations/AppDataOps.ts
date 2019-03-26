@@ -153,7 +153,7 @@ export module AppDataOps {
 
     export function addTab(app: IApp): void {
         const tab = Tab.createNew(app,
-            "tab " + (app.data.tabs().length + 1),
+            "Dashboard " + (app.data.tabs().length + 1),
             new ColorStyle(
                 app,
                 new Color("gray"),

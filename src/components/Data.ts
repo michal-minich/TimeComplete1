@@ -30,6 +30,11 @@ export default class Data implements IData {
     }
 
 
+    get selectedTab(): ITab {
+        return this.tabs()[this.fields.selectedTabIndex];
+    }
+
+
     private _selectedTask: ITask | undefined;
 
     get selectedTask(): ITask | undefined {

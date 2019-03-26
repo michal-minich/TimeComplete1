@@ -20,6 +20,7 @@ export default class DashboardMenuUc implements IDashboardMenuUc {
 
     readonly autoCols = R.data(false);
     readonly popup: IPopupUc;
+    readonly dashEditToggle = R.data(false);
 
 
     get view() {
@@ -33,12 +34,16 @@ export default class DashboardMenuUc implements IDashboardMenuUc {
 
 
     showBelow(el: HTMLElement): void {
+        this.dashEditToggle(false);
         this.popup.showBelow(el);
     }
 }
 
 
 function getControlledView(app: IApp, owner: DashboardMenuUc) {
+
+
+    const newName = R.data("");
 
 
     function incCol() {
@@ -54,6 +59,63 @@ function getControlledView(app: IApp, owner: DashboardMenuUc) {
         if (d.columnsCount === 1)
             return;
         --d.columnsCount;
+    }
+
+
+    function edit() {
+        newName(app.data.selectedTab.title);
+        const val = owner.dashEditToggle();
+        owner.dashEditToggle(!val);
+    }
+
+
+    function saveDashEdit() {
+        owner.dashEditToggle(false);
+        if (newName().trim() === "") {
+            cancelDashEdit();
+        } else {
+            app.data.selectedTab.title = newName();
+            cleanup();
+        }
+    }
+
+
+    function cancelDashEdit() {
+        owner.dashEditToggle(false);
+    }
+
+
+    function cleanup(): void {
+        owner.dashEditToggle(false);
+    }
+
+
+    function keyUp(e: KeyboardEvent): void {
+        if (e.key === "Enter") {
+            saveDashEdit();
+            e.preventDefault();
+        } else if (e.key === "Escape") {
+            cancelDashEdit();
+        }
+    }
+
+
+    function del() {
+        owner.hide();
+        const index = app.data.fields.selectedTabIndex;
+        close(index);
+    }
+
+
+    function close(index: number): void {
+        const tab = app.data.selectedTab;
+        if (!confirm("Close Dashboard '" + tab.title + "'?")) {
+            return;
+        }
+        const selIx = app.data.fields.selectedTabIndex;
+        if (selIx > index || selIx === (app.data.tabs().length - 1))
+            app.data.fields.selectedTabIndex = selIx - 1;
+        app.data.tabDelete(tab);
     }
 
 
@@ -84,6 +146,13 @@ function getControlledView(app: IApp, owner: DashboardMenuUc) {
                     placeholder="Dashboard Filter"
                     fn={data(app.data.dashboard.query.text)}/>
             </li>
+            <li onMouseDown={edit}>Edit</li>
+            <li className={owner.dashEditToggle() ? "" : "hidden"}>
+                <input
+                    onKeyUp={keyUp}
+                    fn={data(newName)}/>
+            </li>
+            <li onMouseDown={del}>Delete</li>
         </ul>;
 
     return view;
