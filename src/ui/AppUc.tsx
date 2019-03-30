@@ -17,7 +17,7 @@ import DashboardMenuUc from "./popup/DashboardMenuUc";
 window.addEventListener("mouseup",
     () => {
         window.setTimeout(() => {
-                //document.body.classList.remove("users-elect-none");
+                //document.body.classList.remove("users-elect-none");          
                 removeTextSelections();
             },
             0);
@@ -33,6 +33,11 @@ export default class AppUc implements IAppUc {
     }
 
     readonly view: HTMLElement;
+
+
+    showError(errorMessage: string) {
+
+    }
 }
 
 
@@ -42,7 +47,7 @@ function getControlledView(app: IApp): HTMLElement {
     const dm = new DashboardMenuUc(app);
     const nm = new TaskNoteMenuUc(app);
     const elv = new LabelEditUc(app);
-    const lpv = new LabelsPopupUc(app, app.data.labels);
+    const lpv = new LabelsPopupUc(app);
     const toolbar = new ToolbarUc(app, elv, lpv, dm);
     const tm = new TaskMenuUc(app);
     const dash = new DashboardUc(app, lpv, tm, nm);

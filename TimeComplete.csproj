@@ -7,6 +7,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="src\common.js" />
+    <None Remove="src\components\App.js" />
+    <None Remove="src\components\Data.js" />
+    <None Remove="src\components\io\Clock.js" />
+    <None Remove="src\components\io\LocalStore.js" />
+    <None Remove="src\components\SyncLog.js" />
+    <None Remove="src\data\dash\Dashboard.js" />
+    <None Remove="src\data\dash\TaskDashItem.js" />
+    <None Remove="src\data\dash\TasksDashItem.js" />
+    <None Remove="src\data\DataFields.js" />
+    <None Remove="src\data\domain\Label.js" />
+    <None Remove="src\data\domain\Tab.js" />
+    <None Remove="src\data\domain\Task.js" />
+    <None Remove="src\data\Query.js" />
+    <None Remove="src\data\value\Color.js" />
+    <None Remove="src\data\value\ColorStyle.js" />
+    <None Remove="src\data\value\DateTime.js" />
+    <None Remove="src\interfaces.js" />
+    <None Remove="src\operations\AppDataOps.js" />
+    <None Remove="src\operations\QueryLabelsResolver.js" />
+    <None Remove="src\operations\QueryMatcher.js" />
+    <None Remove="src\operations\QueryParser.js" />
+    <None Remove="src\operations\Serializer.js" />
     <None Remove="src\ui\AppUc.jsx" />
     <None Remove="src\ui\dash\DashboardUc.jsx" />
     <None Remove="src\ui\dash\TaskAddUc.jsx" />
@@ -20,6 +43,7 @@
     <None Remove="src\ui\MainUc.jsx" />
     <None Remove="src\ui\NoteListUc.jsx" />
     <None Remove="src\ui\PopupUc.jsx" />
+    <None Remove="src\ui\popup\DashboardMenuUc.jsx" />
     <None Remove="src\ui\popup\LabelAddUc.jsx" />
     <None Remove="src\ui\popup\LabelEditUc.jsx" />
     <None Remove="src\ui\popup\LabelsPopupUc.jsx" />

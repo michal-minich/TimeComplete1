@@ -28,7 +28,7 @@ export default class QueryMatcher implements IQueryMatcher {
 
     update(query: IQuery): void {
         this.wasUpdate(true);
-        this.qis = QueryParser.parse(this.app, query.text());
+        this.qis = QueryParser.parse(this.app, query.text);
         const label = this.firstQueryLabel();
         if (label) {
             const l = this.app.data.labels().find(l2 => l2.name === label.value);

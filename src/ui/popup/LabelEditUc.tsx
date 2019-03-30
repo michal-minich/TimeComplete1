@@ -86,9 +86,9 @@ function getControllerView(app: IApp) {
         for (const di of app.data.dashboard.items()) {
             if (!(di instanceof TasksDashItem))
                 continue;
-            const qt = R.sample(di.query.text);
-            di.query.text(qt.replace("#" + l.name,
-                "#" + editLabelName()));
+            const qt = R.sample(di.query.textSignal);
+            di.query.text =
+                qt.replace("#" + l.name, "#" + editLabelName());
         }
 
         l.name = editLabelName();
@@ -140,8 +140,8 @@ function getControllerView(app: IApp) {
             for (const di of app.data.dashboard.items()) {
                 if (!(di instanceof TasksDashItem))
                     continue;
-                const qt = R.sample(di.query.text);
-                di.query.text(qt.replace("#" + l.name, ""));
+                const qt = R.sample(di.query.textSignal);
+                di.query.text = qt.replace("#" + l.name, "");
             }
             app.data.labelDelete(l);
             cleanup();

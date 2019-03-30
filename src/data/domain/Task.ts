@@ -30,6 +30,12 @@ export default class Task implements ITask {
         this.completedOnSignal = R.data(completedOn);
         this.id = id;
         this.createdOn = createdOn;
+        this.known = R.array([
+            this.app.data.knownLabels.all,
+            completedOn === undefined
+            ? this.app.data.knownLabels.todo
+            : this.app.data.knownLabels.done
+        ]);
     }
 
 
@@ -58,7 +64,7 @@ export default class Task implements ITask {
     labelsFromUser: WritableArraySignal<ILabel>;
     labelsFromTextSignal: WritableArraySignal<ILabel>;
     readonly textSignal: ValueSignal<string>;
-
+    private readonly known: WritableArraySignal<ILabel>;
 
     readonly type: "task" = "task";
     id: number;
@@ -83,6 +89,11 @@ export default class Task implements ITask {
         // ReSharper disable once QualifiedExpressionMaybeNull
         if ((cur === undefined ? undefined : cur.value) === val)
             return;
+        this.known.pop();
+        if (value === undefined)
+            this.known.push(this.app.data.knownLabels.todo);
+        else
+            this.known.push(this.app.data.knownLabels.done);
         this.completedOnSignal(value);
         this.app.sync.pushField("task.completedOn", this, val);
     }

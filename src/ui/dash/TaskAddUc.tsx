@@ -54,7 +54,7 @@ function getControlledView(app: IApp, tdi: ITasksDashItem): HTMLElement {
 
     function keyUp(e: KeyboardEvent): void {
         if (e.key === "Enter")
-            confirm(tdi.query.text());
+            confirm(tdi.query.text);
         else if (e.key === "Escape")
             cancel();
     }

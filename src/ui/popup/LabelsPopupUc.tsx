@@ -3,7 +3,7 @@ import * as Surplus from "surplus";
 // noinspection BadExpressionStatementJS
 Surplus;
 import data from "surplus-mixin-data";
-import { IApp, ILabel, ArraySignal, ILabelsPopupUc } from "../../interfaces"
+import { IApp, ILabel, ArraySignal, ILabelsPopupUc, IPopupUc } from "../../interfaces"
 import LabelAddUc, { labelAddUcState } from "./LabelAddUc";
 import { colorInlineStyle, R } from "../../common";
 import PopupUc from "../PopupUc";
@@ -11,10 +11,14 @@ import PopupUc from "../PopupUc";
 
 export default class LabelsPopupUc implements ILabelsPopupUc {
 
-    constructor(
-        private readonly app: IApp,
-        readonly labels: ArraySignal<ILabel>) {
+    constructor(private readonly app: IApp) {
+
+        this.labels = app.data.labels.filter(l => l.id > 4);
+        this.popup = new PopupUc(this.app, getControlledView(this.app, this));
     }
+
+
+    readonly labels: ArraySignal<ILabel>;
 
 
     labelStyle = (l: ILabel) => {
@@ -32,7 +36,7 @@ export default class LabelsPopupUc implements ILabelsPopupUc {
     readonly queryText = R.data("");
     readonly lav = new LabelAddUc(this.app);
     private associated2: ArraySignal<ILabel> | undefined;
-    private readonly popup = new PopupUc(this.app, getControlledView(this.app, this));
+    private readonly popup: IPopupUc;
 
 
     get view() {

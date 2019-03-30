@@ -154,7 +154,7 @@ export default class Serializer implements ISerializer {
                 o.title,
                 o.text,
                 o.version,
-                this.getAssociatedLabels(o),
+                R.array(this.getAssociatedLabels(o)),
                 co,
                 o.id,
                 this.fromPlainObject<IDateTime>(o.createdOn, "DateTime"));
@@ -212,20 +212,20 @@ export default class Serializer implements ISerializer {
     }
 
 
-    getAssociatedLabels(o: any): WritableArraySignal<ILabel> {
+    getAssociatedLabels(o: any): ILabel[] {
         if (o.labelsFromUser) {
             return this.fromRefArray<ILabel>(
                 o.labelsFromUser as number[],
                 this.app.data.labels);
         } else {
-            return R.array([]);
+            return [];
         }
     }
 
 
     getDashboard(o: any): IDashboard {
         const d = new Dashboard(this.app, o.query.text);
-        d.items = this.fromArray<IDashItem>(o.items, "DashItem");
+        d.items = R.array(this.fromArray<IDashItem>(o.items, "DashItem"));
         d.columnsCount = o.columnsCount;
         d.selected(o.selected);
         return d;
@@ -246,23 +246,23 @@ export default class Serializer implements ISerializer {
 
     fromRefArray<T extends IDomainObject>(
         ids: number[],
-        source: ArraySignal<T>): WritableArraySignal<T> {
+        source: ArraySignal<T>): T[] {
 
         const items: T[] = [];
         for (const id of ids) {
             const i = findById<T>(source, id);
             items.push(i);
         }
-        return R.array(items);
+        return items;
     }
 
 
-    fromArray<T extends object>(arr: object[], itemType: string): WritableArraySignal<T> {
+    fromArray<T extends object>(arr: object[], itemType: string): T[] {
         const items: T[] = [];
         for (const item of arr) {
             const i = this.fromPlainObject<T>(item, itemType);
             items.push(i);
         }
-        return R.array(items);
+        return items;
     }
 }

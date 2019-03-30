@@ -8,6 +8,7 @@
         ITab,
         IDashboard,
         WritableArraySignal,
+        IKnownLabels,
     } from
     "../interfaces";
 
@@ -19,6 +20,7 @@ export default class Data implements IData {
     labels!: ArraySignal<ILabel>;
     tabs!: ArraySignal<ITab>;
     fields!: IDataFields;
+    knownLabels!: IKnownLabels;
 
 
     constructor(private readonly app: IApp) {
@@ -87,4 +89,20 @@ export default class Data implements IData {
         (this.tabs as WritableArraySignal<ITab>).remove(t);
         this.app.sync.pushDelete(t);
     }
+}
+
+
+export class KnownLabels implements IKnownLabels {
+
+    constructor(labels: ILabel[]) {
+        this.all = labels[0];
+        this.todo = labels[1];
+        this.done = labels[2];
+        this.rest = labels[3];
+    }
+
+    readonly all: ILabel;
+    readonly todo: ILabel;
+    readonly done: ILabel;
+    readonly rest: ILabel;
 }

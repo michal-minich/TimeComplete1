@@ -16,6 +16,8 @@ import Tab from "../data/domain/Tab";
 import ColorStyle from "../data/value/ColorStyle";
 import Color from "../data/value/Color";
 import Dashboard from "../data/dash/Dashboard";
+import { KnownLabels } from "../components/Data";
+import Label from "../data/domain/Label";
 
 
 export module AppDataOps {
@@ -28,9 +30,15 @@ export module AppDataOps {
         try {
 
             d.fields = loadObj<IDataFields>(app, "fields", "DataFields", () => new DataFields());
-            d.labels = loadArray<ILabel>(app, "labels", "Label");
-            d.tasks = loadArray<ITask>(app, "tasks", "Task");
-            d.tabs = loadArray<ITab>(app, "tabs", "Tab");
+            let labels = loadArray<ILabel>(app, "labels", "Label");
+            if (labels.length === 0) {
+                const kl = createKnownLabels(app);
+                labels = kl.concat(labels);
+            }
+            d.knownLabels = new KnownLabels(labels);
+            d.labels = R.array(labels);
+            d.tasks = R.array(loadArray<ITask>(app, "tasks", "Task"));
+            d.tabs = R.array(loadArray<ITab>(app, "tabs", "Tab"));
 
         } catch (ex) {
 
@@ -49,6 +57,39 @@ export module AppDataOps {
         }
 
         setupStoreSave(app);
+    }
+
+
+    function createKnownLabels(app: IApp): ILabel[] {
+
+        const kl: ILabel[] = [
+            Label.createNew(app,
+                "All",
+                new ColorStyle(app,
+                    new Color("gray"),
+                    new Color("white"),
+                    TextColorUsage.BlackOrWhite)),
+            Label.createNew(app,
+                "Todo",
+                new ColorStyle(app,
+                    new Color("gray"),
+                    new Color("white"),
+                    TextColorUsage.BlackOrWhite)),
+            Label.createNew(app,
+                "Done",
+                new ColorStyle(app,
+                    new Color("gray"),
+                    new Color("white"),
+                    TextColorUsage.BlackOrWhite)),
+            Label.createNew(app,
+                "Rest",
+                new ColorStyle(app,
+                    new Color("gray"),
+                    new Color("white"),
+                    TextColorUsage.BlackOrWhite))
+        ];
+
+        return kl;
     }
 
 
@@ -89,7 +130,7 @@ export module AppDataOps {
 
     function download(fileName: string, text: string): void {
         const el = document.createElement("a");
-        el.setAttribute("href", "data:application/json;charset=utf-8," + encodeURIComponent(text));
+        el.setAttribute("href", `data:application/json;charset=utf-8,${encodeURIComponent(text)}`);
         el.setAttribute("download", fileName);
         el.style.display = "none";
         document.body.appendChild(el);
@@ -98,11 +139,10 @@ export module AppDataOps {
     }
 
 
-    function loadArray<T extends object>(app: IApp, key: string, type: string):
-        WritableArraySignal<T> {
+    function loadArray<T extends object>(app: IApp, key: string, type: string): T[] {
         const arr = app.localStore.loadOrUndefined(key);
         return arr === undefined
-            ? R.array()
+            ? []
             : app.serializer.fromArray<T>(arr as object[], type);
     }
 
@@ -153,7 +193,7 @@ export module AppDataOps {
 
     export function addTab(app: IApp): void {
         const tab = Tab.createNew(app,
-            "Dashboard " + (app.data.tabs().length + 1),
+            `Dashboard ${app.data.tabs().length + 1}`,
             new ColorStyle(
                 app,
                 new Color("gray"),

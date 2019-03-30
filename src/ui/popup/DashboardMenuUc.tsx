@@ -144,7 +144,7 @@ function getControlledView(app: IApp, owner: DashboardMenuUc) {
                     className="view-filter"
                     type="search"
                     placeholder="Dashboard Filter"
-                    fn={data(app.data.dashboard.query.text)}/>
+                    fn={data(app.data.dashboard.query.textSignal)}/>
             </li>
             <li onMouseDown={edit}>Edit</li>
             <li className={owner.dashEditToggle() ? "" : "hidden"}>

@@ -99,6 +99,7 @@ export interface ITab extends IDomainObject {
 export interface ITasksDashItem extends IDashItem {
     readonly newTitle: ValueSignal<string>;
     readonly query: IQuery;
+    //readonly tasks: ITask[];
 }
 
 export interface ITaskDashItem extends IDashItem {
@@ -108,9 +109,11 @@ export interface ITaskDashItem extends IDashItem {
 }
 
 export interface IQuery {
-    readonly text: ValueSignal<string>;
+    textSignal: ValueSignal<string>;
+    text: string;
     readonly matcher: IQueryMatcher;
 }
+
 
 export interface IDataFields {
     labelPrefix: string;
@@ -119,6 +122,9 @@ export interface IDataFields {
     selectedDashItemIndex: number;
     selectedTaskId: number;
     lastId: number;
+    specialLabelAllId: number;
+    specialLabelTodoId: number;
+    specialLabelDoneId: number;
 }
 
 export interface IDashboard {
@@ -131,6 +137,7 @@ export interface IDashboard {
 }
 
 export interface IDashItem {
+    //readonly placedOn: IDashboard;
     readonly estimatedHeight: number;
     visible: boolean;
 }
@@ -168,8 +175,16 @@ export interface IData {
 
     tabAdd(t: ITab): void;
     tabDelete(t: ITab): void;
+
+    knownLabels: IKnownLabels;
 }
 
+export interface IKnownLabels {
+    readonly all: ILabel;
+    readonly todo: ILabel;
+    readonly done: ILabel;
+    readonly rest: ILabel;
+}
 
 export interface ISyncLog {
     pushField<T extends SimpleType>(we: SyncChangeType, o: IDomainObject, value?: T): void;
@@ -177,6 +192,22 @@ export interface ISyncLog {
     pushLabelCreate(l: ILabel): void;
     pushTaskCreate(t: ITask): void;
     pushTabCreate(t: ITab): void;
+}
+
+
+// Traits ================================================================
+
+export interface ILabelMembership {
+    readonly labelsFromProviders: ILabel[];
+}
+
+export interface ITaskListProvider {
+    readonly tasks: ITask[];
+    readonly autoLabel: ILabel;
+}
+
+export interface IQueryInterpreter {
+    readonly title: string | undefined;
 }
 
 
@@ -309,10 +340,10 @@ export interface ISerializer {
 
     fromPlainObject<T extends object>(value: object, type: string): T;
     toPlainObject<T extends object>(value: T): object;
-    fromArray<T extends object>(arr: object[], itemType: string): WritableArraySignal<T>;
+    fromArray<T extends object>(arr: object[], itemType: string): T[];
     fromRefArray<T extends IDomainObject>(
         ids: number[],
-        source: ArraySignal<T>): WritableArraySignal<T>;
+        source: ArraySignal<T>): T[];
 }
 
 

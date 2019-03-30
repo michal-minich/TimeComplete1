@@ -115,18 +115,18 @@ function getControlledView(app: IApp,
 
 
     function begin(): void {
-        originalTitle = tdi.query.text();
+        originalTitle = tdi.query.text;
         app.data.selectedTask = undefined;
     }
 
 
     function rollback(): void {
         if (originalTitle === "__NEXT_EMPTY__") {
-            originalTitle = tdi.query.text();
-            tdi.query.text("");
+            originalTitle = tdi.query.text;
+            tdi.query.text = "";
 
         } else {
-            tdi.query.text(originalTitle);
+            tdi.query.text = originalTitle;
             originalTitle = "__NEXT_EMPTY__";
         }
     }
@@ -135,8 +135,12 @@ function getControlledView(app: IApp,
     function keyUp(e: KeyboardEvent): void {
         if (e.key === "Escape")
             rollback();
+        tdi.query.text = (e.target as HTMLInputElement).value;
     }
 
+
+    function onChange(e: KeyboardEvent): void {
+    }
 
     const view =
         <div onMouseDown={selectSelf}
@@ -150,7 +154,7 @@ function getControlledView(app: IApp,
                     ref={queryTextBox}
                     onFocus={begin}
                     onKeyUp={keyUp}
-                    fn={data(tdi.query.text)}
+                    value={tdi.query.text}
                     style={queryBackground(tdi)}/>
                 <span className="burger-button button" onMouseDown={showMenu}>
                     <span className="drop-down-burger">&#x2261;</span>

@@ -5,13 +5,24 @@ import QueryMatcher from "../operations/QueryMatcher";
 
 export default class Query implements IQuery {
 
-    readonly text: ValueSignal<string>;
+    readonly textSignal: ValueSignal<string>;
     readonly matcher: IQueryMatcher;
 
 
     constructor(private readonly app: IApp, text?: string) {
-        this.text = R.data(text || "");
         this.matcher = new QueryMatcher(app);
-        R.on(this.text, () => this.matcher.update(this));
+        this.textSignal = R.data(text || "");
+        this.matcher.update(this);
+    }
+
+
+    get text(): string {
+        return this.textSignal();
+    }
+
+
+    set text(value: string) {
+        this.textSignal(value);
+        this.matcher.update(this);
     }
 }

@@ -86,7 +86,7 @@ function getControlledView(app: IApp, owner: TaskMenuUc) {
     function duplicate(): void {
         owner.hide();
         const tdi = app.data.dashboard.selected()! as ITasksDashItem;
-        const tdi2 = new TasksDashItem(app, tdi.query.text());
+        const tdi2 = new TasksDashItem(app, tdi.query.text);
         app.data.dashboard.unshift(tdi2);
     }
 

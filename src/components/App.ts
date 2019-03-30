@@ -5,7 +5,7 @@
     IDataStore,
     ISyncLog,
     ISerializer,
-    IAppUc
+    IAppUc,
 } from "../interfaces";
 
 import Clock from "./io/Clock";

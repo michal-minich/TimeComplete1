@@ -18,8 +18,10 @@ import TasksDashItem from "./data/dash/TasksDashItem";
 export function findById<T extends IDomainObject>(
     items: ArraySignal<T>,
     id: number): T {
-    //if (typeof id === "object") // Workaround for occasional serializer issues
-    //    id = (id as any).id as number;
+
+    //if (typeof id === "object") // Workaround for occasional serializer issues
+    //    id = (id as any).id as number;
+
     const item = items.find(i => i.id === id)();
     if (item === undefined)
         throw "Item with key '" + id + "' is not present.";
