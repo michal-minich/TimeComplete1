@@ -7,3 +7,4 @@ obj/
 packages/
 src/**/*.js*
 .idea/
+tsconfig.tsbuildinfo

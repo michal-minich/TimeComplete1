@@ -29,8 +29,8 @@
     "@types/lodash": "^4.14.123",
     "surplus-loader": "latest",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.3.3333",
+    "typescript": "^3.4.1",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.3.0"
   }
 }
