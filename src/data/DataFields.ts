@@ -10,7 +10,7 @@ export default class DataFields implements IDataFields {
     private selectedTabIndexSignal = R.data(0);
     private selectedDashItemIndexSignal = R.data(0);
     private selectedTaskIdSignal = R.data(0);
-    private lastIdSignal = R.data(1000);
+    private lastIdSignal = R.data(0);
     private specialLabelAllIdSignal = R.data(0);
     private specialLabelTodoIdSignal = R.data(0);
     private specialLabelDoneIdSignal = R.data(0);

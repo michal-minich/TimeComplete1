@@ -417,7 +417,9 @@ export interface IAppUc extends IUc {
     //addWindowUc(wv: IWindowUc): void;
 }
 
-export interface ILabelsPopupUc extends IUc {
+export interface ILabelsPopupUc extends IUc {    
+    isForTask: boolean;
+    hideWindow: () => void;
     readonly show: (
         over: HTMLElement,
         associated: ArraySignal<ILabel> | undefined,

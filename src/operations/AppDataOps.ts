@@ -34,6 +34,7 @@ export module AppDataOps {
             if (labels.length === 0) {
                 const kl = createKnownLabels(app);
                 labels = kl.concat(labels);
+                d.fields.lastId = 1000;
             }
             d.knownLabels = new KnownLabels(labels);
             d.labels = R.array(labels);
